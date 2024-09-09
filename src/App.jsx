@@ -9,7 +9,6 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import theme from './styles/theme.js';
-
 // 페이지, 컴포넌트 import
 import NavBar from './components/NavBar/NavBar.jsx';
 import MyPage from './pages/MyPage/MyPage.jsx';
@@ -55,6 +54,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './redux/actions.jsx';
 import Loading from './components/Loading/Loading.jsx';
+import { handleAllowNotification } from './service/notificationPermission.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -67,7 +67,9 @@ function App() {
   let fetchFirst = false;
 
   //console.log(location.pathname);
-
+  useEffect(() => {
+    handleAllowNotification();
+  }, []);
   useEffect(() => {
     const loadUserData = async () => {
       if (!excludepaths.includes(location.pathname)) {
