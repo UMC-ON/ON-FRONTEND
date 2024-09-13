@@ -6,9 +6,9 @@ export const CompanyCalendar = styled.div`
 
 
     .top-header {
-    width: 90%;
+    width: 95%;
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 40px;
     justify-content: flex-start; /* img를 오른쪽 끝으로 정렬 */
   }
 

@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import PageHeader from '../components/PageHeader/PageHeader';
 import ScrapListComponent from '../components/ScrapListComponent';
+import LoadingScreen from '../components/LoadingScreen';
 
 import nothing from "../assets/images/no_content.svg";
 
@@ -15,6 +16,18 @@ import { GET_SCRAP } from '../api/urls';
 
 function ScrapList() {
     const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      window.scrollTo(0, 0);
+  
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000); 
+      // 2 seconds
+  
+      return () => clearTimeout(timer);
+    }, []);
     let userInfo = useSelector((state) => state.user.user);
 
     useEffect(() => {
@@ -43,7 +56,11 @@ function ScrapList() {
 
     return (
         <>
-            <PageHeader pageName={'스크랩한 물품'} />
+        {loading? (
+          <LoadingScreen />
+        ) : (
+          <>
+          <PageHeader pageName={'스크랩한 물품'} />
             <Space /><br /><br />
             {items.length === 0 ? (
                 <NoContentWrapper>
@@ -58,6 +75,9 @@ function ScrapList() {
                     <LastItemMessage>마지막 물품입니다.</LastItemMessage>
                 </>
             )}
+            </>
+        )
+        }
         </>
     );
 }

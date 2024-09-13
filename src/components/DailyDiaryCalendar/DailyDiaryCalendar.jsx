@@ -48,7 +48,7 @@ const DateRangePicker = ({ onApply }) => {
     <s.CompanyCalendar>
       <div className="date-range-picker">
         <div className='top-header'>
-          <p style={{fontSize: "12px", color: "#CCCCCC", marginTop: "10px"}}></p>
+          <p style={{fontSize: "12px", color: "#CCCCCC"}}></p>
         </div>
         <DatePicker
           locale={ko}

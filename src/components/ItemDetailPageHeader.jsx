@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import theme from '../styles/theme';
 
 
-const AccompanyHeader = () => {
+const ItemDetailPageHeader = () => {
 
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ const AccompanyHeader = () => {
   );
 };
 
-export default AccompanyHeader;
+export default ItemDetailPageHeader;
 
 
 export const PageHeaderLayout = styled.div`

@@ -7,6 +7,7 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import DailyDiary from "../../components/DailyDiary";
 import DDayCalendar from '../../components/DDayCalendar.jsx';
 import DailyDiaryCalendar from "../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx";
+import LoadingScreen from '../../components/LoadingScreen';
 
 import styled from 'styled-components';
 import moment from 'moment';
@@ -30,9 +31,21 @@ const Diary = () => {
   const [diaries, setDiaries] = useState([]);
   const [dday, setDday] = useState(null); // state to hold the dday value
   const [dateList, setDateList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); 
+    // 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const fetchDiaries = async () => {
@@ -138,7 +151,11 @@ const Diary = () => {
   
   
   return (
-    <DiaryContainer>
+    <>
+    {loading? (
+      <LoadingScreen />
+    ) : (
+      <DiaryContainer>
       <PageHeader pageName="나의 일기" />
       <Content>
         <Information>
@@ -161,7 +178,7 @@ const Diary = () => {
               <SubText>나의 교환교</SubText>
               <SchoolContainer>
                 <BigText>영국,</BigText>
-                <BigText style={{ color: "#3E73B2", marginLeft: "0.5em" }}>King’s College London</BigText>
+                <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>King’s College London</BigText>
               </SchoolContainer>
             </RightContainer>
           </div>
@@ -175,7 +192,7 @@ const Diary = () => {
         </AddDiary>
 
         {showDatePicker && (
-          <BottomTabLayout $height="65vh">
+          <BottomTabLayout $height="50vh">
             <TopHeader>
               날짜
             </TopHeader>
@@ -199,6 +216,8 @@ const Diary = () => {
       </Content>
       <BottomTabNav />
     </DiaryContainer>
+    )}
+    </>
   );
 };
 
@@ -385,8 +404,9 @@ const NewDiary = styled.textarea`
   flex-direction: column;
   padding: 20px;
   &::placeholder {
-    color: #B9B9B9;
+    color: #838383;
     font-size: 13px;
+    font-family: 'Inter';
   }
   outline: none;
   resize: none;
