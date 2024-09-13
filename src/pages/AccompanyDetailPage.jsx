@@ -164,6 +164,7 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
         setInfoData(info_data.data);
+        console.log("info data here");
         console.log(info_data.data);
         // 
 
@@ -171,6 +172,7 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
         // console.log(user_data.data.result.id);
+        console.log("user id");
         setUserId(user_data.data.result.id);
 
         // console.log(info_data.data[0].nickname);
@@ -282,6 +284,9 @@ function AccompanyDetailPage() {
 
         <Line/>
 
+
+        {accompanyData.length > 0 ?
+        <>
         <BigContainer>
             <LeftContainer>
             <MiddleText color="#3E73B2" spacing="1vh">비슷한</MiddleText>
@@ -289,9 +294,12 @@ function AccompanyDetailPage() {
             </LeftContainer>
         </BigContainer>
 
-        <CardAccompanyList color="#c5d3e0" cards={accompanyData}></CardAccompanyList>
-        <Space/>
+        
+        <CardAccompanyList color="#c5d3e0" cards={accompanyData}></CardAccompanyList></>:null
+        }
+        <BigSpace/>
 
+        {infoData[0].userId !== userId ?
         <BottomTabLayout>
           {card.recruitCompletd ?
           <GreyButton $width="500px">모집이 완료된 동행 글이에요.</GreyButton> :
@@ -299,7 +307,7 @@ function AccompanyDetailPage() {
           <BlueButton onClick={openFirstModal} $width="500px">동행 신청 및 문의하기</BlueButton>
           </>
           }
-        </BottomTabLayout>
+        </BottomTabLayout>:null}
         </div>
          ))}
 
@@ -356,6 +364,10 @@ const SmallIcon = styled.img`
 
 const Space = styled.div`
   margin-top: 7vh;
+`;
+
+const BigSpace = styled.div`
+  margin-top: 15vh;
 `;
 
 const BannerContainer = styled.div`

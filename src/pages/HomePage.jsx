@@ -23,9 +23,9 @@ import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 import NavBar from '../components/NavBar/NavBar';
 import screenshotImg from '../assets/images/screenshot.svg'
 import CardAccompanyList from '../components/CardAccompanyList';
-import InfoCommunityCardList from '../components/InfoCommunityCardList';
-import FreeCommunityCardList from '../components/FreeCommunityCardList';
+import CommunityCardList from '../components/CommunityCardList';
 import { immigration } from '../assets/immigrationDatabase';
+import Loading from '../components/Loading/Loading';
 
 import { getData } from '../api/Functions';
 import { GET_USER_INFO, GET_TWO_FREEPOST, GET_TWO_INFOPOST, GET_NEAR_ACCOMPANY } from '../api/urls';
@@ -36,6 +36,8 @@ import { cities } from '../assets/cityDatabase';
 
 
 function HomePage() {
+    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingAccom, setIsLoadingAccom] = useState(true);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [userData, setUserData] = useState([]);
     const [infoData, setInfoData] = useState([]);
@@ -128,14 +130,17 @@ function HomePage() {
     useEffect(() => {
       const fetchData = async () => {
         try {
+          setIsLoading(true);
+
           const user_data = await getData(GET_USER_INFO,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
           setUserData([user_data.data.result]);
+          // console.log("userData");
           // console.log(user_data.data.result);
-          if (user_data.data.result.universityUrl)
+          if (user_data.data.universityUrl)
           {
-          setUnivLink(user_data.data.result.universityUrl);
+          setUnivLink(user_data.data.universityUrl);
           }
           getSiteByCountry(user_data.data.result.country);
           
@@ -156,7 +161,7 @@ function HomePage() {
           }); 
           if (accom_data)
           {
-            setAccompanyData(accom_data.data.result);
+            setAccompanyData(accom_data.data);
             // console.log(accom_data.data.result);
           }
           else
@@ -166,6 +171,8 @@ function HomePage() {
 
         } catch (error) {
           console.error('Error fetching data:', error);
+        } finally {
+          setIsLoading(false); // Data fetched, stop showing main loading
         }
       };
   
@@ -178,6 +185,7 @@ function HomePage() {
 
       const fetchAccomData = async () => {
         try {
+          setIsLoadingAccom(true);
           const accom_data = await getData(GET_NEAR_ACCOMPANY, {
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           });
@@ -191,6 +199,8 @@ function HomePage() {
         } catch (error) {
           console.error('Error fetching data:', error);
           setAccompanyData([]); 
+        } finally {
+          setIsLoadingAccom(false); // Accom data fetched, stop showing accom loading
         }
       };
     
@@ -200,6 +210,10 @@ function HomePage() {
         fetchAccomData();
       }
     }, [userData.country]);
+
+    if (isLoading && isLoadingAccom) {
+      return <Loading/>;
+    }
 
     return (
       <>
@@ -310,7 +324,7 @@ function HomePage() {
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
 
-          <InfoCommunityCardList cards={infoData}/>
+          <CommunityCardList cards={infoData}/>
 
           <Space></Space>
           <Space></Space>
@@ -320,14 +334,14 @@ function HomePage() {
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
 
-          <FreeCommunityCardList cards={freeData}/>
+          <CommunityCardList free={true} cards={freeData}/>
           
 
           <Space></Space>
           <Space></Space>
 
           {userData.map((card, index) => (
-            card.country ? (
+            card.country && accompanyData.length > 0 ? (
               <FlexContainer onClick={goToAccompany} key={index}>
                 <MiddleText spacing="1vh">내 주변 동행글</MiddleText>
                 <RightIcon src={rightIcon} />
@@ -424,7 +438,7 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 3vh;
+  gap: 5vw;
 `;
 
 const SliderContainer = styled.div`
