@@ -181,6 +181,7 @@ const Photo = styled.img`
 `;
 
 const Information = styled.div`
+  padding-top: 10px;
   padding-left: 10px;
   display: flex;
   height: 16vh;
@@ -211,7 +212,7 @@ const Time = styled.span`
 `;
 
 const TitleTimeContainer = styled.div`
-  width: 190px;
+  width: 155px;
   display: flex; /* Flexbox를 사용하여 수평 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
 `;

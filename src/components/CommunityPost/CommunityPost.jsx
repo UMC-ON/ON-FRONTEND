@@ -145,6 +145,7 @@ const TextContent = styled.span`
   text-overflow: ellipsis;
   text-align: justify;
   white-space: normal;
+  word-break: break-all;
   font-family: Inter;
   font-size: 12px;
   font-style: normal;

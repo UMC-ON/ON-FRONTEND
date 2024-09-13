@@ -89,3 +89,6 @@ export const GET_MY_ACCOMPANY_POST = (userId) =>
 
 //동행 구하기 글 작성
 export const WRITE_ACCOMPANY = `/api/v1/company-post`;
+
+//알림
+export const POST_TOKEN = `/api/v1/alert/deviceToken`;

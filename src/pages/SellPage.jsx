@@ -13,6 +13,7 @@ import ItemList from '../components/ItemList';
 import TransactionPicker from "../components/TransactionPicker";
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
+import LoadingScreen from '../components/LoadingScreen';
 import { getData } from '../api/Functions';
 import { GET_FILTER_ITEM, GET_ITEM_SEARCH } from '../api/urls';
 
@@ -28,10 +29,20 @@ function SellPage() {
   const [searchKeyword, setSearchKeyword] = useState(''); // 검색어 상태 추가
 
   const navigate = useNavigate();
-  const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
   
+  const [loading, setLoading] = useState(true);
 
-  // Fetch items based on filters
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); 
+    // 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const fetchItems = async (dealType = '', currentCountry = '') => {
     try {
       const params = {};
@@ -129,6 +140,10 @@ function SellPage() {
 
   return (
     <>
+    {loading? (
+      <LoadingScreen />
+    ) : (
+      <>
       <SellPageHeader pageName={'거래하기'} />
       <Space /><br />
       <SearchContainer>
@@ -136,7 +151,12 @@ function SellPage() {
           placeholder='국가 / 물품으로 검색해 보세요.'
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
-          onKeyPress={(e) => { if (e.key === 'Enter') e.preventDefault(); }} // 엔터키 동작 막기
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              fetchSearchResults();
+            }
+          }}
         />
         <SearchIcon src={search_icon} onClick={fetchSearchResults} /> {/* 검색 아이콘 클릭 시 검색 요청 */}
       </SearchContainer>
@@ -185,6 +205,8 @@ function SellPage() {
         onApply={handleApply}
         onClose={() => setIsPickerVisible(false)}
       />
+      </>
+    )}
     </>
   );
 }

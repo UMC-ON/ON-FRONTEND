@@ -61,11 +61,7 @@ export const DiaryCalendar = styled.div`
         text-decoration: none;
     }
 
-    .react-calendar__month-view__days__day--neighboringMonth,
-    .react-calendar__decade-view__years__year--neighboringDecade,
-    .react-calendar__century-view__decades__decade--neighboringCentury {
-        color: #757575;
-    }
+    
 `;
 
 export const EmptyCheckbox = styled.div`

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import camera from "../assets/images/camera.svg";
 import PhotoAdd from "../assets/images/PhotoAdd.svg";
+import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import SellPostHeader from "../components/SellPostHeader";
 import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
@@ -48,6 +49,10 @@ function SellPost() {
 
     const handleCameraClick = () => {
         fileInputRef.current.click();
+    };
+
+    const handleDeleteImage = (index) => {
+        setImages(prevImages => prevImages.filter((_, i) => i !== index));
     };
 
     const navigate = useNavigate();
@@ -108,7 +113,12 @@ function SellPost() {
                         <ImagePreview>
                             <ImageContainer>
                                 {images.map((image, index) => (
-                                    <img key={index} src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} />
+                                    <ImageWrapper key={index}>
+                                        <img src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} />
+                                        <DeleteButton onClick={() => handleDeleteImage(index)}>
+                                            <img src={whiteCloseIcon} alt="Delete" />
+                                        </DeleteButton>
+                                    </ImageWrapper>
                                 ))}
                             </ImageContainer>
                             <AddButton onClick={handleCameraClick}>
@@ -238,10 +248,11 @@ const AddButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 5px;
+    margin: 15px;
+    margin-top: 20px;
     border-radius: 8px;
     cursor: pointer;
-    flex-shrink: 0; /* 추가된 부분: 크기가 줄어들지 않도록 함 */
+    flex-shrink: 0;
     background: #F5F5F5;
 
     span {
@@ -269,18 +280,6 @@ const Location = styled.div`
     margin-bottom: 2vh;
 `;
 
-// const Country = styled.div`
-//     display: inline-flex;
-//     align-items: center;
-//     justify-content: space-between;
-//     width: auto;
-//     height: 0.8em;
-//     padding: 0.5em;
-//     background: ${props => props.theme.lightPurple};
-//     margin: 0px 0.6em;
-//     border-radius: 20px;
-//     color: white;
-// `;
 
 const Region = styled.div`
     display: inline-flex;
@@ -374,5 +373,42 @@ const Description = styled.textarea`
     &::placeholder {
         color: #B9B9B9;
         font-size: 14px;
+    }
+`;
+
+const ImageWrapper = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 130px;
+    height: 150px;
+    padding-top: 10px;
+    margin: 5px;
+
+    img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        margin: 5px;
+        border-radius: 16px;
+        flex-shrink: 0;
+    }
+`;
+
+const DeleteButton = styled.div`
+    position: absolute;
+    top: 5px;
+    right: -5px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 15px;
+        height: 15px;
     }
 `;

@@ -17,36 +17,8 @@ import { getData, postData, putData } from '../api/Functions';
 import { GET_SCRAP, POST_SCRAP } from '../api/urls';
 
 const ScrapList = ({ items }) => {
-  let userInfo = useSelector((state) => state.user.user);
   const [scrappedMarketPostIds, setScrappedMarketPostIds] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchScrappedPosts = async () => {
-      try {
-        const response = await getData(
-          GET_SCRAP(userInfo.id), {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-        });
-
-        if (Array.isArray(response.data)) {
-          const scrappedIds = response.data.map(post => post.marketPost.marketPostId);
-          setScrappedMarketPostIds(scrappedIds);
-          console.log('스크랩 페이지', scrappedIds);
-        } else {
-          console.error('Unexpected response structure:', response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching scrapped posts:', error);
-      }
-    };
-
-    if (userInfo.id) {
-      fetchScrappedPosts();
-    }
-  }, [userInfo]);
 
   return (
     <>
@@ -191,6 +163,7 @@ const Photo = styled.img`
 `;
 
 const Information = styled.div`
+  padding-top: 10px;
   padding-left: 10px;
   display: flex;
   height: 16vh;
@@ -221,7 +194,7 @@ const Time = styled.span`
 `;
 
 const TitleTimeContainer = styled.div`
-  width: 190px;
+  width: 155px;
   display: flex; /* Flexbox를 사용하여 수평 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
 `;

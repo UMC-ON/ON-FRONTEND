@@ -9,18 +9,36 @@ export const showWriter = (comment = null, postWriter_id = '') => {
 };
 
 //파견교 정보: 비공개 vs 공개(미정vs확정)
-export const showDispatchedUniv = (writerInfo, is_anonymous = false) => {
-  if (is_anonymous) {
-    return '파견교 비공개';
-  } else {
-    if (writerInfo.userState === 'ACTIVE' || writerInfo.userState === 'ADMIN') {
+export const showDispatchedInfo = (writerInfo, type = 'BOTH') => {
+  if (type === 'BOTH') {
+    if (
+      writerInfo.userStatus === 'ACTIVE' ||
+      writerInfo.userState === 'ADMIN'
+    ) {
       return `${writerInfo.country} ${writerInfo.dispatchedUniversity}`;
+    } else {
+      return '파견 미정';
+    }
+  } else if (type === 'UNIV') {
+    if (
+      writerInfo.userStatus === 'ACTIVE' ||
+      writerInfo.userState === 'ADMIN'
+    ) {
+      return `${writerInfo.dispatchedUniversity}`;
+    } else {
+      return '파견 미정';
+    }
+  } else if (type === 'COUNTRY') {
+    if (
+      writerInfo.userStatus === 'ACTIVE' ||
+      writerInfo.userState === 'ADMIN'
+    ) {
+      return `${writerInfo.country}`;
     } else {
       return '파견 미정';
     }
   }
 };
-
 export const showDate = (postDate) => {
   //string형태로 전달
   //"2024-08-19T09:25:43.206Z"

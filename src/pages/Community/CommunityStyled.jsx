@@ -144,3 +144,10 @@ export const WriteButton = styled.button`
 
   -webkit-tap-highlight-color: transparent;
 `;
+
+export const PaddingDiv = styled.div`
+  box-sizing: border-box;
+  padding: 4rem 0;
+  width: 100%;
+  height: 9rem;
+`;

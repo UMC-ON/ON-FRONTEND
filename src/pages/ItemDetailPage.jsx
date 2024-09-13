@@ -18,7 +18,15 @@ import noImage from "../assets/images/noImage.jpg";
 import {GET_SPECIFIC_ITEM, GET_NEARBY_ITEM, GET_MARKET_ROOMID} from '../api/urls'
 import { getData, postData} from '../api/Functions';
 
-const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
+function ImageModal({ imageSrc, onClose }) {
+  return (
+    <ModalOverlay onClick={onClose}>
+      <ModalContent>
+        <ModalImage src={imageSrc} alt="Original Image" />
+      </ModalContent>
+    </ModalOverlay>
+  );
+}
 
 
 function ItemDetailPage() {
@@ -31,6 +39,19 @@ function ItemDetailPage() {
   const [receiverId, setReceiverId] = useState(null);
   const [roomId, setRoomId] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [modalImage, setModalImage] = useState(null);  // 원본 이미지를 저장
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+const openModal = (imageSrc) => {
+  setModalImage(imageSrc);
+  setIsModalOpen(true);
+};
+
+const closeModal = () => {
+  setIsModalOpen(false);
+  setModalImage(null);
+};
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -151,14 +172,23 @@ function ItemDetailPage() {
           return (
             <React.Fragment key={index}>
               {isSingleImage ? (
-                <SingleImage src={imageUrls[0]} alt={`Image ${index + 1}`} />
-              ) : (
-                <Slider {...settings}>
-                  {imageUrls.map((url, idx) => (
-                    <ItemImage key={idx} src={url} alt={`Slide ${idx + 1}`} />
-                  ))}
-                </Slider>
-              )}
+  <SingleImage 
+    src={imageUrls[0]} 
+    alt={`Image ${index + 1}`}
+    onClick={() => openModal(imageUrls[0])} // 이미지 클릭 시 모달 열기
+  />
+) : (
+  <Slider {...settings}>
+    {imageUrls.map((url, idx) => (
+      <ItemImage 
+        key={idx} 
+        src={url} 
+        alt={`Slide ${idx + 1}`}
+        onClick={() => openModal(url)} // 이미지 클릭 시 모달 열기
+      />
+    ))}
+  </Slider>
+)}
               <InfoContainer>
                 <Title>{item.title}</Title>
                 <State>{item.dealType === 'DIRECT' ? '직거래' : '택배거래'} | {item.dealStatus === 'AWAIT' ? '거래 가능' : '거래 완료'}</State><br />
@@ -177,6 +207,8 @@ function ItemDetailPage() {
           );
         })}
       </ContentContainer>
+      {isModalOpen && <ImageModal imageSrc={modalImage} onClose={closeModal} />}
+
       <BottomTabLayout>
         <ChatButton onClick={handleChatButtonClick}>
           채팅으로 거래하기
@@ -326,4 +358,30 @@ const Nearby = styled.p`
 
 const Blue = styled.span`
   color: #3E73B2;
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
 `;
