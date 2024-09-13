@@ -31,10 +31,12 @@ function AccompanyList({datas}) {
        {datas.map((data, index) => (
         <RoundContainer key={index} onClick={() => goDetail(data.companyPostId)}>
 
+          <ImageWrapper>
             {data.imageUrls[0] ?
             <Image src={data.imageUrls[0]}/>:
             <Image src={defaultImg}/>
-            }             
+            }    
+          </ImageWrapper>         
             <TextContainer>
                 <CardName>{data.title}</CardName>
 
@@ -143,22 +145,28 @@ const RoundContainer = styled.div`
   margin-bottom: 2vh;
 `;
 
+const ImageWrapper = styled.div`
+  width: 16vh;  /* Fixed width for a perfect square */
+  height: 16vh; /* Fixed height for a perfect square */
+  flex-shrink: 0;  /* Prevent shrinking or stretching due to flexbox */
+  overflow: hidden;  /* Ensure no overflow is visible */
+  border-radius: 20px;  /* Optional: For rounded corners */
+`;
+
 const Image = styled.img`
-  width: 130px;
-  height: 130px; 
+  width: 100%; 
+  height: 100%;  
   object-fit: cover; 
-  object-position: center;
-  border-radius: 20px;
-  padding: 0;
+  object-position: center; 
 `;
 
 const TextContainer = styled.div`
-  padding-left: 10px; 
+  margin-left: 10px;
   display: flex;
   height: 130px;
   flex-direction: column;
   box-sizing: border-box; 
-  padding-right: 15px;
+  margin-right: 15px;
 `;
 
 const CardName = styled.p`
@@ -171,12 +179,10 @@ const CardName = styled.p`
   padding-bottom: 10px;
   color: #363636;
 
-  display: inline-block; 
-  max-width: 81%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: 0.02em;
+  white-space: nowrap;         
+  overflow: hidden;            
+  text-overflow: ellipsis;    
+  width: 23vh;
 `;
 
 const Overlay = styled.div`

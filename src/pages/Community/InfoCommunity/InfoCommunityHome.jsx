@@ -1,10 +1,6 @@
 import CommunityHome from '../CommunityHome';
-import Modal from '../../../components/Modal/Modal';
-import { useState } from 'react';
 
 const InfoCommunityHome = () => {
-  const [isFirstModalOpen, setFirstModalOpen] = useState(true);
-  const [isSecondModalOPen, setSecondModalOpen] = useState(false);
   return (
     <>
       <CommunityHome

@@ -2,16 +2,15 @@ import { useNavigate } from 'react-router-dom';
 import * as s from './PostPageStyled.jsx';
 import camera from '../../assets/images/camera.svg';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.jsx';
-import { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Loading from '../../components/Loading/Loading.jsx';
 import { multiFilePostData } from '../../api/Functions.jsx';
+import { showDispatchedInfo } from '../../components/Common/InfoExp.jsx';
 import { WRITE_POST_IN } from '../../api/urls.jsx';
 
 const PostPage = ({ color, boardType }) => {
   const navigate = useNavigate();
-  const previewImages = useRef([]);
-  const sendingImages = useRef([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [isLoading, setLoading] = useState(false);
   let userInfo = useSelector((state) => state.user.user);
@@ -37,7 +36,7 @@ const PostPage = ({ color, boardType }) => {
     }
   }, [userInfo]);
   useEffect(() => {
-    setImageFiles(sendingImages.current);
+    //setImageFiles(sendingImages.current);
     console.log(imageFiles);
   }, [imageFiles]);
 
@@ -65,9 +64,7 @@ const PostPage = ({ color, boardType }) => {
       const previewURLs = imgList.map((file) => {
         return URL.createObjectURL(file);
       });
-      sendingImages.current = sendingImages.current.concat(imgList);
-      previewImages.current = previewImages.current.concat(previewURLs);
-      setImageFiles(sendingImages.current);
+      setImageFiles((prev) => prev.concat(imgList));
     }
   };
   const onSubmit = async () => {
@@ -106,12 +103,6 @@ const PostPage = ({ color, boardType }) => {
       setLoading(false);
     };
     sendData();
-    // const request = await axios.post(WRITE_POST_IN(boardType), formData, {
-    //   headers: {
-    //     Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-    //     'Content-Type': `multipart/form-data`,
-    //   },
-    // });
 
     navigate(-1, { replace: true });
   };
@@ -142,7 +133,7 @@ const PostPage = ({ color, boardType }) => {
           <s.InfoLabel>
             교환 국가:
             <s.ColorButtonTag color={color}>
-              {userInfo.country}
+              {showDispatchedInfo(userInfo, 'COUNTRY')}
             </s.ColorButtonTag>
           </s.InfoLabel>
           <s.SpaceBetweenContainer>
@@ -150,7 +141,7 @@ const PostPage = ({ color, boardType }) => {
               <div style={{ whiteSpace: 'nowrap' }}>교환교:</div>
 
               <s.ColorButtonTag color={color}>
-                {userInfo.dispatchedUniversity}
+                {showDispatchedInfo(userInfo, 'UNIV')}
               </s.ColorButtonTag>
             </s.InfoLabel>
             <DefaultCheckBox
@@ -186,14 +177,42 @@ const PostPage = ({ color, boardType }) => {
               onChange={onChangeInput}
             />
             <s.ImgSection>
-              {previewImages.current.map((url, i) => (
-                <s.PreviewImg
-                  src={url}
-                  width="160"
-                  height="160"
-                  alt={`image${i}`}
-                  key={url}
-                />
+              {imageFiles.map((url, i) => (
+                <div
+                  key={URL.createObjectURL(url)}
+                  style={{ position: 'relative' }}
+                >
+                  <s.PreviewImg
+                    src={URL.createObjectURL(url)}
+                    width="160"
+                    height="160"
+                    alt={`image${i}`}
+                  />
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 15 15"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                      position: 'absolute',
+                      right: '0.3rem',
+                      top: '0.3rem',
+                      zIndex: '2',
+                    }}
+                    onClick={() => {
+                      const deletedImageList = imageFiles.filter(
+                        (imageUrl) => imageUrl !== url,
+                      );
+                      setImageFiles(deletedImageList);
+                    }}
+                  >
+                    <path
+                      d="M14.4433 0.0955087C14.5707 -0.0318362 14.7771 -0.0318362 14.9045 0.0955087C15.0318 0.222854 15.0318 0.42932 14.9045 0.556665L7.96116 7.5L14.9045 14.4433C15.0318 14.5707 15.0318 14.7771 14.9045 14.9045C14.7771 15.0318 14.5707 15.0318 14.4433 14.9045L7.5 7.96116L0.556665 14.9045C0.42932 15.0318 0.222853 15.0318 0.0955081 14.9045C-0.031836 14.7771 -0.031836 14.5707 0.0955081 14.4433L7.03884 7.5L0.095509 0.556665C-0.0318359 0.42932 -0.0318359 0.222854 0.095509 0.0955087C0.222854 -0.0318362 0.429321 -0.0318362 0.556666 0.0955087L7.5 7.03884L14.4433 0.0955087Z"
+                      fill="#000000"
+                    />
+                  </svg>
+                </div>
               ))}
             </s.ImgSection>
           </s.EditorWrapper>

@@ -139,6 +139,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
             ) : (
               <div style={{ padding: '5rem 0' }}>아직 글이 없습니다.</div>
             )}
+            <s.PaddingDiv>마지막 게시글입니다.</s.PaddingDiv>
           </s.PostListSection>
           <s.WriteButton
             style={{

@@ -433,7 +433,12 @@ function AccompanyPostPage() {
                       <CircleContainer onClick={handleCityClick}>{`${city}`}
                       <SmallIcon src={postIcon} $left="5px"/>
                       </CircleContainer>
-                        {!isCityClicked2 && (
+                      </>
+                    )}
+                </Left>
+                <Left $bottom="5px">
+                  <MarginLeft2/>
+                  {!isCityClicked2 && isCityClicked && (
                           <PlusButton src={plusButton} onClick={handleCityClick2}/>
                         )}
                         {isCityClicked2 && (
@@ -441,8 +446,6 @@ function AccompanyPostPage() {
                           <SmallIcon src={postIcon} $left="5px"/>
                           </CircleContainer>
                         )}
-                      </>
-                    )}
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>예상 일정 : </BlackText>
@@ -665,6 +668,7 @@ const GreyButton = styled.button`
   font-weight: 600;
   line-height: normal;
   margin-right: 8px;
+  padding: 5px 15px;
 `;
 
 
@@ -678,6 +682,7 @@ const BlueButton = styled.button`
   font-weight: 600;
   line-height: normal;
   margin-right: 20px;
+  padding: 5px 15px;
 `;
 
 const BlueContainer = styled.div`
@@ -780,6 +785,11 @@ const CircleButton = styled.img`
 
 const MarginLeft = styled.div`
   margin-left: 90px;
+  margin-top: 30px;
+`;
+
+const MarginLeft2 = styled.div`
+  margin-left: 85px;
   margin-top: 30px;
 `;
 
