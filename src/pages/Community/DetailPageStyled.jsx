@@ -49,6 +49,7 @@ export const Title = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  word-break: break-all;
   align-items: start;
   text-align: left;
   padding: 1.3rem 2rem;
@@ -99,6 +100,7 @@ export const Content = styled.pre`
 
   text-align: left;
   white-space: pre-wrap;
+  word-break: break-all;
 
   color: #000;
   font-family: Inter;

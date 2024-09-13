@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import commentImg from '../../assets/images/commentImg.svg';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
-import { CommentList } from '../../components/Common/TempDummyData/PostList.jsx';
-import { showDispatchedUniv } from '../../components/Common/InfoExp.jsx';
+import { showDispatchedInfo } from '../../components/Common/InfoExp.jsx';
 
 import Comment from '../../components/Comment/Comment.jsx';
 
@@ -125,6 +124,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
     } else {
       //답글일 경우
       if (logInInfo.isAuthenticated) {
+        console.log(selectedComment.commentId);
         addComment(WRITE_REPLY_ON(selectedComment.commentId));
       } else {
         return alert('로그인이 필요합니다.');
@@ -148,21 +148,15 @@ const DetailPage = ({ color1, color2, boardType }) => {
     const res = await postData(url, jsonData, {
       Authorization: `Bearer ${localStorage.getItem('AToken')}`,
     });
-
-    const commentFE = {
-      writerInfo: {
-        nickname: userInfo.nickname,
-        id: userInfo.id,
-      },
-      commentId: selectedComment
-        ? selectedComment.commentId
-        : commentList.length + 1,
-      replyId: selectedComment ? selectedComment.replyCount + 1 : null,
-      replyCount: 0,
-      anonymous: isAnonymous.current,
-      contents: content,
-    };
+    console.log('res는');
+    console.log(res);
+    const commentFE = res.data;
     setCommentList([...commentList, commentFE]);
+    //답글일 경우 선택된 댓글의 replyCount 1증가
+    if (selectedComment) {
+      selectedComment.replyCount++;
+    }
+
     setCommentCount((prev) => prev + 1);
     //등록시 바로 보일 수 있도록
 
@@ -212,10 +206,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
           <s.Title color={titleColor}>
             {currentPost.title}
             <s.DispatchedInfo>
-              {showDispatchedUniv(
-                currentPost.writerInfo,
-                currentPost.anonymousUniv,
-              )}
+              {currentPost.anonymousUniv
+                ? '파견교 비공개'
+                : `${showDispatchedInfo(currentPost.writerInfo, 'BOTH')}`}
             </s.DispatchedInfo>
           </s.Title>
           <s.Content>
