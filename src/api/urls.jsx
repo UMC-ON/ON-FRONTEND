@@ -5,7 +5,7 @@ export const SIGN_UP_URL = 'api/v1/user/sign-up';
 export const CHECK_DUPLICATE_NICK = 'api/v1/user/duplicate_check/nickname';
 export const CHECK_DUPLICATE_EMAIL = '/api/v1/user/duplicate_check/email';
 export const SIGN_IN_URL = 'api/v1/user/sign-in';
-export const GET_CURRENT_INFO = '/api/v1/user/current/info';
+export const GET_CURRENT_INFO = 'api/v1/user/current/info';
 export const PUT_UNIV = '/api/v1/user/current/update/univ_url';
 export const PUT_NICKNAME = '/api/v1/user/current/update/nickname';
 

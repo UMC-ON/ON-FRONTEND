@@ -53,7 +53,7 @@ const TradeChatInfo = ({ user, roomId }) => {
       <s.ProductWrapper>
         <s.ProductInfoContainer>
           <s.ProductName>{infoResult.productName}</s.ProductName>
-          <s.ProductPrice>\ {infoResult.productPrice}</s.ProductPrice>
+          <s.ProductPrice>&#8361; {infoResult.productPrice}</s.ProductPrice>
           <s.ProductInfo>{infoResult.tradeMethod} |</s.ProductInfo>
         </s.ProductInfoContainer>
         <s.ProductImg $link={infoResult.imageUrl} />
