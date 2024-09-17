@@ -39,15 +39,20 @@ export const MyPosts = styled.div`
 `;
 
 export const MyInfoTitle = styled.p`
+  width: 100%;
   color: #000;
   font-family: Inter;
   font-size: 1.25rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  text-align: left;
+  text-indent: 1.4rem;
 `;
 export const MyInfoWrapper = styled.article`
-  width: 80%;
+  width: 100%;
+  padding: 0 2.5rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -77,8 +82,9 @@ export const Title = styled.p`
 
 export const EditBtn = styled.div`
   grid-area: edit;
-  width: 1.5625rem;
   height: 1rem;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
   flex-shrink: 0;
   border-radius: 0.625rem;
   background: ${(props) => props.color};
@@ -153,11 +159,12 @@ export const SchoolNameBox = styled.div`
 `;
 
 export const VerifyButton = styled.div`
-  width: 2.44794rem;
   height: 1rem;
+  padding: 1px 0.5rem;
+  box-sizing: border-box;
   margin-left: 10px;
   flex-shrink: 0;
-  border-radius: 0.375rem;
+  border-radius: 0.625rem;
   background: ${theme.purpleGra};
   text-align: center;
   color: white;
@@ -166,7 +173,6 @@ export const VerifyButton = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 1rem;
-  align-self: center;
 `;
 
 export const TypeRadio = styled.input.attrs({ type: 'radio' })`

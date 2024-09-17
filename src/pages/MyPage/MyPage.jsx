@@ -4,12 +4,13 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './MyPageStyled';
 import theme from '../../styles/theme';
 
-import { GET_CURRENT_INFO, PUT_NICKNAME, PUT_UNIV } from '../../api/urls';
+import { PUT_NICKNAME, PUT_UNIV } from '../../api/urls';
 import { getData, postData, putData } from '../../api/Functions';
 import Loading from '../../components/Loading/Loading';
+import { useSelector } from 'react-redux';
 
 const MyPage = () => {
-  const [userInfo, setUserInfo] = useState(null);
+  // const [userInfo, setUserInfo] = useState(null);
   const [error, setError] = useState(null); // 에러를 저장할 상태
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,54 +31,78 @@ const MyPage = () => {
   const [inputWidth, setInputWidth] = useState('auto');
 
   const navigate = useNavigate();
-  //axios 연결 GET
+  const userInfo = useSelector((state) => state.user.user);
+
+  //상태 체크 더미데이터
+  const userTest = {
+    dispatchedUniversity: 'D',
+    userStatus: 'NON_CERTIFIED',
+  };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await getData(
+  //         GET_CURRENT_INFO,
+  //         {
+  //           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+  //         },
+  //         {},
+  //       );
+
+  //       if (response) {
+  //         console.log(response.data.result);
+  //         setUserInfo(response.data.result);
+  //         setSchoolName(response.data.result.dispatchedUniversity);
+  //         setLink(response.data.result.universityUrl);
+  //         setNickname(response.data.result.nickname);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getData(
-          GET_CURRENT_INFO,
-          {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          },
-          {},
-        );
-
-        if (response) {
-          console.log(response.data.result);
-          setUserInfo(response.data.result);
-          setSchoolName(response.data.result.dispatchedUniversity);
-          setLink(response.data.result.universityUrl);
-          setNickname(response.data.result.nickname);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
+    setNickname(userInfo.nickname);
   }, []);
 
-  // 추가: 상태가 업데이트된 후에 값이 제대로 설정되었는지 확인
-  useEffect(() => {
-    console.log('school name:', schoolName);
-    console.log('link:', link);
-    console.log('userInfo:', userInfo);
-    console.log('nick:', nickname);
-  }, [schoolName, link, userInfo, nickname]);
+  const putEditedNickname = async (nicknameInput) => {
+    try {
+      setIsLoading(true);
+      const response = await putData(PUT_NICKNAME, nicknameInput, {
+        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+      });
+      if (response) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  // 수정 버튼 클릭 시 동작
   const clickEditNickname = () => {
-    if (!editNickname) {
+    if (editNickname) {
+      // 수정 완료 시에 새로운 닉네임을 저장 (닉네임 변경 로직 추가 가능)
+      putEditedNickname(nicknameInput);
+    } else {
       console.log('닉네임 수정 중');
     }
+    // 수정 모드 토글
     setEditNickname(!editNickname);
   };
 
-  useEffect(() => {
-    console.log('수정 상태', editNickname);
-  }, []);
+  // useEffect(() => {
+  //   console.log('수정 상태', editNickname);
+  // }, []);
 
   //   //수정하기
   // const clickEditSchoolName = () => {
@@ -130,10 +155,10 @@ const MyPage = () => {
         </s.MyPosts>
       </NavLink>
 
-      <s.MyInfoTitle>개인정보</s.MyInfoTitle>
+      <s.MyInfoTitle>나의 정보 확인</s.MyInfoTitle>
       <s.MyInfoWrapper>
         <form
-          method="post"
+          method="put"
           name="info"
         >
           <s.InfoContainer>
@@ -146,111 +171,26 @@ const MyPage = () => {
             </s.EditBtn>
           </s.InfoContainer>
           <s.InfoContainer>
-            {/* -------------------------- 파견교 -------------------------- */}
+            {/* -------------------------- 파견교 ----------더미데이터 바꾸기---------------- */}
             <s.Title>나의 파견교</s.Title>
-
-            {userInfo?.userStatus === 'TEMPORARY' ||
-            userInfo?.userStatus === 'NON_CERTIFIED' ||
-            userInfo?.userStatus === 'DENIED' ? (
-              <s.SchoolNameBox>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <s.SchoolNameInput
-                    ref={inputRef}
-                    disabled={!editSchoolName}
-                    value={schoolName}
-                    onChange={(e) => setSchoolName(e.target.value)}
-                    placeholder="파견교를 입력하세요"
-                    style={{
-                      width: inputWidth,
-                    }}
-                  />
-                </div>
-                <s.RadioBox>
-                  <s.TypeRadio
-                    type="radio"
-                    disabled={!editSchoolName}
-                    id="exchange"
-                    name="type"
-                  />
-                  <s.TypeLabel htmlFor="exchange">교환</s.TypeLabel>
-                  <s.TypeRadio
-                    type="radio"
-                    disabled={!editSchoolName}
-                    id="visit"
-                    name="type"
-                  />
-                  <s.TypeLabel htmlFor="visit">방문</s.TypeLabel>
-                </s.RadioBox>
-              </s.SchoolNameBox>
-            ) : userInfo?.userStatus === 'AWAIT' ? (
-              <s.SchoolNameBox>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <s.SchoolNameSpan ref={spanRef}>
-                    {schoolName || '파견교를 입력하세요'}
-                  </s.SchoolNameSpan>
-                  <s.SchoolNameInput
-                    ref={inputRef}
-                    disabled={!editSchoolName}
-                    value={schoolName}
-                    placeholder={schoolName}
-                    style={{
-                      width: inputWidth,
-                    }}
-                  />
+            <s.InfoBox>
+              {userTest.userStatus === 'ACTIVE' ? (
+                <span>{userInfo.dispatchedUniversity}</span>
+              ) : userTest.userStatus === 'AWAIT' ? (
+                <>
+                  <span>{userInfo.dispatchedUniversity}</span>
                   <s.VerifyButton>인증 대기중</s.VerifyButton>
-                </div>
-                <s.RadioBox>
-                  <s.TypeRadio
-                    type="radio"
-                    disabled={!editSchoolName}
-                    id="exchange"
-                    name="type"
-                  />
-                  <s.TypeLabel htmlFor="exchange">교환</s.TypeLabel>
-                  <s.TypeRadio
-                    type="radio"
-                    disabled={!editSchoolName}
-                    id="visit"
-                    name="type"
-                  />
-                  <s.TypeLabel htmlFor="visit">방문</s.TypeLabel>
-                </s.RadioBox>
-              </s.SchoolNameBox>
-            ) : userInfo?.userStatus === 'ACTIVE' ? (
-              <s.SchoolNameBox>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <s.SchoolNameSpan ref={spanRef}>
-                    {schoolName || '파견교를 입력하세요'}
-                  </s.SchoolNameSpan>
-                  <s.SchoolNameInput
-                    ref={inputRef}
-                    disabled={!editSchoolName}
-                    value={schoolName}
-                    onChange={(e) => setSchoolName(e.target.value)}
-                    placeholder={schoolName}
-                    style={{
-                      width: inputWidth,
-                    }}
-                  />
-                </div>
-                <s.RadioBox>
-                  <s.TypeRadio
-                    type="radio"
-                    disabled={!editSchoolName}
-                    id="exchange"
-                    name="type"
-                  />
-                  <s.TypeLabel htmlFor="exchange">교환</s.TypeLabel>
-                  <s.TypeRadio
-                    type="radio"
-                    disabled={!editSchoolName}
-                    id="visit"
-                    name="type"
-                  />
-                  <s.TypeLabel htmlFor="visit">방문</s.TypeLabel>
-                </s.RadioBox>
-              </s.SchoolNameBox>
-            ) : null}
+                </>
+              ) : userTest.userStatus === 'NON_CERTIFIED' ? (
+                <>
+                  <span>{userInfo.dispatchedUniversity}</span>
+                  <s.VerifyButton>미인증</s.VerifyButton>
+                </>
+              ) : (
+                //등록 안 된 상태
+                <></>
+              )}
+            </s.InfoBox>
           </s.InfoContainer>
           {/* -------------------------- 파견교 홈페이지 링크 -------------------------- */}
           <s.InfoContainer>
@@ -266,13 +206,14 @@ const MyPage = () => {
               placeholder={link}
             />
           </s.InfoContainer>
-
+          {/* -------------------------- 파견교 국가 -------------------------- */}
           <div style={{ display: 'flex', margin: '2rem 0' }}>
             <s.Title>파견교 소재 국가</s.Title>
             <s.Country>
               {userInfo?.country ? userInfo.country : '없음'}
             </s.Country>
           </div>
+
           <s.InfoContainer>
             <s.Title>Email</s.Title>
             <s.InfoBox>
@@ -283,7 +224,7 @@ const MyPage = () => {
           <s.InfoContainer>
             <s.Title>이름</s.Title>
             <s.InfoBox>
-              <span>김온</span>
+              <span>{userInfo?.name ? userInfo.name : '없음'}</span>
             </s.InfoBox>
           </s.InfoContainer>
 
@@ -296,30 +237,21 @@ const MyPage = () => {
 
           <s.InfoContainer style={{ paddingBottom: '2rem' }}>
             <s.Title>닉네임</s.Title>
+            <s.EditBtn
+              color={theme.lightGray}
+              onClick={() => clickEditNickname()}
+            >
+              {editNickname ? <span>수정 완료</span> : <span>수정</span>}
+            </s.EditBtn>
             <s.TextInput
-              disabled={!editNickname}
-              value={nickname}
-              onChange={(e) => setNicknameInput(e.target.value)}
-              placeholder={nickname}
+              disabled={!editNickname} // 수정 모드일 때만 활성화
+              value={editNickname ? nicknameInput : nickname} // 닉네임 입력 상태를 바인딩
+              onChange={(e) => setNicknameInput(e.target.value)} // 닉네임 입력 변화 처리
+              placeholder="닉네임을 입력하세요"
             />
           </s.InfoContainer>
         </form>
       </s.MyInfoWrapper>
-      <s.Background>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="390"
-          height="152"
-          viewBox="0 0 390 152"
-          fill="none"
-        >
-          <path
-            d="M0 40.5C162 196.5 326.06 206.799 390 0V226H0V40.5Z"
-            fill="#B8E5FF"
-            fillOpacity="0.15"
-          />
-        </svg>
-      </s.Background>
     </s.MyPageLayout>
   );
 };
