@@ -67,9 +67,7 @@ function App() {
   let fetchFirst = false;
 
   //console.log(location.pathname);
-  useEffect(() => {
-    handleAllowNotification();
-  }, []);
+
   useEffect(() => {
     const loadUserData = async () => {
       if (!excludepaths.includes(location.pathname)) {
@@ -92,6 +90,8 @@ function App() {
         } else {
           nav('/landing');
         }
+      } else {
+        handleAllowNotification();
       }
     }
   }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
