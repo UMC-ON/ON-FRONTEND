@@ -2,53 +2,58 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './NotificationPageStyled';
 import notification_circle from '../../assets/images/notification_circle.svg';
 import NoContent from '../../components/NoContent/NoContent';
+import { getData } from '../../api/Functions';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { GET_ALERT_LIST } from '../../api/urls';
+import Loading from '../../components/Loading/Loading';
+import SingleNotification from '../../components/Notification/SingleNotification';
 
 const Notification = () => {
-  const [notification, setNotification] = useState([]);
+  const [notification, setNotification] = useState(['as', 'as']);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const fetchNotification = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_ALERT_LIST,
+          {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+
+        // 응답 데이터의 구조를 확인하고 유효성을 검사
+        console.log('Received data:', response.data); // 전체 응답 데이터 확인
+        setNotification(response.data.result); // 상태 업데이트
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchNotification();
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <s.NotificationLayout>
       <PageHeader pageName="알림" />
-      {isLoading ? (
-        <p>로딩중</p>
-      ) : (
+      {notification && notification.length > 0 ? (
         <>
-          {notification ? (
-            <>
-              <s.NotificationWrapper>
-                <s.NotificationContainer>
-                  <s.NotificationTitle>
-                    <span style={{ overflow: 'visible' }}>[정보글]</span>
-                    <span>내 동행글에 새로운 동행 신청 메시지가 왔어요</span>
-                    {/*읽음 여부 추가*/}
-                    <s.NotificationCircle
-                      src={notification_circle}
-                      alt="Notification Circle"
-                    />
-                  </s.NotificationTitle>
-                  <s.NotificationText>
-                    그러면 6개월 전부터 시도해 보면 괜찮을까요?
-                  </s.NotificationText>
-                </s.NotificationContainer>
-                <s.Line />
-                <s.NotificationContainer>
-                  <s.NotificationTitle>
-                    <span>[정보글]</span>
-                    <span>동행구해요오오오</span>
-                  </s.NotificationTitle>
-                  <s.NotificationText>12tl</s.NotificationText>
-                </s.NotificationContainer>
-              </s.NotificationWrapper>
-              <s.NotificationEnd>알람 내역의 마지막입니다.</s.NotificationEnd>
-              <s.Background />
-            </>
-          ) : (
-            <NoContent content="알림 내역" />
-          )}
+          <s.NotificationWrapper>
+            <SingleNotification />
+            <SingleNotification />
+            <SingleNotification />
+          </s.NotificationWrapper>
+          <s.NotificationEnd>알람 내역의 마지막입니다.</s.NotificationEnd>
+          <s.Background />
         </>
+      ) : (
+        <NoContent content="알림 내역" />
       )}
     </s.NotificationLayout>
   );
