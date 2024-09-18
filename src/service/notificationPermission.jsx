@@ -16,6 +16,7 @@ export async function handleAllowNotification() {
       });
       if (token) {
         console.log('토큰', token);
+        alert(token);
         try {
           const response = await postData(
             POST_TOKEN,
