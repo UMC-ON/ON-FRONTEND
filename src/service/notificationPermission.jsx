@@ -5,7 +5,7 @@ import { POST_TOKEN } from '../api/urls';
 import { app } from './initFirebase';
 
 export async function handleAllowNotification() {
-  registerServiceWorker(); // 나중에 설명
+  registerServiceWorker();
   const messaging = getMessaging(app);
   try {
     const permission = await Notification.requestPermission();
@@ -16,7 +16,6 @@ export async function handleAllowNotification() {
       });
       if (token) {
         console.log('토큰', token);
-        alert(token);
         try {
           const response = await postData(
             POST_TOKEN,
@@ -41,7 +40,6 @@ export async function handleAllowNotification() {
         alert('토큰 등록이 불가능 합니다. 생성하려면 권한을 허용해주세요');
       }
     } else if (permission === 'denied') {
-      alert(token);
       alert(
         'web push 권한이 차단되었습니다. 알림을 사용하시려면 권한을 허용해주세요',
       );
