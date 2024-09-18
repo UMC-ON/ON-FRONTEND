@@ -48,3 +48,14 @@ export async function handleAllowNotification() {
     console.error('푸시 토큰 가져오는 중에 에러 발생', error);
   }
 }
+
+export function requestNotificationPermissionOnce() {
+  const notificationAsked = localStorage.getItem('notificationAsked');
+
+  // 알림 권한을 요청한 적이 없으면
+  if (!notificationAsked) {
+    handleAllowNotification();
+    // 알림 권한 요청을 한 번 했음을 저장
+    localStorage.setItem('notificationAsked', 'true');
+  }
+}

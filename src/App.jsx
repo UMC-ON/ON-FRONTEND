@@ -54,7 +54,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './redux/actions.jsx';
 import Loading from './components/Loading/Loading.jsx';
-import { handleAllowNotification } from './service/notificationPermission.jsx';
+import { requestNotificationPermissionOnce } from './service/notificationPermission.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -91,7 +91,7 @@ function App() {
           nav('/landing');
         }
       } else {
-        handleAllowNotification();
+        requestNotificationPermissionOnce();
       }
     }
   }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
