@@ -5,7 +5,7 @@ export const SIGN_UP_URL = 'api/v1/user/sign-up';
 export const CHECK_DUPLICATE_NICK = 'api/v1/user/duplicate_check/nickname';
 export const CHECK_DUPLICATE_ID = '/api/v1/user/duplicate_check/email';
 export const SIGN_IN_URL = 'api/v1/user/sign-in';
-export const GET_CURRENT_INFO = '/api/v1/user/current/info';
+export const GET_CURRENT_INFO = 'api/v1/user/current/info';
 export const PUT_UNIV = '/api/v1/user/current/update/univ_url';
 export const PUT_NICKNAME = '/api/v1/user/current/update/nickname';
 
@@ -92,3 +92,4 @@ export const WRITE_ACCOMPANY = `/api/v1/company-post`;
 
 //알림
 export const POST_TOKEN = `/api/v1/alert/deviceToken`;
+export const GET_ALERT_LIST = '/api/v1/alert/list';
