@@ -2,32 +2,13 @@ import useMultiStepForm from '../../hooks/useMultiStepForm';
 import * as s from './SignUpStyled';
 import * as FormElement from './FormElements';
 import groupLogo from '../../assets/images/groupLogo.svg';
-import { useState, useEffect, useRef } from 'react';
-import { UserList } from '../../components/Common/TempDummyData/PostList';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { postData } from '../../api/Functions';
 import { SIGN_UP_URL } from '../../api/urls';
 
-const userInfoFE = {
-  userId: UserList.length + 1, //백이랑 연결시 삭제
-  email: '',
-  password: '',
-  nickname: '',
-  name: '',
-  age: '',
-  gender: '',
-  phone: '',
-  is_dispatch_confirmed: true, //여기서부터 백이랑 연결 시 다 삭제
-  dispatchedUniversity: '',
-  universityUrl: '',
-  country: '',
-  dispatchedType: '',
-  userState: 'TEMPORARY',
-};
-
 const userInfoBE = {
-  email: '',
+  loginId: '',
   password: '',
   nickname: '',
   name: '',
@@ -38,16 +19,17 @@ const userInfoBE = {
 
 const SignUpPage = () => {
   const nav = useNavigate();
-  const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState(userInfoBE);
-  const [dupCheck, setDupCheck] = useState({ email: 0, nickname: 0 });
+  const [dupCheck, setDupCheck] = useState({ loginId: 0, nickname: 0 });
+  //0==유효성검사도, 중복검사도 진행X
+  //1== 유효성,중복검사 OK
   const [isActive, setActive] = useState(false);
   const updateUserInfo = (e) => {
     if (e) {
       let name = e.target.name;
       let value = e.target.value;
       setUserInfo({ ...userInfo, [name]: value });
-      if (name === 'nickname' || name === 'email') {
+      if (name === 'nickname' || name === 'loginId') {
         //이메일이나 닉네임이 바뀔 경우 중복체크 역사 초기화
         setDupCheck({ ...dupCheck, [name]: 0 });
       }
@@ -81,21 +63,14 @@ const SignUpPage = () => {
             state={userInfo}
             updateUserInfo={updateUserInfo}
             setActive={setActive}
+            setDupCheck={setDupCheck}
+            dupCheck={dupCheck}
           />
         ),
       },
     ]);
   const animationDiv = useRef(null);
 
-  const handleSubmitFE = (e) => {
-    e.preventDefault();
-    if (isLastStep) {
-      UserList.unshift(userInfo); //DB에 저장
-      alert('회원가입이 완료되었습니다.');
-      return nav('/signIn');
-    }
-    next();
-  };
   const handleSubmitBE = async (e) => {
     e.preventDefault();
 
@@ -129,12 +104,14 @@ const SignUpPage = () => {
             </s.TitleSection>
 
             <s.ContentSection ref={animationDiv}>
-              <s.BackButton
-                type="button"
-                onClick={prev}
-              >
-                이전 단계
-              </s.BackButton>
+              {!isFirstStep && (
+                <s.BackButton
+                  type="button"
+                  onClick={prev}
+                >
+                  이전 단계
+                </s.BackButton>
+              )}
               <s.StyledH2 style={{ marginBottom: '40px' }}>
                 {currentTitle}
               </s.StyledH2>

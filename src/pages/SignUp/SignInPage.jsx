@@ -13,7 +13,7 @@ import { postData, getData } from '../../api/Functions';
 const SignInPage = () => {
   //지금 편의를 위해 userInitialState가 너구리로 돼있어서 첫 렌더링시에 자꾸 useEffect 작동해서 막으려고 ㅠ
   const nav = useNavigate();
-  const inputValue = useRef({ email: '', password: '' });
+  const inputValue = useRef({ loginId: '', password: '' });
 
   const dispatch = useDispatch();
   const onChangeHandler = (e) => {
@@ -29,26 +29,25 @@ const SignInPage = () => {
       const formData = JSON.stringify(inputValue.current);
       //서버에 로그인 요청
       const response = await postData(SIGN_IN_URL, formData);
+      console.log(response);
 
       //로그인 성공
-      if (response.data.inSuccess) {
+      if (response.data) {
         console.log('실행');
         console.log(response.data);
         //응답으로부터 토큰 받아오기
-        const { grantType, accessToken, refreshToken } = response.data.result;
+        const { grantType, accessToken, refreshToken } = response.data;
         console.log(`${grantType},${accessToken},${refreshToken}`);
         //현 사용자 정보 api호출
         const user = await getData(GET_USER_INFO, {
           Authorization: `Bearer ${accessToken}`,
         });
-        console.log(user.data.result);
+        console.log(user.data);
         //현 사용자와 로그인 상태 redux에 저장
-        dispatch(
-          loginSuccess(user.data.result, grantType, accessToken, refreshToken),
-        );
+        dispatch(loginSuccess(user.data, grantType, accessToken, refreshToken));
 
         //유저 상태에 따른 조건부 네비게이팅
-        if (user.data.result.userStatus === 'TEMPORARY') {
+        if (user.data.userStatus === 'TEMPORARY') {
           nav('/signUp/credentials');
         } else {
           nav('/');
@@ -58,6 +57,7 @@ const SignInPage = () => {
         dispatch(loginFailure('Login failed. Please check your credentials.'));
       }
     } catch (error) {
+      alert('아이디나 비밀번호가 일치하지 않습니다.');
       dispatch(loginFailure('Invalid email or password'));
     }
 
@@ -80,9 +80,9 @@ const SignInPage = () => {
               <s.StyledH2>로그인하기</s.StyledH2>
 
               <s.InputWrapper>
-                <LittleTitle>Email</LittleTitle>
+                <LittleTitle>ID</LittleTitle>
                 <s.TransparentInput
-                  name="email"
+                  name="loginId"
                   onChange={onChangeHandler}
                 />
               </s.InputWrapper>
@@ -104,7 +104,7 @@ const SignInPage = () => {
                 Sign Up
               </div>
               <FindSection>
-                <div>Find Email</div>
+                <div>Find Id</div>
                 <div>Find Password</div>
               </FindSection>
             </OptionSection>

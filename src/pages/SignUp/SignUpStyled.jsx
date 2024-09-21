@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 import grayArrow from '../../assets/images/grayArrow.svg';
 import lightBlueArrow from '../../assets/images/lightBlueArrow.svg';
-import radioButton_checked from '../../assets/images/radioButton_checked.svg';
+//import radioButton_checked from '../../assets/images/radioButton_checked.svg';
 
 export const FormPage = styled.section`
   background-color: rgb(250, 250, 250);
@@ -88,6 +88,19 @@ export const StyledH2 = styled.div`
   font-weight: bold;
   margin: 0.75rem 0;
 `;
+const grad = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="10" cy="10" r="9.5" fill="url(#paint0_linear_424_4500)" stroke="#E7E7E7"/>
+<defs>
+<linearGradient id="paint0_linear_424_4500" x1="0" y1="0" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D6EBFF"/>
+<stop offset="1" stop-color="#C2C7FF"/>
+</linearGradient>
+</defs>
+</svg>
+`;
+const encodedGrad = encodeURIComponent(grad)
+  .replace(/'/g, '%27')
+  .replace(/"/g, '%22');
 
 export const RadioButton = styled.input`
   vertical-align: -0.188rem;
@@ -97,7 +110,7 @@ export const RadioButton = styled.input`
   width: 1.25em;
   height: 1.25em;
   &:checked {
-    background: url(${radioButton_checked}) no-repeat center;
+    background: url('data:image/svg+xml,${encodedGrad}') no-repeat center;
   }
 `;
 
