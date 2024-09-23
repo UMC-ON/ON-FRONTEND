@@ -26,7 +26,7 @@ export const postData = async (url, formData, headers = {}, params = {}) => {
     })
     .catch((error) => {
       console.log(error);
-      return null;
+      return response;
     });
 
   return response;
