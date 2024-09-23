@@ -15,7 +15,8 @@ const useFetchMyPosts = (url, boardType, token, params, currentMode) => {
           params,
         );
         if (response) {
-          console.log(boardType + ': ' + response.data);
+          console.log(response.data);
+          console.log(response.data.content);
           setPosts(response.data.content);
         }
       } catch (error) {
@@ -26,7 +27,7 @@ const useFetchMyPosts = (url, boardType, token, params, currentMode) => {
     };
 
     fetchPosts();
-  }, [currentMode]);
+  }, []);
 
   return { posts, isLoading };
 };

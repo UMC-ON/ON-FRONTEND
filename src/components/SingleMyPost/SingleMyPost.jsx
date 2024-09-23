@@ -1,40 +1,41 @@
 import * as s from './SingleMyPostStyled';
-import Img from '../../assets/images/postImgExample.svg';
+import { showDate } from '../Common/InfoExp';
 
 const SingleMyPost = ({
+  postId,
   title,
   time,
   content,
   nickName,
   image,
-  verified,
   comment,
   categories,
+  isAnonymous,
+  isAnonymousUniv,
+  userStatus,
+  boardType,
 }) => {
-  const showImg = () => {
-    console.log('dd', image);
-    if (length.image === 0) false;
-    else true;
-  };
+  const formatTime = showDate(time);
+
   return (
     <s.PostWrapper>
       <s.PostContainer>
         <s.Top>
           <s.Title>{title}</s.Title>
-          <s.Time>{time}</s.Time>
+          <s.Time>{formatTime}</s.Time>
         </s.Top>
 
         <s.ContentText>{content}</s.ContentText>
-        <s.ContentImg
-          src={Img}
-          showimg={showImg}
-        />
+        {image.length > 0 && (
+          <s.ContentImg
+            src={image} // 첫 번째 이미지를 표시하도록 설정
+          />
+        )}
         <s.Info>
           <span style={{ color: '#7A7A7A', marginRight: '0.3rem' }}>
-            {nickName}
+            {isAnonymous ? '익명' : nickName}
           </span>
-          {/* {verified} */}
-          <s.VerifiedSvg />
+          {userStatus === 'ACTIVE' && <s.VerifiedSvg />}
           <s.CommentSvg />
           <span style={{ color: '#92A5BC' }}>{comment}</span>
         </s.Info>

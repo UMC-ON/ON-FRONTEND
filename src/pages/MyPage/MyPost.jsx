@@ -59,13 +59,6 @@ const MyPost = () => {
     console.log('Current Mode:', currentMode);
   }, [currentMode]);
 
-  useEffect(() => {
-    console.log('trade: ', tradePostResult);
-    console.log('acc: ', accompanyPostResult);
-    console.log('free: ', freePostResult);
-    console.log('info: ', infoPostResult);
-  }, []);
-
   const renderPosts = (postResult, component) => {
     return postResult && postResult.length === 0 ? (
       <NoContent
@@ -113,14 +106,18 @@ const MyPost = () => {
         renderPosts(infoPostResult, (data) => (
           <SingleMyPost
             key={data.postId}
+            postId={data.postId}
             title={data.title}
             time={data.createdAt}
             content={data.content}
             nickName={data.writerInfo.nickname}
             image={data.imageUrls}
-            verified={data.anonymous}
             comment={data.commentCount}
             categories="정보 커뮤니티"
+            isAnonymous={data.anonymous}
+            isAnonymousUniv={data.isAnonymousUniv}
+            userStatus={data.writerInfo.userStatus}
+            boardType={data.boardType}
           />
         ))
       ) : currentMode === 1 ? (
@@ -135,6 +132,10 @@ const MyPost = () => {
             verified={data.anonymous}
             comment={data.commentCount}
             categories="자유 커뮤니티"
+            isAnonymous={data.anonymous}
+            isAnonymousUniv={data.isAnonymousUniv}
+            userStatus={data.writerInfo.userStatus}
+            boardType={data.boardType}
           />
         ))
       ) : currentMode === 2 ? (
