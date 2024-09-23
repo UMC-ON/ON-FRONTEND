@@ -180,7 +180,22 @@ const Bold = styled.div`
   display: inline;
   font-weight: bold;
 `;
-import { CHECK_DUPLICATE_EMAIL, CHECK_DUPLICATE_NICK } from '../../api/urls';
+import { CHECK_DUPLICATE_ID, CHECK_DUPLICATE_NICK } from '../../api/urls';
+
+const apiDupCheck = async (url, target, dupCheckSetter, dupCheck) => {
+  const response = await postData(url, target.value, {
+    'Content-Type': 'text/plain',
+  });
+  if (response) {
+    console.log(response);
+    if (response.data.result) {
+      //true면 존재한다는 것
+      dupCheckSetter({ ...dupCheck, [target.name]: -1 });
+    } else {
+      dupCheckSetter({ ...dupCheck, [target.name]: 1 });
+    }
+  }
+};
 
 export const UserInfoForm1 = ({
   state,
@@ -190,35 +205,21 @@ export const UserInfoForm1 = ({
   dupCheck,
 }) => {
   const [pwCheck, setPwCheck] = useState('');
-  const apiDupCheck = async (url, target) => {
-    const response = await postData(url, target.value, {
-      'Content-Type': 'text/plain',
-    });
-    if (response) {
-      console.log(response);
-      if (response.data.result) {
-        //true면 존재한다는 것
-        setDupCheck({ ...dupCheck, [target.name]: -1 });
-      } else {
-        setDupCheck({ ...dupCheck, [target.name]: 1 });
-      }
-    }
-  };
 
   const isAllValid = useRef({
     //형식체크 valid
     password: false,
-    email: false,
+    loginId: false,
   });
   useEffect(() => {
     console.log(
-      `이메일: ${dupCheck.email}, isAllValid:${isAllValid.current.password}, pwCheck:${pwCheck},닉네임:${dupCheck.nickname}`,
+      `이메일: ${dupCheck.loginId}, isAllValid:${isAllValid.current.password}, pwCheck:${pwCheck},닉네임:${dupCheck.nickname}`,
     );
     if (
-      dupCheck.email === 1 &&
+      dupCheck.loginId === 1 &&
       isAllValid.current.password &&
-      pwCheck === state.password &&
-      dupCheck.nickname === 1
+      pwCheck === state.password
+      //dupCheck.nickname === 1
     ) {
       setActive(true);
     } else {
@@ -229,25 +230,27 @@ export const UserInfoForm1 = ({
   return (
     <>
       <s.InputWrapper>
-        <div>이메일</div>
+        <div>아이디</div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"
             onChange={updateUserInfo}
-            name="email"
-            defaultValue={state.email}
+            name="loginId"
+            defaultValue={state.loginId}
           />
-          {dupCheck.email < 1 ? (
+          {dupCheck.loginId < 1 ? (
             <s.GrayButton
               onClick={(e) => {
                 e.preventDefault();
-                if (!isAllValid.current.email) {
-                  return;
-                }
-                apiDupCheck(CHECK_DUPLICATE_EMAIL, {
-                  name: 'email',
-                  value: state.email,
-                });
+                apiDupCheck(
+                  CHECK_DUPLICATE_ID,
+                  {
+                    name: 'loginId',
+                    value: state.loginId,
+                  },
+                  setDupCheck,
+                  dupCheck,
+                );
               }}
             >
               중복확인
@@ -257,18 +260,18 @@ export const UserInfoForm1 = ({
           )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      {dupCheck.email === 0 && (
+      {/* {dupCheck.loginId === 0 && (
         <s.Explanation>
-          {SignUpValidCheck({ name: 'email', value: state.email }, isAllValid)
+          {SignUpValidCheck({ name: 'loginId', value: state.loginId }, isAllValid)
             ? '중복 검사를 해주세요.'
             : '이메일 형식으로 작성해주세요'}
         </s.Explanation>
+      )} */}
+      {dupCheck.loginId === 1 && (
+        <s.Explanation>사용할 수 있는 아이디입니다.</s.Explanation>
       )}
-      {dupCheck.email === 1 && (
-        <s.Explanation>사용할 수 있는 이메일입니다.</s.Explanation>
-      )}
-      {dupCheck.email === -1 && (
-        <s.Explanation>이미 존재하는 이메일입니다.</s.Explanation>
+      {dupCheck.loginId === -1 && (
+        <s.Explanation>이미 존재하는 아이디입니다.</s.Explanation>
       )}
       <s.InputWrapper>
         <div>비밀번호</div>
@@ -315,45 +318,6 @@ export const UserInfoForm1 = ({
       <s.Explanation>
         {pwCheck === state.password ? null : '비밀번호가 일치하지 않습니다'}
       </s.Explanation>
-
-      <s.InputWrapper>
-        <div>닉네임</div>
-        <SpaceBetweenContainer>
-          <s.TransparentInput
-            onChange={updateUserInfo}
-            type="text"
-            name="nickname"
-            defaultValue={state.nickname}
-          />
-          {dupCheck.nickname < 1 ? (
-            <s.GrayButton
-              onClick={async (e) => {
-                e.preventDefault();
-                if (state.nickname === '') {
-                  return;
-                }
-                apiDupCheck(CHECK_DUPLICATE_NICK, {
-                  name: 'nickname',
-                  value: state.nickname,
-                });
-              }}
-            >
-              중복확인
-            </s.GrayButton>
-          ) : (
-            <img src={validImg} />
-          )}
-        </SpaceBetweenContainer>
-      </s.InputWrapper>
-      {dupCheck.nickname === 0 && state.nickname && (
-        <s.Explanation>중복검사를 해주세요.</s.Explanation>
-      )}
-      {dupCheck.nickname === 1 && (
-        <s.Explanation>사용할 수 있는 닉네임입니다.</s.Explanation>
-      )}
-      {dupCheck.nickname === -1 && (
-        <s.Explanation>이미 존재하는 닉네임입니다.</s.Explanation>
-      )}
     </>
   );
 };
@@ -365,7 +329,13 @@ const SpaceBetweenContainer = styled.div`
   align-items: center;
 `;
 
-export const UserInfoForm2 = ({ state, updateUserInfo, setActive }) => {
+export const UserInfoForm2 = ({
+  state,
+  updateUserInfo,
+  setActive,
+  setDupCheck,
+  dupCheck,
+}) => {
   const isAllValid = useRef({
     name: false,
     age: false,
@@ -377,13 +347,14 @@ export const UserInfoForm2 = ({ state, updateUserInfo, setActive }) => {
       isAllValid.current.name &&
       isAllValid.current.age &&
       isAllValid.current.gender &&
-      isAllValid.current.phone
+      isAllValid.current.phone &&
+      dupCheck.nickname === 1
     ) {
       setActive(true);
     } else {
       setActive(false);
     }
-  }, [state]);
+  }, [state, dupCheck]);
   useEffect(() => {
     //이전 단계를 눌로 페이지에 다시 돌아왔을 때, 렌더링하며 조건 상태 체크
     for (let key in state) {
@@ -489,6 +460,49 @@ export const UserInfoForm2 = ({ state, updateUserInfo, setActive }) => {
           ? null
           : '올바른 형식으로 작성해주세요'}
       </s.Explanation>
+      <s.InputWrapper>
+        <div>닉네임</div>
+        <SpaceBetweenContainer>
+          <s.TransparentInput
+            onChange={updateUserInfo}
+            type="text"
+            name="nickname"
+            defaultValue={state.nickname}
+          />
+          {dupCheck.nickname < 1 ? (
+            <s.GrayButton
+              onClick={async (e) => {
+                e.preventDefault();
+                if (state.nickname === '') {
+                  return;
+                }
+                apiDupCheck(
+                  CHECK_DUPLICATE_NICK,
+                  {
+                    name: 'nickname',
+                    value: state.nickname,
+                  },
+                  setDupCheck,
+                  dupCheck,
+                );
+              }}
+            >
+              중복확인
+            </s.GrayButton>
+          ) : (
+            <img src={validImg} />
+          )}
+        </SpaceBetweenContainer>
+      </s.InputWrapper>
+      {dupCheck.nickname === 0 && state.nickname && (
+        <s.Explanation>중복검사를 해주세요.</s.Explanation>
+      )}
+      {dupCheck.nickname === 1 && (
+        <s.Explanation>사용할 수 있는 닉네임입니다.</s.Explanation>
+      )}
+      {dupCheck.nickname === -1 && (
+        <s.Explanation>이미 존재하는 닉네임입니다.</s.Explanation>
+      )}
     </>
   );
 };
