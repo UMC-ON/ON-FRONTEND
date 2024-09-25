@@ -7,49 +7,48 @@ export const PageLayout = styled.div`
   max-width: 480px;
   display: flex;
   box-sizing: border-box;
-  padding: 1.5rem 1rem 0px;
-  /* justify-content: center; */
   align-items: center;
   flex-direction: column;
 `;
 
 export const SearchWrapper = styled.section`
   width: 100%;
+  padding: 1.69rem 1.94rem 1.19rem;
   display: flex;
   flex-wrap: nowrap;
+  box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.2rem;
 `;
 
 export const SearchBox = styled.div`
-  width: 85%;
+  width: 100%;
   height: 2.75rem;
   display: flex;
   align-items: center;
   position: relative;
+  border-radius: 1.875rem;
+  border: 2px solid transparent;
+  background-image: linear-gradient(#f3f9ff, #f3f9ff), ${theme.blueGra};
+  background-origin: border-box;
+  background-clip: content-box, border-box;
 `;
 
 export const SearchInput = styled.input`
-  height: 2.75rem;
   width: 100%;
-  border-radius: 1.875rem;
-  border: 0.5px solid #ccc;
-  padding-inline-start: 1.45rem;
-  padding-inline-end: 2rem;
-  background: linear-gradient(
-    135deg,
-    rgba(214, 235, 255, 0.8) 0%,
-    rgba(194, 199, 255, 0.8) 100%
-  );
+  height: 100%;
+  background: none;
+  border: none;
+  padding-inline-start: 3.63rem;
+  padding-inline-end: 2.75rem;
   outline: none;
 `;
 
 export const SearchButton = styled.img`
-  width: 1.57444rem;
+  width: 1.49769rem;
   height: 1.5rem;
   position: absolute;
-  right: 1.2rem;
+  left: 1.25rem;
 `;
 
 export const Exit = styled.img`
@@ -79,8 +78,9 @@ export const PreSearchWrapper = styled.div`
 `;
 
 export const SearchResultContainer = styled.section`
-  display: block;
+  display: flex;
   width: 100%;
+  flex-direction: column;
 `;
 
 export const LastText = styled.span`
@@ -91,6 +91,7 @@ export const LastText = styled.span`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  margin-top: 1.3rem;
 `;
 
 const ONIconSVG = styled.svg`
