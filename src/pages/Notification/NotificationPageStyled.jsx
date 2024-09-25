@@ -25,21 +25,6 @@ export const Background = styled.div`
   height: 25vh;
 `;
 
-// export const NotificationWrapper = styled.div`
-//   width: 90%;
-//   height: auto;
-//   display: flex;
-//   flex-direction: column;
-//   flex-wrap: wrap;
-//   box-sizing: border-box;
-//   padding: 5px 0px 5px 0px;
-//   border-radius: 14px;
-//   border: 0.5px solid #fff;
-//   background: rgba(227, 227, 227, 0.6);
-//   box-shadow: 4px 4px 24px 0px rgba(62, 115, 178, 0.15);
-//   margin: 1vh 0 3vh 0;
-// `;
-
 export const NotificationWrapper = styled.article`
   width: 100%;
   height: auto;
