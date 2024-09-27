@@ -8,7 +8,9 @@ const Reply = ({ reply, postWriter_id }) => {
       <ReplyImg src={replyImg} />
       <div>
         <Writer writer={`${reply.writerInfo.id === postWriter_id}`}>
-          {showWriter(reply, postWriter_id)}
+          {reply.writerInfo.id === postWriter_id
+            ? '글쓴이'
+            : reply.writerInfo.nickname}
         </Writer>
         {reply.contents}
       </div>
