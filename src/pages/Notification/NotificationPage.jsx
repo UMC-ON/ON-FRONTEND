@@ -78,11 +78,12 @@ const Notification = () => {
           <s.NotificationWrapper>
             {notification.map((data) => (
               <SingleNotification
-                key={data.alertConnectId}
+                key={data.alertId}
                 title={data.title}
                 content={data.content}
                 alertType={data.alertType}
                 alertConnectId={data.alertConnectId}
+                read={data.read}
               />
             ))}
           </s.NotificationWrapper>

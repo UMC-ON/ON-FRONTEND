@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const NotificationLayout = styled.div`
   width: 100vw;
-  height: 100vh;
   max-width: 480px;
   display: flex;
   box-sizing: border-box;
@@ -23,6 +22,7 @@ export const Background = styled.div`
   width: 100%;
   max-width: 480px;
   height: 25vh;
+  z-index: 0;
 `;
 
 export const NotificationWrapper = styled.article`
