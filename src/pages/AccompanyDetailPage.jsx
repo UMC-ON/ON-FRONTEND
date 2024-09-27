@@ -32,6 +32,9 @@ import { GET_DETAIL_ACCOMPANY, GET_SIMILAR_ACCOMPANY, GET_USER_INFO, GET_ROOM_ID
 function AccompanyDetailPage() {
   const location = useLocation();
   const { postId } = useParams();
+
+  let loginInfo = useSelector((state) => state.user);
+  const nav = useNavigate();
   
 
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
@@ -144,22 +147,12 @@ function AccompanyDetailPage() {
     }
   };
 
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); 
-    // 2 seconds
-
-    return () => clearTimeout(timer);
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const info_data = await getData(GET_DETAIL_ACCOMPANY(postId),{
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
@@ -187,18 +180,37 @@ function AccompanyDetailPage() {
 
       } catch (error) {
         console.error('Error fetching data:', error);
-      }
+      } finally {
+        // insert code here
+        setTimeout(() => {
+            setIsLoading(false); // Data fetched, stop showing main loading after 1 second
+        }, 1000); // 1000 milliseconds = 1 second
+    }
     };
 
     fetchData(); 
   }, [postId]); 
 
+  useEffect(() => {
+    if (!isLoading) {
+      if (!loginInfo.isAuthenticated) {
+        const res = confirm('로그인이 필요합니다.');
+        if (res) {
+          nav('/signIn');
+        } else {
+          nav('/landing');
+        }
+      }
+    }
+  }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
+
+  if (isLoading)
+  {
+      return <LoadingScreen/>
+  }
 
     return (
       <>
-      {loading ? (
-        <LoadingScreen/>
-      ) : (
         <>
         <AccompanyHeader openModal={openShareModal}/>
         <Space/>
@@ -320,7 +332,6 @@ function AccompanyDetailPage() {
         {isReportModalOpen && <ReportModal closeModal={closeReportModal} />}
         {isShareModalOpen && <ShareModal closeModal={closeShareModal} />}
       </>
-      )}
       </>
     );
 }
@@ -328,7 +339,7 @@ function AccompanyDetailPage() {
 export default AccompanyDetailPage;
 
 const LittleSpace = styled.div`
-  margin-top: 5px;
+  margin-top: 8px;
 `;
 
 const BlueContainer = styled.div`
@@ -486,12 +497,17 @@ const Row = styled.div`
 
 const RowText = styled.div`
   flex: 1;
-  text-align: center; 
+  text-align: center;
   padding: 10px;
   color: ${props => props.$color || 'black'};
   font-weight: ${props => props.$weight || 'bold'};
   font-size: ${props => props.$size || '1em'};
+  white-space: normal;
+  word-break: keep-all; /* Ensures words don't break in the middle */
+  overflow-wrap: break-word; /* Allows wrapping only at natural breaks (like spaces) */
+  max-width: 100px;
 `;
+
 
 const LittleButton = styled.button`
   font-size: 0.7em;

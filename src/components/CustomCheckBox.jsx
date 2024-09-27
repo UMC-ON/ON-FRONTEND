@@ -3,22 +3,13 @@ import React from 'react';
 
 function CustomCheckbox({ checked, onChange }) {
   return (
-    <CheckboxContainer>
-      <StyledCheckbox checked={checked} onClick={() => onChange({ target: { checked: !checked } })}>
-        {checked && <Checkmark>✓</Checkmark>}
-      </StyledCheckbox>
-    </CheckboxContainer>
+    <StyledCheckbox checked={checked} onClick={() => onChange({ target: { checked: !checked } })}>
+      {checked && <Checkmark>✓</Checkmark>}
+    </StyledCheckbox>
   );
 }
 
 export default CustomCheckbox;
-
-const CheckboxContainer = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-`;
 
 const StyledCheckbox = styled.div`
   margin-top: 5px;
