@@ -17,12 +17,15 @@ import CameraBottom from '../components/CameraBottom';
 import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SelectCity from './SelectCity/SelectCity.jsx';
+import Loading from '../components/Loading/Loading.jsx';
 
 import { multiFilePostData, getData } from '../api/Functions';
 import { WRITE_ACCOMPANY, GET_USER_INFO } from '../api/urls';
 
 
 function AccompanyPostPage() {
+    const [isLoading, setIsLoading] = useState(true);
+
     const [ageChecked, setAgeChecked] = useState(false);
     const [schoolChecked, setSchoolChecked] = useState(false);
 
@@ -71,13 +74,16 @@ function AccompanyPostPage() {
     useEffect(() => {
       const fetchData = async () => {
         try {
+          setIsLoading(true);
+
           const user_data = await getData(GET_USER_INFO,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
 
-          const data = user_data.data.result;
+          const data = user_data.data;
           setUserData(data);
-          // console.log(user_data.data.result);
+          console.log("user data");
+          console.log(user_data.data);
         
           setAge(data.age);
           setCountry(data.country);
@@ -86,6 +92,8 @@ function AccompanyPostPage() {
 
         } catch (error) {
           console.error('Error fetching data:', error);
+        } finally {
+          setIsLoading(false);
         }
       };
   
@@ -333,6 +341,7 @@ function AccompanyPostPage() {
     };
 
     const onSubmit = () => {
+      console.log(input);
       if (personValue == 0)
       {
           alert('모집 인원을 입력해주세요.');
@@ -361,6 +370,10 @@ function AccompanyPostPage() {
       }
       // alert(input);
     };
+
+    if (isLoading) {
+      return <Loading/>;
+    }
     
     return (
       <>

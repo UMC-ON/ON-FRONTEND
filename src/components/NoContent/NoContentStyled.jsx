@@ -5,6 +5,8 @@ export const NoContentLayout = styled.div`
   flex-direction: column;
   height: 100%;
   justify-content: center;
+  position: fixed;
+  z-index: 3;
 `;
 
 export const NoImg = styled.img`
@@ -13,12 +15,12 @@ export const NoImg = styled.img`
   }
 `;
 export const NoText = styled.p`
-  color: #b8b8b8;
+  margin: 31px 0 61px;
+  color: #7a7a7a;
   text-align: center;
   font-family: Inter;
-  font-size: 14px;
+  font-size: 17px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 700;
   line-height: normal;
-  margin-top: 10px;
 `;

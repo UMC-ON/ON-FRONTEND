@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import check from '../../assets/images/check.svg';
+
 import { useRef } from 'react';
 const DefaultCheckBox = ({
   before,
@@ -55,6 +55,42 @@ const CheckBoxWrapper = styled.label`
   height: 18px;
   width: auto;
 `;
+
+const blueCheck = `<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="10"
+    height="11"
+    viewBox="0 0 10 11"
+    fill="none"
+  >
+    <path
+      d="M1 5.09091C1.95711 5.70736 3.46442 8.77393 4.24007 9.59925C4.43597 9.80769 4.70767 10.24 4.81569 9.82893C5.3072 7.95844 6.08611 6.1162 6.98533 4.40627C7.44924 3.52412 8.27273 1.81818 9 1"
+      stroke="#BFD8E5"
+      stroke-width="2"
+      stroke-linecap="round"
+    />
+  </svg>`;
+const purpleCheck = `<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="10"
+    height="11"
+    viewBox="0 0 10 11"
+    fill="none"
+  >
+    <path
+      d="M1 5.09091C1.95711 5.70736 3.46442 8.77393 4.24007 9.59925C4.43597 9.80769 4.70767 10.24 4.81569 9.82893C5.3072 7.95844 6.08611 6.1162 6.98533 4.40627C7.44924 3.52412 8.27273 1.81818 9 1"
+      stroke="#CBCDE9"
+      stroke-width="2"
+      stroke-linecap="round"
+    />
+  </svg>`;
+const encodedBlueCheck = encodeURIComponent(blueCheck)
+  .replace(/'/g, '%27')
+  .replace(/"/g, '%22');
+
+const encodedPurpleCheck = encodeURIComponent(purpleCheck)
+  .replace(/'/g, '%27')
+  .replace(/"/g, '%22');
 const StyledCheckBox = styled.input`
   appearance: none;
   box-sizing: border-box;
@@ -66,7 +102,12 @@ const StyledCheckBox = styled.input`
   padding: 0 4px;
   background-color: white;
   &:checked {
-    background: url(${check}) no-repeat center white;
+    background: ${(props) =>
+      props.style.color === '#BFD8E5'
+        ? `url('data:image/svg+xml,${encodedBlueCheck}') no-repeat center
+      white`
+        : `url('data:image/svg+xml,${encodedPurpleCheck}') no-repeat center
+      white`};
   }
 `;
 

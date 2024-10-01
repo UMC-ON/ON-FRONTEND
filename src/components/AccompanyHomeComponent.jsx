@@ -24,20 +24,20 @@ import SecondModal from './SecondModal.jsx';
 
 const images = [bannerImg, bannerImg, bannerImg, bannerImg, bannerImg];
 
-const accompanyCards = [
-  {
-    isClosed: true,
-    image: marketImg,
-    title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
-    date: '8/2',
-    people: '(1/4)',
-    place: '런던 버로우 마켓',
-    description: '같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 많은 관심 부탁드립니다',
-    id: 'wjdscl',
-    age: '20대',
-    gender: '여',
-  },
-];
+// const accompanyCards = [
+//   {
+//     isClosed: true,
+//     image: marketImg,
+//     title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
+//     date: '8/2',
+//     people: '(1/4)',
+//     place: '런던 버로우 마켓',
+//     description: '같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 많은 관심 부탁드립니다',
+//     id: 'wjdscl',
+//     age: '20대',
+//     gender: '여',
+//   },
+// ];
 
 const AccompanyHomeComponent = 
 ({ allData,

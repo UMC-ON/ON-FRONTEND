@@ -41,7 +41,7 @@ export const loadUser = () => {
           Authorization: `Bearer ${accessToken}`,
         }); // 토큰을 사용해 유저 정보를 가져옴
         if (res) {
-          let user = res.data.result;
+          let user = res.data;
           console.log(user);
           dispatch({
             type: LOAD_USER,
