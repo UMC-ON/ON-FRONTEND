@@ -135,26 +135,29 @@ function HomePage() {
           const user_data = await getData(GET_USER_INFO,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
-          setUserData([user_data.data.result]);
-          // console.log("userData");
-          // console.log(user_data.data.result);
+          setUserData([user_data.data]);
+          console.log("userData");
+          console.log(user_data.data);
           if (user_data.data.universityUrl)
           {
           setUnivLink(user_data.data.universityUrl);
           }
-          getSiteByCountry(user_data.data.result.country);
+          if (user_data.data.country)
+          {
+          getSiteByCountry(user_data.data.country);
+          }
           
           const info_data = await getData(GET_TWO_INFOPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
-          setInfoData(info_data.data.result);
-          // console.log("infoData");
-          // console.log(info_data.data.result);
+          setInfoData(info_data.data);
+          console.log("infoData");
+          console.log(info_data.data);
 
           const free_data = await getData(GET_TWO_FREEPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
-          setFreeData(free_data.data.result);
+          setFreeData(free_data.data);
 
           const accom_data = await getData(GET_NEAR_ACCOMPANY,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
@@ -223,7 +226,7 @@ function HomePage() {
             {userData.map((card, index) => (
               <div key={index}>
               <LeftContainer>
-                  <SubText>나의 교환교</SubText>
+                  <SubText>나의 파견교</SubText>
               </LeftContainer>
               {card.country?
               <LeftContainer>
@@ -242,7 +245,7 @@ function HomePage() {
             <Container key={index}>
                 <Button onClick={goToCollege}>
                     <Icon src={schoolIcon} alt="School Icon" />
-                    <SubText>교환교</SubText>
+                    <SubText>파견교</SubText>
                     <SubText>홈페이지</SubText>
                 </Button>
                 {card.country?
@@ -426,6 +429,22 @@ const Button = styled.button`
   font-size: 16px;
   cursor: pointer;
   width: 6rem;
+  border: none; 
+  outline: none; 
+
+  &:hover {
+    border: none; 
+  }
+
+  &:focus {
+    border: none; 
+    outline: none; 
+  }
+
+  &:active {
+    border: none; 
+    outline: none; 
+  }
 `;
 
 const Icon = styled.img`
@@ -435,10 +454,10 @@ const Icon = styled.img`
 `;
 
 const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 5vw;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 0 auto;
 `;
 
 const SliderContainer = styled.div`
@@ -459,9 +478,12 @@ const SliderWrapper = styled.div.withConfig({
 
 const Slide = styled.div`
   min-width: 100%;
-  height: 100px;
+  padding-bottom: 33%; /* Adjust this according to the image aspect ratio */
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  position: relative;
 `;
 
 const DotContainer = styled.div`

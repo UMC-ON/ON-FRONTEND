@@ -8,10 +8,15 @@ import closeIcon from '../assets/images/close_button.svg';
 import GenderChoice from '../components/GenderChoice.jsx';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 
+import Loading from '../components/Loading/Loading.jsx';
+
 import { getData } from '../api/Functions';
 import { GET_ALL_ACCOMPANY, GET_FILTER_ACCOMPANY, GET_USER_INFO } from '../api/urls';
 
 function AccompanyPage() {
+    const [isLoading, setIsLoading] = useState(true);
+    const [isUserLoading, setIsUserLoading] = useState(true);
+
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [isDateClicked, setIsDateClicked] = useState(false);
@@ -83,6 +88,8 @@ function AccompanyPage() {
 
     const filterData = async () => {
       try {
+        setIsLoading(true);
+
         console.log("filterData is pressed");
 
         const params = {};
@@ -103,29 +110,37 @@ function AccompanyPage() {
           params
         );
     
-        setAllData(filter_data.data);
-        console.log(filter_data.data);
+        setAllData(filter_data.data.content);
+        // console.log("Filter Data");
+        // console.log(filter_data.data.content);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     const fetchData = async () => {
       try {
+        setIsUserLoading(true);
+
         const all_data = await getData(GET_ALL_ACCOMPANY,{
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
-        setAllData(all_data.data);
-        // console.log(all_data.data);
+        setAllData(all_data.data.content);
+        console.log("All Data");
+        console.log(all_data.data.content);
 
         const user_data = await getData(GET_USER_INFO,{
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
-        setIsValidated(user_data.data.result.country);
-        console.log(user_data.data.result.country);
+        setIsValidated(user_data.data.country);
+        console.log(user_data.data.country);
 
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setIsUserLoading(false);
       }
     };
 
@@ -138,6 +153,10 @@ function AccompanyPage() {
         filterData();
       }
     }, [gender, startDate, endDate, country, isGenderClicked, isDateClicked, isCountryClicked]);
+
+    if (isLoading && isUserLoading){
+      return <Loading/>
+    }
 
     return (
       <>

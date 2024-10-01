@@ -61,7 +61,7 @@ function App() {
   let loginInfo = useSelector((state) => state.user);
   const location = useLocation();
   const nav = useNavigate();
-  const excludepaths = ['/signIn', '/signUp', '/landing', '/signUp/complete'];
+  const excludepaths = ['/signIn', '/signUp', '/landing', '/signUp/complete', '/accompany/detail'];
   const [isLoading, setIsLoading] = useState(true);
 
   //console.log(location.pathname);
@@ -93,7 +93,7 @@ function App() {
       }
     }
   }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
-  if (isLoading) {
+  if (isLoading && excludepaths.includes(location.pathname)) {
     return <Loading />;
   }
   if (loginInfo.isAuthenticated || excludepaths.includes(location.pathname)) {
