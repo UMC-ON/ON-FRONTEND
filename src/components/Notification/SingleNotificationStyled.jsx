@@ -1,68 +1,90 @@
 import styled from 'styled-components';
+import theme from '../../styles/theme';
 
 export const NotificationContainer = styled.div`
   width: 100%;
-  height: 4rem;
-  min-height: 50px;
-  max-height: 60px;
-  display: grid;
-  padding: 0.7rem 1rem;
+  height: 6.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1rem 0.94rem;
   box-sizing: border-box;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: 1fr 1fr;
-  align-items: center;
   position: relative;
-  grid-column-gap: 0.2rem;
+  border-radius: 0.625rem;
+  border: 0.5px solid #d9d9d9;
+  justify-content: space-between;
+  background: ${theme.blueGra};
+  margin-top: 0.63rem;
+  z-index: 1;
 `;
 export const NotificationTitle = styled.span`
   display: inline-block;
   overflow: hidden;
-  color: #363636;
+  color: #1e1e1e;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: Inter;
-  font-size: 14px;
+  font-size: 1.0625rem;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 700;
   line-height: normal;
-  letter-spacing: 0.28px;
+  letter-spacing: 0.02125rem;
   text-align: left;
 `;
 
-// export const NotificationTitle = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   position: relative;
-//   span {
-//     display: inline-block;
-//     overflow: hidden;
-//     color: #363636;
-//     text-overflow: ellipsis;
-//     white-space: nowrap;
-//     font-family: Inter;
-//     font-size: 14px;
-//     font-style: normal;
-//     font-weight: 600;
-//     line-height: normal;
-//     letter-spacing: 0.28px;
-//     text-align: left;
-//   }
-// `;
+export const ReadNotificationContainer = styled.div`
+  width: 100%;
+  height: 6.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1rem 0.94rem;
+  box-sizing: border-box;
+  position: relative;
+  border-radius: 0.625rem;
+  border: 0.5px solid #d9d9d9;
+  justify-content: space-between;
+  background: rgba(227, 227, 227, 0.6);
+  margin-top: 0.63rem;
+  z-index: 1;
+`;
+export const ReadNotificationTitle = styled.span`
+  display: inline-block;
+  overflow: hidden;
+  color: #5c5c5c;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Inter;
+  font-size: 1.0625rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.02125rem;
+  text-align: left;
+`;
 
 export const NotificationText = styled.p`
-  color: #363636;
+  height: 2rem;
+  overflow: hidden;
+  color: #5c5c5c;
+  text-overflow: ellipsis;
+  white-space: break-spaces;
   font-family: Inter;
-  font-size: 11px;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  letter-spacing: 0.22px;
   text-align: left;
-  grid-column: 1 / 3;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  margin-bottom: 0.5rem;
 `;
 
-export const NotificationCircle = styled.img`
+export const NotificationCircle = styled.div`
   position: absolute;
   right: 1rem;
-  top: 0.3rem;
+  top: 1rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background-color: #ffffff;
 `;
