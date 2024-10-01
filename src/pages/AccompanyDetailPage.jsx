@@ -165,8 +165,8 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
         // console.log(user_data.data.result.id);
-        console.log("user id");
-        setUserId(user_data.data.result.id);
+        console.log("user id"); 
+        setUserId(user_data.data.id);
 
         // console.log(info_data.data[0].nickname);
         setNickName(info_data.data[0].nickname);
