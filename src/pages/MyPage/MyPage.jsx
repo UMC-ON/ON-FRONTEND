@@ -33,12 +33,6 @@ const MyPage = () => {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.user.user);
 
-  //상태 체크 더미데이터
-  const userTest = {
-    dispatchedUniversity: 'D',
-    userStatus: 'NON_CERTIFIED',
-  };
-
   // useEffect(() => {
   //   const fetchData = async () => {
   //     setIsLoading(true);
@@ -99,6 +93,16 @@ const MyPage = () => {
     // 수정 모드 토글
     setEditNickname(!editNickname);
   };
+
+  //전화번호 포멧팅
+  function formatPhoneNumber(phoneNumber) {
+    // 전화번호 문자열이 11자리일 경우에만 포맷팅 진행
+    if (phoneNumber.length === 11 && /^010\d{8}$/.test(phoneNumber)) {
+      return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    } else {
+      return phoneNumber;
+    }
+  }
 
   // useEffect(() => {
   //   console.log('수정 상태', editNickname);
@@ -174,14 +178,17 @@ const MyPage = () => {
             {/* -------------------------- 파견교 ----------더미데이터 바꾸기---------------- */}
             <s.Title>나의 파견교</s.Title>
             <s.InfoBox>
-              {userTest.userStatus === 'ACTIVE' ? (
-                <span>{userInfo.dispatchedUniversity}</span>
-              ) : userTest.userStatus === 'AWAIT' ? (
+              {userInfo.userStatus === 'ACTIVE' ? (
+                <>
+                  <span>{userInfo.dispatchedUniversity}</span>
+                  <s.VerifyButton>인증 완료</s.VerifyButton>
+                </>
+              ) : userInfo.userStatus === 'AWAIT' ? (
                 <>
                   <span>{userInfo.dispatchedUniversity}</span>
                   <s.VerifyButton>인증 대기중</s.VerifyButton>
                 </>
-              ) : userTest.userStatus === 'NON_CERTIFIED' ? (
+              ) : userInfo.userStatus === 'NON_CERTIFIED' ? (
                 <>
                   <span>{userInfo.dispatchedUniversity}</span>
                   <s.VerifyButton>미인증</s.VerifyButton>
@@ -214,12 +221,12 @@ const MyPage = () => {
             </s.Country>
           </div>
 
-          <s.InfoContainer>
+          {/* <s.InfoContainer>
             <s.Title>Email</s.Title>
             <s.InfoBox>
               <span>{userInfo?.email ? userInfo.email : '없음'}</span>
             </s.InfoBox>
-          </s.InfoContainer>
+          </s.InfoContainer> */}
 
           <s.InfoContainer>
             <s.Title>이름</s.Title>
@@ -231,7 +238,9 @@ const MyPage = () => {
           <s.InfoContainer>
             <s.Title>전화번호</s.Title>
             <s.InfoBox>
-              <span>{userInfo?.phone ? userInfo.phone : '없음'}</span>
+              <span>
+                {userInfo?.phone ? formatPhoneNumber(userInfo.phone) : '없음'}
+              </span>
             </s.InfoBox>
           </s.InfoContainer>
 
