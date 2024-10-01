@@ -110,13 +110,13 @@ const MyPost = () => {
             title={data.title}
             time={data.createdAt}
             content={data.content}
-            nickName={data.writerInfo.nickname}
+            nickName={data.anonymous ? '익명' : data.writerInfo.nickname}
             image={data.imageUrls}
             comment={data.commentCount}
             categories="정보 커뮤니티"
-            isAnonymous={data.anonymous}
-            isAnonymousUniv={data.isAnonymousUniv}
-            userStatus={data.writerInfo.userStatus}
+            verified={
+              data.writerInfo.userStatus === 'ACTIVE' ? 'true' : 'false'
+            }
             boardType={data.boardType}
           />
         ))

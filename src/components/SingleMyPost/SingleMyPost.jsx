@@ -1,5 +1,6 @@
 import * as s from './SingleMyPostStyled';
 import { showDate } from '../Common/InfoExp';
+import { useNavigate } from 'react-router-dom';
 
 const SingleMyPost = ({
   postId,
@@ -10,15 +11,23 @@ const SingleMyPost = ({
   image,
   comment,
   categories,
-  isAnonymous,
-  isAnonymousUniv,
-  userStatus,
+  verified,
   boardType,
 }) => {
   const formatTime = showDate(time);
+  const navigate = useNavigate();
+  const deletePost = ()=>{
+    
+  }
 
   return (
-    <s.PostWrapper>
+    <s.PostWrapper
+      onClick={() =>
+        navigate(`/community/${boardType}/detail/${postId}`, {
+          state: { value: postId },
+        })
+      }
+    >
       <s.PostContainer>
         <s.Top>
           <s.Title>{title}</s.Title>
@@ -33,9 +42,9 @@ const SingleMyPost = ({
         )}
         <s.Info>
           <span style={{ color: '#7A7A7A', marginRight: '0.3rem' }}>
-            {isAnonymous ? '익명' : nickName}
+            {nickName}
           </span>
-          {userStatus === 'ACTIVE' && <s.VerifiedSvg />}
+          {verified ? <s.VerifiedSvg /> : ''}
           <s.CommentSvg />
           <span style={{ color: '#92A5BC' }}>{comment}</span>
         </s.Info>
