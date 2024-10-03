@@ -159,14 +159,15 @@ export const TermForm = ({ setActive }) => {
 const TermContent = styled.div`
   color: black;
   overflow: auto;
-  height: 17.625rem;
+  height: 30.6875rem;
+  flex-shrink: 0;
   margin: 0.313rem 0rem;
   padding: 1rem 1.5rem;
   line-height: 1.25rem;
   font-size: 0.75rem;
   text-align: justify;
-  background-color: #f4f4f4;
-  border-radius: 1.188rem;
+  border-radius: 1.1875rem;
+  background: #f4f4f4;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -188,7 +189,7 @@ const apiDupCheck = async (url, target, dupCheckSetter, dupCheck) => {
   });
   if (response) {
     console.log(response);
-    if (response.data.result) {
+    if (response.data) {
       //true면 존재한다는 것
       dupCheckSetter({ ...dupCheck, [target.name]: -1 });
     } else {
@@ -253,20 +254,13 @@ export const UserInfoForm1 = ({
                 );
               }}
             >
-              중복확인
+              중복검사
             </s.GrayButton>
           ) : (
             <img src={validImg} />
           )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      {/* {dupCheck.loginId === 0 && (
-        <s.Explanation>
-          {SignUpValidCheck({ name: 'loginId', value: state.loginId }, isAllValid)
-            ? '중복 검사를 해주세요.'
-            : '이메일 형식으로 작성해주세요'}
-        </s.Explanation>
-      )} */}
       {dupCheck.loginId === 1 && (
         <s.Explanation>사용할 수 있는 아이디입니다.</s.Explanation>
       )}

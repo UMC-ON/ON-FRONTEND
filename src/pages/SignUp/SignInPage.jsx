@@ -95,7 +95,12 @@ const SignInPage = () => {
                 />
               </s.InputWrapper>
             </s.ContentSection>
-            <SignInBtn type="submit">Log in</SignInBtn>
+            <s.PurpleButton
+              type="submit"
+              style={{ margin: '2rem 0' }}
+            >
+              로그인
+            </s.PurpleButton>
             <OptionSection>
               <div
                 style={{ flexShrink: 0 }}
