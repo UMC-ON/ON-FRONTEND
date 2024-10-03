@@ -58,12 +58,16 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
     if (userInfo) {
       const fetchData = async () => {
         setIsLoading(true);
-        const response = await getData(GET_POST_OF(currentBoardType), {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        });
+        const response = await getData(
+          GET_POST_OF(currentBoardType),
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          { page: 0, size: 20, sort: 'DESC' },
+        );
         if (response) {
           //console.log(response.data.imageUrls);
-          setPostList(response.data);
+          setPostList(response.data.content);
         }
         return response;
       };
@@ -94,89 +98,89 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
     return <Loading />;
   }
 
-  if (userInfo) {
-    return (
-      <>
-        <s.PageContainer>
-          <PageHeader
-            pageName={boardType === 'INFO' ? '정보 게시판' : '자유 게시판'}
-            color={boardType === 'INFO' ? '#3E73B2' : '#6458BF'}
-          ></PageHeader>
-          <s.SliderWrapper>
-            <DotInslideSlider images={images}></DotInslideSlider>
-          </s.SliderWrapper>
+  return (
+    <>
+      <s.PageContainer>
+        <PageHeader
+          pageName={boardType === 'INFO' ? '정보 게시판' : '자유 게시판'}
+          color={boardType === 'INFO' ? '#3E73B2' : '#6458BF'}
+        ></PageHeader>
+        <s.SliderWrapper>
+          <DotInslideSlider images={images}></DotInslideSlider>
+        </s.SliderWrapper>
 
-          <s.FilterSection>
-            <s.GreyPicker
-              $isCountryClicked={country}
-              color1={color1}
-              color2={color2}
-            >
-              <span onClick={handleCountryClick}>
-                {country ? `${country}` : '국가'}
-                {!country && <s.Icon src={arrowIcon} />}
-              </span>
-              {country && (
-                <s.Icon
-                  src={whiteCloseIcon}
-                  onClick={resetCountry}
-                />
-              )}
-            </s.GreyPicker>
-          </s.FilterSection>
-          <s.PostListSection>
-            {postList && postList.length > 0 ? (
-              postList.map((post) => {
-                console.log(post);
-                return (
-                  <CommunityPost
-                    key={post.postId}
-                    post={post}
-                    postImg={post.imageUrls[0]}
-                  />
-                );
-              })
-            ) : (
-              <div style={{ padding: '5rem 0' }}>아직 글이 없습니다.</div>
-            )}
-            <s.PaddingDiv>마지막 게시글입니다.</s.PaddingDiv>
-          </s.PostListSection>
-          <s.WriteButton
-            style={{
-              background: `linear-gradient(135deg,${color1},${color2})`,
-            }}
-            onClick={nav}
+        <s.FilterSection>
+          <s.GreyPicker
+            $isCountryClicked={country}
+            color1={color1}
+            color2={color2}
           >
-            <img src={pencilImg} />
-            글쓰기
-          </s.WriteButton>
-          <img
-            src={gradientRec}
-            style={{
-              position: 'fixed',
-              bottom: '0',
-              pointerEvents: 'none',
-              zIndex: '1',
-              width: '100%',
-              maxWidth: '480px',
+            <span onClick={handleCountryClick}>
+              {country ? `${country}` : '국가'}
+              {!country && <s.Icon src={arrowIcon} />}
+            </span>
+            {country && (
+              <s.Icon
+                src={whiteCloseIcon}
+                onClick={resetCountry}
+              />
+            )}
+          </s.GreyPicker>
+        </s.FilterSection>
+        <s.PostListSection>
+          {postList && postList.length > 0 ? (
+            postList.map((post) => {
+              console.log(post);
+              return (
+                <CommunityPost
+                  key={post.postId}
+                  post={post}
+                  postImg={post.imageUrls[0]}
+                />
+              );
+            })
+          ) : (
+            <div style={{ padding: '5rem 0' }}>아직 글이 없습니다.</div>
+          )}
+          {postList && postList.length > 0 && (
+            <s.PaddingDiv>마지막 게시글입니다.</s.PaddingDiv>
+          )}
+        </s.PostListSection>
+        <s.WriteButton
+          style={{
+            background: `linear-gradient(135deg,${color1},${color2})`,
+          }}
+          onClick={nav}
+        >
+          <img src={pencilImg} />
+          글쓰기
+        </s.WriteButton>
+        <img
+          src={gradientRec}
+          style={{
+            position: 'fixed',
+            bottom: '0',
+            pointerEvents: 'none',
+            zIndex: '1',
+            width: '100%',
+            maxWidth: '480px',
+          }}
+        />
+
+        {showCountry && (
+          <SelectCountry
+            closeModal={() => {
+              setShowCountry(!showCountry);
+            }}
+            getCountry={(country) => {
+              setCountry(country);
+              setShowCountry(false);
             }}
           />
-
-          {showCountry && (
-            <SelectCountry
-              closeModal={() => {
-                setShowCountry(!showCountry);
-              }}
-              getCountry={(country) => {
-                setCountry(country);
-                setShowCountry(false);
-              }}
-            />
-          )}
-        </s.PageContainer>
-      </>
-    );
-  }
+        )}
+      </s.PageContainer>
+    </>
+  );
 };
 
 export default CommunityHome;

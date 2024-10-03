@@ -1,11 +1,11 @@
 //사용자
-export const GET_USER_INFO = 'api/v1/user/current/info';
+export const GET_USER_INFO = '/api/v1/user/current/info';
 export const GET_USER_STATUS = 'api/v1/user/current/status';
 export const SIGN_UP_URL = 'api/v1/user/sign-up';
 export const CHECK_DUPLICATE_NICK = 'api/v1/user/duplicate_check/nickname';
-export const CHECK_DUPLICATE_EMAIL = '/api/v1/user/duplicate_check/email';
+export const CHECK_DUPLICATE_ID = '/api/v1/user/duplicate_check/email';
 export const SIGN_IN_URL = 'api/v1/user/sign-in';
-export const GET_CURRENT_INFO = '/api/v1/user/current/info';
+export const GET_CURRENT_INFO = 'api/v1/user/current/info';
 export const PUT_UNIV = '/api/v1/user/current/update/univ_url';
 export const PUT_NICKNAME = '/api/v1/user/current/update/nickname';
 
@@ -24,8 +24,7 @@ export const GET_TWO_INFOPOST = '/api/v1/home/info/list';
 export const GET_TWO_FREEPOST = '/api/v1/home/free/list';
 export const GET_POST_DETAIL = (boardType, postId) =>
   `/api/v1/post/${boardType}/${postId}`;
-export const GET_MY_POST = (boardType, userId) =>
-  `/api/v1/post/user/${userId}/${boardType}`;
+export const GET_MY_POST = (boardType) => `/api/v1/post/user/${boardType}`;
 ///국가필터링///
 export const GET_FILTERED_POST_IN = (boardType) =>
   `/api/v1/post/filter/${boardType}`;
@@ -59,8 +58,7 @@ export const GET_ITEM_SEARCH = `/api/v1/market-post/search`;
 export const GET_FILTER_ITEM = `/api/v1/market-post/filter`;
 export const POST_ITEM = `/api/v1/market-post`;
 export const GET_MARKET_ROOMID = `/api/v1/chat/request`;
-export const GET_MY_MARKET_POST = (userId) =>
-  `/api/v1/market-post/user/${userId}`;
+export const GET_MY_MARKET_POST = `/api/v1/market-post/user`;
 
 //스크랩
 export const POST_SCRAP = `/api/v1/scrap`;
@@ -84,11 +82,11 @@ export const GET_DETAIL_ACCOMPANY = (companyPostId) =>
 export const GET_SIMILAR_ACCOMPANY = (companyPostId) =>
   `/api/v1/company-post/${companyPostId}/nearby`;
 export const GET_ROOM_ID = '/api/v1/chat/request';
-export const GET_MY_ACCOMPANY_POST = (userId) =>
-  `/api/v1/company-post/user/${userId}`;
+export const GET_MY_ACCOMPANY_POST = '/api/v1/company-post/user';
 
 //동행 구하기 글 작성
 export const WRITE_ACCOMPANY = `/api/v1/company-post`;
 
 //알림
 export const POST_TOKEN = `/api/v1/alert/deviceToken`;
+export const GET_ALERT_LIST = '/api/v1/alert/list';

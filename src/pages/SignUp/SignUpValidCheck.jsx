@@ -1,9 +1,7 @@
-import { UserList } from '../../components/Common/TempDummyData/PostList';
-
 export const SignUpValidCheck = (target, isAllValid) => {
   const email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
   const password_regex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!^%*#?&])[A-Za-z\d@$!^%*#?&]{8,}$/;
 
   const specialChar =
     /[~!@\#$%^&*\()\-=+_'\;<>0-9\/.\`:\"\\,\[\]?|{}ㄱ-ㅎㅏ-ㅣ]/gi;
@@ -11,15 +9,15 @@ export const SignUpValidCheck = (target, isAllValid) => {
   const phonePattern = /[0-9]{3}[0-9]{4}[0-9]{4}/gi;
 
   switch (target.name) {
-    case 'email': {
-      if (!email_regex.test(target.value)) {
-        isAllValid.current.email = false;
-        return false;
-      } else {
-        isAllValid.current.email = true;
-        return true;
-      }
-    }
+    // case 'email': {
+    //   if (!email_regex.test(target.value)) {
+    //     isAllValid.current.email = false;
+    //     return false;
+    //   } else {
+    //     isAllValid.current.email = true;
+    //     return true;
+    //   }
+    // }
     case 'password': {
       if (!password_regex.test(target.value)) {
         isAllValid.current.password = false;

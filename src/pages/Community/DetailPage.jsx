@@ -57,7 +57,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
           Authorization: `Bearer ${localStorage.getItem('AToken')}`,
         });
         if (response) {
-          setCommentList(response.data);
+          setCommentList(response.data.content);
         }
         setLoading(false);
       };
