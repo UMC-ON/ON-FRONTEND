@@ -32,9 +32,9 @@ const ScrapList = ({ items }) => {
             <Information>
               <StarContainer
                 marketPostId={item.marketPost.marketPostId}
-                isFilled={isScrapped} // Pass isScrapped as isFilled prop
-                scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
-                setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
+                isFilled={isScrapped}
+                scrappedMarketPostIds={scrappedMarketPostIds}
+                setScrappedMarketPostIds={setScrappedMarketPostIds}
               />
               <Description onClick={() => navigate(`../sell/${item.marketPost.marketPostId}`)}>
                 <TitleTimeContainer>
@@ -66,53 +66,44 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
     try {
       if (isStarFilled) {
         // 스크랩 취소 요청
-        await axios.delete(`${serverAddress}/api/v1/scrap/${userInfo?.id}/${marketPostId}`, {
+        await axios.delete(`${serverAddress}/api/v1/scrap/${marketPostId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
+          params: {
+            marketPostId: marketPostId
+          }
         });
 
         // Remove marketPostId from scrappedMarketPostIds array
         setScrappedMarketPostIds(prevIds => prevIds.filter(id => id !== marketPostId));
       } else {
-        const formData = new FormData();
-
-        const jsonData = {
-          marketPostId: marketPostId,
-          userId: userInfo?.id,
-        };
-
-        console.log(jsonData);
-
-        const jsonBlob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
-        formData.append('requestDTO', jsonBlob);
-
-        try {
-          const response = await postData(
-            POST_SCRAP,
-            formData,
-            {
+        // 스크랩 등록 요청
+        await axios.post(
+          `${serverAddress}/api/v1/scrap`,
+          {
+            marketPostId: marketPostId,
+          },
+          {
+            headers: {
               Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-            }
-          );
-          if (response) {
-            console.log(response.data.result);
-
-            // Add marketPostId to scrappedMarketPostIds array
-            setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
+            },
           }
-        } catch (error) {
-          console.error('Error Scrap Item', error);
-        }
+        );
+
+        // Add marketPostId to scrappedMarketPostIds array
+        setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
       }
 
       // Toggle the star state
       setIsStarFilled(!isStarFilled);
 
+      console.log({ marketPostId });
     } catch (error) {
       console.error('스크랩 처리 중 오류 발생:', error);
     }
   };
+
 
   return (
     <Star
@@ -264,3 +255,4 @@ const LocationAndUser = styled.div`
 const Space = styled.div`
   height: 3em;
 `;
+

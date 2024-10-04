@@ -4,19 +4,17 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import camera from "../assets/images/camera.svg";
-import PhotoAdd from "../assets/images/PhotoAdd.svg";
 import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import SellPostHeader from "../components/SellPostHeader";
 import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
 import SellPostCitySelect from "../components/SellPostCitySelect";
-import { postData, multiFilePostData} from '../api/Functions';
+import { postData, multiFilePostData } from '../api/Functions';
 import { POST_ITEM } from '../api/urls';
- 
 
 function SellPost() {
     const [selectedOption, setSelectedOption] = useState(null);
-    const [images, setImages] = useState([]);
+    const [image, setImage] = useState(null); // 한 장의 이미지로 수정
     const [title, setTitle] = useState('');
     const [cost, setCost] = useState('');
     const [content, setContent] = useState('');
@@ -29,7 +27,7 @@ function SellPost() {
 
     const resetCityClick = () => {
         setIsCityClicked(false);
-        setCity({ country: '', city: '' }); // 초기 상태로 설정
+        setCity({ country: '', city: '' });
     };
 
     const handleGetCity = (locationInfo) => {
@@ -43,16 +41,16 @@ function SellPost() {
     };
 
     const handleImageUpload = (event) => {
-        const files = Array.from(event.target.files);
-        setImages(prevImages => [...prevImages, ...files]);
+        const file = event.target.files[0];
+        setImage(file);
     };
 
     const handleCameraClick = () => {
         fileInputRef.current.click();
     };
 
-    const handleDeleteImage = (index) => {
-        setImages(prevImages => prevImages.filter((_, i) => i !== index));
+    const handleDeleteImage = () => {
+        setImage(null); // 이미지 삭제
     };
 
     const navigate = useNavigate();
@@ -69,16 +67,16 @@ function SellPost() {
             currentCountry: city.country,
             currentLocation: city.city,
             share: share,
-        }
+        };
         console.log(jsonData);
 
         const jsonBlob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
         formData.append('requestDTO', jsonBlob);
 
-        if (images) {
-            formData.append('imageFiles', images);
+        if (image) {
+            formData.append('imageFiles', image); // 한 장의 이미지만 첨부
         }
-    
+
         try {
             const response = await multiFilePostData(
                 POST_ITEM,
@@ -97,39 +95,24 @@ function SellPost() {
             console.error('ITEM POST Error:', error.message);
         }
     };
-    
-    
-    
 
     return (
         <>
             <SellPostHeader onSubmit={handleSubmit} />
             <Space />
-            <Photo isPreviewVisible={images.length > 0}>
-                {images.length === 0 ? (
-                    <Camera src={camera} onClick={handleCameraClick} />
+            <Photo isImageUploaded={image}>
+                {image ? (
+                    <ImageWrapper>
+                        <img src={URL.createObjectURL(image)} alt="Preview" />
+                        <DeleteButton onClick={handleDeleteImage}>
+                            <img src={whiteCloseIcon} alt="Delete" />
+                        </DeleteButton>
+                    </ImageWrapper>
                 ) : (
-                    <>
-                        <ImagePreview>
-                            <ImageContainer>
-                                {images.map((image, index) => (
-                                    <ImageWrapper key={index}>
-                                        <img src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} />
-                                        <DeleteButton onClick={() => handleDeleteImage(index)}>
-                                            <img src={whiteCloseIcon} alt="Delete" />
-                                        </DeleteButton>
-                                    </ImageWrapper>
-                                ))}
-                            </ImageContainer>
-                            <AddButton onClick={handleCameraClick}>
-                                <img src={PhotoAdd} style={{ width: "22px", height: "22px" }} />
-                            </AddButton>
-                        </ImagePreview>
-                    </>
+                    <Camera src={camera} onClick={handleCameraClick} />
                 )}
                 <FileInput
                     type="file"
-                    multiple
                     ref={fileInputRef}
                     onChange={handleImageUpload}
                 />
@@ -203,12 +186,11 @@ const Photo = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
     width: 100%;
     height: 12em;
     margin-bottom: 2vh;
     cursor: pointer;
-    background: ${(props) => (props.isPreviewVisible ? 'white' : 'linear-gradient(135deg, #C2C7FF80 0%, #AD99FF80 50%)')};
+    background: ${(props) => (props.isImageUploaded ? 'white' : 'linear-gradient(135deg, #C2C7FF80 0%, #AD99FF80 50%)')};
 `;
 
 
@@ -221,43 +203,15 @@ const FileInput = styled.input`
     display: none;
 `;
 
-const ImagePreview = styled.div`
-    display: flex;
-    flex-wrap: nowrap; /* 이미지들이 가로로 나열되도록 함 */
-    overflow-x: auto; /* 가로로 넘칠 경우 스크롤 가능하게 함 */
-    margin-top: 10px;
+const ImageWrapper = styled.div`
+    position: relative;
     width: 100%;
+    height: 100%;
 
     img {
-        width: 120px;
-        height: 120px;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        margin: 5px;
-        border-radius: 16px;
-        flex-shrink: 0; /* 이미지가 축소되지 않도록 함 */
-    }
-`;
-
-const ImageContainer = styled.div`
-    display: flex;
-`;
-
-const AddButton = styled.div`
-    width: 120px;
-    height: 120px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 15px;
-    margin-top: 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    flex-shrink: 0;
-    background: #F5F5F5;
-
-    span {
-        font-size: 32px;
-        color: #B9B9B9;
     }
 `;
 
@@ -376,36 +330,14 @@ const Description = styled.textarea`
     }
 `;
 
-const ImageWrapper = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 130px;
-    height: 150px;
-    padding-top: 10px;
-    margin: 5px;
-
-    img {
-        width: 120px;
-        height: 120px;
-        object-fit: cover;
-        margin: 5px;
-        border-radius: 16px;
-        flex-shrink: 0;
-    }
-`;
-
 const DeleteButton = styled.div`
     position: absolute;
     top: 5px;
-    right: -5px;
+    right: 5px;
     background-color: rgba(0, 0, 0, 0.6);
     border-radius: 50%;
     padding: 5px;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
     img {
         width: 15px;
