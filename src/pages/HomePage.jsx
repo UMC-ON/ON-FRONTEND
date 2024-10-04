@@ -262,8 +262,9 @@ function HomePage() {
                 </Button>
                 :
                 <Button onClick={() => window.location.href = "https://www.mofa.go.kr/www/index.do"}>
-                    <Icon $iconType='migrationIcon'/>
+                    <Icon $iconType='migrationIcon' $ratio='2.1 / 1'>
                     <WhiteText>한국 외교부</WhiteText>
+                    </Icon>
                 </Button>
                 }
                 <Button onClick={goToInfoPost}>
@@ -317,11 +318,14 @@ function HomePage() {
                     </LeftContainer>
                 </BigContainer>
 
-                <CardList selectedCountry={card.country}/>
+                <FixContainer>
+                  <CardList selectedCountry={card.country}/>
+                  <OverlayBox/>
+                </FixContainer>
                 
-              <PageContainer>
+              {/* <PageContainer>
               <OverlayBox/>
-              </PageContainer>
+              </PageContainer> */}
               </BlueContainer>
               
           :null}
@@ -364,8 +368,10 @@ function HomePage() {
           ))}
           <SmallSpace/>
 
-          <CardAccompanyList cards={accompanyData}></CardAccompanyList>
-
+          <FixContainer>
+            <CardAccompanyList cards={accompanyData}></CardAccompanyList>
+            <OverlayBox/>
+          </FixContainer>
           <BigSpace/>
 
 
@@ -384,6 +390,10 @@ const FlexContainer = styled.div`
   justify-content: space-between;
   align-items: center; 
   padding: 10px; 
+`;
+
+const FixContainer = styled.div`
+  position: relative;
 `;
 
 const RightIcon = styled.img`
@@ -611,14 +621,14 @@ const BlueContainer = styled.div`
 `;
 
 const OverlayBox = styled.div`
-  // position: absolute; /* Position fixed to viewport */
-  // top: 120vh; /* Align to the top of the viewport */
-  // right: 0;
-  // width: 20%;
-  // height: 43%;
-  // background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-  // z-index: 1; /* On top of other elements */
-  // pointer-events: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px; /* Adjust the width to control how much of the right side is covered */
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  z-index: 1;
+  pointer-events: none;
 `;
 
 const PageContainer = styled.div`
