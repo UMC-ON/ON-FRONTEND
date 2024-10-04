@@ -62,9 +62,9 @@ export const GET_MY_MARKET_POST = `/api/v1/market-post/user`;
 
 //스크랩
 export const POST_SCRAP = `/api/v1/scrap`;
-export const GET_SCRAP = (userId) => `/api/v1/scrap/${userId}`;
-export const DELETE_SCRAP = (userId, marketPostId) =>
-  `/api/v1/scrap/${userId}/${marketPostId}`;
+export const GET_SCRAP = `/api/v1/scrap/`;
+export const DELETE_SCRAP = (marketPostId) =>
+  `/api/v1/scrap/${marketPostId}`;
 
 //일기 작성
 export const GET_DIARY = `/api/v1/diary/list`;
