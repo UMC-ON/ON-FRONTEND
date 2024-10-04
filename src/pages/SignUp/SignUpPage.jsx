@@ -21,6 +21,7 @@ const SignUpPage = () => {
   const nav = useNavigate();
   const [userInfo, setUserInfo] = useState(userInfoBE);
   const [dupCheck, setDupCheck] = useState({ loginId: 0, nickname: 0 });
+  const currentDotStep = useRef(0);
   //0==유효성검사도, 중복검사도 진행X
   //1== 유효성,중복검사 OK
   const [isActive, setActive] = useState(false);
@@ -91,6 +92,7 @@ const SignUpPage = () => {
     }
 
     next(userInfo);
+    currentDotStep.current++;
   };
   return (
     <div>
@@ -107,29 +109,100 @@ const SignUpPage = () => {
               {!isFirstStep && (
                 <s.BackButton
                   type="button"
-                  onClick={prev}
+                  onClick={() => {
+                    prev();
+                    currentDotStep.current--;
+                  }}
                 >
                   이전 단계
                 </s.BackButton>
               )}
-              <s.StyledH2 style={{ marginBottom: '40px' }}>
-                {currentTitle}
-              </s.StyledH2>
+              <s.StyledH2>{currentTitle}</s.StyledH2>
               {currentStep}
             </s.ContentSection>
           </s.SectionWrapper>
-          <s.ButtonSection>
-            <s.TwoColumnWrapper>
-              {currentTitle === '파견교 인증' ? (
-                <s.PurpleButton style={{ backgroundColor: ' #d7dff4' }}>
-                  건너뛰기
+          <div style={{ width: '100%' }}>
+            {currentDotStep.current > 0 && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="51"
+                height="20"
+                viewBox="0 0 51 20"
+                fill="none"
+              >
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="8.75"
+                  fill={
+                    currentDotStep.current > 0
+                      ? 'url(#paint0_linear_3436_11766)'
+                      : '#D9D9D9'
+                  }
+                  stroke="#E7E7E7"
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx="41"
+                  cy="10"
+                  r="8.75"
+                  fill={
+                    currentDotStep.current > 1
+                      ? 'url(#paint1_linear_3436_11769)'
+                      : '#D9D9D9'
+                  }
+                  stroke="#E7E7E7"
+                  strokeWidth="1.5"
+                />
+                {currentDotStep.current > 0 ? (
+                  <defs>
+                    <linearGradient
+                      id="paint0_linear_3436_11766"
+                      x1="2"
+                      y1="10"
+                      x2="14.8948"
+                      y2="16.3278"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop stopColor="#94C5FF" />
+                      <stop
+                        offset="1"
+                        stopColor="#896CFF"
+                      />
+                    </linearGradient>
+                    {currentDotStep.current == 2 ? (
+                      <linearGradient
+                        id="paint1_linear_3436_11769"
+                        x1="33"
+                        y1="10"
+                        x2="45.8948"
+                        y2="16.3278"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop stopColor="#94C5FF" />
+                        <stop
+                          offset="1"
+                          stopColor="#896CFF"
+                        />
+                      </linearGradient>
+                    ) : null}
+                  </defs>
+                ) : null}
+              </svg>
+            )}
+            <s.ButtonSection style={{ marginTop: '1.3rem' }}>
+              <s.TwoColumnWrapper>
+                {currentTitle === '파견교 인증' ? (
+                  <s.PurpleButton style={{ backgroundColor: ' #d7dff4' }}>
+                    건너뛰기
+                  </s.PurpleButton>
+                ) : null}
+                <s.PurpleButton disabled={!isActive}>
+                  {isLastStep ? '회원 가입하기' : '다음 단계'}
                 </s.PurpleButton>
-              ) : null}
-              <s.PurpleButton disabled={!isActive}>
-                {isLastStep ? '회원 가입하기' : '다음 단계'}
-              </s.PurpleButton>
-            </s.TwoColumnWrapper>
-          </s.ButtonSection>
+              </s.TwoColumnWrapper>
+            </s.ButtonSection>
+          </div>
         </s.FormPage>
       </form>
     </div>
