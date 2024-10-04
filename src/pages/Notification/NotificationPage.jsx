@@ -79,6 +79,7 @@ const Notification = () => {
             {notification.map((data) => (
               <SingleNotification
                 key={data.alertId}
+                id={data.alertId}
                 title={data.title}
                 content={data.content}
                 alertType={data.alertType}
