@@ -161,10 +161,6 @@ const MyPage = () => {
 
       <s.MyInfoTitle>나의 정보 확인</s.MyInfoTitle>
       <s.MyInfoWrapper>
-        <form
-          method="put"
-          name="info"
-        >
           <s.InfoContainer>
             <s.Title>파견교 정보를 수정하세요!</s.Title>
             <s.EditBtn
@@ -259,7 +255,6 @@ const MyPage = () => {
               placeholder="닉네임을 입력하세요"
             />
           </s.InfoContainer>
-        </form>
       </s.MyInfoWrapper>
     </s.MyPageLayout>
   );
