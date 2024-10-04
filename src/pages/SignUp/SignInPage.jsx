@@ -109,7 +109,13 @@ const SignInPage = () => {
                 Sign Up
               </div>
               <FindSection>
-                <div>Find Id</div>
+                <div
+                  onClick={() => {
+                    nav('/findId');
+                  }}
+                >
+                  Find Id
+                </div>
                 <div>Find Password</div>
               </FindSection>
             </OptionSection>
@@ -151,7 +157,7 @@ const SignInBtn = styled.button`
 
 const OptionSection = styled.div`
   box-sizing: border-box;
-  width: 19.25rem;
+  width: 90%;
   height: auto;
   display: flex;
   flex-direction: row;
