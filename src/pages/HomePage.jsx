@@ -7,16 +7,17 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import CardList from '../components/CardList';
 
-import schoolIcon from '../assets/images/school_icon.svg';
-import migrationIcon from '../assets/images/migration_icon.svg';
-import companyIcon from '../assets/images/company_icon.svg';
-import informationIcon from '../assets/images/information_icon.svg';
-import writeIcon from '../assets/images/write_icon.svg';
-import diaryIcon from '../assets/images/diary_icon.svg';
+import schoolIcon from '../assets/images/new_school_icon.svg';
+import migrationIcon from '../assets/images/new_immigration_icon.svg';
+import companyIcon from '../assets/images/new_accompany_icon.svg';
+import informationIcon from '../assets/images/new_info_icon.svg';
+import writeIcon from '../assets/images/new_free_icon.svg';
+import diaryIcon from '../assets/images/new_diary_icon.svg';
 import bannerimg from '../assets/images/home_banner.svg';
 import londonImg from '../assets/images/london_gallery.svg';
 import rightIcon from '../assets/images/right_arrow.svg';
 import marketImg from '../assets/images/borough_market.svg';
+import sliderImage from '../assets/images/slider_image.svg';
 
 
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
@@ -31,7 +32,7 @@ import { getData } from '../api/Functions';
 import { GET_USER_INFO, GET_TWO_FREEPOST, GET_TWO_INFOPOST, GET_NEAR_ACCOMPANY } from '../api/urls';
 
 
-const images = [bannerimg, bannerimg, bannerimg, bannerimg, bannerimg];
+const images = [sliderImage, sliderImage, sliderImage, sliderImage, sliderImage];
 import { cities } from '../assets/cityDatabase';
 
 
@@ -235,7 +236,7 @@ function HomePage() {
               </LeftContainer>
               :
               <LeftContainer>
-                  <BigText spacing="1vh">교환교를 등록해주세요</BigText>
+                  <BigText spacing="1vh">학교가 인증되지 않았어요.</BigText>
               </LeftContainer>
               }
               </div>
@@ -243,50 +244,51 @@ function HomePage() {
             
             {userData.map((card, index) => (
             <Container key={index}>
+                <Button onClick={goToDiary}>
+                  <Icon $iconType='diaryIcon' $ratio='1 / 2.1'>
+                    <WhiteText>일기쓰기</WhiteText>
+                  </Icon>
+                </Button>
                 <Button onClick={goToCollege}>
-                    <Icon src={schoolIcon} alt="School Icon" />
-                    <SubText>파견교</SubText>
-                    <SubText>홈페이지</SubText>
+                  <Icon $iconType='schoolIcon' $ratio='2.1 / 1'>
+                    <WhiteText>파견교 홈페이지</WhiteText>
+                  </Icon>
                 </Button>
                 {card.country?
                 <Button onClick={goToMigration}>
-                    <Icon src={migrationIcon} alt="Migration Icon" />
-                    <SubText>{card.country}</SubText>
-                    <SubText>이민국</SubText>
+                    <Icon $iconType='migrationIcon' $ratio='2.1 / 1'>
+                      <WhiteText>영국 이민국</WhiteText>
+                    </Icon>
                 </Button>
                 :
                 <Button onClick={() => window.location.href = "https://www.mofa.go.kr/www/index.do"}>
-                    <Icon src={migrationIcon} alt="Migration Icon" />
-                    <SubText>한국</SubText>
-                    <SubText>외교부</SubText>
+                    <Icon $iconType='migrationIcon'/>
+                    <WhiteText>한국 외교부</WhiteText>
                 </Button>
                 }
+                <Button onClick={goToInfoPost}>
+                  <Icon $iconType='informationIcon' $ratio='1 / 1'>
+                  <SmallWhiteText>정보<br/>글쓰기</SmallWhiteText>
+                  </Icon>
+                </Button>
+                <Button onClick={goToGeneralPost}>
+                  <Icon $iconType='writeIcon' $ratio='1 / 1'>
+                    <SmallWhiteText>자유<br/>글쓰기</SmallWhiteText>
+                  </Icon>
+                </Button>
                 <Button onClick={goToAccompany}>
-                    <Icon src={companyIcon} alt="Company Icon" />
-                    <SubText>동행</SubText>
-                    <SubText>구하기</SubText>
+                  <Icon $iconType='companyIcon' $ratio='1 / 1'>
+                  <SmallWhiteText>동행<br/>구하기</SmallWhiteText>
+                  </Icon>
                 </Button>
             </Container>
             ))}
-
-            <Container>
-                <Button onClick={goToInfoPost}>
-                    <Icon src={informationIcon} alt="Information Icon" />
-                    <SubText>정보글</SubText>
-                    <SubText>쓰기</SubText>
-                </Button>
-                <Button onClick={goToGeneralPost}>
-                    <Icon src={writeIcon} alt="Write Icon" />
-                    <SubText>자유글</SubText>
-                    <SubText>쓰기</SubText>
-                </Button>
-                <Button onClick={goToDiary}>
-                    <Icon src={diaryIcon} alt="Diary Icon" />
-                    <SubText>일기</SubText>
-                    <SubText>쓰기</SubText>
-                    {/* <SubText>&nbsp; &nbsp;</SubText> */}
-                </Button>
-            </Container>
+           
+           <Space/>
+           <LeftContainer>
+                  <BigText spacing="1vh">나를 위한 </BigText>
+                  <BigText color="#3E73B2">꿀팁 정보</BigText>
+           </LeftContainer>
 
             <SliderContainer {...handlers}>
                 <SliderWrapper currentSlide={currentSlide}>
@@ -302,7 +304,7 @@ function HomePage() {
             </DotContainer>
           </BigContainer>
           
-
+          <SmallSpace/>
           
           {userData.map((card, index) => (
             <div key={index}>
@@ -310,22 +312,29 @@ function HomePage() {
               <BlueContainer key = {index}>
                 <BigContainer>
                     <LeftContainer>
-                    <MiddleText spacing="1vh">나를 위한</MiddleText>
-                    <MiddleText color="#3E73B2">{getContinentForCountry(card.country)} 인기 여행지</MiddleText>
+                    <BigText spacing="1vh">나를 위한</BigText>
+                    <BigText color="#3E73B2">{getContinentForCountry(card.country)} 인기 여행지</BigText>
                     </LeftContainer>
                 </BigContainer>
 
                 <CardList selectedCountry={card.country}/>
+                
+              <PageContainer>
+              <OverlayBox/>
+              </PageContainer>
               </BlueContainer>
+              
           :null}
           </div>
           ))}
+
      
 
           <FlexContainer onClick={goToInfoCommunity}>
               <MiddleText spacing="1vh">최신 정보글</MiddleText>
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
+          <SmallSpace2/>
 
           <CommunityCardList cards={infoData}/>
 
@@ -336,6 +345,8 @@ function HomePage() {
               <MiddleText spacing="1vh">최신 자유글</MiddleText>
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
+
+          <SmallSpace2/>
 
           <CommunityCardList free={true} cards={freeData}/>
           
@@ -351,6 +362,7 @@ function HomePage() {
               </FlexContainer>
             ) : null
           ))}
+          <SmallSpace/>
 
           <CardAccompanyList cards={accompanyData}></CardAccompanyList>
 
@@ -380,7 +392,15 @@ const RightIcon = styled.img`
 `;
 
 const Space = styled.div`
-  margin-top: 7vh;
+  margin-top: 8vh;
+`;
+
+const SmallSpace = styled.div`
+  margin-top: 4vh;
+`;
+
+const SmallSpace2 = styled.div`
+  margin-top: 3vh;
 `;
 
 const BigSpace = styled.div`
@@ -397,9 +417,29 @@ const LeftContainer = styled.div`
 `;
 
 const SubText = styled.div`
-  color: #838383;
-  font-family: 'Inter-Regular';
-  font-size: 0.8em;
+  color: #5C5C5C;
+  font-family: 'Inter-Bold';
+  font-size: 1em;
+`;
+
+const WhiteText = styled.div`
+  color: #FFFFFF;
+  font-family: 'Inter-Bold';
+  font-weight: bold;
+  font-size: 1.2em;
+  padding-top: 15px;
+  text-align: left;
+  padding-left: 15px;
+`;
+
+const SmallWhiteText = styled.div`
+  color: #FFFFFF;
+  font-family: 'Inter-Bold';
+  font-weight: bold;
+  font-size: 1em;
+  padding-top: 15px;
+  text-align: left;
+  padding-left: 15px;
 `;
 
 const BigText = styled.div`
@@ -408,8 +448,8 @@ const BigText = styled.div`
   margin-right: ${props => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter-Regular';
-  font-size: 1.38em;
-  margin-bottom: 3.5vh;
+  font-size: 1.5em;
+  margin-bottom: 2vh;
 `;
 
 const MiddleText = styled.div`
@@ -420,17 +460,61 @@ const MiddleText = styled.div`
   font-size: 1.2em;
 `;
 
+
+const Container = styled.div`
+  margin: 1em;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; 
+  grid-template-rows: repeat(2, 1fr); 
+  justify-content: space-evenly;
+  gap: 10px; 
+
+  /* First button spans two rows (vertical) */
+  & > button:nth-child(1) {
+    grid-row: span 2; /* Takes up two rows */
+    grid-column: 1; /* First column */
+  }
+
+  /* Second button */
+  & > button:nth-child(2) {
+    grid-row: 1; /* First row */
+    grid-column: 2 / 4; /* Second column */
+  }
+
+  /* Third button */
+  & > button:nth-child(3) {
+    grid-row: 2; /* Second row */
+    grid-column: 2 / 4; /* Third column */
+  }
+
+  /* Fourth button */
+  & > button:nth-child(4) {
+    grid-row: 3; /* Second row */
+    grid-column: 1 / 2; /* Third column */
+  }
+
+  /* Fifth button */
+  & > button:nth-child(5) {
+    grid-row: 3; /* Second row */
+    grid-column: 2 / 3; /* Third column */
+  }
+
+  /* Sixth button */
+  & > button:nth-child(6) {
+    grid-row: 3; /* Second row */
+    grid-column: 3 / 4; /* Third column */
+  }
+`;
+
+
 const Button = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background-color: #ffffff;
-  font-size: 16px;
-  cursor: pointer;
-  width: 6rem;
-  border: none; 
-  outline: none; 
+  background: white;
+  border: none; /* Remove default button border */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+  display: flex; /* Use flex to center content */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
 
   &:hover {
     border: none; 
@@ -447,25 +531,43 @@ const Button = styled.button`
   }
 `;
 
-const Icon = styled.img`
-  width: 5vh; 
-  height: 5vh; 
-  margin-bottom: 1vh;
+const Icon = styled.div`
+  width: 100%; 
+  aspect-ratio: ${props => props.$ratio || '1 / 2'};
+  background-image: url(${(props) => {
+    switch (props.$iconType) {
+      case 'diaryIcon':
+        return diaryIcon;
+      case 'schoolIcon':
+        return schoolIcon;
+      case 'migrationIcon':
+        return migrationIcon;
+      case 'informationIcon':
+        return informationIcon;
+      case 'writeIcon':
+        return writeIcon;
+      case 'companyIcon':
+        return companyIcon;
+      default:
+        return '';
+    }
+  }});
+  background-size: contain; /* Ensure the image fits within the div */
+  background-repeat: no-repeat; /* Prevent repeating of the image */
+  background-position: center; /* Center the image */
+  position: relative; /* Allows placement of text */
+  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 `;
 
-const Container = styled.div`
-  display: grid;
-  justify-items: center;
-  grid-template-columns: 1fr 1fr 1fr;
-  margin: 0 auto;
-`;
 
 const SliderContainer = styled.div`
   position: relative;
   width: 100%;
   margin: 0 auto;
-  margin-top: 4vh;
+  margin-top: 1.5vh;
   overflow: hidden;
+  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
+  
 `;
 
 const SliderWrapper = styled.div.withConfig({
@@ -482,14 +584,13 @@ const Slide = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 10px;
-  position: relative;
+  aspect-ratio: 1/0.385;
 `;
 
 const DotContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 1vh;
+  margin-top: 1.5vh;
 `;
 
 const Dot = styled.div.withConfig({
@@ -499,7 +600,7 @@ const Dot = styled.div.withConfig({
   height: ${props => (props.active ? '8px' : '5px')};
   margin: ${props => (props.active ? '0 5px' : '2px 5px')};
   border-radius: 50%;
-  background-color: ${props => (props.active ? '#9D9AB1' : '#6EBAFF')};
+  background-color: ${props => (props.active ? '#3E73B2' : '#A3A3A3')};
   opacity: ${props => (props.active ? '1' : '0.5')};
   cursor: pointer;
 `;
@@ -507,8 +608,29 @@ const Dot = styled.div.withConfig({
 const BlueContainer = styled.div`
   margin-top: 1vh;
   width: 100%;
-  background-color: #f8fcfc;
-  border-bottom: 1.5px solid #d9d9d9;
-  border-top: 1.5px solid #d9d9d9;
-  margin-bottom: 1vh;
+`;
+
+const OverlayBox = styled.div`
+  // position: absolute; /* Position fixed to viewport */
+  // top: 120vh; /* Align to the top of the viewport */
+  // right: 0;
+  // width: 20%;
+  // height: 43%;
+  // background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  // z-index: 1; /* On top of other elements */
+  // pointer-events: none;
+`;
+
+const PageContainer = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  flex-direction: column;
+  align-content: start;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  background-color:red;
 `;
