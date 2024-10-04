@@ -135,7 +135,7 @@ function App() {
             element={<FindId />}
           />
           <Route
-            path="/findPasswod"
+            path="/findPassword"
             element={<FindPassword />}
           />
           <Route

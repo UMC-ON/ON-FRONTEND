@@ -116,7 +116,13 @@ const SignInPage = () => {
                 >
                   Find Id
                 </div>
-                <div>Find Password</div>
+                <div
+                  onClick={() => {
+                    nav('/findPassword');
+                  }}
+                >
+                  Find Password
+                </div>
               </FindSection>
             </OptionSection>
           </s.SectionWrapper>
