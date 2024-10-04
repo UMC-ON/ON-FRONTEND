@@ -94,7 +94,7 @@ const AccompanyHomeComponent =
 
     return (
         <>
-          <PageHeader pageName={'동행 구하기'} />
+          <PageHeader pageName={'동행 구하기'} nav={'/'}/>
           <Space />
     
           <DotInslideSlider images={images} />

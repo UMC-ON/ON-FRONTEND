@@ -86,7 +86,7 @@ const ImgContainer = styled.div`
   background-size: cover; 
   background-position: center; 
   background-repeat: no-repeat; 
-  width: 80%;
+  width: 85%;
   aspect-ratio: 1 / 0.49; 
   margin: 0 auto;
   margin-bottom: 15px;
@@ -100,7 +100,7 @@ const PaddingTop = styled.div`
 const Stripe = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 340px; 
+  width: 100%;
   background-size: cover; 
   background-position: center; 
   background-repeat: no-repeat; 
@@ -125,7 +125,8 @@ const TextTopRight = styled.div`
   font-size: 0.8em;
   text-align: right;
   padding: 5px;
-  padding-right: 15%;
+  padding-right: 20px;
+  position: static;
 `;
 
 const BetweenContainer = styled.div`
@@ -133,6 +134,7 @@ const BetweenContainer = styled.div`
   justify-content: space-between;
   align-items: flex-start; 
   padding: 5px;
+  margin-top: 8px;
 `;
 
 const TextContainer = styled.div`
@@ -144,45 +146,26 @@ const TextMiddle = styled.div`
   color: #838383;
   font-size: 12px;
   text-align: left;
-  line-height: 1.3em;
+  line-height: 1.5em;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   padding-left: 12px;
   padding-right: 12px;
   padding-top: 5px;
-  height: 4em;
+  height: 50%;
+
+  position: relative;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 70%, white 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
 `;
 
-const InlineTextContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  padding: 10px;
-  margin-left: 3px;
-`;
-
-const TextBottomLeft = styled.div`
-  color: #7A7A7A;
-  font-size: 0.7em;
-  top: 13.8vh;
-  left: 2.5vh;
-  text-align: right;
-`;
-
-const IconBottomLeft = styled.img`
-  margin-left: 10px;
-`;
-
-const TextBottomLeft2 = styled.div`
-  color: #ffffff;
-  font-size: 0.7em;
-  margin-left: 3px;
-`;
 
 const ImageRight = styled.img`
-  width: 75px;
-  height: 75px;
+  width: 85px;
+  height: 85px;
   border-radius: 10px;
   margin-right: 20px;
   padding-top: 3px;

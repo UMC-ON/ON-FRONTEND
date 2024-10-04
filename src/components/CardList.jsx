@@ -405,6 +405,7 @@ const CardList = ({ selectedCountry }) => {
         </CardContainer>
       ))}
     </CardListContainer>
+    
     </>
   );
 };
@@ -534,4 +535,16 @@ const GradientOverlay = styled.div`
   height: 30%;
   background: linear-gradient(to bottom, #D6EBFF, transparent);
   opacity: 1; 
+`;
+
+const OverlayBox = styled.div`
+  position: fixed;
+  top: 120vh;
+  right: 0;
+  width: 20%;
+  height: 43%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  z-index: 1; 
+  pointer-events: none;
+  background-color: red;
 `;
