@@ -65,7 +65,6 @@ const ChatList = () => {
     fetchAccompanyChat();
   }, [currentMode === 'accompany']);
 
-  //axios 물품 거래
   useEffect(() => {
     const fetchTradeChat = async () => {
       setIsLoading(true);
@@ -77,15 +76,11 @@ const ChatList = () => {
           },
           {},
         );
-    
-        // 응답 데이터의 구조를 확인하고 유효성을 검사
-        if (response && response.data && response.data.result && Array.isArray(response.data.result.roomList)) {
-          console.log('Received data:', response.data); // 전체 응답 데이터 확인
-          console.log('Room List:', response.data.result.roomList); // roomList 확인
-          setTradeChatResult(response.data.result.roomList); // 상태 업데이트
-        } else {
-          console.error('Invalid response data format:', response);
-          setTradeChatResult([]); // 빈 배열로 초기화
+
+        if (response) {
+          console.log('TRADE: ', response.data.result);
+          console.log(response.data.result.roomList);
+          setTradeChatResult(response.data.result.roomList);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -93,12 +88,43 @@ const ChatList = () => {
         setIsLoading(false);
       }
     };
-    
-    
-
-
     fetchTradeChat();
   }, [currentMode === 'trade']);
+  //axios 물품 거래
+  // useEffect(() => {
+  //   const fetchTradeChat = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await getData(
+  //         GET_TRADE_LIST,
+  //         {
+  //           Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+  //         },
+  //         {},
+  //       );
+
+  //       // 응답 데이터의 구조를 확인하고 유효성을 검사
+  //       if (
+  //         response &&
+  //         response.data &&
+  //         response.data.result &&
+  //         Array.isArray(response.data.result.roomList)
+  //       ) {
+  //         console.log('Received data:', response.data); // 전체 응답 데이터 확인
+  //         console.log('Room List:', response.data.result.roomList); // roomList 확인
+  //         setTradeChatResult(response.data.result.roomList); // 상태 업데이트
+  //       } else {
+  //         console.error('Invalid response data format:', response);
+  //         setTradeChatResult([]); // 빈 배열로 초기화
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchTradeChat();
+  // }, [currentMode === 'trade']);
 
   //콘솔 출력 함수들
   useEffect(() => {
