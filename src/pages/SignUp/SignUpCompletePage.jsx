@@ -21,7 +21,6 @@ const SignUpCompletePage = () => {
           <s.StyledH2
             style={{
               fontSize: '2.5rem',
-              color: '#87c3f8',
               marginTop: '8.5rem',
               marginBottom: '1.25rem',
             }}
@@ -40,11 +39,12 @@ const SignUpCompletePage = () => {
       <s.ButtonSection>
         <s.PurpleButton
           style={{
-            background: 'linear-gradient(135deg, #d6ebff 0%, #c2c7ff 100%)',
+            background:
+              'linear-gradient(116deg, #94C5FF 16.46%, #896CFF 83.54%)',
           }}
           onClick={nav}
         >
-          ON 시작하기
+          로그인하기
         </s.PurpleButton>
       </s.ButtonSection>
     </s.FormPage>

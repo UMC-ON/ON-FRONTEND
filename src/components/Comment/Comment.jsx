@@ -2,10 +2,6 @@ import styled from 'styled-components';
 import Reply from './Reply';
 import replyBtnImg from '../../assets/images/replyBtnImg.svg';
 import { showWriter } from '../Common/InfoExp';
-import { getData } from '../../api/Functions';
-import { GET_REPLIES_OF } from '../../api/urls';
-import { useEffect, useState } from 'react';
-import Loading from '../Loading/Loading';
 
 const Comment = ({
   comment,
@@ -13,39 +9,16 @@ const Comment = ({
   clickedComment,
   postWriter_id,
 }) => {
-  const [replyList, setReplyList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   if (comment.replyCount > 0) {
-  //     const fetchReply = async () => {
-  //       setIsLoading(true);
-  //       const res = await getData(GET_REPLIES_OF(comment.commentId), {
-  //         Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-  //       });
-  //       if (res) {
-  //         console.log('아');
-  //         console.log(res.data);
-  //         setReplyList(res.data);
-  //       }
-  //     };
-  //     fetchReply();
-  //   }
-  //   if (replyList) {
-  //     setIsLoading(false);
-  //   }
-  // }, []);
-
-  // if (isLoading) {
-  //   return <Loading />;
-  // }
   return (
     <CommentAndReplyWrapper>
       <CommentDiv
         onClick={() => {
           onCommentClick({
             target: {
-              writer: showWriter(comment, postWriter_id),
+              writer:
+                comment.writerInfo.id === postWriter_id
+                  ? '글쓴이'
+                  : comment.writerInfo.nickname,
               comment: comment,
             },
           });
@@ -56,7 +29,9 @@ const Comment = ({
         }}
       >
         <Writer writer={`${comment.writerInfo.id === postWriter_id}`}>
-          {showWriter(comment, postWriter_id)}
+          {comment.writerInfo.id === postWriter_id
+            ? '글쓴이'
+            : comment.writerInfo.nickname}
           <img src={replyBtnImg} />
         </Writer>
         {comment.contents}
