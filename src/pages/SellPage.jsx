@@ -50,27 +50,40 @@ function SellPage() {
 
   const fetchItems = async (dealType = '', currentCountry = '') => {
     try {
-      const params = {
-        page: 0,
-        size: 20,
-        sort: 'DESC',
-        dealType: dealType === '직거래' ? 'DIRECT' : 'DELIVERY',
-        currentCountry,
-        ...(showAvailable && { dealStatus: 'AWAIT' }), // showAvailable이 true일 때만 dealStatus 추가
-      };
+      if (showAvailable) {
+        // 거래 가능한 물품만 불러오기
+        const response = await getData(
+          '/api/v1/market-post/available', {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        });
+        if (response) {
+          setItems(response.data.content);
+        }
+      } else {
+        // 필터링된 물품 불러오기
+        const params = {
+          page: 0,
+          size: 20,
+          sort: 'DESC',
+          dealType: dealType === '직거래' ? 'DIRECT' : 'DELIVERY',
+          currentCountry,
+          dealStatus: 'COMPLETE', // 거래 불가능한 물품 (showAvailable이 false일 때)
+        };
   
-      const response = await getData(
-        GET_FILTER_ITEM, {
-        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-      }, params);
+        const response = await getData(
+          GET_FILTER_ITEM, {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }, params);
   
-      if (response) {
-        setItems(response.data.content);
+        if (response) {
+          setItems(response.data.content);
+        }
       }
     } catch (error) {
       console.error('필터링 중 오류 발생:', error);
     }
   };
+  
   
   const fetchSearchResults = async () => {
     try {
