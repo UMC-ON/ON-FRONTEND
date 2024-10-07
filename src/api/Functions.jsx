@@ -80,3 +80,18 @@ export const multiFilePostData = async (
 
   return response;
 };
+
+export const deleteData = async (url, headers = {}, params = {}) => {
+  const response = await apiClient
+    .delete(url, { headers: { ...headers }, params: { ...params } })
+    .then((response) => {
+      console.log(response);
+      return response;
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
+    });
+
+  return response;
+};
