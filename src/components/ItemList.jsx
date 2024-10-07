@@ -43,7 +43,6 @@ const ItemList = ({ items }) => {
       if (Array.isArray(response.data.content)) {
         const scrappedIds = response.data.content.map(post => post.marketPost.marketPostId);
         setScrappedMarketPostIds(scrappedIds);
-        console.log(scrappedIds);
       } else {
         console.error('Unexpected response structure:', response.data);
       }
@@ -64,7 +63,7 @@ const ItemList = ({ items }) => {
 
         return (
           <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.imageUrls[0] ? item.imageUrls[0] : noImage} />
+            <Photo src={item.imageUrls.length > 0 ? item.imageUrls : noImage} />
             <Information>
               <StarContainer
                 marketPostId={item.marketPostId}
@@ -133,7 +132,6 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
       // Toggle the star state
       setIsStarFilled(!isStarFilled);
 
-      console.log({ marketPostId });
     } catch (error) {
       console.error('스크랩 처리 중 오류 발생:', error);
     }
@@ -252,16 +250,25 @@ const Profile = styled.img`
   margin-right: 2px;
 `;
 
+const LocationAndUser = styled.div`
+  display: flex;
+  align-items: center;
+  height: 2em;
+  width: 11em;
+  margin-bottom: 1vh;
+`;
+
 const Place = styled.p`
-  width: 100px;
+  width: 100%; 
   font-size: 0.7em;
   align-items: center;
   margin-right: 10px;
   color: #838383;
-  white-space: nowrap; /* 줄 바꿈 없이 한 줄로 표시 */
-  overflow: hidden; /* 넘치는 텍스트를 숨깁니다 */
-  text-overflow: ellipsis; /* 넘치는 텍스트를 '...'으로 표시 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
+
 
 const Compas = styled.img`
   width: 1.2em;
@@ -275,16 +282,8 @@ const User = styled.p`
   align-items: center;
   color: #838383;
   padding-top: 5px;
-`;
-
-const LocationAndUser = styled.div`
-  display: flex;
-  align-items: center;
-  width: 11em;
-  margin-bottom: 1vh;
-`;
-
-
-const Space = styled.div`
-  height: 3em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 `;
