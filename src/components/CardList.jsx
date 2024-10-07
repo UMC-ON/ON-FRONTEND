@@ -384,26 +384,29 @@ const CardList = ({ selectedCountry }) => {
   }, [selectedCountry]);
 
   return (
+    <>
     <CardListContainer>
       {filteredTravels.map((card, index) => (
         <CardContainer key={index}>
           <Card onClick={goToAccompany}>
-            <CardImage src={card.img}/>
-              <CardContent>
+            <CardImage src={card.img} />
+            <GradientOverlay />
+            <CardContent>
               <Left><CardDistance>{card.country}</CardDistance></Left>
               <Left><CardName>{card.tourist_attraction}</CardName></Left>
               <Left><CardDescription>{card.detail}</CardDescription></Left>
               <Bottom>
-                <CardLabel>{card.country}</CardLabel>
-                <CardLabel>{hasLastConsonantLetter(card.country) ? "으로" : "로"}</CardLabel>
-                <CardLabel>&nbsp;함께 떠날 동행 구하기</CardLabel>
-                <Icon src={airplaneImg}/>
+                <Icon src={airplaneImg} />
+                <CardLabel>동행 구하기</CardLabel>
               </Bottom>
-              </CardContent>
+            </CardContent>
           </Card>
+          
         </CardContainer>
       ))}
     </CardListContainer>
+    
+    </>
   );
 };
 
@@ -411,12 +414,15 @@ export default CardList;
 
 const Icon = styled.img`
   margin-left: 3px;
-  margin-bottom: 8px;
+  margin-right: 7px;
+  color: white;
+  width: 20px;
 `;
 
 
 const CardListContainer = styled.div`
-  margin-left: 2vh;
+  margin-left: 3vh;
+  position: relative;
   display: flex;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -429,26 +435,27 @@ const CardListContainer = styled.div`
 `;
 
 const CardContainer = styled.div`
+  position: relative;
   display: inline-block; 
-  margin: 0 1.3vh;
+  margin-right: 8.5vh;
   min-width: 15vh;
 `;
 
 const Card = styled.div`
 background: white;
-border-radius: 15px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+border-radius: 20px;
+filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 overflow: hidden;
 text-align: center;
 display: flex;
 flex-direction: column;
-width: 15vh;
-height: 21vh;
+width: 21vh;
+height: 35vh;
 `;
 
 const CardImage = styled.img`
   width: 100%;        
-  height: 12vh;        
+  height: 18vh;        
   object-fit: cover;   
 `;
 
@@ -457,29 +464,30 @@ const CardContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   flex: 1; 
-  background-color: #698DB8;
+  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
 `;
 
 const CardDistance = styled.h2`
-  font-size: 9px;
+  font-size: 15px;
+  font-weight: bold;
   padding: 8px 0 5px;
-  color: #ffffff;
+  color: #5C5C5C;
   margin: 0;
 `;
 
 const CardName = styled.p`
-  font-size: 0.8em;
+  font-size: 17px;
   padding: 0;
   font-weight: bold;
-  padding-bottom: 4px;
-  color: #ffffff;
+  padding-bottom: 0.8em;
+  color: #1E1E1E;
   margin: 0;
 `;
 
 const CardDescription = styled.p`
-  font-size: 7.5px;
+  font-size: 12px;
   padding: 0;
-  color: #ffffff;
+  color: #5C5C5C;
   font-weight: semi-bold;
   overflow: hidden;
   display: -webkit-box;
@@ -489,25 +497,54 @@ const CardDescription = styled.p`
   text-align: left;
   margin: 0;
   margin-right: 1em;
+  line-height: 15px;
 `;
 
 
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding-left: 0.5em;
+  padding-left: 0.95em;
 `;
 
 const Bottom = styled.div`
   display: flex;
-  justify-content: flex-start;
-  padding: 0 0.5em;
+  margin: 0 auto;
+  width: 65%;
+  justify-content: center;
+  padding: 9px 5px;
   margin-top: auto;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 `;
 
 const CardLabel = styled.p`
-  font-size: 7px;
+  font-size: 12px;
+  font-weight: bold;
   padding: 0;
-  padding-bottom: 10px;
   color: #ffffff;
+`;
+
+const GradientOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(to bottom, #D6EBFF, transparent);
+  opacity: 1; 
+`;
+
+const OverlayBox = styled.div`
+  position: fixed;
+  top: 120vh;
+  right: 0;
+  width: 20%;
+  height: 43%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  z-index: 1; 
+  pointer-events: none;
+  background-color: red;
 `;

@@ -2,14 +2,12 @@ import styled from "styled-components";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from "react-redux";
-import axios from 'axios';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
 import ItemDetailPageHeader from "../components/ItemDetailPageHeader";
-import NearItemList from '../components/NearbyItemList';
-import LoadingScreen from '../components/LoadingScreen';
+import ItemList from '../components/ItemList';
 
 import compas from "../assets/images/compasIcon.svg";
 import icon from "../assets/images/profileIcon.svg";
@@ -38,32 +36,20 @@ function ItemDetailPage() {
   const [nearitems, setNearitems] = useState([]);
   const [receiverId, setReceiverId] = useState(null);
   const [roomId, setRoomId] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  const [modalImage, setModalImage] = useState(null);  // 원본 이미지를 저장
+  const [modalImage, setModalImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasBottomTab, setHasBottomTab] = useState(true); // 추가된 상태
 
-const openModal = (imageSrc) => {
-  setModalImage(imageSrc);
-  setIsModalOpen(true);
-};
+  const openModal = (imageSrc) => {
+    setModalImage(imageSrc);
+    setIsModalOpen(true);
+  };
 
-const closeModal = () => {
-  setIsModalOpen(false);
-  setModalImage(null);
-};
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); 
-    // 2 seconds
-
-    return () => clearTimeout(timer);
-  }, []);
-
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalImage(null);
+  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -76,7 +62,7 @@ const closeModal = () => {
         );
         if (response) {
           setItems([response.data]);
-          setReceiverId(response.data.userId); // Extract and set receiverId
+          setReceiverId(response.data.userId);
           console.log(response.data);
         }
       } catch (error) {
@@ -86,7 +72,6 @@ const closeModal = () => {
 
     fetchItems();
   }, [marketPostId]);
-  
 
   useEffect(() => {
     const fetchNearitems = async () => {
@@ -109,21 +94,12 @@ const closeModal = () => {
     fetchNearitems();
   }, [marketPostId]);
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-  };
-
   const handleChatButtonClick = async () => {
     if (!receiverId || !marketPostId) {
       console.error('Receiver ID or Market Post ID is missing.');
       return;
     }
-  
+
     try {
       const response = await postData(
         GET_MARKET_ROOMID,
@@ -137,7 +113,7 @@ const closeModal = () => {
           'Content-Type': 'application/json',
         }
       );
-  
+
       if (response?.data?.inSuccess) {
         const roomId = response.data.result.roomId;
         const nickname = userInfo?.nickname || 'Unknown User';
@@ -150,45 +126,39 @@ const closeModal = () => {
       console.error('Error sending chat request:', error);
     }
   };
-  
-  
 
   return (
     <>
-    {loading ? (
-      <LoadingScreen />
-    ) : (
-      <>
-        <ItemDetailPageHeader />
+      <ItemDetailPageHeader />
       <Space />
-      <ContentContainer>
+      <ContentContainer hasBottomTab={userInfo.id !== receiverId}>
         {items && items.map((item, index) => {
           const imageUrls = item.imageUrls && item.imageUrls.length > 0 
             ? item.imageUrls 
             : [noImage];
-          
+      
           const isSingleImage = imageUrls.length === 1;
 
           return (
             <React.Fragment key={index}>
               {isSingleImage ? (
-  <SingleImage 
-    src={imageUrls[0]} 
-    alt={`Image ${index + 1}`}
-    onClick={() => openModal(imageUrls[0])} // 이미지 클릭 시 모달 열기
-  />
-) : (
-  <Slider {...settings}>
-    {imageUrls.map((url, idx) => (
-      <ItemImage 
-        key={idx} 
-        src={url} 
-        alt={`Slide ${idx + 1}`}
-        onClick={() => openModal(url)} // 이미지 클릭 시 모달 열기
-      />
-    ))}
-  </Slider>
-)}
+                <SingleImage 
+                  src={imageUrls[0]} 
+                  alt={`Image ${index + 1}`}
+                  onClick={() => openModal(imageUrls[0])} // 이미지 클릭 시 모달 열기
+                />
+              ) : (
+                <Slider {...settings}>
+                  {imageUrls.map((url, idx) => (
+                    <ItemImage 
+                      key={idx} 
+                      src={url} 
+                      alt={`Slide ${idx + 1}`}
+                      onClick={() => openModal(url)} // 이미지 클릭 시 모달 열기
+                    />
+                  ))}
+                </Slider>
+              )}
               <InfoContainer>
                 <Title>{item.title}</Title>
                 <State>{item.dealType === 'DIRECT' ? '직거래' : '택배거래'} | {item.dealStatus === 'AWAIT' ? '거래 가능' : '거래 완료'}</State><br />
@@ -202,24 +172,26 @@ const closeModal = () => {
                 </SellerInfo>
                 <Nearby><Blue>주변</Blue> 중고거래글</Nearby>
               </InfoContainer>
-              <NearItemList nearitems={nearitems} />
+              <ItemList items={nearitems} />
+              {nearitems.length === 0 && <NoNearbyItems>주변 거래글이 없습니다.</NoNearbyItems>}
             </React.Fragment>
           );
         })}
       </ContentContainer>
+
       {isModalOpen && <ImageModal imageSrc={modalImage} onClose={closeModal} />}
 
-      <BottomTabLayout>
-        <ChatButton onClick={handleChatButtonClick}>
-          채팅으로 거래하기
-        </ChatButton>
-      </BottomTabLayout>
-      </>
-    )}
-      
+      {userInfo.id !== receiverId && (
+        <BottomTabLayout>
+          <ChatButton onClick={handleChatButtonClick}>
+            채팅으로 거래하기
+          </ChatButton>
+        </BottomTabLayout>
+      )}
     </>
   );
 }
+
 
 export default ItemDetailPage;
 
@@ -229,7 +201,7 @@ const Space = styled.div`
 `;
 
 const ContentContainer = styled.div`
-  max-height: calc(100vh - 7vh - 87px); /* Space + BottomTabLayout의 높이를 고려하여 설정 */
+  max-height: ${(props) => (props.hasBottomTab ? 'calc(100vh - 7vh - 87px)' : '100vh')}; 
   overflow-y: auto;
 `;
 
@@ -384,4 +356,11 @@ const ModalContent = styled.div`
 const ModalImage = styled.img`
   max-width: 100%;
   max-height: 100%;
+`;
+
+const NoNearbyItems = styled.p`
+  text-align: center;
+  font-size: 16px;
+  color: #7A7A7A;
+  margin: 20px 0;
 `;
