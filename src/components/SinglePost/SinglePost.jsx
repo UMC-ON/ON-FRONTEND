@@ -1,5 +1,6 @@
 import * as s from './SinglePostStyled';
 import { useNavigate } from 'react-router-dom';
+import { showDate } from '../Common/InfoExp';
 
 const SinglePost = ({
   postId,
@@ -12,6 +13,7 @@ const SinglePost = ({
   boardType,
 }) => {
   const navigate = useNavigate();
+
   return (
     <s.SearchWrapper
       onClick={() =>
@@ -21,19 +23,23 @@ const SinglePost = ({
       }
     >
       <s.Title>{title}</s.Title>
-      <s.Time>{time}</s.Time>
+      <s.Time>{showDate(time)}</s.Time>
       <s.Content>{content}</s.Content>
       <s.Info>
-        <span style={{ color: '#7A7A7A', marginRight: '0.3rem' }}>
-          {nickName}
-        </span>
-        {verified ? <s.VerifiedSvg /> : ''}
+        <s.Nickname>
+          <span>{nickName}</span>
+          {verified ? <s.VerifiedSvg /> : ''}
+        </s.Nickname>
+
         <s.CommentSvg />
         <span style={{ color: '#92A5BC' }}>{comment}</span>
       </s.Info>
-      <s.Categories>
-        {boardType === 'general' ? '자유게시판' : '정보게시판'}
-      </s.Categories>
+
+      {boardType === 'INFO' ? (
+        <s.Categories $fontcolor="#3E73B2">정보 커뮤니티</s.Categories>
+      ) : (
+        <s.Categories $fontcolor="#6458BF">자유 커뮤니티</s.Categories>
+      )}
     </s.SearchWrapper>
   );
 };

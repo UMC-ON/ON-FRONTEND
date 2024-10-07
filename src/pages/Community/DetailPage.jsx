@@ -162,6 +162,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
 
     //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     //자식에게 ref전달 알아보기
+    location.reload(true); // 너무 느려지는데?ㅜㅜ
   };
 
   if (isLoading) {
