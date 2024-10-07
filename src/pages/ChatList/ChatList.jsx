@@ -79,7 +79,6 @@ const ChatList = () => {
                 <SingleAccompanyChat
                   key={data.roomId}
                   roomId={data.roomId}
-                  img={data.location}
                   time={data.lastChatTime !== null ? data.lastChatTime : ''}
                   message={
                     data.lastMessage !== null

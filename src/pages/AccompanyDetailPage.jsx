@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 import detailImg from '../assets/images/accompany_img.svg';
@@ -12,7 +12,6 @@ import placeIcon from '../assets/images/black_place_icon.svg';
 import plusIcon from '../assets/images/black_plus_icon.svg';
 import marketImg from '../assets/images/borough_market.svg';
 
-
 import CardAccompanyList from '../components/CardAccompanyList';
 import AccompanyHeader from '../components/AccompanyHeader';
 import FirstModal from '../components/FirstModal';
@@ -21,13 +20,18 @@ import LoadingScreen from '../components/LoadingScreen';
 import ReportModal from '../components/ReportModal';
 import ShareModal from '../components/ShareModal';
 
-import CountryIcon from '../components/CountryIcon';
+import { CountryIcon } from '../components/CountryIcon';
 
 import { showDate } from '../components/Common/InfoExp';
 
 import { useSelector } from 'react-redux';
 import { getData, postData } from '../api/Functions';
-import { GET_DETAIL_ACCOMPANY, GET_SIMILAR_ACCOMPANY, GET_USER_INFO, GET_ROOM_ID } from '../api/urls';
+import {
+  GET_DETAIL_ACCOMPANY,
+  GET_SIMILAR_ACCOMPANY,
+  GET_USER_INFO,
+  GET_ROOM_ID,
+} from '../api/urls';
 
 function AccompanyDetailPage() {
   const location = useLocation();
@@ -35,7 +39,6 @@ function AccompanyDetailPage() {
 
   let loginInfo = useSelector((state) => state.user);
   const nav = useNavigate();
-  
 
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
@@ -51,57 +54,53 @@ function AccompanyDetailPage() {
   const [accompanyData, setAccompanyData] = useState([]);
 
   const userInfo = useSelector((state) => state.user.user);
-   
- 
+
   const navigate = useNavigate();
 
   const openFirstModal = () => {
-    if (userInfo.country != null)
-    {
-    console.log("First modal opened");
-    setIsFirstModalOpen(true);
-    }
-    else
-    {
+    if (userInfo.country != null) {
+      console.log('First modal opened');
+      setIsFirstModalOpen(true);
+    } else {
       setIsSecondModalOpen(true);
     }
   };
 
   const closeFirstModal = () => {
-    console.log("First modal closed");
+    console.log('First modal closed');
     setIsFirstModalOpen(false);
   };
 
   const openSecondModal = () => {
-    console.log("Second modal opened");
+    console.log('Second modal opened');
     setIsSecondModalOpen(true);
   };
 
   const closeSecondModal = () => {
-    console.log("Second modal closed");
+    console.log('Second modal closed');
     setIsSecondModalOpen(false);
   };
 
   const openReportModal = () => {
-    console.log("Report modal opened");
+    console.log('Report modal opened');
     setIsReportModalOpen(true);
   };
 
   const closeReportModal = () => {
-    console.log("Report modal closed");
+    console.log('Report modal closed');
     setIsReportModalOpen(false);
   };
 
   const openShareModal = () => {
-    console.log("Share modal opened");
+    console.log('Share modal opened');
     setIsShareModalOpen(true);
   };
 
   const closeShareModal = () => {
-    console.log("Share modal closed");
+    console.log('Share modal closed');
     setIsShareModalOpen(false);
   };
- 
+
   const handleBlueButtonClick = () => {
     closeFirstModal();
     applyData();
@@ -125,21 +124,23 @@ function AccompanyDetailPage() {
       // console.log(typeof infoData[0].userId);
       // console.log("postId: ");
       // console.log(typeof postId);
-      
+
       const response = await postData(
         GET_ROOM_ID,
-        { chatType: "COMPANY", receiverId: infoData[0].userId, postId: postId},
+        { chatType: 'COMPANY', receiverId: infoData[0].userId, postId: postId },
         {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }
+        },
       );
-  
+
       if (response) {
         console.log(response.data);
         const roomId = response.data.roomId;
         const senderName = infoData[0].nickname;
         console.log('Application successful:', roomId);
-        navigate(`/chat/accompany/${roomId}`, { state: { roomId, senderName } });
+        navigate(`/chat/accompany/${roomId}`, {
+          state: { roomId, senderName },
+        });
       } else {
         console.error('Application failed');
       }
@@ -154,43 +155,41 @@ function AccompanyDetailPage() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const info_data = await getData(GET_DETAIL_ACCOMPANY(postId),{
+        const info_data = await getData(GET_DETAIL_ACCOMPANY(postId), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }); 
+        });
         setInfoData(info_data.data);
-        console.log("info data here");
+        console.log('info data here');
         console.log(info_data.data);
-        // 
+        //
 
-        const user_data = await getData(GET_USER_INFO,{
+        const user_data = await getData(GET_USER_INFO, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }); 
+        });
         // console.log(user_data.data.result.id);
-        console.log("user id"); 
+        console.log('user id');
         setUserId(user_data.data.id);
 
         // console.log(info_data.data[0].nickname);
         setNickName(info_data.data[0].nickname);
 
-        const accompany_data = await getData(GET_SIMILAR_ACCOMPANY(postId),{
+        const accompany_data = await getData(GET_SIMILAR_ACCOMPANY(postId), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }); 
+        });
         setAccompanyData(accompany_data.data);
         console.log(accompanyData);
-
-
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
         // insert code here
         setTimeout(() => {
-            setIsLoading(false); // Data fetched, stop showing main loading after 1 second
+          setIsLoading(false); // Data fetched, stop showing main loading after 1 second
         }, 1000); // 1000 milliseconds = 1 second
-    }
+      }
     };
 
-    fetchData(); 
-  }, [postId]); 
+    fetchData();
+  }, [postId]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -205,136 +204,201 @@ function AccompanyDetailPage() {
     }
   }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
 
-  if (isLoading)
-  {
-      return <LoadingScreen/>
+  if (isLoading) {
+    return <LoadingScreen />;
   }
 
-    return (
+  return (
+    <>
       <>
-        <>
-        <AccompanyHeader openModal={openShareModal}/>
-        <Space/>
+        <AccompanyHeader openModal={openShareModal} />
+        <Space />
         {infoData.map((card, index) => (
           <div key={index}>
-          <BannerContainer>
-            {card.imageUrls[0] ?
-            <><BannerImg src={card.imageUrls[0]} alt="Banner" /> <GradientOverlay /></>:
-            <BannerImg src={marketImg2}/>
-            }
-            <ProfileTextContainer>
-              <CountryIcon country={card.currentCountry}/>
-              <TextContainer>
-                <Left>
-                  <BigText>{card.nickname}</BigText>
-                  <GreyText $left="8px">(</GreyText>
-                  {card.ageAnonymous ? 
-                  <></> :
-                  <GreyText>{card.age}세/</GreyText>
-                  }
-                  {card.gender == 'FEMALE' ? 
-                  <GreyText>여</GreyText>:
-                  <GreyText>남</GreyText>
-                   }
-                  <GreyText>)</GreyText>
-                </Left>
-                <Left>
-                  <SmallIcon src={coordinateIcon}/>
-                  <GreyText $size="0.9em">{card.currentCountry}</GreyText>
-                  {card.universityAnonymous ?
-                  <></> :
+            <BannerContainer>
+              {card.imageUrls[0] ? (
+                <>
+                  <BannerImg
+                    src={card.imageUrls[0]}
+                    alt="Banner"
+                  />{' '}
+                  <GradientOverlay />
+                </>
+              ) : (
+                <BannerImg src={marketImg2} />
+              )}
+              <ProfileTextContainer>
+                <CountryIcon country={card.currentCountry} />
+                <TextContainer>
+                  <Left>
+                    <BigText>{card.nickname}</BigText>
+                    <GreyText $left="8px">(</GreyText>
+                    {card.ageAnonymous ? (
+                      <></>
+                    ) : (
+                      <GreyText>{card.age}세/</GreyText>
+                    )}
+                    {card.gender == 'FEMALE' ? (
+                      <GreyText>여</GreyText>
+                    ) : (
+                      <GreyText>남</GreyText>
+                    )}
+                    <GreyText>)</GreyText>
+                  </Left>
+                  <Left>
+                    <SmallIcon src={coordinateIcon} />
+                    <GreyText $size="0.9em">{card.currentCountry}</GreyText>
+                    {card.universityAnonymous ? (
+                      <></>
+                    ) : (
+                      <>
+                        <GreyText $size="0.9em">,&nbsp;</GreyText>
+                        <GreyText $size="0.9em">
+                          {card.dispatchedUniversity}
+                        </GreyText>
+                      </>
+                    )}
+                  </Left>
+                </TextContainer>
+              </ProfileTextContainer>
+            </BannerContainer>
+
+            <BlueContainer>
+              <TitleText $size="1.3em">{card.title}</TitleText>
+              <Left>
+                <GreyText>{showDate(card.createdAt)}</GreyText>
+              </Left>
+            </BlueContainer>
+
+            <BodyText>{card.content}</BodyText>
+
+            <PurpleContainer>
+              <FlexContainer>
+                <Row>
+                  <RowText>
+                    <BlackIcon src={calendarIcon} />
+                    희망일정
+                  </RowText>
+                  <RowText>
+                    <BlackIcon src={placeIcon} />
+                    지역
+                  </RowText>
+                  <RowText>
+                    <BlackIcon src={plusIcon} />
+                    모집 인원
+                  </RowText>
+                </Row>
+                <Row>
+                  {card.startDate == card.endDate ? (
+                    <RowText
+                      $size="0.9em"
+                      $weight="normal"
+                      $color="#7a7a7a"
+                    >
+                      {replaceHyphenWithDot(card.startDate)} <br />
+                      <LittleSpace />
+                      당일치기
+                    </RowText>
+                  ) : (
+                    <RowText
+                      $size="0.9em"
+                      $weight="normal"
+                      $color="#7a7a7a"
+                    >
+                      {replaceHyphenWithDot(card.startDate)} <br />
+                      <LittleSpace />~ {replaceHyphenWithDot(card.endDate)}
+                    </RowText>
+                  )}
+                  <RowText
+                    $size="0.9em"
+                    $weight="normal"
+                    $color="#7a7a7a"
+                  >
+                    {card.travelArea[0]}
+                    <br />
+                    <LittleSpace />
+                    {card.travelArea[1]}
+                  </RowText>
+                  <RowText
+                    $size="0.9em"
+                    $weight="normal"
+                    $color="#7a7a7a"
+                  >
+                    ({card.currentRecruitNumber}/{card.totalRecruitNumber})
+                  </RowText>
+                </Row>
+              </FlexContainer>
+            </PurpleContainer>
+
+            <Left>
+              <LittleButton onClick={openReportModal}>
+                이 게시물 신고하기
+              </LittleButton>
+            </Left>
+
+            <Line />
+
+            {accompanyData.length > 0 ? (
+              <>
+                <BigContainer>
+                  <LeftContainer>
+                    <MiddleText
+                      color="#3E73B2"
+                      spacing="1vh"
+                    >
+                      비슷한
+                    </MiddleText>
+                    <MiddleText>동행글 추천</MiddleText>
+                  </LeftContainer>
+                </BigContainer>
+
+                <CardAccompanyList
+                  color="#c5d3e0"
+                  cards={accompanyData}
+                ></CardAccompanyList>
+              </>
+            ) : null}
+            <BigSpace />
+
+            {infoData[0].userId !== userId ? (
+              <BottomTabLayout>
+                {card.recruitCompletd ? (
+                  <GreyButton $width="500px">
+                    모집이 완료된 동행 글이에요.
+                  </GreyButton>
+                ) : (
                   <>
-                    <GreyText $size="0.9em">,&nbsp;</GreyText>
-                    <GreyText $size="0.9em">{card.dispatchedUniversity}</GreyText>
+                    <BlueButton
+                      onClick={openFirstModal}
+                      $width="500px"
+                    >
+                      동행 신청 및 문의하기
+                    </BlueButton>
                   </>
-                  }
-                </Left>
-              </TextContainer>
-            </ProfileTextContainer>
-          </BannerContainer>
-       
-
-        <BlueContainer>
-          <TitleText $size="1.3em">{card.title}</TitleText>
-          <Left><GreyText>{showDate(card.createdAt)}</GreyText></Left>
-        </BlueContainer>
-
-        <BodyText>
-          {card.content}
-        </BodyText>
-
-        <PurpleContainer>
-          <FlexContainer>
-            <Row>
-              <RowText><BlackIcon src={calendarIcon}/>희망일정</RowText>
-              <RowText><BlackIcon src={placeIcon}/>지역</RowText>
-              <RowText><BlackIcon src={plusIcon}/>모집 인원</RowText>
-            </Row>
-            <Row>
-              
-                {(card.startDate == card.endDate) ?
-                  <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                  {replaceHyphenWithDot(card.startDate)} <br/><LittleSpace/>당일치기
-                  </RowText>
-                :
-                  <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                  {replaceHyphenWithDot(card.startDate)} <br/><LittleSpace/>~ {replaceHyphenWithDot(card.endDate)}
-                  </RowText>
-                }
-              <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                {card.travelArea[0]}<br/><LittleSpace/>{card.travelArea[1]}
-              </RowText>
-              <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                ({card.currentRecruitNumber}/{card.totalRecruitNumber})
-              </RowText>
-            </Row>
-          </FlexContainer>
-        </PurpleContainer>
-
-        <Left>
-        <LittleButton onClick={openReportModal}>이 게시물 신고하기</LittleButton>
-        </Left>
-
-        <Line/>
-
-
-        {accompanyData.length > 0 ?
-        <>
-        <BigContainer>
-            <LeftContainer>
-            <MiddleText color="#3E73B2" spacing="1vh">비슷한</MiddleText>
-            <MiddleText>동행글 추천</MiddleText>
-            </LeftContainer>
-        </BigContainer>
-
-        
-        <CardAccompanyList color="#c5d3e0" cards={accompanyData}></CardAccompanyList></>:null
-        }
-        <BigSpace/>
-
-        {infoData[0].userId !== userId ?
-        <BottomTabLayout>
-          {card.recruitCompletd ?
-          <GreyButton $width="500px">모집이 완료된 동행 글이에요.</GreyButton> :
-          <>
-          <BlueButton onClick={openFirstModal} $width="500px">동행 신청 및 문의하기</BlueButton>
-          </>
-          }
-        </BottomTabLayout>:null}
-        </div>
-         ))}
+                )}
+              </BottomTabLayout>
+            ) : null}
+          </div>
+        ))}
 
         {isFirstModalOpen && (
-        <FirstModal closeModal={closeFirstModal} openNextModal={handleBlueButtonClick} 
-          nickname={nickname}
-        />
+          <FirstModal
+            closeModal={closeFirstModal}
+            openNextModal={handleBlueButtonClick}
+            nickname={nickname}
+          />
         )}
-        {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} openNextModal={openNextModal} />}
+        {isSecondModalOpen && (
+          <SecondModal
+            closeModal={closeSecondModal}
+            openNextModal={openNextModal}
+          />
+        )}
         {isReportModalOpen && <ReportModal closeModal={closeReportModal} />}
         {isShareModalOpen && <ShareModal closeModal={closeShareModal} />}
       </>
-      </>
-    );
+    </>
+  );
 }
 
 export default AccompanyDetailPage;
@@ -350,7 +414,7 @@ const BlueContainer = styled.div`
   border-radius: 10px;
   padding: 15px;
   width: 83%;
-  border: 1px solid #DFDFDF;
+  border: 1px solid #dfdfdf;
   margin-bottom: 2vh;
 `;
 
@@ -365,14 +429,12 @@ const BlackIcon = styled.img`
   padding-right: 5px;
 `;
 
-
 const SmallIcon = styled.img`
   width: 15px;
   height: 15px;
   padding-top: 11px;
   margin-right: 5px;
 `;
-
 
 const Space = styled.div`
   margin-top: 7vh;
@@ -406,13 +468,13 @@ const GradientOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(to top, #363636, transparent);
-  opacity: 0.7; 
+  opacity: 0.7;
 `;
 
 const ProfileTextContainer = styled.div`
   position: absolute;
-  bottom: -35%; 
-  left: 5%; 
+  bottom: -35%;
+  left: 5%;
   display: flex;
   align-items: center;
 `;
@@ -420,8 +482,8 @@ const ProfileTextContainer = styled.div`
 const ProfileImg = styled.img`
   border-radius: 100px;
   width: 12vh;
-  height: 12vh; 
-  object-fit: cover; 
+  height: 12vh;
+  object-fit: cover;
   object-position: center;
   // border: 1px solid #D9D9D9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
@@ -433,39 +495,39 @@ const TextContainer = styled.div`
 `;
 
 const BigText = styled.p`
-  color: black; 
+  color: black;
   margin: 0;
   padding-top: 0px;
-  font-size: ${props => props.$size || '1.5em'};
+  font-size: ${(props) => props.$size || '1.5em'};
   font-weight: bold;
   text-align: left;
   line-height: 3vh;
   max-width: 180px;
-  
+
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
 `;
 
 const TitleText = styled.p`
-  color: black; 
+  color: black;
   margin: 0;
   padding-top: 0px;
-  font-size: ${props => props.$size || '1.5em'};
+  font-size: ${(props) => props.$size || '1.5em'};
   font-weight: bold;
   text-align: left;
   line-height: 3vh;
 `;
 
 const GreyText = styled.p`
-  font-size:${props => props.$size || '0.7em'};
+  font-size: ${(props) => props.$size || '0.7em'};
   color: #7a7a7a;
   padding-top: 0.8em;
-  padding-left: ${props => props.$left || ''};
+  padding-left: ${(props) => props.$left || ''};
 `;
 
 const BodyText = styled.p`
-  color: black; 
+  color: black;
   line-height: 2.5vh;
   margin: 0 auto;
   width: 80%;
@@ -500,15 +562,14 @@ const RowText = styled.div`
   flex: 1;
   text-align: center;
   padding: 10px;
-  color: ${props => props.$color || 'black'};
-  font-weight: ${props => props.$weight || 'bold'};
-  font-size: ${props => props.$size || '1em'};
+  color: ${(props) => props.$color || 'black'};
+  font-weight: ${(props) => props.$weight || 'bold'};
+  font-size: ${(props) => props.$size || '1em'};
   white-space: normal;
   word-break: keep-all; /* Ensures words don't break in the middle */
   overflow-wrap: break-word; /* Allows wrapping only at natural breaks (like spaces) */
   max-width: 100px;
 `;
-
 
 const LittleButton = styled.button`
   font-size: 0.7em;
@@ -536,8 +597,8 @@ const LeftContainer = styled.div`
 `;
 
 const MiddleText = styled.div`
-  color: ${props => props.color || '#000000'};
-  margin-right: ${props => props.spacing || '0'};
+  color: ${(props) => props.color || '#000000'};
+  margin-right: ${(props) => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter-Regular';
   font-size: 1.2em;
@@ -549,7 +610,7 @@ const BottomTabLayout = styled.div`
   height: 87px;
   position: fixed;
   bottom: 0;
-  border-top:  1px solid #DFDFDF;
+  border-top: 1px solid #dfdfdf;
   background: #ffffff;
   z-index: 1;
   display: flex;
@@ -561,12 +622,12 @@ const BottomTabLayout = styled.div`
 
 const GreyButton = styled.button`
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   left: 0;
   right: 0;
   margin: 0 auto;
   border-radius: 10px;
-  width: ${props => props.$width || '148px'};
+  width: ${(props) => props.$width || '148px'};
   height: 50px;
   padding: 15px 26px;
   background-color: #d9d9d9;
@@ -580,18 +641,17 @@ const GreyButton = styled.button`
   z-index: 2;
 `;
 
-
 const BlueButton = styled.button`
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   left: 0;
   right: 0;
-  margin: 0 auto; 
+  margin: 0 auto;
   border-radius: 10px;
-  width: ${props => props.$width || '148px'};
+  width: ${(props) => props.$width || '148px'};
   height: 50px;
   padding: 15px 26px;
-  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+  background: linear-gradient(135deg, #d6ebff, #c2c7ff);
   color: white;
   text-align: center;
   font-family: Inter;
