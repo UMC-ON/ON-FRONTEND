@@ -7,6 +7,7 @@ import Loading from '../Loading/Loading';
 const TradeChatInfo = ({ user, roomId }) => {
   const [infoResult, setInfoResult] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [tradeMethod, setTradeMethod] = useState('');
 
   useEffect(() => {
     const fetchTradeInfo = async () => {
@@ -23,6 +24,11 @@ const TradeChatInfo = ({ user, roomId }) => {
         if (response) {
           console.log(response.data.result);
           setInfoResult(response.data.result);
+          if (infoResult.tradeMethod === 'DIRECT') {
+            setTradeMethod('직접 만나서 거래');
+          } else {
+            setTradeMethod('택배 거래');
+          }
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -54,7 +60,7 @@ const TradeChatInfo = ({ user, roomId }) => {
         <s.ProductInfoContainer>
           <s.ProductName>{infoResult.productName}</s.ProductName>
           <s.ProductPrice>&#8361; {infoResult.productPrice}</s.ProductPrice>
-          <s.ProductInfo>{infoResult.tradeMethod} |</s.ProductInfo>
+          <s.ProductInfo>{tradeMethod} | 거래완료여부추가필요</s.ProductInfo>
         </s.ProductInfoContainer>
         <s.ProductImg $link={infoResult.imageUrl} />
       </s.ProductWrapper>

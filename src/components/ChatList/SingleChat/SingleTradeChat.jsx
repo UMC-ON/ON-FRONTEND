@@ -20,10 +20,14 @@ const SingleTradeChat = ({
         })
       }
     >
-      <s.TradePicture
-        src={img}
-        alt="no img"
-      />
+      {img && img.length > 0 ? (
+        <s.TradePicture
+          src={img}
+          alt="no img"
+        />
+      ) : (
+        <s.NoTradePicture />
+      )}
       <s.Nickname>{nickName}</s.Nickname>
       <s.Time>{time}</s.Time>
       <s.Message>{message}</s.Message>
