@@ -24,46 +24,59 @@ import swedenIcon from '../assets/images/countryIcon/sweden.svg';
 import swissIcon from '../assets/images/countryIcon/swiss.svg';
 import taiwanIcon from '../assets/images/countryIcon/taiwan.svg';
 
-
 const countryIcons = {
-  "기본": basicIcon,
-  "미국": americaIcon,
-  "호주": austrailaIcon,
-  "오스트리아": autriaIcon,
-  "벨기에": belgiumIcon,
-  "캐나다": canadaIcon,
-  "중국": chinaIcon,
-  "덴마크": denmarkIcon,
-  "영국": englandIcon,
-  "핀란드": finlandIcon,
-  "프랑스": franceIcon,
-  "독일": germanyIcon,
-  "이탈리아": italyIcon,
-  "일본": japanIcon,
-  "뉴질랜드": newzealandIcon,
-  "폴란드": polandIcon,
-  "포르투갈": portugalIcon,
-  "싱가포르": singaporeIcon,
-  "스페인": spainIcon,
-  "스웨덴": swedenIcon,
-  "스위스": swissIcon,
-  "대만": taiwanIcon,
+  기본: basicIcon,
+  미국: americaIcon,
+  호주: austrailaIcon,
+  오스트리아: autriaIcon,
+  벨기에: belgiumIcon,
+  캐나다: canadaIcon,
+  중국: chinaIcon,
+  덴마크: denmarkIcon,
+  영국: englandIcon,
+  핀란드: finlandIcon,
+  프랑스: franceIcon,
+  독일: germanyIcon,
+  이탈리아: italyIcon,
+  일본: japanIcon,
+  뉴질랜드: newzealandIcon,
+  폴란드: polandIcon,
+  포르투갈: portugalIcon,
+  싱가포르: singaporeIcon,
+  스페인: spainIcon,
+  스웨덴: swedenIcon,
+  스위스: swissIcon,
+  대만: taiwanIcon,
 };
 
 const CountryIcon = ({ country }) => {
-    const source = countryIcons[country] || basicIcon;
+  const source = countryIcons[country] || basicIcon;
 
-    return <ProfileImg src={source}/>;
+  return <ProfileImg src={source} />;
 };
 
-export default CountryIcon;
+const ChatCountryIcon = ({ country }) => {
+  const source = countryIcons[country] || basicIcon;
+  return <AccompanyPicture src={source} />;
+};
+export { CountryIcon, ChatCountryIcon };
 
 const ProfileImg = styled.img`
   border-radius: 100px;
   width: 12vh;
-  height: 12vh; 
-  object-fit: cover; 
+  height: 12vh;
+  object-fit: cover;
   object-position: center;
   // border: 1px solid #D9D9D9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+`;
+
+const AccompanyPicture = styled.img`
+  grid-area: pic;
+  width: 3.125rem;
+  height: 3.125rem;
+  flex-shrink: 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 50%;
+  background: lightgray 50% / cover no-repeat;
 `;
