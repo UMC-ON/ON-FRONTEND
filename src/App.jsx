@@ -55,13 +55,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './redux/actions.jsx';
 import Loading from './components/Loading/Loading.jsx';
 import { handleAllowNotification } from './service/notificationPermission.jsx';
+import FindId from './pages/FindPage/FindId.jsx';
+import FindPassword from './pages/FindPage/FindPassword.jsx';
 
 function App() {
   const dispatch = useDispatch();
   let loginInfo = useSelector((state) => state.user);
   const location = useLocation();
   const nav = useNavigate();
-  const excludepaths = ['/signIn', '/signUp', '/landing', '/signUp/complete', '/accompany/detail'];
+  const excludepaths = [
+    '/signIn',
+    '/signUp',
+    '/findId',
+    '/findPassword',
+    '/landing',
+    '/signUp/complete',
+    '/accompany/detail',
+  ];
   const [isLoading, setIsLoading] = useState(true);
 
   //console.log(location.pathname);
@@ -119,6 +129,14 @@ function App() {
           <Route
             path="/signIn"
             element={<SignInPage />}
+          />
+          <Route
+            path="/findId"
+            element={<FindId />}
+          />
+          <Route
+            path="/findPassword"
+            element={<FindPassword />}
           />
           <Route
             path="/signUp/credentials"

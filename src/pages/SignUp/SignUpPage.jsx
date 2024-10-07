@@ -21,10 +21,10 @@ const SignUpPage = () => {
   const nav = useNavigate();
   const [userInfo, setUserInfo] = useState(userInfoBE);
   const [dupCheck, setDupCheck] = useState({ loginId: 0, nickname: 0 });
-  const currentDotStep = useRef(0);
   //0==유효성검사도, 중복검사도 진행X
   //1== 유효성,중복검사 OK
   const [isActive, setActive] = useState(false);
+  const currentDotStep = useRef(0);
   const updateUserInfo = (e) => {
     if (e) {
       let name = e.target.name;
@@ -106,17 +106,20 @@ const SignUpPage = () => {
             </s.TitleSection>
 
             <s.ContentSection ref={animationDiv}>
-              {!isFirstStep && (
-                <s.BackButton
-                  type="button"
-                  onClick={() => {
+              <s.BackButton
+                type="button"
+                onClick={() => {
+                  if (!isFirstStep) {
                     prev();
                     currentDotStep.current--;
-                  }}
-                >
-                  이전 단계
-                </s.BackButton>
-              )}
+                  } else {
+                    nav('/signIn');
+                  }
+                }}
+              >
+                {isFirstStep ? '돌아가기' : '이전 단계'}
+              </s.BackButton>
+
               <s.StyledH2>{currentTitle}</s.StyledH2>
               {currentStep}
             </s.ContentSection>
