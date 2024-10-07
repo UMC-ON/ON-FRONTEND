@@ -104,7 +104,9 @@ const PostPage = ({ color, boardType }) => {
     };
     sendData();
 
-    navigate(-1, { replace: true });
+    navigate(`/community/${boardType == 'FREE' ? 'general' : 'info'}`, {
+      replace: true,
+    });
   };
 
   return (
