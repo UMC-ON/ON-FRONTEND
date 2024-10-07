@@ -8,6 +8,8 @@ export const SIGN_IN_URL = 'api/v1/user/sign-in';
 export const GET_CURRENT_INFO = 'api/v1/user/current/info';
 export const PUT_UNIV = '/api/v1/user/current/update/univ_url';
 export const PUT_NICKNAME = '/api/v1/user/current/update/nickname';
+export const LOGOUT = '/api/v1/user/sign-out';
+export const DELETE_ACCOUNT = '/api/v1/user/delete';
 
 //교환교 인증
 export const DISPATCH_CERTIFY_REQUEST = 'api/v1/dispatch-certify/apply';
@@ -63,8 +65,7 @@ export const GET_MY_MARKET_POST = `/api/v1/market-post/user`;
 //스크랩
 export const POST_SCRAP = `/api/v1/scrap`;
 export const GET_SCRAP = `/api/v1/scrap/`;
-export const DELETE_SCRAP = (marketPostId) =>
-  `/api/v1/scrap/${marketPostId}`;
+export const DELETE_SCRAP = (marketPostId) => `/api/v1/scrap/${marketPostId}`;
 
 //일기 작성
 export const GET_DIARY = `/api/v1/diary/list`;

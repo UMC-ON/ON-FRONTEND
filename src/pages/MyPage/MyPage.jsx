@@ -4,8 +4,8 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './MyPageStyled';
 import theme from '../../styles/theme';
 
-import { PUT_NICKNAME, PUT_UNIV } from '../../api/urls';
-import { getData, postData, putData } from '../../api/Functions';
+import { PUT_NICKNAME, PUT_UNIV, LOGOUT, DELETE_ACCOUNT } from '../../api/urls';
+import { getData, postData, putData, deleteData } from '../../api/Functions';
 import Loading from '../../components/Loading/Loading';
 import { useSelector } from 'react-redux';
 
@@ -33,35 +33,6 @@ const MyPage = () => {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.user.user);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const response = await getData(
-  //         GET_CURRENT_INFO,
-  //         {
-  //           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-  //         },
-  //         {},
-  //       );
-
-  //       if (response) {
-  //         console.log(response.data.result);
-  //         setUserInfo(response.data.result);
-  //         setSchoolName(response.data.result.dispatchedUniversity);
-  //         setLink(response.data.result.universityUrl);
-  //         setNickname(response.data.result.nickname);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   useEffect(() => {
     setNickname(userInfo.nickname);
   }, []);
@@ -77,6 +48,60 @@ const MyPage = () => {
       }
     } catch (error) {
       console.log('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    setIsLoading(true);
+    try {
+      const response = await postData(
+        LOGOUT,
+        {
+          accessToken: localStorage.getItem('AToken'),
+          refreshToken: localStorage.getItem('RToken'),
+        },
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        {},
+      );
+
+      console.log(response);
+      if (response.status == 200) {
+        localStorage.removeItem('AToken');
+        localStorage.removeItem('RToken');
+        localStorage.removeItem('grantType');
+
+        navigate('/landing');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleDeleteAccount = async () => {
+    setIsLoading(true);
+    try {
+      const response = await deleteData(
+        DELETE_ACCOUNT,
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        {},
+      );
+
+      console.log(response);
+      if (response.status == 200) {
+        localStorage.removeItem('AToken');
+        localStorage.removeItem('RToken');
+        localStorage.removeItem('grantType');
+        navigate('/landing');
+      }
+    } catch (error) {
+      console.error('delete account error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -133,7 +158,6 @@ const MyPage = () => {
   if (isLoading) {
     return <Loading />;
   }
-
   return (
     <s.MyPageLayout>
       <PageHeader pageName="마이페이지" />
@@ -161,100 +185,100 @@ const MyPage = () => {
 
       <s.MyInfoTitle>나의 정보 확인</s.MyInfoTitle>
       <s.MyInfoWrapper>
-          <s.InfoContainer>
-            <s.Title>파견교 정보를 수정하세요!</s.Title>
-            <s.EditBtn
-              onClick={() => navigate('./schoolAuth')}
-              color={theme.lightGray}
-            >
-              수정
-            </s.EditBtn>
-          </s.InfoContainer>
-          <s.InfoContainer>
-            {/* -------------------------- 파견교 ----------더미데이터 바꾸기---------------- */}
-            <s.Title>나의 파견교</s.Title>
-            <s.InfoBox>
-              {userInfo.userStatus === 'ACTIVE' ? (
-                <>
-                  <span>{userInfo.dispatchedUniversity}</span>
-                  <s.VerifyButton>인증 완료</s.VerifyButton>
-                </>
-              ) : userInfo.userStatus === 'AWAIT' ? (
-                <>
-                  <span>{userInfo.dispatchedUniversity}</span>
-                  <s.VerifyButton>인증 대기중</s.VerifyButton>
-                </>
-              ) : userInfo.userStatus === 'NON_CERTIFIED' ? (
-                <>
-                  <span>{userInfo.dispatchedUniversity}</span>
-                  <s.VerifyButton>미인증</s.VerifyButton>
-                </>
-              ) : (
-                //등록 안 된 상태
-                <></>
-              )}
-            </s.InfoBox>
-          </s.InfoContainer>
-          {/* -------------------------- 파견교 홈페이지 링크 -------------------------- */}
-          <s.InfoContainer>
-            <s.Title>파견교 홈페이지 링크</s.Title>
+        <s.InfoContainer>
+          <s.Title>파견교 정보를 수정하세요!</s.Title>
+          <s.EditBtn
+            onClick={() => navigate('./schoolAuth')}
+            color={theme.lightGray}
+          >
+            수정
+          </s.EditBtn>
+        </s.InfoContainer>
+        <s.InfoContainer>
+          {/* -------------------------- 파견교 ----------더미데이터 바꾸기---------------- */}
+          <s.Title>나의 파견교</s.Title>
+          <s.InfoBox>
+            {userInfo.userStatus === 'ACTIVE' ? (
+              <>
+                <span>{userInfo.dispatchedUniversity}</span>
+                <s.VerifyButton>인증 완료</s.VerifyButton>
+              </>
+            ) : userInfo.userStatus === 'AWAIT' ? (
+              <>
+                <span>{userInfo.dispatchedUniversity}</span>
+                <s.VerifyButton>인증 대기중</s.VerifyButton>
+              </>
+            ) : userInfo.userStatus === 'NON_CERTIFIED' ? (
+              <>
+                <span>{userInfo.dispatchedUniversity}</span>
+                <s.VerifyButton>미인증</s.VerifyButton>
+              </>
+            ) : (
+              //등록 안 된 상태
+              <></>
+            )}
+          </s.InfoBox>
+        </s.InfoContainer>
+        {/* -------------------------- 파견교 홈페이지 링크 -------------------------- */}
+        <s.InfoContainer>
+          <s.Title>파견교 홈페이지 링크</s.Title>
 
-            <s.TextInput
-              disabled={!editLink}
-              value={
-                link && link.length > 0
-                  ? { link }
-                  : '파견교 홈페이지 링크를 등록하세요'
-              }
-              placeholder={link}
-            />
-          </s.InfoContainer>
-          {/* -------------------------- 파견교 국가 -------------------------- */}
-          <div style={{ display: 'flex', margin: '2rem 0' }}>
-            <s.Title>파견교 소재 국가</s.Title>
-            <s.Country>
-              {userInfo?.country ? userInfo.country : '없음'}
-            </s.Country>
-          </div>
+          <s.TextInput
+            disabled={!editLink}
+            value={
+              link && link.length > 0
+                ? { link }
+                : '파견교 홈페이지 링크를 등록하세요'
+            }
+            placeholder={link}
+          />
+        </s.InfoContainer>
+        {/* -------------------------- 파견교 국가 -------------------------- */}
+        <div style={{ display: 'flex', margin: '2rem 0' }}>
+          <s.Title>파견교 소재 국가</s.Title>
+          <s.Country>{userInfo?.country ? userInfo.country : '없음'}</s.Country>
+        </div>
 
-          {/* <s.InfoContainer>
+        {/* <s.InfoContainer>
             <s.Title>Email</s.Title>
             <s.InfoBox>
               <span>{userInfo?.email ? userInfo.email : '없음'}</span>
             </s.InfoBox>
           </s.InfoContainer> */}
 
-          <s.InfoContainer>
-            <s.Title>이름</s.Title>
-            <s.InfoBox>
-              <span>{userInfo?.name ? userInfo.name : '없음'}</span>
-            </s.InfoBox>
-          </s.InfoContainer>
+        <s.InfoContainer>
+          <s.Title>이름</s.Title>
+          <s.InfoBox>
+            <span>{userInfo?.name ? userInfo.name : '없음'}</span>
+          </s.InfoBox>
+        </s.InfoContainer>
 
-          <s.InfoContainer>
-            <s.Title>전화번호</s.Title>
-            <s.InfoBox>
-              <span>
-                {userInfo?.phone ? formatPhoneNumber(userInfo.phone) : '없음'}
-              </span>
-            </s.InfoBox>
-          </s.InfoContainer>
+        <s.InfoContainer>
+          <s.Title>전화번호</s.Title>
+          <s.InfoBox>
+            <span>
+              {userInfo?.phone ? formatPhoneNumber(userInfo.phone) : '없음'}
+            </span>
+          </s.InfoBox>
+        </s.InfoContainer>
 
-          <s.InfoContainer style={{ paddingBottom: '2rem' }}>
-            <s.Title>닉네임</s.Title>
-            <s.EditBtn
-              color={theme.lightGray}
-              onClick={() => clickEditNickname()}
-            >
-              {editNickname ? <span>수정 완료</span> : <span>수정</span>}
-            </s.EditBtn>
-            <s.TextInput
-              disabled={!editNickname} // 수정 모드일 때만 활성화
-              value={editNickname ? nicknameInput : nickname} // 닉네임 입력 상태를 바인딩
-              onChange={(e) => setNicknameInput(e.target.value)} // 닉네임 입력 변화 처리
-              placeholder="닉네임을 입력하세요"
-            />
-          </s.InfoContainer>
+        <s.InfoContainer style={{ paddingBottom: '2rem' }}>
+          <s.Title>닉네임</s.Title>
+          <s.EditBtn
+            color={theme.lightGray}
+            onClick={() => clickEditNickname()}
+          >
+            {editNickname ? <span>수정 완료</span> : <span>수정</span>}
+          </s.EditBtn>
+          <s.TextInput
+            disabled={!editNickname} // 수정 모드일 때만 활성화
+            value={editNickname ? nicknameInput : nickname} // 닉네임 입력 상태를 바인딩
+            onChange={(e) => setNicknameInput(e.target.value)} // 닉네임 입력 변화 처리
+            placeholder="닉네임을 입력하세요"
+          />
+        </s.InfoContainer>
+        <div onClick={() => handleLogout()}>로그아웃</div>
+        <div onClick={() => handleDeleteAccount()}>탈퇴</div>
       </s.MyInfoWrapper>
     </s.MyPageLayout>
   );
