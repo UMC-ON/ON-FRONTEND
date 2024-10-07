@@ -36,7 +36,7 @@ const SingleNotification = ({
       navigate(`/community/info/detail/${alertConnectId}`);
     } else if (alertType === 'FREE') {
       navigate(`/community/general/detail/${alertConnectId}`);
-    }
+    } //추가 필요
   };
   if (read == true) {
     return (
@@ -45,7 +45,7 @@ const SingleNotification = ({
         <s.NotificationText>{content}</s.NotificationText>
       </s.ReadNotificationContainer>
     );
-  } else {
+  } else if (read == false) {
     return (
       <s.NotificationContainer onClick={() => clickNotification()}>
         <s.NotificationTitle>{title}</s.NotificationTitle>
