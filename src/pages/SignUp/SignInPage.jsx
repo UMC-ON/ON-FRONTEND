@@ -95,7 +95,12 @@ const SignInPage = () => {
                 />
               </s.InputWrapper>
             </s.ContentSection>
-            <SignInBtn type="submit">Log in</SignInBtn>
+            <s.PurpleButton
+              type="submit"
+              style={{ margin: '2rem 0' }}
+            >
+              로그인
+            </s.PurpleButton>
             <OptionSection>
               <div
                 style={{ flexShrink: 0 }}
@@ -104,8 +109,20 @@ const SignInPage = () => {
                 Sign Up
               </div>
               <FindSection>
-                <div>Find Id</div>
-                <div>Find Password</div>
+                <div
+                  onClick={() => {
+                    nav('/findId');
+                  }}
+                >
+                  Find Id
+                </div>
+                <div
+                  onClick={() => {
+                    nav('/findPassword');
+                  }}
+                >
+                  Find Password
+                </div>
               </FindSection>
             </OptionSection>
           </s.SectionWrapper>
@@ -146,7 +163,7 @@ const SignInBtn = styled.button`
 
 const OptionSection = styled.div`
   box-sizing: border-box;
-  width: 19.25rem;
+  width: 90%;
   height: auto;
   display: flex;
   flex-direction: row;

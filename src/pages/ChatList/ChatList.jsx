@@ -8,6 +8,8 @@ import SingleTradeChat from '../../components/ChatList/SingleChat/SingleTradeCha
 import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
 import img from '../../assets/images/country_flag/000.svg';
+import useFetchChatList from '../../hooks/useFetchChatList';
+import { showDate } from '../../components/Common/InfoExp';
 
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
 import { getData } from '../../api/Functions';
@@ -15,8 +17,6 @@ import { getData } from '../../api/Functions';
 const ChatList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentMode, setCurrentMode] = useState('accompany');
-  const [accompanyChatResult, setAccompanyChatResult] = useState([]);
-  const [tradeChatResult, setTradeChatResult] = useState([]);
 
   //채팅 모드 바꾸는 함수
   const handleModeChange = (mode) => () => {
@@ -29,89 +29,30 @@ const ChatList = () => {
     console.log('Current Mode:', currentMode);
   }, [currentMode]);
 
-  useEffect(() => {
-    console.log('Current ac:', accompanyChatResult);
-  }, [currentMode]);
+  const token = localStorage.getItem('AToken');
 
-  //채팅 존재 여부 확인 변수
-  const isAccompanyChatEmpty = accompanyChatResult.length === 0;
-  const isTradeChatEmpty = tradeChatResult.length === 0;
+  const { chatList: accompanyChatResult } = useFetchChatList(
+    GET_ACCOMPANY_LIST,
+    token,
+    { page: 0, size: 20 },
+    currentMode,
+    'accompany',
+  );
 
-  //axios 동행 구하기
-  useEffect(() => {
-    const fetchAccompanyChat = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getData(
-          GET_ACCOMPANY_LIST,
-          {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-          {},
-        );
-
-        if (response) {
-          console.log('accompany', response.data.result);
-          console.log(response.data.result.roomList);
-          setAccompanyChatResult(response.data.result.roomList);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAccompanyChat();
-  }, [currentMode === 'accompany']);
-
-  //axios 물품 거래
-  useEffect(() => {
-    const fetchTradeChat = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getData(
-          GET_TRADE_LIST,
-          {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-          {},
-        );
-    
-        // 응답 데이터의 구조를 확인하고 유효성을 검사
-        if (response && response.data && response.data.result && Array.isArray(response.data.result.roomList)) {
-          console.log('Received data:', response.data); // 전체 응답 데이터 확인
-          console.log('Room List:', response.data.result.roomList); // roomList 확인
-          setTradeChatResult(response.data.result.roomList); // 상태 업데이트
-        } else {
-          console.error('Invalid response data format:', response);
-          setTradeChatResult([]); // 빈 배열로 초기화
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    
-
-
-    fetchTradeChat();
-  }, [currentMode === 'trade']);
-
-  //콘솔 출력 함수들
-  useEffect(() => {
-    console.log('trade chat: ', tradeChatResult);
-  }, [tradeChatResult]);
-
-  useEffect(() => {
-    console.log('acc chat: ', accompanyChatResult);
-  }, [accompanyChatResult]);
+  const { chatList: tradeChatResult } = useFetchChatList(
+    GET_TRADE_LIST,
+    token,
+    { page: 0, size: 20 },
+    currentMode,
+    'trade',
+  );
 
   return (
     <s.ChatListLayout>
-      <PageHeader pageName="채팅" />
+      <PageHeader
+        pageName="채팅"
+        nav="/"
+      />
       {/*위쪽 버튼*/}
       <s.ModeContainer>
         <s.ModeButton
@@ -138,8 +79,6 @@ const ChatList = () => {
                 <SingleAccompanyChat
                   key={data.roomId}
                   roomId={data.roomId}
-                  img={data.location}
-                  nickName={data.senderName}
                   time={data.lastChatTime !== null ? data.lastChatTime : ''}
                   message={
                     data.lastMessage !== null
@@ -147,6 +86,7 @@ const ChatList = () => {
                       : '채팅을 시작해보새요!'
                   }
                   senderName={data.senderName}
+                  location={data.location}
                 />
                 <s.Line />
               </s.ChatListWrapper>
@@ -168,8 +108,11 @@ const ChatList = () => {
                   key={data.roomId}
                   roomId={data.roomId}
                   img={data.profileImg}
-                  nickName={data.senderName}
-                  time={data.lastChatTime !== null ? data.lastChatTime : ''}
+                  time={
+                    data.lastChatTime !== null
+                      ? showDate(data.lastChatTime)
+                      : ''
+                  }
                   message={
                     data.lastMessage !== null
                       ? data.lastMessage

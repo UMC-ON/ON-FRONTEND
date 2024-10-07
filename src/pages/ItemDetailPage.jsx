@@ -2,20 +2,20 @@ import styled from "styled-components";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from "react-redux";
-import axios from 'axios';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
 import ItemDetailPageHeader from "../components/ItemDetailPageHeader";
-import NearItemList from '../components/NearbyItemList';
-import LoadingScreen from '../components/LoadingScreen';
+import ItemList from '../components/ItemList';
+import SellChatModal from '../components/SellChatModal';
+import SecondModal from '../components/SecondModal';
 
 import compas from "../assets/images/compasIcon.svg";
 import icon from "../assets/images/profileIcon.svg";
 import noImage from "../assets/images/noImage.jpg";
 
-import {GET_SPECIFIC_ITEM, GET_NEARBY_ITEM, GET_MARKET_ROOMID} from '../api/urls'
+import {GET_SPECIFIC_ITEM, GET_NEARBY_ITEM, GET_MARKET_ROOMID, GET_ROOM_ID} from '../api/urls'
 import { getData, postData} from '../api/Functions';
 
 function ImageModal({ imageSrc, onClose }) {
@@ -38,33 +38,90 @@ function ItemDetailPage() {
   const [nearitems, setNearitems] = useState([]);
   const [receiverId, setReceiverId] = useState(null);
   const [roomId, setRoomId] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  const [modalImage, setModalImage] = useState(null);  // 원본 이미지를 저장
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [hasBottomTab, setHasBottomTab] = useState(true)
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [infoData, setInfoData] = useState([]);
+  
 
-const openModal = (imageSrc) => {
-  setModalImage(imageSrc);
-  setIsModalOpen(true);
-};
+  const openChatModal = () => {
+    if (userInfo.country != null)
+    {
+    console.log("First modal opened");
+    setIsChatModalOpen(true);
+    }
+    else
+    {
+      setIsSecondModalOpen(true);
+    }
+  };
 
-const closeModal = () => {
-  setIsModalOpen(false);
-  setModalImage(null);
-};
+  const closeChatModal = () => {
+    console.log("First modal closed");
+    setIsChatModalOpen(false);
+  };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  const openSecondModal = () => {
+    console.log("Second modal opened");
+    setIsSecondModalOpen(true);
+  };
 
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); 
-    // 2 seconds
+  const closeSecondModal = () => {
+    console.log("Second modal closed");
+    setIsSecondModalOpen(false);
+  };
 
-    return () => clearTimeout(timer);
-  }, []);
+  const openNextModal = () => {
+    setIsSecondModalOpen(false);
+    navigate('/mypage/schoolAuth');
+  };
 
+  const openImageModal = (imageSrc) => {
+    setModalImage(imageSrc);
+    setIsImageModalOpen(true);
+  };
 
+  const closeImageModal = () => {
+    setIsImageModalOpen(false);
+    setModalImage(null);
+  };
+
+  const handleChatButtonClick = () => {
+    closeChatModal();
+    applyData();
+  };
+
+  const applyData = async () => {
+    try {
+      
+      const response = await postData(
+        GET_ROOM_ID,
+        { chatType: "MARKET", 
+          receiverId: receiverId,
+          postId: marketPostId,},
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }
+      );
+  
+      if (response) {
+        console.log(response.data);
+        const roomId = response.data.roomId;
+        const senderName = userInfo.nickname;
+        console.log('Application successful:', roomId);
+        navigate(`/chat/market/${roomId}`, { state: { roomId, senderName } });
+      } else {
+        console.error('Application failed');
+      }
+    } catch (error) {
+      console.error('Error applying for market chat:', error);
+    }
+  };
+
+  
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -76,7 +133,7 @@ const closeModal = () => {
         );
         if (response) {
           setItems([response.data]);
-          setReceiverId(response.data.userId); // Extract and set receiverId
+          setReceiverId(response.data.userId);
           console.log(response.data);
         }
       } catch (error) {
@@ -86,7 +143,6 @@ const closeModal = () => {
 
     fetchItems();
   }, [marketPostId]);
-  
 
   useEffect(() => {
     const fetchNearitems = async () => {
@@ -109,86 +165,71 @@ const closeModal = () => {
     fetchNearitems();
   }, [marketPostId]);
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-  };
+  // const handleChatButtonClick = async () => {
+  //   closeChatModal();
+  //   if (!receiverId || !marketPostId) {
+  //     console.error('Receiver ID or Market Post ID is missing.');
+  //     return;
+  //   }
 
-  const handleChatButtonClick = async () => {
-    if (!receiverId || !marketPostId) {
-      console.error('Receiver ID or Market Post ID is missing.');
-      return;
-    }
-  
-    try {
-      const response = await postData(
-        GET_MARKET_ROOMID,
-        {
-          chatType: "MARKET",
-          receiverId: receiverId,
-          postId: marketPostId,
-        },
-        {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          'Content-Type': 'application/json',
-        }
-      );
-  
-      if (response?.data?.inSuccess) {
-        const roomId = response.data.result.roomId;
-        const nickname = userInfo?.nickname || 'Unknown User';
-        setRoomId(roomId);
-        navigate(`/chat/trade/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
-      } else {
-        console.error('Failed to create chat room:', response?.data?.message);
-      }
-    } catch (error) {
-      console.error('Error sending chat request:', error);
-    }
-  };
-  
-  
+  //   try {
+  //     const response = await postData(
+  //       GET_MARKET_ROOMID,
+  //       {
+  //         chatType: "MARKET",
+  //         receiverId: receiverId,
+  //         postId: marketPostId,
+  //       },
+  //       {
+  //         Authorization: `Bearer ${localStorage.getItem('AToken')}`
+  //       }
+  //     );
+
+  //     if (response?.data?.inSuccess) {
+  //       const roomId = response.data.result.roomId;
+  //       const nickname = userInfo?.nickname || 'Unknown User';
+  //       setRoomId(roomId);
+  //       navigate(`/chat/trade/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
+  //     } else {
+  //       console.error('Failed to create chat room:', response?.data?.message);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error sending chat request:', error);
+  //   }
+  // };
 
   return (
     <>
-    {loading ? (
-      <LoadingScreen />
-    ) : (
-      <>
-        <ItemDetailPageHeader />
+      <ItemDetailPageHeader />
       <Space />
-      <ContentContainer>
+      <ContentContainer hasBottomTab={userInfo.id !== receiverId}>
         {items && items.map((item, index) => {
           const imageUrls = item.imageUrls && item.imageUrls.length > 0 
             ? item.imageUrls 
             : [noImage];
-          
+      
           const isSingleImage = imageUrls.length === 1;
 
           return (
             <React.Fragment key={index}>
               {isSingleImage ? (
-  <SingleImage 
-    src={imageUrls[0]} 
-    alt={`Image ${index + 1}`}
-    onClick={() => openModal(imageUrls[0])} // 이미지 클릭 시 모달 열기
-  />
-) : (
-  <Slider {...settings}>
-    {imageUrls.map((url, idx) => (
-      <ItemImage 
-        key={idx} 
-        src={url} 
-        alt={`Slide ${idx + 1}`}
-        onClick={() => openModal(url)} // 이미지 클릭 시 모달 열기
-      />
-    ))}
-  </Slider>
-)}
+                <SingleImage 
+                  src={imageUrls[0]} 
+                  alt={`Image ${index + 1}`}
+                  onClick={() => openImageModal(imageUrls[0])} // 이미지 클릭 시 모달 열기
+                />
+              ) : (
+                <Slider {...settings}>
+                  {imageUrls.map((url, idx) => (
+                    <ItemImage 
+                      key={idx} 
+                      src={url} 
+                      alt={`Slide ${idx + 1}`}
+                      onClick={() => openImageModal(url)} // 이미지 클릭 시 모달 열기
+                    />
+                  ))}
+                </Slider>
+              )}
               <InfoContainer>
                 <Title>{item.title}</Title>
                 <State>{item.dealType === 'DIRECT' ? '직거래' : '택배거래'} | {item.dealStatus === 'AWAIT' ? '거래 가능' : '거래 완료'}</State><br />
@@ -202,24 +243,32 @@ const closeModal = () => {
                 </SellerInfo>
                 <Nearby><Blue>주변</Blue> 중고거래글</Nearby>
               </InfoContainer>
-              <NearItemList nearitems={nearitems} />
+              <ItemList items={nearitems} />
+              {nearitems.length === 0 && <NoNearbyItems>주변 거래글이 없습니다.</NoNearbyItems>}
             </React.Fragment>
           );
         })}
       </ContentContainer>
-      {isModalOpen && <ImageModal imageSrc={modalImage} onClose={closeModal} />}
 
-      <BottomTabLayout>
-        <ChatButton onClick={handleChatButtonClick}>
-          채팅으로 거래하기
-        </ChatButton>
-      </BottomTabLayout>
-      </>
-    )}
-      
+      {isImageModalOpen && <ImageModal imageSrc={modalImage} onClose={closeImageModal} />}
+
+      {userInfo.id !== receiverId && (
+        <BottomTabLayout>
+          <ChatButton onClick={openChatModal}>
+            채팅으로 거래하기
+          </ChatButton>
+        </BottomTabLayout>
+      )}
+      {isChatModalOpen && (
+        <SellChatModal closeModal={closeChatModal}  openNextModal={handleChatButtonClick}
+          nickname={userInfo.nickname}
+        />
+        )}
+        {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />}
     </>
   );
 }
+
 
 export default ItemDetailPage;
 
@@ -229,7 +278,7 @@ const Space = styled.div`
 `;
 
 const ContentContainer = styled.div`
-  max-height: calc(100vh - 7vh - 87px); /* Space + BottomTabLayout의 높이를 고려하여 설정 */
+  max-height: ${(props) => (props.hasBottomTab ? 'calc(100vh - 7vh - 87px)' : '100vh')}; 
   overflow-y: auto;
 `;
 
@@ -384,4 +433,11 @@ const ModalContent = styled.div`
 const ModalImage = styled.img`
   max-width: 100%;
   max-height: 100%;
+`;
+
+const NoNearbyItems = styled.p`
+  text-align: center;
+  font-size: 16px;
+  color: #7A7A7A;
+  margin: 20px 0;
 `;

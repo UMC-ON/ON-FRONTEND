@@ -7,7 +7,6 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import DailyDiary from "../../components/DailyDiary";
 import DDayCalendar from '../../components/DDayCalendar.jsx';
 import DailyDiaryCalendar from "../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx";
-import LoadingScreen from '../../components/LoadingScreen';
 
 import styled from 'styled-components';
 import moment from 'moment';
@@ -31,21 +30,10 @@ const Diary = () => {
   const [diaries, setDiaries] = useState([]);
   const [dday, setDday] = useState(null); // state to hold the dday value
   const [dateList, setDateList] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); 
-    // 2 seconds
-
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const fetchDiaries = async () => {
@@ -152,9 +140,6 @@ const Diary = () => {
   
   return (
     <>
-    {loading? (
-      <LoadingScreen />
-    ) : (
       <DiaryContainer>
       <PageHeader pageName="나의 일기" />
       <Content>
@@ -172,17 +157,12 @@ const Diary = () => {
               />
             )}
           </DDay>
-          <div>
-            <RightContainer>
-              <Today>{todayDate}</Today>
-              <SubText>나의 교환교</SubText>
-              <SchoolContainer>
-                <BigText>영국,</BigText>
-                <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>King’s College London</BigText>
-              </SchoolContainer>
-            </RightContainer>
-          </div>
         </Information>
+        <SubText>나의 교환교</SubText>
+          <SchoolContainer>
+            <BigText>영국,</BigText>
+            <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>King’s College London</BigText>
+          </SchoolContainer>
         <CalendarContainer>
           <DiaryCalendar diaries={diaries} dateList={dateList} />
         </CalendarContainer>
@@ -216,7 +196,6 @@ const Diary = () => {
       </Content>
       <BottomTabNav />
     </DiaryContainer>
-    )}
     </>
   );
 };
@@ -342,6 +321,7 @@ const SubText = styled.div`
 `;
 
 const SchoolContainer = styled.div`
+  text-align: center;
   display: flex;
   flex-wrap: wrap; // Ensures that text will wrap if there's not enough space
 `;
