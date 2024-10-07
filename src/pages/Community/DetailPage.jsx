@@ -171,7 +171,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
       }
       setLoading(false);
     };
-    fetchCommentData(); // 너무 느려지는데?ㅜㅜ
+    fetchCommentData(); //너무 느려지는데?ㅜㅜ
   };
 
   if (isLoading) {
