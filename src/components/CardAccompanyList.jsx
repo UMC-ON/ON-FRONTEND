@@ -39,12 +39,10 @@ const CardAccompanyList = ({ color, cards }) => {
             <CardImage src={defaultImg} />
           )}
           <GreyCard color={color}>
-            <Left>
-              <CardName>{card.title}</CardName>
-            </Left>
+            <SmallSpace/>
             <Left>
               <CardIcon src={personIcon} />
-              <SmallGreyText>{card.nickname}</SmallGreyText>
+              <SmallGreyText $size="15px" $padding="6px">{card.nickname}</SmallGreyText>
               <SmallGreyText>·</SmallGreyText>
               <SmallGreyText>{card.age}세</SmallGreyText>
               <SmallGreyText>·</SmallGreyText>
@@ -54,29 +52,33 @@ const CardAccompanyList = ({ color, cards }) => {
                 <SmallGreyText>남</SmallGreyText>
               )}
             </Left>
-            <Space />
             <Left>
+              <CardName>{card.title}</CardName>
+            </Left>
+
+            <BigSpace/>
+        
+            <Left2>
               <CardIcon src={calendarIcon} />
               {card.startDate === card.endDate ? (
                 <GreyText>{formatDateToMD(card.startDate)}</GreyText>
               ) : (
                 <GreyText>
-                  {formatDateToMD(card.startDate)}~{formatDateToMD(card.endDate)}
+                  {formatDateToMD(card.startDate)}
+                  {/* ~{formatDateToMD(card.endDate)} */}
                 </GreyText>
               )}
               <Padding />
               <CardIcon src={plusIcon} />
               <GreyText>{card.currentRecruitNumber}/{card.totalRecruitNumber}</GreyText>
-            </Left>
-            <Left>
+              <Padding />
               <CardIcon src={placeIcon} />
               <GreyText>{card.travelArea[0]}</GreyText>
             
               {card.travelArea[1] ? (
                 <GreyText $left="0px">, {card.travelArea[1]}</GreyText>
               ) : null}
-            </Left>
-            <SmallSpace />
+            </Left2>
           </GreyCard>
         </Card>
       </CardContainer>
@@ -96,8 +98,12 @@ const Space = styled.div`
   margin-top: 2vh;
 `;
 
+const BigSpace = styled.div`
+  margin-top: 3vh;
+`;
+
 const Padding = styled.div`
-  padding-left: 3vh;
+  padding-left: 20px;
 `;
 
 const CardListContainer = styled.div`
@@ -128,13 +134,13 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 22vh; 
-  height: 32vh; 
+  width: 42vh;
+  height: 34vh; 
 `;
 
 const CardImage = styled.img`
   width: 100%;
-  height: 18vh;        
+  height: 17vh;        
   object-fit: cover;   
   aspect-ratio: 16/9;
   margin: 0;
@@ -143,18 +149,18 @@ const CardImage = styled.img`
 `;
 
 const CardIcon = styled.img`
-  width: 14px;
-  height: 14px;
+  width: 21px;
+  height: 21px;
+  margin-top: 2px;
 `;
 
 const CardName = styled.p`
-  font-size: 1em;
+  font-size: 17px;
   padding: 12px 0 7px 0;
   margin: 0;
   font-weight: bold;
-  padding-top: 12px;
   padding-bottom: 7px;
-  color: #363636;
+  color: #1e1e1e;
 
   width: 80%;
   -webkit-line-clamp: 1;
@@ -168,11 +174,10 @@ const CardName = styled.p`
 `;
 
 const SmallGreyText = styled.p`
-  font-size: 0.7em;
+  font-size: ${props => props.$size || "12px"};
   padding-left: 6px;
-  padding-top: 2px;
-  padding-bottom: 13px;
-  color: #7a7a7a;
+  padding-top: ${props => props.$padding || "8px"};
+  color: #5c5c5c;
 
   display: inline-block; 
   max-width: 40%;
@@ -183,22 +188,32 @@ const SmallGreyText = styled.p`
 `;
 
 const GreyText = styled.p`
-  font-size: 0.7em;
+  font-size: 15px;
   padding-left: ${props => props.$left || "6px"};
   padding-top: 2px;
   padding-bottom: 9px;
-  color: #7a7a7a;
-
+  color: #5c5c5c;
+  margin-top: 3px;
 `;
 
 const GreyCard = styled.div`
-  background-color: ${props => props.color || '#D0D6DA'};
+  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
   margin-top: 0;
-  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1; 
 `;
 
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding-left: 1.2vh;
+  padding-left: 2vh;
+`;
+
+const Left2 = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2vh;
+  margin-bottom: 15px;
 `;

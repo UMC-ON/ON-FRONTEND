@@ -22,7 +22,6 @@ export const SectionWrapper = styled.section`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-bottom: 40px;
 `;
 
 export const TitleSection = styled.section`
@@ -68,7 +67,7 @@ export const ContentSection = styled.section`
     display: flex;
     flex-direction: row;
     justify-content: end;
-    margin: 1.875rem 0;
+    margin-top: 1.8rem;
   }
   & .radioBtn > label {
     margin: 0 0.813rem;
@@ -82,10 +81,12 @@ export const StyledFieldSet = styled.fieldset`
   flex-wrap: wrap;
 `;
 export const StyledH2 = styled.div`
-  color: black;
+  color: #3e73b2;
   font-family: Inter;
-  font-size: 1.563rem;
-  font-weight: bold;
+  font-size: 1.5625rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
   margin: 0.75rem 0;
 `;
 const grad = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -121,24 +122,26 @@ export const ButtonSection = styled.section`
   align-content: center;
   justify-content: center;
   width: 100%;
-  padding: 5px 0;
 `;
 
 export const PurpleButton = styled.button`
   display: flex;
-  width: auto;
-  height: auto;
+  width: 19.25rem;
+  height: 3.375rem;
+  padding: 0.9375rem 7.125rem;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 0.625rem;
   flex-shrink: 0;
-  border-radius: 1.25rem;
-  background: linear-gradient(135deg, #c2c7ff, #ad99ff);
-  color: white;
+  border-radius: 3.75rem;
+  background: linear-gradient(135deg, #c2c7ff 0%, #ad99ff 100%);
+  color: #fff;
+  text-align: center;
   font-family: Inter;
   font-size: 1.25rem;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 700;
+  line-height: normal;
   &:focus {
     border: none;
     outline: none;
@@ -203,15 +206,20 @@ export const TransparentInput = styled.input`
 `;
 
 export const GrayButton = styled.button`
-  flex-shrink: 0;
-  background-color: #d0d0d0;
-  color: white;
-  font-size: 0.625rem;
-  font-weight: lighter;
-  border: none;
-  border-radius: 8px;
-  padding: 0.4rem 0.4rem;
-  font-family: 'Inter-Regular';
+  display: inline-flex;
+  padding: 0.375rem 0.5625rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 3.875rem;
+  background: #ccc;
+  color: #fff;
+  font-family: Inter;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
   margin: 0.25rem 0.25rem;
   &:focus {
     outline: none;
@@ -219,7 +227,7 @@ export const GrayButton = styled.button`
 `;
 
 export const Explanation = styled.div`
-  color: rgba(0, 0, 0, 0.49);
+  color: #5c5c5c;
   font-family: 'Baloo Bhaina 2';
   font-size: 13px;
   font-style: normal;

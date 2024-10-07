@@ -94,7 +94,7 @@ const AccompanyHomeComponent =
 
     return (
         <>
-          <PageHeader pageName={'동행 구하기'} />
+          <PageHeader pageName={'동행 구하기'} nav={'/'}/>
           <Space />
     
           <DotInslideSlider images={images} />
@@ -154,11 +154,13 @@ const AccompanyHomeComponent =
           <AccompanyList datas={allData} />
           <Space />
     
-          <WriteButton onClick={goPost}>
-            <img src={pencilImg} alt="Write" />
-            <LeftPadding />
-            글 쓰기
-          </WriteButton>
+          <PageContainer>
+            <WriteButton onClick={goPost}>
+              <img src={pencilImg} alt="Write" />
+              <LeftPadding />
+              글 쓰기
+            </WriteButton>
+          </PageContainer>
 
           {isModalOpen && <SecondModal closeModal={closeModal} openNextModal={openNextModal} />}
         </>
@@ -227,9 +229,8 @@ const WriteButton = styled.button`
   justify-content: center;
   position: fixed;
   bottom: 93px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
+
+
   border-radius: 55px;
   border: 1px solid #cccccc;
   width: 148px;
@@ -253,4 +254,17 @@ const WriteButton = styled.button`
   }
 
   -webkit-tap-highlight-color: transparent;
+`;
+
+const PageContainer = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  flex-direction: column;
+  align-content: start;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
 `;

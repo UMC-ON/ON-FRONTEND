@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const SearchWrapper = styled.div`
   width: 100%;
   height: 8.5rem;
-  padding: 0 0.6rem;
+  padding: 0 1.75rem;
   box-sizing: border-box;
   border: 0.5px solid transparent;
   border-image: linear-gradient(90deg, #ffffff 0%, #d9d9d9 50%, #fff 100%);
@@ -11,11 +11,12 @@ export const SearchWrapper = styled.div`
 
   display: grid;
   grid-template-areas:
-    'title time'
-    'content content'
-    'info categories';
-  grid-template-columns: 1fr auto;
-  gap: 1rem;
+    'title title time'
+    'content content content'
+    'info categories categories';
+  grid-template-columns: 1fr auto auto;
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
   justify-content: space-between;
   align-content: center;
   align-items: center;
@@ -73,6 +74,7 @@ export const Info = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin-top: 0.25rem;
   span {
     font-family: Inter;
     font-size: 0.5rem;
@@ -82,24 +84,31 @@ export const Info = styled.div`
   }
 `;
 
-export const Nickname = styled.span`
-  color: #7a7a7a;
-  font-family: Inter;
-  font-size: 0.5rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
+export const Nickname = styled.div`
+  min-width: 2.5rem;
+  display: flex;
+  align-items: center;
+  span {
+    color: #7a7a7a;
+    font-family: Inter;
+    font-size: 0.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    margin-right: 0.2rem;
+  }
 `;
 
 export const Categories = styled.span`
   grid-area: categories;
-  color: #6458bf;
+  color: ${(props) => props.$fontcolor};
   font-family: Inter;
   font-size: 0.625rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   justify-self: end;
+  margin-top: 0.25rem;
 `;
 
 export const VerifiedSvg = () => {

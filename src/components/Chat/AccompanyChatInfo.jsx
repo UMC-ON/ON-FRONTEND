@@ -35,8 +35,8 @@ const AccompanyChatInfo = ({
         );
 
         if (response) {
-          console.log(response.data.result);
-          setInfoResult(response.data.result);
+          console.log('chat info: ', response.data);
+          setInfoResult(response.data);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
