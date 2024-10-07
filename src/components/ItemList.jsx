@@ -29,15 +29,19 @@ const ItemList = ({ items }) => {
         return;
       }
 
-      const response = await axios.get(`${serverAddress}/api/v1/scrap/${userInfo.id}`, {
+      const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('AToken')}`,
         },
+        params: {
+          page: 0, size: 20, sort: 'DESC'
+        }
+        
       });
 
       // Extract marketPostId from each marketPost object
-      if (Array.isArray(response.data)) {
-        const scrappedIds = response.data.map(post => post.marketPost.marketPostId);
+      if (Array.isArray(response.data.content)) {
+        const scrappedIds = response.data.content.map(post => post.marketPost.marketPostId);
         setScrappedMarketPostIds(scrappedIds);
         console.log(scrappedIds);
       } else {
@@ -97,10 +101,13 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
     try {
       if (isStarFilled) {
         // 스크랩 취소 요청
-        await axios.delete(`${serverAddress}/api/v1/scrap/${userInfo?.id}/${marketPostId}`, {
+        await axios.delete(`${serverAddress}/api/v1/scrap/${marketPostId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
+          params: {
+            marketPostId: marketPostId
+          }
         });
 
         // Remove marketPostId from scrappedMarketPostIds array
@@ -111,7 +118,6 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
           `${serverAddress}/api/v1/scrap`,
           {
             marketPostId: marketPostId,
-            userId: userInfo?.id,
           },
           {
             headers: {

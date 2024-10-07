@@ -3,11 +3,16 @@ import React, { useEffect, useState } from 'react';
 import * as s from './PageHeaderStyled.jsx';
 import theme from '../../styles/theme';
 
-const PageHeader = ({ pageName, color = `${theme.title}` }) => {
+const PageHeader = ({ pageName, color = `${theme.title}`, nav }) => {
   const navigate = useNavigate();
 
   const onClickBackButton = () => {
-    navigate(-1);
+    if (nav) {
+      console.log(nav);
+      navigate(nav);
+    } else {
+      navigate(-1);
+    }
   };
   return (
     <s.PageHeaderLayout>

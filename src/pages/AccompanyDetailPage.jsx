@@ -135,7 +135,8 @@ function AccompanyDetailPage() {
       );
   
       if (response) {
-        const roomId = response.data.result.roomId;
+        console.log(response.data);
+        const roomId = response.data.roomId;
         const senderName = infoData[0].nickname;
         console.log('Application successful:', roomId);
         navigate(`/chat/accompany/${roomId}`, { state: { roomId, senderName } });
