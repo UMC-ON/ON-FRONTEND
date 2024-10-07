@@ -9,6 +9,7 @@ import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
 import img from '../../assets/images/country_flag/000.svg';
 import useFetchChatList from '../../hooks/useFetchChatList';
+import { showDate } from '../../components/Common/InfoExp';
 
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
 import { getData } from '../../api/Functions';
@@ -79,7 +80,6 @@ const ChatList = () => {
                   key={data.roomId}
                   roomId={data.roomId}
                   img={data.location}
-                  nickName={data.senderName}
                   time={data.lastChatTime !== null ? data.lastChatTime : ''}
                   message={
                     data.lastMessage !== null
@@ -87,6 +87,7 @@ const ChatList = () => {
                       : '채팅을 시작해보새요!'
                   }
                   senderName={data.senderName}
+                  location={data.location}
                 />
                 <s.Line />
               </s.ChatListWrapper>
@@ -108,8 +109,11 @@ const ChatList = () => {
                   key={data.roomId}
                   roomId={data.roomId}
                   img={data.profileImg}
-                  nickName={data.senderName}
-                  time={data.lastChatTime !== null ? data.lastChatTime : ''}
+                  time={
+                    data.lastChatTime !== null
+                      ? showDate(data.lastChatTime)
+                      : ''
+                  }
                   message={
                     data.lastMessage !== null
                       ? data.lastMessage

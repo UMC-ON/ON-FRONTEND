@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import defaultImg from '../../../assets/images/country_flag/default.svg';
 
 const SingleAccompanyChat = ({
-  nickName,
   time,
   message,
   img,
@@ -24,7 +23,7 @@ const SingleAccompanyChat = ({
         src={defaultImg}
         alt="no img"
       />
-      <s.Nickname>{nickName}</s.Nickname>
+      <s.Nickname>{senderName}</s.Nickname>
       <s.Time>{time}</s.Time>
       <s.Message>{message}</s.Message>
     </s.SingleChatContainer>

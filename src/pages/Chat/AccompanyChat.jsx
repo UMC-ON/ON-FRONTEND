@@ -58,14 +58,11 @@ const AccompanyChat = () => {
         );
 
         if (response) {
-          console.log(response.data.result);
-          console.log(response.data.result.currentUserId);
-          console.log(response.data.result.chatList);
-          setCurrentUserId(response.data.result.currentUserId);
-          setChatList(response.data.result.chatList);
+          console.log('콘솔', response.data);
+          setCurrentUserId(response.data.content[0].currentUserId);
+          setChatList(response.data.content[0].chatList);
           // 첫 번째 채팅 메시지의 userId와 currentUserId 비교
           const firstChatUserId = response.data.result.chatList[0]?.userId;
-          const currentUserId = response.data.result.currentUserId;
 
           if (firstChatUserId === currentUserId) {
             setUser(1); // 현재 유저가 첫 번째 메시지를 보낸 경우
@@ -101,54 +98,54 @@ const AccompanyChat = () => {
     scrollToBottom();
   };
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    pollingRef.current = true;
+  // useEffect(() => {
+  //   const abortController = new AbortController();
+  //   pollingRef.current = true;
 
-    const startLongPolling = async () => {
-      while (pollingRef.current) {
-        try {
-          const response = await getData(
-            GET_ACCOMPANY_CHAT(roomId),
-            {
-              Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-              signal: abortController.signal, // signal 추가
-            },
-            { roomId: roomId },
-          );
+  //   const startLongPolling = async () => {
+  //     while (pollingRef.current) {
+  //       try {
+  //         const response = await getData(
+  //           GET_ACCOMPANY_CHAT(roomId),
+  //           {
+  //             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+  //             signal: abortController.signal, // signal 추가
+  //           },
+  //           { roomId: roomId },
+  //         );
 
-          if (response) {
-            const newMessages = response.data.result.chatList;
-            if (newMessages.length !== chatListRef.current.length) {
-              setChatList(newMessages);
-              scrollToBottom();
-            }
-          }
-        } catch (error) {
-          if (error.name !== 'AbortError') {
-            console.error('Error fetching new messages:', error);
-          }
-        }
+  //         if (response) {
+  //           const newMessages = response.data.result.chatList;
+  //           if (newMessages.length !== chatListRef.current.length) {
+  //             setChatList(newMessages);
+  //             scrollToBottom();
+  //           }
+  //         }
+  //       } catch (error) {
+  //         if (error.name !== 'AbortError') {
+  //           console.error('Error fetching new messages:', error);
+  //         }
+  //       }
 
-        // 3초 간격으로 폴링
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-      }
-    };
+  //       // 3초 간격으로 폴링
+  //       await new Promise((resolve) => setTimeout(resolve, 3000));
+  //     }
+  //   };
 
-    startLongPolling();
+  //   startLongPolling();
 
-    return () => {
-      pollingRef.current = false; // 컴포넌트 언마운트 시 polling 중지
-      abortController.abort(); // 요청 취소
-    };
-  }, [roomId]);
+  //   return () => {
+  //     pollingRef.current = false; // 컴포넌트 언마운트 시 polling 중지
+  //     abortController.abort(); // 요청 취소
+  //   };
+  // }, [roomId]);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [chatList]);
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [chatList]);
 
   const handleBackNavigation = () => {
-    pollingRef.current = false; // polling 상태를 false로 설정
+    // pollingRef.current = false; // polling 상태를 false로 설정
     navigate('/chatlist'); // 이전 페이지로 이동
   };
 
