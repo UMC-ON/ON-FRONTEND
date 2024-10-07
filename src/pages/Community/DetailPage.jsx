@@ -148,7 +148,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
     const res = await postData(url, jsonData, {
       Authorization: `Bearer ${localStorage.getItem('AToken')}`,
     });
-    console.log('res는');
     console.log(res);
     const commentFE = res.data;
     setCommentList([...commentList, commentFE]);
