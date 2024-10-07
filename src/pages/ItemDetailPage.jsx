@@ -8,12 +8,14 @@ import Slider from "react-slick";
 
 import ItemDetailPageHeader from "../components/ItemDetailPageHeader";
 import ItemList from '../components/ItemList';
+import SellChatModal from '../components/SellChatModal';
+import SecondModal from '../components/SecondModal';
 
 import compas from "../assets/images/compasIcon.svg";
 import icon from "../assets/images/profileIcon.svg";
 import noImage from "../assets/images/noImage.jpg";
 
-import {GET_SPECIFIC_ITEM, GET_NEARBY_ITEM, GET_MARKET_ROOMID} from '../api/urls'
+import {GET_SPECIFIC_ITEM, GET_NEARBY_ITEM, GET_MARKET_ROOMID, GET_ROOM_ID} from '../api/urls'
 import { getData, postData} from '../api/Functions';
 
 function ImageModal({ imageSrc, onClose }) {
@@ -38,19 +40,88 @@ function ItemDetailPage() {
   const [roomId, setRoomId] = useState(null);
 
   const [modalImage, setModalImage] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [hasBottomTab, setHasBottomTab] = useState(true); // 추가된 상태
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [hasBottomTab, setHasBottomTab] = useState(true)
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [infoData, setInfoData] = useState([]);
+  
 
-  const openModal = (imageSrc) => {
-    setModalImage(imageSrc);
-    setIsModalOpen(true);
+  const openChatModal = () => {
+    if (userInfo.country != null)
+    {
+    console.log("First modal opened");
+    setIsChatModalOpen(true);
+    }
+    else
+    {
+      setIsSecondModalOpen(true);
+    }
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeChatModal = () => {
+    console.log("First modal closed");
+    setIsChatModalOpen(false);
+  };
+
+  const openSecondModal = () => {
+    console.log("Second modal opened");
+    setIsSecondModalOpen(true);
+  };
+
+  const closeSecondModal = () => {
+    console.log("Second modal closed");
+    setIsSecondModalOpen(false);
+  };
+
+  const openNextModal = () => {
+    setIsSecondModalOpen(false);
+    navigate('/mypage/schoolAuth');
+  };
+
+  const openImageModal = (imageSrc) => {
+    setModalImage(imageSrc);
+    setIsImageModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setIsImageModalOpen(false);
     setModalImage(null);
   };
 
+  const handleChatButtonClick = () => {
+    closeChatModal();
+    applyData();
+  };
+
+  const applyData = async () => {
+    try {
+      
+      const response = await postData(
+        GET_ROOM_ID,
+        { chatType: "MARKET", 
+          receiverId: receiverId,
+          postId: marketPostId,},
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }
+      );
+  
+      if (response) {
+        console.log(response.data);
+        const roomId = response.data.roomId;
+        const senderName = userInfo.nickname;
+        console.log('Application successful:', roomId);
+        navigate(`/chat/market/${roomId}`, { state: { roomId, senderName } });
+      } else {
+        console.error('Application failed');
+      }
+    } catch (error) {
+      console.error('Error applying for market chat:', error);
+    }
+  };
+
+  
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -94,38 +165,38 @@ function ItemDetailPage() {
     fetchNearitems();
   }, [marketPostId]);
 
-  const handleChatButtonClick = async () => {
-    if (!receiverId || !marketPostId) {
-      console.error('Receiver ID or Market Post ID is missing.');
-      return;
-    }
+  // const handleChatButtonClick = async () => {
+  //   closeChatModal();
+  //   if (!receiverId || !marketPostId) {
+  //     console.error('Receiver ID or Market Post ID is missing.');
+  //     return;
+  //   }
 
-    try {
-      const response = await postData(
-        GET_MARKET_ROOMID,
-        {
-          chatType: "MARKET",
-          receiverId: receiverId,
-          postId: marketPostId,
-        },
-        {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          'Content-Type': 'application/json',
-        }
-      );
+  //   try {
+  //     const response = await postData(
+  //       GET_MARKET_ROOMID,
+  //       {
+  //         chatType: "MARKET",
+  //         receiverId: receiverId,
+  //         postId: marketPostId,
+  //       },
+  //       {
+  //         Authorization: `Bearer ${localStorage.getItem('AToken')}`
+  //       }
+  //     );
 
-      if (response?.data?.inSuccess) {
-        const roomId = response.data.result.roomId;
-        const nickname = userInfo?.nickname || 'Unknown User';
-        setRoomId(roomId);
-        navigate(`/chat/trade/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
-      } else {
-        console.error('Failed to create chat room:', response?.data?.message);
-      }
-    } catch (error) {
-      console.error('Error sending chat request:', error);
-    }
-  };
+  //     if (response?.data?.inSuccess) {
+  //       const roomId = response.data.result.roomId;
+  //       const nickname = userInfo?.nickname || 'Unknown User';
+  //       setRoomId(roomId);
+  //       navigate(`/chat/trade/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
+  //     } else {
+  //       console.error('Failed to create chat room:', response?.data?.message);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error sending chat request:', error);
+  //   }
+  // };
 
   return (
     <>
@@ -145,7 +216,7 @@ function ItemDetailPage() {
                 <SingleImage 
                   src={imageUrls[0]} 
                   alt={`Image ${index + 1}`}
-                  onClick={() => openModal(imageUrls[0])} // 이미지 클릭 시 모달 열기
+                  onClick={() => openImageModal(imageUrls[0])} // 이미지 클릭 시 모달 열기
                 />
               ) : (
                 <Slider {...settings}>
@@ -154,7 +225,7 @@ function ItemDetailPage() {
                       key={idx} 
                       src={url} 
                       alt={`Slide ${idx + 1}`}
-                      onClick={() => openModal(url)} // 이미지 클릭 시 모달 열기
+                      onClick={() => openImageModal(url)} // 이미지 클릭 시 모달 열기
                     />
                   ))}
                 </Slider>
@@ -179,15 +250,21 @@ function ItemDetailPage() {
         })}
       </ContentContainer>
 
-      {isModalOpen && <ImageModal imageSrc={modalImage} onClose={closeModal} />}
+      {isImageModalOpen && <ImageModal imageSrc={modalImage} onClose={closeImageModal} />}
 
       {userInfo.id !== receiverId && (
         <BottomTabLayout>
-          <ChatButton onClick={handleChatButtonClick}>
+          <ChatButton onClick={openChatModal}>
             채팅으로 거래하기
           </ChatButton>
         </BottomTabLayout>
       )}
+      {isChatModalOpen && (
+        <SellChatModal closeModal={closeChatModal}  openNextModal={handleChatButtonClick}
+          nickname={userInfo.nickname}
+        />
+        )}
+        {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />}
     </>
   );
 }

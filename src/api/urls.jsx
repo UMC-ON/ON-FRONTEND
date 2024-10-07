@@ -91,3 +91,4 @@ export const WRITE_ACCOMPANY = `/api/v1/company-post`;
 //알림
 export const POST_TOKEN = `/api/v1/alert/deviceToken`;
 export const GET_ALERT_LIST = '/api/v1/alert/list';
+export const POST_READ_ALERT =(alertId)=> `/api/v1/alert/${alertId}`;
