@@ -16,50 +16,39 @@ import { GET_SCRAP } from '../api/urls';
 
 function ScrapList() {
     const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-  
-    useEffect(() => {
-      window.scrollTo(0, 0);
-  
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 2000); 
-      // 2 seconds
-  
-      return () => clearTimeout(timer);
-    }, []);
-    let userInfo = useSelector((state) => state.user.user);
+
 
     useEffect(() => {
-        if (userInfo) {
-          const fetchItems = async () => {
-            try {
-              const response = await getData(
-                GET_SCRAP(userInfo.id), 
-                {
-                  Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-                }
-              );
-    
-              if (response?.data) {
-                setItems(response.data);
-                console.log(response.data);
-              }
-            } catch (error) {
-              console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
+      const fetchItems = async () => {
+        try {
+          const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+            },
+            params: {
+              page: 0, size: 20, sort: 'DESC'
             }
-          };
+            
+          });
     
-          fetchItems();
+          // 응답 데이터 확인
+          console.log("API response:", response.data.content);
+    
+          if (response.data.content) {
+            setItems(response.data.content);
+          } else {
+            console.warn('스크랩 물품 데이터를 찾을 수 없습니다.');
+          }
+        } catch (error) {
+          console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
         }
-      }, [userInfo]);
-
+      };
+    
+      fetchItems();
+    }, []); // 빈 배열을 추가하여 useEffect가 한 번만 실행되도록 함
+    
     return (
         <>
-        {loading? (
-          <LoadingScreen />
-        ) : (
-          <>
           <PageHeader pageName={'스크랩한 물품'} />
             <Space /><br /><br />
             {items.length === 0 ? (
@@ -75,9 +64,7 @@ function ScrapList() {
                     <LastItemMessage>마지막 물품입니다.</LastItemMessage>
                 </>
             )}
-            </>
-        )
-        }
+
         </>
     );
 }
