@@ -23,6 +23,16 @@ export const AccompanyPicture = styled.img`
   background: lightgray 50% / cover no-repeat;
 `;
 
+export const NoTradePicture = styled.div`
+  grid-area: pic;
+  width: 3.125rem;
+  height: 3.125rem;
+  flex-shrink: 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 50%;
+  background: lightgray 50% / cover no-repeat;
+`;
+
 export const TradePicture = styled.img`
   grid-area: pic;
   width: 3.125rem;
