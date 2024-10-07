@@ -58,7 +58,7 @@ const CardAccompanyList = ({ color, cards }) => {
 
             <BigSpace/>
         
-            <Left>
+            <Left2>
               <CardIcon src={calendarIcon} />
               {card.startDate === card.endDate ? (
                 <GreyText>{formatDateToMD(card.startDate)}</GreyText>
@@ -78,8 +78,7 @@ const CardAccompanyList = ({ color, cards }) => {
               {card.travelArea[1] ? (
                 <GreyText $left="0px">, {card.travelArea[1]}</GreyText>
               ) : null}
-            </Left>
-            <SmallSpace />
+            </Left2>
           </GreyCard>
         </Card>
       </CardContainer>
@@ -104,7 +103,7 @@ const BigSpace = styled.div`
 `;
 
 const Padding = styled.div`
-  padding-left: 3vh;
+  padding-left: 20px;
 `;
 
 const CardListContainer = styled.div`
@@ -135,8 +134,8 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 38vh; 
-  height: 32vh; 
+  width: 42vh;
+  height: 34vh; 
 `;
 
 const CardImage = styled.img`
@@ -200,11 +199,21 @@ const GreyText = styled.p`
 const GreyCard = styled.div`
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
   margin-top: 0;
-  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1; 
 `;
 
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
   padding-left: 2vh;
+`;
+
+const Left2 = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2vh;
+  margin-bottom: 15px;
 `;

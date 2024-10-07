@@ -214,13 +214,12 @@ export const UserInfoForm1 = ({
   });
   useEffect(() => {
     console.log(
-      `이메일: ${dupCheck.loginId}, isAllValid:${isAllValid.current.password}, pwCheck:${pwCheck},닉네임:${dupCheck.nickname}`,
+      `아이디: ${dupCheck.loginId}, isAllValid:${isAllValid.current.password}, pwCheck:${pwCheck},닉네임:${dupCheck.nickname}`,
     );
     if (
       dupCheck.loginId === 1 &&
       isAllValid.current.password &&
       pwCheck === state.password
-      //dupCheck.nickname === 1
     ) {
       setActive(true);
     } else {
