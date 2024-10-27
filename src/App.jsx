@@ -54,9 +54,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './redux/actions.jsx';
 import Loading from './components/Loading/Loading.jsx';
-import { handleAllowNotification } from './service/notificationPermission.jsx';
 import FindId from './pages/FindPage/FindId.jsx';
 import FindPassword from './pages/FindPage/FindPassword.jsx';
+import { requestNotificationPermissionOnce } from './service/notificationPermission.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -75,9 +75,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   //console.log(location.pathname);
-  useEffect(() => {
-    handleAllowNotification();
-  }, []);
+
   useEffect(() => {
     const loadUserData = async () => {
       if (!excludepaths.includes(location.pathname)) {
@@ -100,6 +98,8 @@ function App() {
         } else {
           nav('/landing');
         }
+      } else {
+        requestNotificationPermissionOnce();
       }
     }
   }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
