@@ -148,7 +148,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
     const res = await postData(url, jsonData, {
       Authorization: `Bearer ${localStorage.getItem('AToken')}`,
     });
-    console.log('res는');
     console.log(res);
     const commentFE = res.data;
     setCommentList([...commentList, commentFE]);
@@ -162,7 +161,16 @@ const DetailPage = ({ color1, color2, boardType }) => {
 
     //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     //자식에게 ref전달 알아보기
-    location.reload(true); // 너무 느려지는데?ㅜㅜ
+    const fetchCommentData = async () => {
+      const response = await getData(GET_COMMENT_OF(currentPost_id), {
+        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+      });
+      if (response) {
+        setCommentList(response.data.content);
+      }
+      setLoading(false);
+    };
+    fetchCommentData(); //너무 느려지는데?ㅜㅜ
   };
 
   if (isLoading) {
@@ -172,8 +180,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
   if (userInfo && currentPost && commentList) {
-    //return <div>{currentPost.postId}</div>;
-
     return (
       <div ref={mobileViewRef}>
         <s.PostInfoHeader>
