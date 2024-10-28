@@ -4,6 +4,8 @@ export const GET_USER_STATUS = 'api/v1/user/current/status';
 export const SIGN_UP_URL = 'api/v1/user/sign-up';
 export const CHECK_DUPLICATE_NICK = 'api/v1/user/duplicate_check/nickname';
 export const CHECK_DUPLICATE_ID = '/api/v1/user/duplicate_check/email';
+export const FIND_ID = '/api/v1/user/find-id';
+export const FIND_PW = '/api/v1/user/find-password';
 export const SIGN_IN_URL = 'api/v1/user/sign-in';
 export const GET_CURRENT_INFO = 'api/v1/user/current/info';
 export const PUT_UNIV = '/api/v1/user/current/update/univ_url';
@@ -91,4 +93,4 @@ export const WRITE_ACCOMPANY = `/api/v1/company-post`;
 //알림
 export const POST_TOKEN = `/api/v1/alert/deviceToken`;
 export const GET_ALERT_LIST = '/api/v1/alert/list';
-export const POST_READ_ALERT =(alertId)=> `/api/v1/alert/${alertId}`;
+export const POST_READ_ALERT = (alertId) => `/api/v1/alert/${alertId}`;
