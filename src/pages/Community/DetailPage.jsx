@@ -140,7 +140,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const addComment = async (url) => {
     const comment = {
       id: userInfo.id,
-      contents: content + '',
+      contents: content + ' ',
       anonymous: isAnonymous.current,
     };
     const jsonData = JSON.stringify(comment);
