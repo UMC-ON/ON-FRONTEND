@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { getData } from '../../api/Functions.jsx';
 import { GET_FILTERED_POST_IN, GET_POST_OF } from '../../api/urls.jsx';
-import { loadUser, logout } from '../../redux/actions.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
@@ -63,7 +62,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
           {
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           },
-          { page: 0, size: 20, sort: 'DESC' },
+          { page: 0, size: 3, sort: 'DESC' },
         );
         if (response) {
           //console.log(response.data.imageUrls);
