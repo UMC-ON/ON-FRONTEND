@@ -352,8 +352,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
                     return;
                   }
                   onCommentSubmit();
-                } else {
-                  return;
                 }
               }}
               value={content}
