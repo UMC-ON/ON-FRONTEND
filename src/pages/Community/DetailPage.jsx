@@ -140,7 +140,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const addComment = async (url) => {
     const comment = {
       id: userInfo.id,
-      contents: content + ' ',
+      contents: content,
       anonymous: isAnonymous.current,
     };
     const jsonData = JSON.stringify(comment);
@@ -322,8 +322,11 @@ const DetailPage = ({ color1, color2, boardType }) => {
                 if (e.key === 'Enter' && e.shiftKey) {
                   return;
                 } else if (e.key === 'Enter') {
-                  onCommentSubmit();
-                  e.preventDefault();
+                  if (e.nativeEvent.isComposing) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    onCommentSubmit();
+                  }
                 } else {
                   return;
                 }
