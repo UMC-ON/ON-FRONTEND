@@ -1,7 +1,5 @@
 import styled from 'styled-components';
-import Reply from './Reply';
 import replyBtnImg from '../../assets/images/replyBtnImg.svg';
-import { showWriter } from '../Common/InfoExp';
 
 const Comment = ({
   comment,
@@ -32,19 +30,13 @@ const Comment = ({
           {comment.writerInfo.id === postWriter_id
             ? '글쓴이'
             : comment.writerInfo.nickname}
-          <img src={replyBtnImg} />
+          <img
+            src={replyBtnImg}
+            style={{ width: '0.75rem', height: '0.8rem' }}
+          />
         </Writer>
-        {comment.contents}
+        <Content>{comment.contents}</Content>
       </CommentDiv>
-      {/* {replyList
-        ? replyList.map((reply, index) => (
-            <Reply
-              reply={reply}
-              key={index}
-              postWriter_id={postWriter_id}
-            />
-          ))
-        : null} */}
     </CommentAndReplyWrapper>
   );
 };
@@ -62,12 +54,12 @@ const CommentAndReplyWrapper = styled.div`
 
 const CommentDiv = styled.div`
   box-sizing: border-box;
-  padding: 10px 0.56rem 0.88rem 1.19rem;
+  padding: 10px 0.56rem 0.56rem 1.19rem;
   width: 100%;
   height: auto;
-  background-color: #d9d9d933;
-  border: 2px solid #bfd8e533;
-  border-radius: 10px;
+  border-radius: 0.625rem;
+  border: 0.5px solid #d9d9d9;
+  background: rgba(217, 217, 217, 0.4);
 
   color: #3d3d3d;
   font-family: Inter;
@@ -75,22 +67,36 @@ const CommentDiv = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  text-align: left;
 
+  text-align: left;
   white-space: pre-wrap;
 `;
 
 const Writer = styled.div`
   padding: 3px 0;
-  color: ${(props) => (props.writer === 'true' ? '#3E73B2' : '#525252')};
+  color: ${(props) => (props.writer === 'true' ? '#3E73B2' : '#5C5C5C')};
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: Inter;
-  font-size: 13px;
+  font-size: 1rem;
   font-style: normal;
-  font-weight: bold;
+  font-weight: 700;
   line-height: normal;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+`;
+
+const Content = styled.div`
+  padding: 0.5rem 0;
+  overflow: hidden;
+  color: #5c5c5c;
+  text-overflow: ellipsis;
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
