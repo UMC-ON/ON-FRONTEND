@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import moment from 'moment';
 
 import AccompanyHomeComponent from '../components/AccompanyHomeComponent';
@@ -12,151 +12,180 @@ import Loading from '../components/Loading/Loading.jsx';
 
 import { getData } from '../api/Functions';
 import { GET_ALL_ACCOMPANY, GET_FILTER_ACCOMPANY, GET_USER_INFO } from '../api/urls';
-
 function AccompanyPage() {
-    const [isLoading, setIsLoading] = useState(true);
-    const [isUserLoading, setIsUserLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUserLoading, setIsUserLoading] = useState(true);
 
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [isDateClicked, setIsDateClicked] = useState(false);
-    const [showCalendar, setShowCalendar] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [isDateClicked, setIsDateClicked] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
 
-    const [showGender, setShowGender] = useState(false);
-    const [gender, setGender] = useState(null);
-    const [isGenderClicked, setIsGenderClicked] = useState(false);
+  const [showGender, setShowGender] = useState(false);
+  const [gender, setGender] = useState(null);
+  const [isGenderClicked, setIsGenderClicked] = useState(false);
 
-    const [showCountry, setShowCountry] = useState(false);
-    const [country, setCountry] = useState(null);
-    const [isCountryClicked, setIsCountryClicked] = useState(false);
-    const [allData, setAllData] = useState([]);
-    const [isValidated, setIsValidated] = useState(null);
+  const [showCountry, setShowCountry] = useState(false);
+  const [country, setCountry] = useState(null);
+  const [isCountryClicked, setIsCountryClicked] = useState(false);
+  const [allData, setAllData] = useState([]);
+  const [isValidated, setIsValidated] = useState(null);
+  const [page, setPage] = useState(0);
 
-    const handleIsDateClickedChange = () => {
-      setIsDateClicked(false);
-      setStartDate(null);
-      setEndDate(null);
-    };
+  const handleFilterClick = useCallback(() => {
+    console.log("handleFilterClick");
+    setPage(0);
+    setAllData([]); 
+ }, []);
+ 
+ const handleIsDateClickedChange = useCallback(() => {
+  console.log("handleIsDateClickedChange");
+    setIsDateClicked(false);
+    setStartDate(null);
+    setEndDate(null);
+    handleFilterClick();
+ }, [handleFilterClick]);
+ 
+ const resetGenderClick = useCallback(() => {
+  console.log("resetGenderClick");
+    setIsGenderClicked(false);
+    setGender(null);
+    handleFilterClick();
+ }, [handleFilterClick]);
+ 
+ const resetCountryClick = useCallback(() => {
+  console.log("resetCountryClick");
+    setIsCountryClicked(false);
+    setCountry(null);
+    handleFilterClick();
+ }, [handleFilterClick]);
+ 
+ const handleResetAll = useCallback(() => {
+  console.log("handleResetAll");
+    setIsDateClicked(false);
+    setIsGenderClicked(false);
+    setIsCountryClicked(false);
+    setStartDate(null);
+    setEndDate(null);
+    setGender(null);
+    setCountry(null);
+    setPage(0);
+    setAllData([]);
+ }, []);
+ 
+ const handleApplyClick = useCallback((start, end) => {
+  console.log("handleApplyClick");
+    setStartDate(moment(start).format('YYYY-MM-DD'));
+    setEndDate(moment(end).format('YYYY-MM-DD'));
+    setIsDateClicked(true);
+    setShowCalendar(false);
+    handleFilterClick();
+ }, [handleFilterClick]);
+ 
+ const handleGetGender = useCallback((gender) => {
+  console.log("handleGetGender");
+    setGender(gender);
+    setIsGenderClicked(true);
+    setShowGender(false);
+    handleFilterClick();
+ }, [handleFilterClick]);
+ 
+ const handleGetCountry = useCallback((country) => {
+  console.log("handleGetCountry");
+    setCountry(country);
+    setIsCountryClicked(true);
+    setShowCountry(false);
+    handleFilterClick();
+ }, [handleFilterClick]);
 
-    const resetGenderClick = () => {
-      setIsGenderClicked(false);
-      setGender(null);
-    };
+  const handleCalendarClick = () => {
+    setShowCalendar(!showCalendar);
+  };
 
-    const resetCountryClick = () => {
-      setIsCountryClicked(false);
-      setCountry(null);
-    };
+  const handleGenderClick = () => {
+    setShowGender(!showGender);
+  };
 
-    const handleResetAll = () => {
-      handleIsDateClickedChange();
-      resetGenderClick();
-      resetCountryClick();
-      fetchData();
-    };
+  const handleCountryClick = () => {
+    setShowCountry(!showCountry);
+  };
 
-    const handleApplyClick = (start, end) => {
-      setStartDate(moment(start).format('YYYY-MM-DD'));
-      setEndDate(moment(end).format('YYYY-MM-DD'));
-      setIsDateClicked(true);
-      setShowCalendar(false);
-    };
-
-    const handleGetGender = (gender) => {
-      setGender(gender);
-      setIsGenderClicked(true);
-      setShowGender(false);
-    };
-
-    const handleGetCountry = (country) => {
-      setCountry(country);
-      setIsCountryClicked(true);
-      setShowCountry(false);
-    };
-
-    const handleCalendarClick = () => {
-      setShowCalendar(!showCalendar);
-    };
-
-    const handleGenderClick = () => {
-      setShowGender(!showGender);
-    };
-
-    const handleCountryClick = () => {
-      setShowCountry(!showCountry);
-    };
-
-    const filterData = async () => {
+  const fetchData = async () => { 
       try {
-        setIsLoading(true);
+          setIsLoading(true);
+          
+          const params = {};
+          
+          if (startDate) params.startDate = startDate;
+          if (endDate) params.endDate = endDate;
+          if (gender) params.gender = gender === "여자" ? 'FEMALE' : 'MALE';
+          if (country) params.country = country;
 
-        console.log("filterData is pressed");
+          console.log('Current params:', params); // 디버깅용
 
-        const params = {};
-    
-        if (startDate) params.startDate = startDate;
-        if (endDate) params.endDate = endDate;
-        if (gender) params.gender = gender === "여자" ? 'FEMALE' : 'MALE';
-        if (country) params.country = country;
-
-    
-        console.log('Params:', params);
-
-        const filter_data = await getData(
-          GET_FILTER_ACCOMPANY,
-          {
+          const all_data = await getData(GET_FILTER_ACCOMPANY, {
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           },
-          params
-        );
-    
-        setAllData(filter_data.data.content);
-        // console.log("Filter Data");
-        // console.log(filter_data.data.content);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+          {
+              page: page,
+              size: 4,
+              ...params
+          });
 
-    const fetchData = async () => {
-      try {
-        setIsUserLoading(true);
+          // console.log("param is " + params);
+          console.log("params:", params);
+          // console.log("all data is " + all_data);
 
-        const all_data = await getData(GET_ALL_ACCOMPANY,{
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }); 
-        setAllData(all_data.data.content);
-        console.log("All Data");
-        console.log(all_data.data.content);
+          if (page === 0) {
+            console.log("all data");
+            console.log(all_data.data.content);
+              setAllData(all_data.data.content);
+          } else {
+            console.log("extra data");
+            console.log(all_data.data.content);
+              setAllData(prevData => [...prevData, ...all_data.data.content]);
+          }
 
-        const user_data = await getData(GET_USER_INFO,{
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }); 
-        setIsValidated(user_data.data.country);
-        console.log(user_data.data.country);
+
+          const user_data = await getData(GET_USER_INFO, {
+              Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          });
+
+          setIsValidated(user_data.data.country);
 
       } catch (error) {
-        console.error('Error fetching data:', error);
+          console.error('Error fetching data:', error);
       } finally {
-        setIsUserLoading(false);
+          setIsLoading(false);
       }
-    };
+  };
 
-    useEffect(() => {
-      fetchData();
-    }, []);
+  // 필터 상태나 페이지가 변경될 때만 데이터를 가져옴
+  useEffect(() => {
+    console.log("Fetching data with", { page, startDate, endDate, gender, country });
+    fetchData();
+}, [page, startDate, endDate, gender, country, isGenderClicked, isCountryClicked, isDateClicked]);
 
-    useEffect(() => {
-      if (isGenderClicked || isDateClicked || isCountryClicked || !isGenderClicked || !isDateClicked || !isCountryClicked) {
-        filterData();
+  const handleScroll = useCallback(() => {
+      const scrolledToBottom = 
+          window.innerHeight + document.documentElement.scrollTop 
+          >= document.documentElement.offsetHeight - 10;
+
+      if (scrolledToBottom && !isLoading) {
+          setPage(prevPage => prevPage + 1);
       }
-    }, [gender, startDate, endDate, country, isGenderClicked, isDateClicked, isCountryClicked]);
+  }, [isLoading]);
 
-    if (isLoading && isUserLoading){
+  useEffect(() => {
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  if (isLoading && page === 0) {
       return <Loading/>
-    }
+  }
+
+  // ... rest of your component JSX
 
     return (
       <>
