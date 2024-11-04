@@ -214,7 +214,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
         <PageHeader
           pageName={boardType === 'INFO' ? '정보 게시판' : '자유 게시판'}
           color={boardType === 'INFO' ? '#3E73B2' : '#6458BF'}
-          nav="/community"
         ></PageHeader>
         <s.DetailPageLayout>
           <s.Title color={titleColor}>
@@ -225,11 +224,11 @@ const DetailPage = ({ color1, color2, boardType }) => {
                 : `${showDispatchedInfo(currentPost.writerInfo, 'BOTH')}`}
             </s.DispatchedInfo>
             <s.InfoLabel>
+              <img
+                src={profilePic}
+                style={{ padding: '0 0.5rem 0 0' }}
+              />
               <s.NameInfo>
-                <img
-                  src={profilePic}
-                  style={{ padding: '0 0.5rem 0 0' }}
-                />
                 {currentPost.anonymous
                   ? '익명'
                   : currentPost.writerInfo.nickname}
@@ -350,7 +349,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
                     e.stopPropagation();
                     e.preventDefault();
                     onCommentSubmit();
+                    return;
                   }
+                  onCommentSubmit();
                 } else {
                   return;
                 }
