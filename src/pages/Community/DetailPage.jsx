@@ -1,6 +1,8 @@
 import * as s from './DetailPageStyled.jsx';
 import styled from 'styled-components';
-import commentImg from '../../assets/images/commentImg.svg';
+import profilePic from '../../assets/images/profilepic.svg';
+import PageHeader from '../../components/PageHeader/PageHeader.jsx';
+import commentImg from '../../assets/images/replyBtnImg.svg';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
 import { showDispatchedInfo } from '../../components/Common/InfoExp.jsx';
@@ -140,7 +142,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const addComment = async (url) => {
     const comment = {
       id: userInfo.id,
-      contents: content + ' ',
+      contents: content,
       anonymous: isAnonymous.current,
     };
     const jsonData = JSON.stringify(comment);
@@ -182,7 +184,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
   if (userInfo && currentPost && commentList) {
     return (
       <div ref={mobileViewRef}>
-        <s.PostInfoHeader>
+        {/* <s.PostInfoHeader>
           <s.BackButton onClick={() => nav(-1)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -208,7 +210,12 @@ const DetailPage = ({ color1, color2, boardType }) => {
               {new Date(currentPost.createdAt).toLocaleString('ko-KR')}
             </s.InfoLabel>
           </s.PostInfo>
-        </s.PostInfoHeader>
+        </s.PostInfoHeader> */}
+        <PageHeader
+          pageName={boardType === 'INFO' ? '정보 게시판' : '자유 게시판'}
+          color={boardType === 'INFO' ? '#3E73B2' : '#6458BF'}
+          nav="/community"
+        ></PageHeader>
         <s.DetailPageLayout>
           <s.Title color={titleColor}>
             {currentPost.title}
@@ -217,6 +224,20 @@ const DetailPage = ({ color1, color2, boardType }) => {
                 ? '파견교 비공개'
                 : `${showDispatchedInfo(currentPost.writerInfo, 'BOTH')}`}
             </s.DispatchedInfo>
+            <s.InfoLabel>
+              <s.NameInfo>
+                <img
+                  src={profilePic}
+                  style={{ padding: '0 0.5rem 0 0' }}
+                />
+                {currentPost.anonymous
+                  ? '익명'
+                  : currentPost.writerInfo.nickname}
+              </s.NameInfo>
+              <s.DateInfo>
+                {'· ' + new Date(currentPost.createdAt).toLocaleString('ko-KR')}
+              </s.DateInfo>
+            </s.InfoLabel>
           </s.Title>
           <s.Content>
             {currentPost.content}
@@ -236,7 +257,10 @@ const DetailPage = ({ color1, color2, boardType }) => {
             </s.ImgSection>
           </s.Content>
           <s.CommentNumSection>
-            <img src={commentImg} />
+            <img
+              src={commentImg}
+              style={{ width: '0.96rem', height: '1.04rem' }}
+            />
             {commentCount}
           </s.CommentNumSection>
           <s.CommentSection ref={scrollRef}>
@@ -322,8 +346,11 @@ const DetailPage = ({ color1, color2, boardType }) => {
                 if (e.key === 'Enter' && e.shiftKey) {
                   return;
                 } else if (e.key === 'Enter') {
-                  onCommentSubmit();
-                  e.preventDefault();
+                  if (e.nativeEvent.isComposing) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    onCommentSubmit();
+                  }
                 } else {
                   return;
                 }
