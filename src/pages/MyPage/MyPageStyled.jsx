@@ -7,47 +7,96 @@ export const MyPageLayout = styled.div`
   max-width: 480px;
   display: flex;
   box-sizing: border-box;
-  padding: 61px 0px 0px;
+  padding: 61px 1.5rem 0px;
   /* justify-content: center; */
   align-items: center;
   flex-direction: column;
 `;
 
-export const MyPosts = styled.div`
+export const PasswordContainer = styled.article`
+  margin-top: 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+`;
+
+export const PasswordTextInput = styled.input`
+  width: 100%;
+  height: 2rem;
+  border: none;
+  border-bottom: solid #b0b0b0 1px;
+  background: none;
+  color: #838383;
+  font-family: Inter;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2rem;
+  ::placeholder {
+    color: #838383;
+    font-family: Inter;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+`;
+
+export const ConfirmButton = styled.div`
+  display: flex;
+  border-radius: 3.75rem;
+  background: ${theme.purpleGra};
+  width: 100%;
+  height: 2.75rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  flex-shrink: 0;
+  color: #fff;
+  text-align: center;
+  font-family: Inter;
+  font-size: 0.9375rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+`;
+
+export const MyPosts = styled.article`
+  margin-top: 1.1rem;
+  border-radius: 12px;
   background: linear-gradient(
     135deg,
-    rgba(214, 235, 255, 0.3) 0%,
-    rgba(194, 199, 255, 0.3) 100%
+    rgba(214, 235, 255, 0.5) 0%,
+    rgba(194, 199, 255, 0.5) 100%
   );
-  display: flex;
-  align-content: center;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-  width: 100%;
-  height: 48px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  height: 3.1875rem;
   flex-shrink: 0;
-  padding-left: 5%;
-  margin: 21px 0;
+  display: flex;
+  padding: 0 21px;
+  align-items: center;
+  gap: 6px;
   span {
-    color: #000;
-    font-size: 15px;
+    color: #5c5c5c;
+    font-family: Inter;
+    font-size: 1.0625rem;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 700;
     line-height: normal;
-    margin-right: 11px;
   }
 `;
 
 export const MyInfoTitle = styled.p`
+  margin-top: 2.5rem;
   width: 100%;
-  color: #000;
+  color: #3e73b2;
   font-family: Inter;
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   text-align: left;
-  text-indent: 1.4rem;
 `;
 export const MyInfoWrapper = styled.article`
   width: 100%;
