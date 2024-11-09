@@ -17,6 +17,7 @@ import { logout } from '../../redux/actions';
 import MyInfoCard from '../../components/MyPage/MyInfoCard';
 import arrow from '../../assets/images/mypage_arrow.svg';
 import MyInfo from '../../components/MyPage/MyInfo';
+import DeleteAccountModal from '../../components/MyPage/DeleteAccountModal';
 
 const MyPage = () => {
   // const [userInfo, setUserInfo] = useState(null);
@@ -107,32 +108,6 @@ const MyPage = () => {
     }
   };
 
-  //계정 삭제 api
-  const handleDeleteAccount = async () => {
-    setIsLoading(true);
-    try {
-      const response = await deleteData(
-        DELETE_ACCOUNT,
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        {},
-      );
-      console.log(response);
-      if (response.status == 200) {
-        // localStorage.removeItem('AToken');
-        // localStorage.removeItem('RToken');
-        // localStorage.removeItem('grantType');
-        dispatch(logout());
-        navigate('/landing');
-      }
-    } catch (error) {
-      console.error('delete account error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // 수정 버튼 클릭 시 동작
   const clickEditNickname = () => {
     if (editNickname) {
@@ -162,53 +137,55 @@ const MyPage = () => {
     return <>오류</>;
   } else {
     return (
-      <s.MyPageLayout>
-        <PageHeader pageName="마이페이지" />
+      <>
+        <s.MyPageLayout>
+          <PageHeader pageName="마이페이지" />
 
-        <MyInfoCard
-          nickname={userInfo.nickname ? userInfo?.nickname : ''}
-          country={userInfo.country ? userInfo.country : ''}
-          university={
-            userInfo.dispatchedUniversity ? userInfo.dispatchedUniversity : ''
-          }
-          dispatchType={userInfo.dispatchType ? userInfo.dispatchType : ''}
-          userStatus={userInfo.userStatus ? userInfo.userStatus : ''}
-          isPassword={isPasswordConfirmed}
-        />
-        <NavLink
-          to="/mypage/mypost"
-          style={{ width: '100%' }}
-        >
-          <s.MyPosts>
-            <span>내 글 보기</span>
-            <img src={arrow} />
-          </s.MyPosts>
-        </NavLink>
-
-        <s.MyInfoTitle>나의 정보 확인</s.MyInfoTitle>
-        {!isPasswordConfirmed ? (
-          <s.PasswordContainer>
-            <s.PasswordTextInput
-              type="password"
-              placeholder="개인정보 보호를 위해 비밀번호를 입력해 주세요."
-              onChange={(e) => setPasswordInput(e.target.value)}
-            />
-            <s.ConfirmButton onClick={() => handelPassword(passwordInput)}>
-              확인
-            </s.ConfirmButton>
-          </s.PasswordContainer>
-        ) : (
-          <MyInfo
-            loginId={userInfo.loginId ? userInfo.loginId : ''}
-            name={userInfo.name ? userInfo.name : ''}
-            phone={userInfo.phone ? userInfo.phone : ''}
-            universityUrl={
-              userInfo.universityUrl ? userInfo.universityUrl : '없음'
+          <MyInfoCard
+            nickname={userInfo.nickname ? userInfo?.nickname : ''}
+            country={userInfo.country ? userInfo.country : ''}
+            university={
+              userInfo.dispatchedUniversity ? userInfo.dispatchedUniversity : ''
             }
-            userNickname={userInfo.nickname ? userInfo.nickname : ''}
+            dispatchType={userInfo.dispatchType ? userInfo.dispatchType : ''}
+            userStatus={userInfo.userStatus ? userInfo.userStatus : ''}
+            isPassword={isPasswordConfirmed}
           />
-        )}
-      </s.MyPageLayout>
+          <NavLink
+            to="/mypage/mypost"
+            style={{ width: '100%' }}
+          >
+            <s.MyPosts>
+              <span>내 글 보기</span>
+              <img src={arrow} />
+            </s.MyPosts>
+          </NavLink>
+
+          <s.MyInfoTitle>내 정보 확인</s.MyInfoTitle>
+          {!isPasswordConfirmed ? (
+            <s.PasswordContainer>
+              <s.PasswordTextInput
+                type="password"
+                placeholder="개인정보 보호를 위해 비밀번호를 입력해 주세요."
+                onChange={(e) => setPasswordInput(e.target.value)}
+              />
+              <s.ConfirmButton onClick={() => handelPassword(passwordInput)}>
+                확인
+              </s.ConfirmButton>
+            </s.PasswordContainer>
+          ) : (
+            <MyInfo
+              loginId={userInfo.loginId ? userInfo.loginId : ''}
+              name={userInfo.name ? userInfo.name : ''}
+              phone={userInfo.phone ? userInfo.phone : ''}
+              universityUrl={
+                userInfo.universityUrl ? userInfo.universityUrl : '없음'
+              }
+              userNickname={userInfo.nickname ? userInfo.nickname : ''}
+            />
+          )}
+        </s.MyPageLayout>
+      </>
     );
   }
 };

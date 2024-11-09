@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import EditButton from '../../assets/images/mypage_edit_button.svg';
 import { useState, useRef, useEffect } from 'react';
+import { DELETE_ACCOUNT } from '../../api/urls';
+import { deleteData } from '../../api/Functions';
+import DeleteAccountModal from './DeleteAccountModal';
 
 const MyInfo = ({ loginId, name, phone, universityUrl, userNickname }) => {
   const [editLink, setEditLink] = useState(false);
@@ -11,6 +14,8 @@ const MyInfo = ({ loginId, name, phone, universityUrl, userNickname }) => {
   const [nickname, setNickname] = useState(userNickname);
   const [nicknameInput, setNicknameInput] = useState('');
 
+  const [modalDisplay, setModalDisplay] = useState(false); // 모달 상태 관리
+
   function formatPhoneNumber(phoneNumber) {
     // 전화번호 문자열이 11자리일 경우에만 포맷팅 진행
     if (phoneNumber.length === 11 && /^010\d{8}$/.test(phoneNumber)) {
@@ -19,6 +24,31 @@ const MyInfo = ({ loginId, name, phone, universityUrl, userNickname }) => {
       return phoneNumber;
     }
   }
+  //탈퇴
+  const handleDeleteAccount = async () => {
+    setIsLoading(true);
+    try {
+      const response = await deleteData(
+        DELETE_ACCOUNT,
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        {},
+      );
+      console.log(response);
+      if (response.status == 200) {
+        localStorage.removeItem('AToken');
+        localStorage.removeItem('RToken');
+        localStorage.removeItem('grantType');
+        dispatch(logout());
+        navigate('/landing');
+      }
+    } catch (error) {
+      console.error('delete account error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <MyInfoContainer>
       <Wrapper>
@@ -58,6 +88,18 @@ const MyInfo = ({ loginId, name, phone, universityUrl, userNickname }) => {
         </TitleBox>
         <TextInput value={nickname} />
       </Wrapper>
+      <Wrapper style={{ display: 'inline-block', textAlign: 'left' }}>
+        <DeleteAccount onClick={() => setModalDisplay(true)}>
+          탈퇴
+        </DeleteAccount>
+      </Wrapper>
+      {/* 모달 표시 */}
+      {modalDisplay && (
+        <DeleteAccountModal
+          modalDisplay={modalDisplay}
+          onClose={() => setModalDisplay(false)}
+        />
+      )}
     </MyInfoContainer>
   );
 };
@@ -65,7 +107,7 @@ const MyInfo = ({ loginId, name, phone, universityUrl, userNickname }) => {
 export default MyInfo;
 
 const MyInfoContainer = styled.article`
-  margin-top: 1.1rem;
+  margin: 1.1rem 0;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -129,4 +171,17 @@ const TextInput = styled.input`
     font-weight: 400;
     line-height: normal;
   }
+`;
+
+const DeleteAccount = styled.span`
+  color: #a3a3a3;
+  font-family: Inter;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-align: left;
+  display: inline-block;
 `;

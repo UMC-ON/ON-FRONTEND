@@ -3,6 +3,7 @@ import theme from '../../styles/theme';
 import check from '../../assets/images/mypage_check.svg';
 import EditButton from '../../assets/images/mypage_edit_button.svg';
 import { useNavigate } from 'react-router-dom';
+import { ChatCountryIcon } from '../CountryIcon';
 
 const MyInfoCard = ({
   nickname,
@@ -20,27 +21,46 @@ const MyInfoCard = ({
           <span>{nickname}</span>
           {userStatus === 'ACTIVE' ? <img src={check} /> : <></>}
         </Nickname>
-        <Flag></Flag>
-        <University>{university}</University>
-        <SpecificInfo>
-          <span>{country}</span>
-          <div />
-          <span>
-            {dispatchType === 'DISPATCHED'
-              ? `교환학생`
-              : dispatchType === 'NOT_DISPATCHED'
-                ? `방문학생`
-                : ''}
-          </span>
-          {isPassword ? (
-            <img
-              src={EditButton}
-              onClick={() => navigate('./schoolAuth')}
-            />
-          ) : (
-            <></>
-          )}
-        </SpecificInfo>
+
+        <Flag>
+          <ChatCountryIcon country={country} />
+        </Flag>
+        {userStatus === 'ACTIVE' ? (
+          <>
+            <University>{university}</University>
+            <SpecificInfo>
+              <span>{country}</span>
+              <div />
+              <span>
+                {dispatchType === 'DISPATCHED'
+                  ? `교환학생`
+                  : dispatchType === 'NOT_DISPATCHED'
+                    ? `방문학생`
+                    : ''}
+              </span>
+              {isPassword ? (
+                <img
+                  src={EditButton}
+                  onClick={() => navigate('./schoolAuth')}
+                />
+              ) : (
+                <></>
+              )}
+            </SpecificInfo>
+          </>
+        ) : userStatus === 'NOT_CERTIFY' ? (
+          <>
+            <University>학교가 인증되지 않았어요.</University>
+            <PurpleBox onClick={() => navigate('./schoolAuth')}>
+              파견교 등록 및 인증
+            </PurpleBox>
+          </>
+        ) : userStatus === 'AWAIT' ? (
+          <>
+            <University>{university}</University>
+            <PurpleBox>인증 대기중</PurpleBox>
+          </>
+        ) : null}
       </InfoCardContainer>
     </InfoCardWrapper>
   );
@@ -102,8 +122,6 @@ const Flag = styled.div`
   width: 44px;
   height: 44px;
   flex-shrink: 0;
-  border-radius: 50%;
-  border: 1px solid #d9d9d9;
 `;
 
 const University = styled.span`
@@ -121,10 +139,12 @@ const SpecificInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.37rem;
+  grid-column: 1/3;
+  grid-row: 3/4;
   div {
     width: 1px;
     background-color: #a3a3a3;
-    transform: scaleX(0.8);
+    transform: scaleX(0.5);
     height: 15px;
   }
   span {
@@ -135,4 +155,21 @@ const SpecificInfo = styled.div`
     font-style: normal;
     font-weight: 300;
   }
+`;
+
+const PurpleBox = styled.div`
+  height: 1.375rem;
+  grid-column: 1/3;
+  grid-row: 3/4;
+  padding: 0 0.625rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 0.625rem;
+  background: ${theme.purpleGra};
+  color: #fff;
+  font-family: Inter;
+  font-size: 0.75rem;
+  font-weight: 500;
 `;
