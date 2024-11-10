@@ -350,8 +350,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
                     e.preventDefault();
                     onCommentSubmit();
                     return;
+                  } else {
+                    onCommentSubmit();
                   }
-                  onCommentSubmit();
                 }
               }}
               value={content}
