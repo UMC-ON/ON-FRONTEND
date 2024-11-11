@@ -8,7 +8,7 @@ import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
 import filled_star from "../assets/images/filled_star.svg";
-import noImage from "../assets/images/noImage.jpg";
+import defaultImg from '../assets/images/bannerDefault.svg';
 
 import {showDate} from "../components/Common/InfoExp";
 import { GET_CURRENT_INFO } from '../api/urls';
@@ -63,7 +63,7 @@ const ItemList = ({ items }) => {
 
         return (
           <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.imageUrls.length > 0 ? item.imageUrls : noImage} />
+            <Photo src={item.imageUrls.length > 0 ? item.imageUrls : defaultImg} />
             <Information>
               <StarContainer
                 marketPostId={item.marketPostId}
@@ -177,7 +177,7 @@ const Star = styled.img`
 
 const Photo = styled.img`
   width: 16vh;
-  height: 16vh;
+  height: 18vh;
   object-fit: cover;
   object-position: center;
   border-radius: 20px;
@@ -185,10 +185,9 @@ const Photo = styled.img`
 `;
 
 const Information = styled.div`
-  padding-top: 10px;
+  padding-top: 5px;
   padding-left: 10px;
   display: flex;
-  height: 16vh;
   flex-direction: column;
   box-sizing: border-box;
   padding-right: 15px;
@@ -259,6 +258,7 @@ const LocationAndUser = styled.div`
 `;
 
 const Place = styled.p`
+  height: 20px;
   width: 100%; 
   font-size: 0.7em;
   align-items: center;
