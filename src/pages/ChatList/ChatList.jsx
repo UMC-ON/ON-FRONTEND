@@ -86,7 +86,7 @@ const ChatList = () => {
                       : '채팅을 시작해보새요!'
                   }
                   senderName={data.senderName}
-                  location={data.location}
+                  location={data.country}
                 />
                 <s.Line />
               </s.ChatListWrapper>
@@ -106,6 +106,7 @@ const ChatList = () => {
               <s.ChatListWrapper>
                 <SingleTradeChat
                   key={data.roomId}
+                  nickName={data.senderName}
                   roomId={data.roomId}
                   img={data.profileImg}
                   time={
@@ -118,7 +119,6 @@ const ChatList = () => {
                       ? data.lastMessage
                       : '새로운 채팅을 시작해보새요!'
                   }
-                  senderName={data.senderName}
                 />
                 <s.Line />
               </s.ChatListWrapper>
