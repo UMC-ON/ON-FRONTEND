@@ -1,10 +1,30 @@
 import styled from 'styled-components';
 
 export const DiaryCalendar = styled.div`
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0; 
+        left: 7px;
+        right: 7px;
+        bottom: 0;
+        border-radius: 10px;
+        padding: 3px; /* border 두께 조절 */
+        background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+        -webkit-mask: 
+          linear-gradient(#fff 0 0) content-box, 
+          linear-gradient(#fff 0 0);
+        mask: 
+          linear-gradient(#fff 0 0) content-box, 
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: destination-out; 
+        mask-composite: exclude;
+    }
+        
     .react-calendar {
         width: 350px;
         max-width: 100%;
-        background: linear-gradient(-45deg, #DCDFFF, #D6EBFF);
+        background: #F3F9FF;
         border: none;
         border-radius: 10px;
         font-family: Arial, Helvetica, sans-serif;
@@ -17,27 +37,25 @@ export const DiaryCalendar = styled.div`
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1em;
-        border-bottom: 2px dashed white;
         padding: 0 10px;
     }
 
     .react-calendar__navigation__arrow {
         font-size: 22px; /* Keep a smaller font-size */
-        transform: scale(1.8); /* Scale the arrows */
+        transform: scale(1.5); /* Scale the arrows */
         line-height: 0.5; /* Adjust line-height to maintain the header height */
         background: none;
-        color: white;
-        
+        color: #363636;
     }
 
     .react-calendar__navigation__label {
         font-weight: 600;
         font-family: Inter;
         font-size: 22px; /* Keep a smaller font-size */
-        transform: scale(1.2); /* Scale the arrows */
+        transform: scale(1.0); /* Scale the arrows */
         line-height: 0.5; /* Adjust line-height to maintain the header height */
         background: none;
-        color: white;
+        color: #363636;
         height: 2em;
     }
 
@@ -61,7 +79,11 @@ export const DiaryCalendar = styled.div`
         text-decoration: none;
     }
 
-    
+    .react-calendar__month-view__days__day--neighboringMonth,
+    .react-calendar__decade-view__years__year--neighboringDecade,
+    .react-calendar__century-view__decades__decade--neighboringCentury {
+        color: #757575;
+    }
 `;
 
 export const EmptyCheckbox = styled.div`

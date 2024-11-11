@@ -21,7 +21,7 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
   };
 
   return (
-    <DDayCalendar>
+    <>
       <DatePickerWrapper>
         <DatePicker
           showPopperArrow={false}
@@ -52,27 +52,28 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
           onClickOutside={() => setCalendarOpen(false)}
         />
       </DatePickerWrapper>
-    </DDayCalendar>
+    </>
   );
 };
 
 export default DDayCalendarComponent;
 
-const DDayCalendar = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  z-index: 2;
+// const DDayCalendar = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 100%;
+//   z-index: 2;
   
   
-`;
+// `;
 
 const DatePickerWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+
+  position: absolute;
+  left: 5%;
+  top: 45%;
+
   z-index: 2;
   .react-datepicker__day--outside-month {
   visibility: hidden;
@@ -83,12 +84,10 @@ const DatePickerWrapper = styled.div`
   background: white;
   border: none;
   };
-
-  
-  
 `;
 
 const HeaderContainer = styled.div`
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -99,7 +98,6 @@ const HeaderContainer = styled.div`
 const HeaderDate = styled.div`
   font-size: 16px;
   font-weight: bold;
-  color: #3E73B2;
   margin: 0 4rem;
   
 `;
