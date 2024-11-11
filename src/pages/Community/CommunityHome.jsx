@@ -168,7 +168,6 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         <PageHeader
           pageName={boardType === 'INFO' ? '정보 게시판' : '자유 게시판'}
           color={boardType === 'INFO' ? '#3E73B2' : '#6458BF'}
-          nav="/community"
         ></PageHeader>
         <s.SliderWrapper>
           <DotInslideSlider images={images}></DotInslideSlider>
