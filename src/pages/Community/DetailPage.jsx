@@ -390,19 +390,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
               onInput={handleResizeHeight}
               rows={1}
               onChange={(e) => setContent(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && e.shiftKey) {
-                  return;
-                } else if (e.key === 'Enter') {
-                  if (e.nativeEvent.isComposing) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                  } else {
-                    onCommentSubmit();
-                    return;
-                  }
-                }
-              }}
               value={content}
               ref={commentEditor}
               disabled={!logInInfo.isAuthenticated}
@@ -415,7 +402,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
             height="22"
             viewBox="0 0 22 22"
             fill="none"
-            onClick={onCommentSubmit}
+            onClick={(e) => {
+              onCommentSubmit();
+            }}
           >
             <circle
               cx="11"
