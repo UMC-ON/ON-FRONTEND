@@ -146,11 +146,6 @@ function App() {
             path="/"
             element={<HomePage />}
           />
-
-          <Route
-            path="/community"
-            element={<CommunityHomePage />}
-          />
           <Route
             path="/community/general"
             element={<FreeCommunityHome />}
