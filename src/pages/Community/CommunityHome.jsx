@@ -38,6 +38,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
   };
   const resetCountry = () => {
     setCountry(null);
+    currentPage.page = 0;
   };
 
   const nav = () => {
@@ -64,7 +65,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
       {
         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
       },
-      { page: currentPage.current, size: 3, sort: 'DESC' },
+      { page: currentPage.current, size: 5, sort: 'DESC' },
     );
     if (response) {
       totalPage.current = response.data.totalPages;
@@ -79,16 +80,27 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
     return response;
   };
   const fetchFilteredData = async () => {
-    setIsLoading(true);
+    if (currentPage.current == 0) {
+      setIsLoading(true);
+    } else {
+      newDataLoading.current = true;
+    }
     const response = await getData(
       GET_FILTERED_POST_IN(currentBoardType),
       {
         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
       },
-      { country },
+      { country: country, page: currentPage.current, size: 5, sort: 'DESC' },
     );
     if (response) {
-      setPostList(response.data);
+      totalPage.current = response.data.totalPages;
+      if (currentPage.current > 0) {
+        setPostList((postList) => [...postList, ...response.data.content]);
+        console.log('내용 존재');
+      } else {
+        setPostList(response.data.content);
+        console.log('이거 실행');
+      }
     }
   };
 
@@ -121,7 +133,11 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         console.log(currentPage.current);
         console.log(totalPage.current);
         console.log(isLoading);
-        await fetchData();
+        if (country === null) {
+          await fetchData();
+        } else {
+          await fetchFilteredData();
+        }
         console.log(isLoading);
         newDataLoading.current = false;
       }
@@ -223,6 +239,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
             }}
             getCountry={(country) => {
               setCountry(country);
+              currentPage.current = 0;
               setShowCountry(false);
             }}
           />
