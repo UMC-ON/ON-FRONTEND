@@ -13,7 +13,7 @@ import { showDate } from '../../components/Common/InfoExp';
 
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
 import { getData } from '../../api/Functions';
-
+//test
 const ChatList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentMode, setCurrentMode] = useState('accompany');
