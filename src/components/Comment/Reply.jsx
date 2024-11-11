@@ -4,7 +4,7 @@ import { showWriter } from '../Common/InfoExp';
 
 const Reply = ({ reply, postWriter_id }) => {
   return (
-    <ReplyDiv>
+    <ReplyDiv writer={`${reply.writerInfo.id === postWriter_id}`}>
       <ReplyImg src={replyImg} />
       <div>
         <Writer writer={`${reply.writerInfo.id === postWriter_id}`}>
@@ -22,12 +22,19 @@ export default Reply;
 
 const Writer = styled.div`
   padding: 3px 0;
-  color: ${(props) => (props.writer === 'true' ? '#3E73B2' : '#525252')};
+  color: ${(props) => (props.writer === 'true' ? '#3E73B2' : '#5C5C5C')};
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: Inter;
-  font-size: 13px;
+  font-size: 1rem;
   font-style: normal;
-  font-weight: bold;
+  font-weight: 700;
   line-height: normal;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ReplyDiv = styled.div`
@@ -35,7 +42,10 @@ const ReplyDiv = styled.div`
   padding: 10px 19px;
   width: 100%;
   height: auto;
-  background-color: #d9d9d966;
+  background: ${(props) =>
+    props.writer === 'true'
+      ? 'linear-gradient(135deg, #d6ebff 0%, #c2c7ff 100%)'
+      : 'rgba(217, 217, 217, 0.40)'};
   border: 2px solid #bfd8e533;
   border-radius: 10px;
 
