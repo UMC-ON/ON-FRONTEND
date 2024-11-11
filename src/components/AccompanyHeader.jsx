@@ -71,4 +71,5 @@ export const BackButton = styled.div`
 export const RightButton = styled.img`
   position: absolute;
   right: 17px;
+  width: 15px;
 `;

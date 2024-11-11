@@ -121,7 +121,7 @@ const GreyMiddleText = styled.p`
   font-size: 0.5em;
   color: #7a7a7a;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   // width: 20vh;
@@ -146,11 +146,11 @@ const RoundContainer = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  width: 16vh;  /* Fixed width for a perfect square */
-  height: 16vh; /* Fixed height for a perfect square */
-  flex-shrink: 0;  /* Prevent shrinking or stretching due to flexbox */
-  overflow: hidden;  /* Ensure no overflow is visible */
-  border-radius: 20px;  /* Optional: For rounded corners */
+  width: 16vh;  
+  height: 16vh; 
+  flex-shrink: 0;  
+  overflow: hidden;  
+  border-radius: 20px;  
 `;
 
 const Image = styled.img`

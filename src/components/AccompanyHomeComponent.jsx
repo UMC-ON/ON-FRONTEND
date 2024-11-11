@@ -152,7 +152,7 @@ const AccompanyHomeComponent =
     
           <SmallSpace />
           <AccompanyList datas={allData} />
-          <Space />
+          <BigSpace />
     
           <PageContainer>
             <WriteButton onClick={goPost}>
@@ -163,6 +163,8 @@ const AccompanyHomeComponent =
           </PageContainer>
 
           {isModalOpen && <SecondModal closeModal={closeModal} openNextModal={openNextModal} />}
+
+          <BottomTabNav/>
         </>
       );
     };
@@ -222,13 +224,17 @@ const Space = styled.div`
   margin-top: 7vh;
 `;
 
+const BigSpace = styled.div`
+  margin-top: 15vh;
+`;
+
 const WriteButton = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 93px;
+  bottom: 120px;
 
 
   border-radius: 55px;
