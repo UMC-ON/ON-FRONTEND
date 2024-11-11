@@ -368,7 +368,7 @@ function AccompanyPostPage() {
           navigate('/accompany', { state: { refresh: true } });
         });
       }
-      // alert(input);
+      alert(input);
     };
 
     if (isLoading) {
@@ -381,6 +381,8 @@ function AccompanyPostPage() {
             <GreyButton onClick={onClickBackButton}>취소</GreyButton>
             <BlueButton onClick={onSubmit}>등록</BlueButton>
         </RightContainer>
+
+        <SpaceBetween/>
 
         <LeftContainer>
             <Title>
@@ -636,6 +638,20 @@ const GreyInput = styled.textarea`
     margin-bottom: 3vh;
     height: ${props => props.$height || 'auto'};
     background-color: white;
+
+    &:hover {
+    border: none; 
+  }
+
+  &:focus {
+    border: 1px solid #CABCCB;
+    outline: none; 
+  }
+
+  &:active {
+    border: 1px solid #CABCCB;
+    outline: none; 
+  }
 `;
 
 
@@ -663,9 +679,17 @@ const LeftContainer = styled.section`
 `;
 
 const RightContainer = styled.div`
-  margin-top: 3vh;
   display: flex;
   justify-content: flex-end;
+  background-color: white;
+  position: fixed;
+  width: 100%;
+  padding: 2vh 0;
+  z-index: 100;
+`;
+
+const SpaceBetween = styled.div`
+  margin-top: 5vh;
 `;
 
 
@@ -682,6 +706,20 @@ const GreyButton = styled.button`
   line-height: normal;
   margin-right: 8px;
   padding: 5px 15px;
+
+  &:hover {
+    border: none; 
+  }
+
+  &:focus {
+    border: none; 
+    outline: none; 
+  }
+
+  &:active {
+    border: none; 
+    outline: none; 
+  }
 `;
 
 
@@ -696,6 +734,20 @@ const BlueButton = styled.button`
   line-height: normal;
   margin-right: 20px;
   padding: 5px 15px;
+
+  &:hover {
+    border: none; 
+  }
+
+  &:focus {
+    border: none; 
+    outline: none; 
+  }
+
+  &:active {
+    border: none; 
+    outline: none; 
+  }
 `;
 
 const BlueContainer = styled.div`

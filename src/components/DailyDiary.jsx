@@ -30,7 +30,6 @@ const DailyDiary = styled.div`
   text-align: left;
   display: flex;
   flex-direction: column;
-  color: #838383;
   position: relative;
 `;
 
@@ -51,6 +50,7 @@ const DDay = styled.div`
 
 const Content = styled.p`
   padding: 20px;
+  color: #D9D9D9;
   font-size: 13px;
   flex-grow: 1; /* Content가 가능한 모든 공간을 차지하도록 설정 */
 `;
@@ -59,6 +59,7 @@ const Date = styled.p`
   font-size: 11px;
   margin: 10px;
   font-weight: 600;
+  color: #B8B8B8;
   position: absolute;
   bottom: 2px;
   right: 5px; /* Date를 아래로 배치하고 왼쪽에 고정 */

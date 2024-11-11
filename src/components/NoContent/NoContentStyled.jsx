@@ -6,7 +6,7 @@ export const NoContentLayout = styled.div`
   height: 100%;
   justify-content: center;
   position: fixed;
-  z-index: 3;
+  z-index: 0;
 `;
 
 export const NoImg = styled.img`
