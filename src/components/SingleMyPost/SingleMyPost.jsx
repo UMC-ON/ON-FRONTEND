@@ -10,15 +10,11 @@ const SingleMyPost = ({
   nickName,
   image,
   comment,
-  categories,
-  verified,
   boardType,
 }) => {
   const formatTime = showDate(time);
   const navigate = useNavigate();
-  const deletePost = ()=>{
-    
-  }
+  const deletePost = () => {};
 
   return (
     <s.PostWrapper
@@ -35,16 +31,16 @@ const SingleMyPost = ({
         </s.Top>
 
         <s.ContentText>{content}</s.ContentText>
+
         {image.length > 0 && (
           <s.ContentImg
-            src={image} // 첫 번째 이미지를 표시하도록 설정
+            src={image[0]} // 첫 번째 이미지를 표시하도록 설정
           />
         )}
         <s.Info>
-          <span style={{ color: '#7A7A7A', marginRight: '0.3rem' }}>
+          <span style={{ color: '#7A7A7A', marginRight: '1.12rem' }}>
             {nickName}
           </span>
-          {verified ? <s.VerifiedSvg /> : ''}
           <s.CommentSvg />
           <span style={{ color: '#92A5BC' }}>{comment}</span>
         </s.Info>
