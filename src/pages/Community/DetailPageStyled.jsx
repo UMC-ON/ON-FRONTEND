@@ -31,51 +31,52 @@ export const InfoLabel = styled.div`
   overflow: hidden;
   color: #000;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: wrap;
   font-family: Inter;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 
-  margin: 0 0.25rem;
-
-  & > * {
-    margin: 0 0.25rem;
-  }
+  gap: 0.38rem;
 `;
 export const Title = styled.div`
-  box-sizing: border-box;
   display: flex;
+  box-sizing: border-box;
+  padding: 1.25rem 1.125rem;
+  margin: 1.5rem;
   flex-direction: column;
-  flex-wrap: wrap;
-  word-break: break-all;
+  justify-content: center;
   align-items: start;
-  text-align: left;
-  padding: 1.3rem 2rem;
-  width: 100%;
-  min-height: 60.126px;
-  height: auto;
-  color: black;
-  background: ${(props) => props.color || '#BFD8E5'};
+  gap: 0.625rem;
+  border: 3px solid transparent;
 
-  color: #000;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  background-image: linear-gradient(#f3f9ff, #f3f9ff),
+    linear-gradient(135deg, #d6ebff, #c2c7ff);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+
+  color: #1e1e1e;
   font-family: Inter;
-  font-size: 18px;
+  font-size: 1.4375rem;
   font-style: normal;
   font-weight: 600;
-  line-height: 26px;
+  line-height: 1.875rem; /* 130.435% */
 `;
 
 export const DispatchedInfo = styled.div`
-  color: #fff;
+  overflow: hidden;
+  color: #5c5c5c;
+  text-overflow: ellipsis;
   font-family: Inter;
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.015rem;
-  padding-top: 0.31rem;
+  padding-top: 0.75rem;
 `;
 export const DetailPageLayout = styled.div`
   position: relative;
@@ -88,6 +89,33 @@ export const DetailPageLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
+`;
+
+export const NameInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  white-space: wrap;
+  color: #5c5c5c;
+  text-overflow: ellipsis;
+  font-family: Inter;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+`;
+export const DateInfo = styled.div`
+  overflow: hidden;
+  color: #a3a3a3;
+  text-overflow: ellipsis;
+  font-family: Inter;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
 
 export const Content = styled.pre`
@@ -248,14 +276,16 @@ export const Reply = styled.div`
 export const CommentNumSection = styled.div`
   box-sizing: border-box;
   border: none;
-  border-top: 0.3px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 3px solid;
+  border-image: linear-gradient(190deg, #d6ebff 0%, #c2c7ff 100%);
+  border-image-slice: 1;
   width: 100%;
   height: 38px;
   padding: 0 1.5rem;
 
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: start;
   align-items: center;
   align-content: center;
 

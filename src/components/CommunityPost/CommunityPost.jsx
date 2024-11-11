@@ -57,7 +57,9 @@ const CommunityPost = ({ post }) => {
         </ContentWrapper>
         <ContentImg
           src={post.imageUrls ? post.imageUrls[0] : null}
-          showimg={(post.imageUrls.length > 0).toString()}
+          showimg={
+            post.imageUrls ? (post.imageUrls.length > 0).toString() : false
+          }
         />
       </ContentSection>
     </s.Post>

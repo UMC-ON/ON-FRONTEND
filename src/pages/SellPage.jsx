@@ -65,9 +65,9 @@ function SellPage() {
           page: 0,
           size: 20,
           sort: 'DESC',
-          dealType: dealType === '직거래' ? 'DIRECT' : 'DELIVERY',
+          dealType: dealType === '직거래' ? 'DIRECT' : 'DIRECT',
           currentCountry,
-          dealStatus: 'COMPLETE', // 거래 불가능한 물품 (showAvailable이 false일 때)
+          dealStatus: showAvailable? 'AWAIT' : null // 거래 불가능한 물품 (showAvailable이 true일 때)
         };
   
         const response = await getData(
@@ -212,10 +212,12 @@ function SellPage() {
         </Span>
       </FlexContainer><br />
       <ItemList items={items} />
-      <WriteButton onClick={goPost}>
-        <img src={pencilImg} alt="pencil icon" />
-        글쓰기
-      </WriteButton>
+      <ButtonContainer>
+        <WriteButton onClick={goPost}>
+          <img src={pencilImg} alt="pencil icon" />
+          글 쓰기
+        </WriteButton>
+      </ButtonContainer>
 
       <TransactionPicker
         isVisible={isPickerVisible}
@@ -241,6 +243,8 @@ const SearchContainer = styled.div`
   position: relative;
   width: 96%;
   margin: 0 auto;
+  background-color: #FFFFFF; /* 밝은 배경색 */
+  color: #000000; /* 텍스트 색상 */
 `;
 
 const Search = styled.textarea`
@@ -262,6 +266,8 @@ const Search = styled.textarea`
   font-size: 15px;
   font-family: Inter;
   }
+  background-color: #FFFFFF; /* 밝은 배경색 */
+  color: #000000; /* 텍스트 색상 */
 `;
 
 const SearchIcon = styled.img`
@@ -326,13 +332,13 @@ const WriteButton = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   position: fixed;
   bottom: 70px;
-  left: 50%;
-  transform: translateX(-50%);
+
+
   border-radius: 55px;
-  border: none;
+  border: 1px solid #cccccc;
   width: 148px;
   height: 50px;
   padding: 15px 26px;
@@ -340,9 +346,31 @@ const WriteButton = styled.button`
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
   color: white;
   text-align: center;
+  font-family: Inter;
   font-size: 16px;
+  font-style: normal;
   font-weight: 600;
   line-height: normal;
   z-index: 2;
-  border: 1px solid #CCCCCC;
+  &:hover {
+    outline: 1px solid #9279f8;
+  }
+  &:focus {
+    outline: 1px solid #9279f8;
+  }
+
+  -webkit-tap-highlight-color: transparent;
+`;
+
+const ButtonContainer = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  flex-direction: column;
+  align-content: start;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
 `;
