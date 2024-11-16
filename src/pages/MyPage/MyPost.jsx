@@ -157,6 +157,7 @@ const MyPost = () => {
         renderPosts(tradePostResult, (data) => (
           <SingleMyTrade
             key={data.marketPostId}
+            postId={data.marketPostId}
             title={data.title}
             time={data.createdAt}
             tradeStyle={data.dealType}

@@ -5,6 +5,8 @@ export const PostWrapper = styled.div`
   flex-direction: column;
   height: 8.68rem;
   width: 100%;
+  padding: 0 1.31rem;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,7 +28,7 @@ export const Delete = styled.span`
   right: 2rem;
 `;
 export const PostContainer = styled.div`
-  width: 22.375rem;
+  width: 100%;
   height: 8.375rem;
   border-radius: 1.25rem;
   border: 1px solid #dfdfdf;
@@ -148,11 +150,6 @@ export const ContentText = styled.span`
   align-self: center;
 `;
 
-// export const ContentImg = styled.div`
-//   height: 4rem;
-//   width: 4rem;
-//   border-radius: 1rem;
-// `;
 export const ContentImg = styled.img`
   grid-area: img;
   height: 8.375rem;
