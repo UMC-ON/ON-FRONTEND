@@ -66,7 +66,10 @@ const MyPost = () => {
         style={{ marginBottom: '10rem' }}
       />
     ) : (
-      <s.PostWrapper>{postResult.map((data) => component(data))}</s.PostWrapper>
+      <s.PostWrapper>
+        {postResult.map((data) => component(data))}
+        <s.LastText>마지막 글입니다.</s.LastText>
+      </s.PostWrapper>
     );
   };
 
@@ -113,10 +116,6 @@ const MyPost = () => {
             nickName={data.anonymous ? '익명' : data.writerInfo.nickname}
             image={data.imageUrls}
             comment={data.commentCount}
-            categories="정보 커뮤니티"
-            verified={
-              data.writerInfo.userStatus === 'ACTIVE' ? 'true' : 'false'
-            }
             boardType={data.boardType}
           />
         ))
@@ -124,14 +123,13 @@ const MyPost = () => {
         renderPosts(freePostResult, (data) => (
           <SingleMyPost
             key={data.postId}
+            postId={data.postId}
             title={data.title}
             time={data.createdAt}
             content={data.content}
             nickName={data.writerInfo.nickname}
             image={data.imageUrls}
-            verified={data.anonymous}
             comment={data.commentCount}
-            categories="자유 커뮤니티"
             isAnonymous={data.anonymous}
             isAnonymousUniv={data.isAnonymousUniv}
             userStatus={data.writerInfo.userStatus}

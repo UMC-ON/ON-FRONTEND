@@ -36,6 +36,38 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const [isLoading, setLoading] = useState(false);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const openedImg = useRef(null);
+  const currentPage = useRef(0);
+  const totalPage = useRef(0);
+  const newCommentLoading = useRef(0);
+
+  const fetchCommentData = async () => {
+    if (currentPage.current == 0) {
+      setLoading(true);
+    } else {
+      newCommentLoading.current = true;
+    }
+
+    const response = await getData(
+      GET_COMMENT_OF(currentPost_id),
+      {
+        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+      },
+      { page: currentPage.current, size: 20, sort: 'DESC' },
+    );
+    if (response) {
+      totalPage.current = response.data.totalPages;
+      if (currentPage.current > 0) {
+        setCommentList((commentList) => [
+          ...commentList,
+          ...response.data.content,
+        ]);
+        console.log('내용 존재');
+      } else {
+        setCommentList(response.data.content);
+        console.log('이거 실행');
+      }
+    }
+  };
   useEffect(() => {
     if (userInfo) {
       const fetchPostData = async () => {
@@ -54,16 +86,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
         }
       };
 
-      const fetchCommentData = async () => {
-        const response = await getData(GET_COMMENT_OF(currentPost_id), {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-        });
-        if (response) {
-          setCommentList(response.data.content);
-        }
-        setLoading(false);
-      };
-      let res = fetchPostData();
+      fetchPostData();
       fetchCommentData();
     }
   }, [userInfo]);
@@ -91,7 +114,41 @@ const DetailPage = ({ color1, color2, boardType }) => {
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
-  const nav = useNavigate();
+
+  const onScroll = async () => {
+    if (
+      window.scrollY + document.documentElement.clientHeight >
+      document.documentElement.scrollHeight - 50
+    ) {
+      if (
+        !isLoading &&
+        !newCommentLoading.current &&
+        currentPage.current < totalPage.current
+      ) {
+        currentPage.current++;
+        console.log(currentPage.current);
+        console.log(totalPage.current);
+        console.log(isLoading);
+        await fetchCommentData();
+        console.log(isLoading);
+        newCommentLoading.current = false;
+      }
+    }
+  };
+
+  let throttleCheck = false;
+  if (!throttleCheck) {
+    throttleCheck = setTimeout(() => {
+      onScroll();
+      throttleCheck = false;
+    }, 10000);
+  }
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [throttleCheck]);
 
   const onCommentSelection = (e) => {
     if (selectedComment === null) {
@@ -163,16 +220,8 @@ const DetailPage = ({ color1, color2, boardType }) => {
 
     //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     //자식에게 ref전달 알아보기
-    const fetchCommentData = async () => {
-      const response = await getData(GET_COMMENT_OF(currentPost_id), {
-        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-      });
-      if (response) {
-        setCommentList(response.data.content);
-      }
-      setLoading(false);
-    };
-    fetchCommentData(); //너무 느려지는데?ㅜㅜ
+    fetchCommentData();
+    setLoading(false);
   };
 
   if (isLoading) {
@@ -350,10 +399,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
                     e.preventDefault();
                     onCommentSubmit();
                     return;
+                  } else {
+                    onCommentSubmit();
                   }
-                  onCommentSubmit();
-                } else {
-                  return;
                 }
               }}
               value={content}

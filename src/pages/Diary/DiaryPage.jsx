@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
@@ -33,6 +32,7 @@ const Diary = () => {
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
+  console.log(userInfo);
 
 
   useEffect(() => {
@@ -107,7 +107,6 @@ const Diary = () => {
     setShowDatePicker(false); // 달력을 숨깁니다.
   };
 
-  const todayDate = moment().format('YYYY.MM.DD');
 
   const handleSaveDiary = async () => {
     const formattedDate = moment(selectedDate2).format('YYYY-MM-DD');
@@ -146,7 +145,7 @@ const Diary = () => {
         <Information>
           <DDay>
             {dday !== null ? (
-              <DDayText>{`D${dday}`}</DDayText> // Display the dday value
+              <DDayText>{`D${dday}`}</DDayText>
             ) : (
               <DDayCalendar
                 selectedDate={selectedDate1}
@@ -158,10 +157,10 @@ const Diary = () => {
             )}
           </DDay>
         </Information>
-        <SubText>나의 교환교</SubText>
+        <SubText>나의 {userInfo?.dispatchType === "DISPATCHED" ? '교환교' : '파견교'}</SubText>
           <SchoolContainer>
-            <BigText>영국,</BigText>
-            <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>King’s College London</BigText>
+            <BigText>{userInfo?.country},</BigText>
+            <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>{userInfo?.dispatchedUniversity}</BigText>
           </SchoolContainer>
         <CalendarContainer>
           <DiaryCalendar diaries={diaries} dateList={dateList} />
@@ -229,58 +228,50 @@ const Information = styled.div`
   width: 100%;
   height: 30vh;
   position: relative;
-`;
-
-const DatePickerWrapper = styled.div`
-  position: fixed;  // 화면에 고정되도록 설정
-  bottom: 0;  // 화면의 맨 아래에 위치하도록 설정
-  left: 0;  // 화면의 왼쪽에 맞춤
-  width: 100%;  // 전체 화면 너비를 차지하도록 설정
-  background-color: white;  // 배경색 설정
-  z-index: 1000;  // 다른 요소들 위에 나타나도록 우선순위 설정
-  padding: 10px 0;  // 상하 패딩 추가
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);  // 그림자 추가로 상단에 약간의 분리감을 줌
-  border-top: 1px solid #E0E0E0;  // 상단에 경계선 추가
-  display: flex;
-  justify-content: center;  // DatePicker를 중앙에 위치하도록 설정
-`;
-
-const DatePickerStyled = styled(DatePicker)`
-  .react-datepicker {
-    width: 100%;  // 달력 너비를 전체로 확장
-    border: none;  // 테두리 제거
-  }
-  
-  .react-datepicker__header {
-    background-color: #f7f8fa;  // 헤더 배경색 변경
-    border-bottom: 1px solid #eaeaea;  // 하단에 경계선 추가
-  }
-  
-  .react-datepicker__day--selected {
-    background-color: #3E73B2;  // 선택된 날짜 배경색 설정
-    color: white;  // 선택된 날짜 텍스트 색상 설정
-  }
-  
-  // 필요에 따라 추가적인 스타일을 설정
+  margin-bottom: 30px;
 `;
 
 
 
 const DDay = styled.div`
-  position: absolute; // 부모 요소를 기준으로 위치 고정
-  width: 130px;
-  height: 130px;
+  position: absolute;
+  width: 238px;
+  height: 238px;
   top: 30%; 
-  left: 6%;
+  left: 17%;
   font-size: 1.2em !important;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 5px solid #DCDFFF;
-  z-index: 1; // 다른 요소들 위에 나타나도록 우선순위 설정
-  background-color: white; // 필요시 배경색 설정
+  z-index: 1;
+  background-color: white; 
+
+  /* ::before를 이용해 테두리 생성 */
+  &::before {
+    content: '';
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    padding: 10px; /* 테두리 두께 설정 */
+    background: linear-gradient(to bottom right, #D6EBFF, #C2C7FF);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+  }
+
+  /* 텍스트를 가상 테두리 위에 표시 */
+  position: relative;
 `;
+
+
 
 
 
@@ -294,36 +285,16 @@ const DDayText = styled.div`
   text-fill-color: transparent;
 `;
 
-
-const Today = styled.div`
-  background: ${props => props.theme.lightPurple};
-  margin-top: 4em;
-  width: 6em;
-  height: 1.5em;
-  border-radius: 30px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const RightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; // Ensures left alignment for all children
-  margin-top: 2.5em;
-  margin-left: 11em; // Adjust this value as needed to achieve the desired spacing from the DDay component
-`;
-
 const SubText = styled.div`
-  margin-top: 1em; // Adjust this value to add some spacing between Today and SubText
-  margin-bottom: 0.5em;
+  margin-top: 5em;
+
 `;
 
 const SchoolContainer = styled.div`
-  text-align: center;
   display: flex;
-  flex-wrap: wrap; // Ensures that text will wrap if there's not enough space
+  justify-content: center;  // 수평 가운데 정렬
+  align-items: center;
+  flex-wrap: wrap;
 `;
 
 const BigText = styled.div`
@@ -331,7 +302,7 @@ const BigText = styled.div`
   color: ${props => props.color || '#000000'};
   font-weight: bold;
   font-family: 'Inter-Regular';
-  font-size: 1em;
+  font-size: 22px;
   margin-bottom: 3.5vh;
   margin-left: ${props => props.spacing || '0'};
 `;
