@@ -41,6 +41,12 @@ export const TextInput = styled.textarea`
   border-radius: 0.875rem;
   background: #f6f6f6;
   border: 0;
+  font-family: 'Inter';
+  &:focus {
+    outline: none;
+  }
+  resize: none;
+  box-sizing: border-box;
 `;
 
 export const SendButton = styled.div`
