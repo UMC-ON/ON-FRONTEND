@@ -6,13 +6,12 @@ export const PostWrapper = styled.div`
   height: 8.68rem;
   width: 100%;
   display: flex;
-  position: relative;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 export const Delete = styled.span`
-  grid-area: delete;
   color: #7a7a7a;
   font-family: Inter;
   font-size: 0.5rem;
@@ -22,6 +21,9 @@ export const Delete = styled.span`
   text-decoration-line: underline;
   justify-self: right;
   margin-bottom: 0.4rem;
+  position: absolute;
+  bottom: 0.31rem;
+  right: 2rem;
 `;
 export const PostContainer = styled.div`
   width: 22.375rem;
@@ -32,47 +34,55 @@ export const PostContainer = styled.div`
   box-sizing: border-box;
   display: grid;
   grid-template-areas:
-    'img title title'
-    'img tripInfo tripInfo'
-    'img content content'
-    'img myinfo delete';
-  grid-template-columns: 8.4375rem 1fr auto;
-  grid-template-rows: 2.5rem 1.2rem auto 1.2rem;
+    'img title '
+    'img tripInfo '
+    'img content '
+    'img myinfo ';
+  grid-template-columns: auto 1fr auto;
   justify-content: space-between;
-  align-content: center;
   justify-items: start;
-  column-gap: 0.6rem;
+  column-gap: 1rem;
   padding-right: 1rem;
 `;
 
 export const Title = styled.div`
+  padding-top: 0.62rem;
+  box-sizing: border-box;
   grid-area: title;
-  text-align: left;
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  color: #363636;
-  font-family: Inter;
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  letter-spacing: 0.0175rem;
-  word-break: keep-all;
-  align-self: end;
+  display: flex;
+  span {
+    text-align: left;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: #363636;
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.0175rem;
+    word-break: keep-all;
+  }
+  align-self: center;
 `;
 
 export const TripInfo = styled.div`
   grid-area: tripInfo;
   display: flex;
+  align-self: center;
+  gap: 0.3rem;
+  overflow: hidden;
+  width: 100%;
 `;
 
 export const Date = styled.div`
   display: flex;
   align-items: center;
   align-self: end;
+  gap: 0.15rem;
   min-width: 2.3rem;
   span {
     margin-left: 0.13rem;
@@ -89,6 +99,7 @@ export const Num = styled.div`
   align-items: center;
   align-self: end;
   min-width: 2.3rem;
+  gap: 0.1rem;
   span {
     margin-left: 0.13rem;
     color: #7a7a7a;
@@ -103,6 +114,7 @@ export const Location = styled.div`
   display: flex;
   align-items: center;
   align-self: end;
+  gap: 0.1rem;
   span {
     margin-left: 0.13rem;
     color: #7a7a7a;
@@ -111,6 +123,7 @@ export const Location = styled.div`
     font-style: normal;
     font-weight: 400;
     letter-spacing: 0.01rem;
+    white-space: nowrap;
   }
 `;
 
@@ -132,7 +145,7 @@ export const ContentText = styled.span`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-align: left;
-  align-self: start;
+  align-self: center;
 `;
 
 // export const ContentImg = styled.div`
@@ -155,7 +168,7 @@ export const Info = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 0.4rem;
+
   gap: 0.3rem;
   margin-bottom: 0.63rem;
   span {
@@ -163,7 +176,8 @@ export const Info = styled.div`
     font-size: 0.5rem;
     font-style: normal;
     font-weight: 400;
-    color: '#7A7A7A';
+    color: #7a7a7a;
+    line-height: normal;
   }
   div {
     width: 2px;

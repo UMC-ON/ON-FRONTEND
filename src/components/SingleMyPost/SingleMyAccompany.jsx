@@ -1,4 +1,7 @@
 import * as s from './SingleMyAccompanyStyled';
+import noImg from '../../assets/images/bannerDefault.svg';
+import { useNavigate } from 'react-router-dom';
+
 const SingleMyAccompany = ({
   postId,
   title,
@@ -8,6 +11,7 @@ const SingleMyAccompany = ({
   totalRecruitNumber,
   currentRecruitNumber,
   location,
+  locationNum,
   nickName,
   age,
   gender,
@@ -29,11 +33,19 @@ const SingleMyAccompany = ({
     return `${createdDate.getMonth() + 1}/${createdDate.getDate()}`;
   };
 
+  const navigate = useNavigate();
+
   return (
     <s.PostWrapper>
-      <s.PostContainer>
-        <s.ContentImg src={image[0]} />
-        <s.Title>{title}</s.Title>
+      <s.PostContainer onClick={() => navigate(`/accompany/detail/${postId}`)}>
+        {image.length > 0 ? (
+          <s.ContentImg src={image[0]} />
+        ) : (
+          <s.ContentImg src={noImg}></s.ContentImg>
+        )}
+        <s.Title>
+          <span>{title}</span>
+        </s.Title>
         <s.TripInfo>
           <s.Date>
             <s.DateSvg />
@@ -47,9 +59,13 @@ const SingleMyAccompany = ({
           </s.Num>
           <s.Location>
             <s.LocationSvg />
-            <span>{location}</span>
+            <span>
+              {location}
+              {locationNum > 1 ? <> +{locationNum - 1}</> : <></>}
+            </span>
           </s.Location>
         </s.TripInfo>
+        {console.log(locationNum)}
 
         <s.ContentText>{content}</s.ContentText>
         <s.Info>

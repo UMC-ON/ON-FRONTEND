@@ -147,6 +147,7 @@ const MyPost = () => {
             totalRecruitNumber={data.totalRecruitNumber}
             currentRecruitNumber={data.currentRecruitNumber}
             location={data.travelArea[0]}
+            locationNum={data.travelArea.length}
             nickName={data.nickname}
             age={data.age}
             gender={data.gender}
