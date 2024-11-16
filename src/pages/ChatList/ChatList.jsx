@@ -9,7 +9,6 @@ import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
 import img from '../../assets/images/country_flag/000.svg';
 import useFetchChatList from '../../hooks/useFetchChatList';
-import { showDate } from '../../components/Common/InfoExp';
 
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
 import { getData } from '../../api/Functions';
@@ -109,11 +108,7 @@ const ChatList = () => {
                   nickName={data.senderName}
                   roomId={data.roomId}
                   img={data.profileImg}
-                  time={
-                    data.lastChatTime !== null
-                      ? showDate(data.lastChatTime)
-                      : ''
-                  }
+                  time={data.lastChatTime !== null ? data.lastChatTime : ''}
                   message={
                     data.lastMessage !== null
                       ? data.lastMessage
