@@ -3,7 +3,6 @@ import theme from '../../styles/theme';
 
 export const InputField = styled.article`
   width: 100%;
-  height: 6.125rem;
   flex-shrink: 0;
   position: fixed;
   bottom: 0;
@@ -17,42 +16,48 @@ export const InputField = styled.article`
   z-index: 2;
 `;
 
-export const SubmitForm = styled.form`
-  width: 90%;
-`;
-
 export const TextInputContainer = styled.div`
-  height: 2rem;
+  height: auto;
   width: 90%;
   border: 0;
   position: relative;
   box-sizing: border-box;
+  padding: 0.5rem 0.8rem 0.5rem 0.5rem;
   resize: none;
   display: grid;
   align-items: center;
   grid-template-columns: 1fr auto;
-  column-gap: 0.5rem;
+  column-gap: 0.2rem;
   align-content: center;
+  border-radius: 0.875rem;
+  background-color: #f6f6f6;
 `;
 
 export const TextInput = styled.textarea`
   width: 100%;
-  height: 2rem;
-  border-radius: 0.875rem;
-  background: #f6f6f6;
+  height: auto;
+  min-height: 1rem;
+  font-size: 0.875rem;
+  max-height: 104px;
+
+  background: none;
+  color: black;
   border: 0;
   font-family: 'Inter';
   &:focus {
     outline: none;
   }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   resize: none;
   box-sizing: border-box;
 `;
 
-export const SendButton = styled.div`
-  width: 1.5rem;
-  height: 1.5rem;
+export const SendButton = styled.img`
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: ${theme.blueGra};
-  right: 0;
 `;
