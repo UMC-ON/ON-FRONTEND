@@ -2,16 +2,13 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import * as s from './ChatListStyled';
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
 import SingleAccompanyChat from '../../components/ChatList/SingleChat/SingleAccompanyChat';
 import SingleTradeChat from '../../components/ChatList/SingleChat/SingleTradeChat';
 import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
-import img from '../../assets/images/country_flag/000.svg';
 import useFetchChatList from '../../hooks/useFetchChatList';
 
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
-import { getData } from '../../api/Functions';
 //test
 const ChatList = () => {
   const [isLoading, setIsLoading] = useState(false);
