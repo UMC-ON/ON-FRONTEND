@@ -63,7 +63,7 @@ function AlertModal({ closeModal, line1}) {
     background: white;
     padding: 24px 16px;
     border-radius: 4px;
-    width: 65%;
+    width: 65%; 
     border: 1px solid #dcdcdc;
     border-radius: 10px;
     position: relative;
