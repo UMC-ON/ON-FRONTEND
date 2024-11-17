@@ -363,14 +363,14 @@ function HomePage() {
                     </Icon>
                 </Button>
                 }
-                <Button onClick={goToInfoPost}>
+                <Button onClick={goToInfoCommunity}>
                   <Icon $iconType='informationIcon' $ratio='1 / 1'>
-                  <SmallWhiteText>정보<br/>글쓰기</SmallWhiteText>
+                  <SmallWhiteText>정보<br/>게시판</SmallWhiteText>
                   </Icon>
                 </Button>
-                <Button onClick={goToGeneralPost}>
+                <Button onClick={goToGeneralCommunity}>
                   <Icon $iconType='writeIcon' $ratio='1 / 1'>
-                    <SmallWhiteText>자유<br/>글쓰기</SmallWhiteText>
+                    <SmallWhiteText>자유<br/>게시판</SmallWhiteText>
                   </Icon>
                 </Button>
                 <Button onClick={goToAccompany}>
@@ -381,8 +381,10 @@ function HomePage() {
             </Container>
             ))}
            
-           <Space/>
-           <LeftContainer>
+           {/* <Space/> */}
+
+           
+           {/* <LeftContainer>
                   <BigText spacing="1vh">나를 위한 </BigText>
                   <BigText color="#3E73B2">꿀팁 정보</BigText>
            </LeftContainer>
@@ -398,7 +400,7 @@ function HomePage() {
                 {images.map((_, index) => (
                 <Dot key={index} active={index === currentSlide} onClick={() => goToSlide(index)} />
                 ))}
-            </DotContainer>
+            </DotContainer> */}
           </BigContainer>
           
           <SmallSpace/>
@@ -454,20 +456,29 @@ function HomePage() {
           <Space></Space>
           <Space></Space>
 
-          {userData.map((card, index) => (
-            card.country && accompanyData.length > 0 ? (
-              <FlexContainer onClick={goToAccompany} key={index}>
-                <MiddleText spacing="1vh">내 주변 동행글</MiddleText>
-                <RightIcon src={rightIcon} />
-              </FlexContainer>
-            ) : null
-          ))}
+          <FlexContainer onClick={goToAccompany}>
+            <MiddleText spacing="1vh">내 주변 동행글</MiddleText>
+            <RightIcon src={rightIcon} />
+          </FlexContainer>
           <SmallSpace/>
 
           <FixContainer>
-            <CardAccompanyList cards={accompanyData}></CardAccompanyList>
-            <OverlayBox/>
-          </FixContainer>
+                <CardAccompanyList cards={accompanyData}></CardAccompanyList>
+                <OverlayBox/>
+              </FixContainer>
+
+          {/* {userData.map((card, index) => (
+            card.country && accompanyData.length > 0 ? (
+              <FixContainer key={index}>
+                <CardAccompanyList cards={accompanyData}></CardAccompanyList>
+                <OverlayBox/>
+              </FixContainer>
+            ) : 
+            <LeftContainer>
+              <LeftSpace/>
+              <SubText>아무것도 없습니다.</SubText>
+            </LeftContainer>
+          ))} */}
           <BigSpace/>
 
 
@@ -477,6 +488,11 @@ function HomePage() {
 }
 
 export default HomePage;
+
+const LeftSpace = styled.div`
+  margin-left: 1.5rem;
+  padding: 5px; 
+`;
 
 const FlexContainer = styled.div`
   margin-top: 1.5rem;
