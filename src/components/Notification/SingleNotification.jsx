@@ -31,11 +31,17 @@ const SingleNotification = ({
       }
     }
     if (alertType === 'COMPANY') {
-      navigate(`/accompany/detail/${alertConnectId}`);
+      navigate(`/accompany/detail/${alertConnectId}`, {
+        state: { value: alertConnectId },
+      });
     } else if (alertType === 'INFORMATION') {
-      navigate(`/community/info/detail/${alertConnectId}`);
+      navigate(`/community/info/detail/${alertConnectId}`, {
+        state: { value: alertConnectId },
+      });
     } else if (alertType === 'FREE') {
-      navigate(`/community/general/detail/${alertConnectId}`);
+      navigate(`/community/general/detail/${alertConnectId}`, {
+        state: { value: alertConnectId },
+      });
     } //추가 필요
   };
   if (read == true) {
