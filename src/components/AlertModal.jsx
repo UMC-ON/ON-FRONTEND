@@ -69,7 +69,7 @@ function AlertModal({ closeModal, line1}) {
     position: relative;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.05);
   `;
-  
+   
   const ModalTitle = styled.div`
     font-size: 1.3em;
     font-weight: bold;
