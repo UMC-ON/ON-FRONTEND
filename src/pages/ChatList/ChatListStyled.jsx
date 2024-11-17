@@ -20,6 +20,7 @@ export const ModeContainer = styled.section`
   padding-left: 1.5rem;
   box-sizing: border-box;
   align-content: flex-start;
+  z-index: 3;
 `;
 
 export const ModeButton = styled.div`
