@@ -81,15 +81,15 @@ const Search = () => {
           onClick={exitSearchPage}
         />
         <s.SearchBox>
-          <s.SearchButton
-            src={search_button1}
-            onClick={clickSearchButton}
-          />
           <s.SearchInput
             type="text"
             value={searchInput}
             onChange={searchInputChange}
             placeholder="궁금한 것을 입력해보세요"
+          />
+          <s.SearchButton
+            src={search_button1}
+            onClick={clickSearchButton}
           />
         </s.SearchBox>
       </s.SearchWrapper>

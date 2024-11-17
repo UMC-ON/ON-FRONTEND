@@ -2,22 +2,14 @@ import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './MyPageStyled';
-import theme from '../../styles/theme';
 
-import {
-  SIGN_IN_URL,
-  PUT_NICKNAME,
-  LOGOUT,
-  DELETE_ACCOUNT,
-} from '../../api/urls';
-import { postData, putData, deleteData } from '../../api/Functions';
+import { SIGN_IN_URL, PUT_NICKNAME } from '../../api/urls';
+import { postData, putData } from '../../api/Functions';
 import Loading from '../../components/Loading/Loading';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../redux/actions';
+import { useSelector } from 'react-redux';
 import MyInfoCard from '../../components/MyPage/MyInfoCard';
 import arrow from '../../assets/images/mypage_arrow.svg';
 import MyInfo from '../../components/MyPage/MyInfo';
-import DeleteAccountModal from '../../components/MyPage/DeleteAccountModal';
 
 const MyPage = () => {
   // const [userInfo, setUserInfo] = useState(null);
@@ -37,7 +29,6 @@ const MyPage = () => {
 
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setNickname(userInfo.nickname);
@@ -55,35 +46,6 @@ const MyPage = () => {
       }
     } catch (error) {
       console.log('Error fetching data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  //로그아웃 api
-  const handleLogout = async () => {
-    setIsLoading(true);
-    try {
-      const response = await postData(
-        LOGOUT,
-        {
-          accessToken: localStorage.getItem('AToken'),
-          refreshToken: localStorage.getItem('RToken'),
-        },
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        {},
-      );
-
-      console.log(response);
-      if (response.status == 200) {
-        dispatch(logout());
-
-        navigate('/landing');
-      }
-    } catch (error) {
-      console.error('Logout error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -150,6 +112,7 @@ const MyPage = () => {
             dispatchType={userInfo.dispatchType ? userInfo.dispatchType : ''}
             userStatus={userInfo.userStatus ? userInfo.userStatus : ''}
             isPassword={isPasswordConfirmed}
+            setIsLoading={setIsLoading}
           />
           <NavLink
             to="/mypage/mypost"
