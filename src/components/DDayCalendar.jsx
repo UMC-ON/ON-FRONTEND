@@ -1,23 +1,41 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import ko from 'date-fns/locale/ko';
+import { getData, postData } from '../api/Functions';
+import { GET_DIARY, POST_DDAY, POST_DIARY } from '../api/urls';
 
-const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen, datePickerRef, userId }) => {
+const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen, datePickerRef }) => {
   const [storedDate, setStoredDate] = useState(null);
 
   useEffect(() => {
-    // 저장된 날짜가 있을 때 dateChange 핸들러를 호출
     if (storedDate) {
       handleDateChange(storedDate);
     }
   }, [storedDate, handleDateChange]);
 
-  const handleDateSelect = (date) => {
+  const handleDateSelect = async (date) => {
     setStoredDate(date);
     handleDateChange(date);
 
+    // 선택된 날짜를 서버로 전송
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    try {
+      const response = await postData(
+        POST_DDAY,
+        { "startDate": formattedDate }, // dday를 서버로 전송
+        {
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          'Content-Type': 'application/json',
+        }
+      );
+      console.log('디데이 저장 완료');
+      console.log(localStorage.getItem('AToken'));
+    } catch (error) {
+      console.error('서버로 dday 전달 중 오류 발생:', error);
+      console.log(dday);
+    }
   };
 
   return (
@@ -26,7 +44,7 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
         <DatePicker
           showPopperArrow={false}
           locale={ko}
-          className='inputDate'
+          className="inputDate"
           placeholderText={'날짜 설정'}
           ref={datePickerRef}
           selected={storedDate || selectedDate}
@@ -58,15 +76,14 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
 
 export default DDayCalendarComponent;
 
-// const DDayCalendar = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 100%;
-//   z-index: 2;
-  
-  
-// `;
+
+const DDayCalendar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: 2;
+`;
 
 const DatePickerWrapper = styled.div`
 
@@ -75,15 +92,19 @@ const DatePickerWrapper = styled.div`
   top: 45%;
 
   z-index: 2;
-  .react-datepicker__day--outside-month {
-  visibility: hidden;
+
+  .inputDate::placeholder {
+    font-size: 30px;
   }
-  
+
+  .react-datepicker__day--outside-month {
+    visibility: hidden;
+  }
 
   .react-datepicker__header {
-  background: white;
-  border: none;
-  };
+    background: white;
+    border: none;
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -98,8 +119,8 @@ const HeaderContainer = styled.div`
 const HeaderDate = styled.div`
   font-size: 16px;
   font-weight: bold;
+  color: #3e73b2;
   margin: 0 4rem;
-  
 `;
 
 const Arrow = styled.div`

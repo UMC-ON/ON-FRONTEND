@@ -8,7 +8,7 @@ import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
 import filled_star from "../assets/images/filled_star.svg";
-import noImage from "../assets/images/noImage.jpg";
+import defaultImg from '../assets/images/bannerDefault.svg';
 
 import { showDate } from "../components/Common/InfoExp";
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
@@ -28,7 +28,7 @@ const ScrapList = ({ items }) => {
 
         return (
           <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.marketPost.imageUrls[0] ? item.marketPost.imageUrls[0] : noImage} />
+            <Photo src={item.marketPost.imageUrls[0] ? item.marketPost.imageUrls[0] : defaultImg} />
             <Information>
               <StarContainer
                 marketPostId={item.marketPost.marketPostId}
@@ -60,11 +60,10 @@ const ScrapList = ({ items }) => {
 
 const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrappedMarketPostIds }) => {
   const [isStarFilled, setIsStarFilled] = useState(!isFilled);
-  let userInfo = useSelector((state) => state.user.user);
+
 
   const toggleStar = async () => {
     try {
-      if (isStarFilled) {
         // 스크랩 취소 요청
         await axios.delete(`${serverAddress}/api/v1/scrap/${marketPostId}`, {
           headers: {
@@ -73,36 +72,22 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
           params: {
             marketPostId: marketPostId
           }
-        });
+    })
+  
+    setScrappedMarketPostIds(prevIds => prevIds.filter(id => id !== marketPostId));
 
-        // Remove marketPostId from scrappedMarketPostIds array
-        setScrappedMarketPostIds(prevIds => prevIds.filter(id => id !== marketPostId));
-      } else {
-        // 스크랩 등록 요청
-        await axios.post(
-          `${serverAddress}/api/v1/scrap`,
-          {
-            marketPostId: marketPostId,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-            },
-          }
-        );
-
-        // Add marketPostId to scrappedMarketPostIds array
-        setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
-      }
-
+  
       // Toggle the star state
       setIsStarFilled(!isStarFilled);
-
-      console.log({ marketPostId });
+  
+      // 페이지 새로 고침
+      window.location.reload();
+  
     } catch (error) {
       console.error('스크랩 처리 중 오류 발생:', error);
     }
   };
+  
 
 
   return (

@@ -5,14 +5,15 @@ export const PostWrapper = styled.div`
   flex-direction: column;
   height: 8.68rem;
   width: 100%;
+  padding: 0 1.31rem;
+  box-sizing: border-box;
   display: flex;
-  position: relative;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 export const Delete = styled.span`
-  grid-area: delete;
   color: #7a7a7a;
   font-family: Inter;
   font-size: 0.5rem;
@@ -22,9 +23,12 @@ export const Delete = styled.span`
   text-decoration-line: underline;
   justify-self: right;
   margin-bottom: 0.4rem;
+  position: absolute;
+  bottom: 0.31rem;
+  right: 2rem;
 `;
 export const PostContainer = styled.div`
-  width: 22.375rem;
+  width: 100%;
   height: 8.375rem;
   border-radius: 1.25rem;
   border: 1px solid #dfdfdf;
@@ -32,43 +36,56 @@ export const PostContainer = styled.div`
   box-sizing: border-box;
   display: grid;
   grid-template-areas:
-    'img title title title'
-    'img date num location'
-    'img content content content'
-    'img myinfo myinfo delete';
-  grid-template-columns: 8.4375rem 1fr 1fr auto;
-  grid-template-rows: 2.9rem 1.2rem 1.5fr 1.2rem;
+    'img title '
+    'img tripInfo '
+    'img content '
+    'img myinfo ';
+  grid-template-columns: auto 1fr auto;
   justify-content: space-between;
-  align-content: center;
   justify-items: start;
-  column-gap: 0.6rem;
+  column-gap: 1rem;
   padding-right: 1rem;
 `;
 
-export const Title = styled.span`
+export const Title = styled.div`
+  padding-top: 0.62rem;
+  box-sizing: border-box;
   grid-area: title;
+  display: flex;
+  span {
+    text-align: left;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: #363636;
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.0175rem;
+    word-break: keep-all;
+  }
   align-self: center;
-  margin-top: 0.88rem;
-  text-align: left;
-  display: -webkit-box;
+`;
+
+export const TripInfo = styled.div`
+  grid-area: tripInfo;
+  display: flex;
+  align-self: center;
+  gap: 0.3rem;
   overflow: hidden;
-  word-break: break-all;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  color: #363636;
-  font-family: Inter;
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  letter-spacing: 0.0175rem;
+  width: 100%;
 `;
 
 export const Date = styled.div`
   display: flex;
   align-items: center;
   align-self: end;
+  gap: 0.15rem;
+  min-width: 2.3rem;
   span {
     margin-left: 0.13rem;
     color: #7a7a7a;
@@ -83,6 +100,8 @@ export const Num = styled.div`
   display: flex;
   align-items: center;
   align-self: end;
+  min-width: 2.3rem;
+  gap: 0.1rem;
   span {
     margin-left: 0.13rem;
     color: #7a7a7a;
@@ -97,6 +116,7 @@ export const Location = styled.div`
   display: flex;
   align-items: center;
   align-self: end;
+  gap: 0.1rem;
   span {
     margin-left: 0.13rem;
     color: #7a7a7a;
@@ -105,6 +125,7 @@ export const Location = styled.div`
     font-style: normal;
     font-weight: 400;
     letter-spacing: 0.01rem;
+    white-space: nowrap;
   }
 `;
 
@@ -126,34 +147,17 @@ export const ContentText = styled.span`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-align: left;
-  /* height: 2rem; */
-  /* color: #838383;
-  font-family: Inter;
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 1.125rem */
-  /* letter-spacing: 0.015rem;
-  justify-self: start;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-
-  white-space: normal;
-  text-align: left;  */
+  align-self: center;
 `;
 
-// export const ContentImg = styled.div`
-//   height: 4rem;
-//   width: 4rem;
-//   border-radius: 1rem;
-// `;
 export const ContentImg = styled.img`
   grid-area: img;
-  /* display: ${(props) => (props.showimg ? 'inline' : 'none')}; */
+  height: 8.375rem;
+  width: 8.375rem;
   height: 8.3rem;
   border-radius: 1.25rem;
   align-self: start;
+  object-fit: cover;
 `;
 
 export const Info = styled.div`
@@ -161,13 +165,22 @@ export const Info = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 0.4rem;
+
+  gap: 0.3rem;
+  margin-bottom: 0.63rem;
   span {
     font-family: Inter;
     font-size: 0.5rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 150%; /* 0.75rem */
+    color: #7a7a7a;
+    line-height: normal;
+  }
+  div {
+    width: 2px;
+    height: 2px;
+    background-color: #7a7a7a;
+    border-radius: 50%;
   }
 `;
 

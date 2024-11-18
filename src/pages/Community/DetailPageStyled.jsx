@@ -60,6 +60,7 @@ export const Title = styled.div`
 
   color: #1e1e1e;
   font-family: Inter;
+  text-align: left;
   font-size: 1.4375rem;
   font-style: normal;
   font-weight: 600;

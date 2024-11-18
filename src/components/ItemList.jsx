@@ -71,7 +71,7 @@ const ItemList = ({ items }) => {
                 scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
                 setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
               />
-              <Description onClick={() => navigate(`./${item.marketPostId}`)}>
+              <Description onClick={() => navigate(`/sell/${item.marketPostId}`)}>
                 <TitleTimeContainer>
                   <Title>{item.title}</Title>
                   <Time>{showDate(item.createdAt)}</Time>
@@ -125,11 +125,8 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
           }
         );
 
-        // Add marketPostId to scrappedMarketPostIds array
         setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
       }
-
-      // Toggle the star state
       setIsStarFilled(!isStarFilled);
 
     } catch (error) {
@@ -252,17 +249,21 @@ const Profile = styled.img`
 const LocationAndUser = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 2em;
-  width: 11em;
+  width: 100%;
   margin-bottom: 1vh;
 `;
 
 const Place = styled.p`
+  display: inline-block;
+  align-item: center;
   height: 20px;
   width: 100%; 
   font-size: 0.7em;
   align-items: center;
   margin-right: 10px;
+  margin-top: 6px;
   color: #838383;
   white-space: nowrap;
   overflow: hidden;
@@ -281,7 +282,6 @@ const User = styled.p`
   display: flex;
   align-items: center;
   color: #838383;
-  padding-top: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

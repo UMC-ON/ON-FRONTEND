@@ -37,9 +37,10 @@ export const TitleSection = styled.section`
   }
 `;
 export const Logo = styled.img`
-  object-fit: contain;
-  width: 93px;
-  height: 56px;
+  width: 3.0515rem;
+  height: 1.875rem;
+  flex-shrink: 0;
+  margin: 0.81rem 0;
 `;
 
 export const BackButton = styled.button`

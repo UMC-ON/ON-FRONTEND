@@ -59,7 +59,12 @@ const ChatCountryIcon = ({ country }) => {
   const source = countryIcons[country] || basicIcon;
   return <AccompanyPicture src={source} />;
 };
-export { CountryIcon, ChatCountryIcon };
+
+const MyPageCountryIcon = ({ country }) => {
+  const source = countryIcons[country] || basicIcon;
+  return <MyPagePicture src={source} />;
+};
+export { CountryIcon, ChatCountryIcon, MyPageCountryIcon };
 
 const ProfileImg = styled.img`
   border-radius: 100px;
@@ -75,6 +80,15 @@ const AccompanyPicture = styled.img`
   grid-area: pic;
   width: 3.125rem;
   height: 3.125rem;
+  flex-shrink: 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 50%;
+  background: lightgray 50% / cover no-repeat;
+`;
+const MyPagePicture = styled.img`
+  grid-area: pic;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
   border: 1px solid #d9d9d9;
   border-radius: 50%;

@@ -7,7 +7,6 @@ import NoContent from '../../components/NoContent/NoContent';
 import SingleMyPost from '../../components/SingleMyPost/SingleMyPost';
 import SingleMyAccompany from '../../components/SingleMyPost/SingleMyAccompany';
 import SingleMyTrade from '../../components/SingleMyPost/SingleMyTrade';
-import Img from '../../assets/images/postImgExample.svg';
 import {
   GET_MY_POST,
   GET_MY_ACCOMPANY_POST,
@@ -140,18 +139,25 @@ const MyPost = () => {
         renderPosts(accompanyPostResult, (data) => (
           <SingleMyAccompany
             key={data.companyPostId}
+            postId={data.companyPostId}
             title={data.title}
-            date={data.createdAt}
+            date={data.startDate}
             content={data.content}
             image={data.imageUrls}
-            numberOfPeople={data.totalRecruitNumber}
-            location={data.location}
+            totalRecruitNumber={data.totalRecruitNumber}
+            currentRecruitNumber={data.currentRecruitNumber}
+            location={data.travelArea[0]}
+            locationNum={data.travelArea.length}
+            nickName={data.nickname}
+            age={data.age}
+            gender={data.gender}
           />
         ))
       ) : (
         renderPosts(tradePostResult, (data) => (
           <SingleMyTrade
             key={data.marketPostId}
+            postId={data.marketPostId}
             title={data.title}
             time={data.createdAt}
             tradeStyle={data.dealType}
