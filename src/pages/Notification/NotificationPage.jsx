@@ -42,6 +42,8 @@ const Notification = () => {
       fetchNextPage();
     }
   };
+  const isEmpty =
+    !data || (data.pages.length === 1 && data.pages[0].length === 0);
 
   if (isLoading) {
     return <Loading />;
@@ -52,20 +54,27 @@ const Notification = () => {
       onScroll={handleScroll}
     >
       <PageHeader pageName="알림" />
-      {data?.pages.map((page, i) =>
-        page.map((data) => (
-          <SingleNotification
-            key={data.alertId}
-            id={data.alertId}
-            title={data.title}
-            content={data.content}
-            alertType={data.alertType}
-            alertConnectId={data.alertConnectId}
-            read={data.read}
-          />
-        )),
-      )}
-      {isFetchingNextPage && <Loading />}
+      <s.NotificationWrapper>
+        {isEmpty ? (
+          <NoContent content="알림 내역이 없습니다." />
+        ) : (
+          data?.pages.map((page, i) =>
+            page.map((data) => (
+              <SingleNotification
+                key={data.alertId}
+                id={data.alertId}
+                title={data.title}
+                content={data.content}
+                alertType={data.alertType}
+                alertConnectId={data.alertConnectId}
+                read={data.read}
+              />
+            )),
+          )
+        )}
+        {isFetchingNextPage && <Loading />}
+        <s.NotificationEnd>알람 내역의 마지막입니다.</s.NotificationEnd>
+      </s.NotificationWrapper>
     </s.NotificationLayout>
   );
 };
