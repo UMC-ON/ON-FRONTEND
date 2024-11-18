@@ -1,20 +1,17 @@
 import * as s from './SearchPageStyled';
 import Loading from '../../components/Loading/Loading';
-import { useState, useEffect } from 'react';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import search_button1 from '../../assets/images/search_button1.svg';
 import search_exit from '../../assets/images/search_exit.svg';
 import SinglePost from '../../components/SinglePost/SinglePost';
 import { GET_SEARCH_RESULT } from '../../api/urls';
 import { getData } from '../../api/Functions';
+import { useInfiniteQuery } from 'react-query';
 
 const Search = () => {
-  const [isLoading, setIsLoading] = useState(false); //연결할 때 로딩 추가
-  const [searchInput, setSearchInput] = useState(''); //검색창에 입력한 것
-  const [searchTarget, setSearchTarget] = useState(''); //돋보기 누를 때 넘어가는 것
-  const [searchResult, setSearchResult] = useState([]); //검색 결과 넣음
-  const [showResult, setShowResult] = useState(false); //검색 결과 있/없 나타냄
-  const [error, setError] = useState(null); //에러처리 필요
+  const [searchInput, setSearchInput] = useState(''); // 검색창에 입력한 것
+  const [searchTarget, setSearchTarget] = useState(''); // 돋보기 누를 때 넘어가는 것
 
   const navigate = useNavigate();
 
@@ -26,55 +23,58 @@ const Search = () => {
     setSearchInput(e.target.value);
   };
 
-  const clickSearchButton = (e) => {
+  const clickSearchButton = () => {
     setSearchTarget(searchInput);
   };
 
-  //AXIOS 검색 결과
-  useEffect(() => {
-    if (searchInput === '') {
-      console.log('입력한 검색어 없음');
-      setSearchResult([]);
-      setShowResult(false);
-    } else {
-      console.log('입력한 검색어:' + searchTarget);
-      const fetchSearchResult = async () => {
-        setIsLoading(true);
-        try {
-          const response = await getData(
-            GET_SEARCH_RESULT,
-            {
-              Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-            },
-            { keyword: searchTarget, page: 0, size: 20 },
-          );
-          if (response) {
-            // 수정: 응답이 배열인지 확인
-            console.log(response.data);
-            setSearchResult(response.data.content);
-          } else {
-            setSearchResult([]); // 수정: 응답이 유효하지 않으면 빈 배열로 설정
-          }
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          setError('검색 결과를 가져오는 중 오류가 발생했습니다.'); // 수정: 오류 메시지 설정
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchSearchResult();
-      setShowResult(true);
-    }
-  }, [searchTarget]);
+  const fetchSearchResult = async ({ pageParam = 0 }) => {
+    const response = await getData(
+      GET_SEARCH_RESULT,
+      {
+        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+      },
+      { keyword: searchTarget, page: pageParam, size: 20 },
+    );
+    return response.data;
+  };
 
-  useEffect(() => {
-    console.log(searchResult);
-  }, [searchResult]);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery(['searchResults', searchTarget], fetchSearchResult, {
+      enabled: !!searchTarget, // 검색어가 있을 때만 실행
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.content.length < 20) return undefined; // 데이터가 더 없으면 undefined
+        return allPages.length; // 다음 페이지 번호 반환
+      },
+    });
+
+  const handleScroll = (e) => {
+    console.log(
+      'Scrolling...',
+      e.target.scrollTop,
+      e.target.scrollHeight,
+      e.target.clientHeight,
+    );
+
+    if (
+      e.target.scrollHeight - e.target.scrollTop <=
+        e.target.clientHeight + 50 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  };
+
+  const isEmpty =
+    !data || (data.pages.length === 1 && data.pages[0].content.length === 0);
 
   return isLoading ? (
     <Loading />
   ) : (
-    <s.PageLayout>
+    <s.PageLayout
+      style={{ overflowY: 'auto', minHeight: '100vh' }}
+      onScroll={handleScroll}
+    >
       <s.SearchWrapper>
         <s.Exit
           src={search_exit}
@@ -93,32 +93,36 @@ const Search = () => {
           />
         </s.SearchBox>
       </s.SearchWrapper>
-      {showResult ? (
+      {searchTarget && (
         <s.SearchResultContainer>
-          {searchResult && searchResult.length > 0 ? (
-            <>
-              {searchResult.map((data) => (
+          {isEmpty ? (
+            <s.LastText>검색 결과가 없습니다.</s.LastText>
+          ) : (
+            data?.pages.map((page) =>
+              page.content.map((data) => (
                 <SinglePost
-                  key={data.postId} // 수정: 고유 key 값 추가
+                  key={data.postId}
                   postId={data.postId}
-                  title={data.title} // 수정: title 필드 사용
-                  time={data.createdAt} // 수정: createdAt 필드 사용하여 시간 포맷팅
-                  content={data.content} // 수정: content 필드 사용
-                  nickName={data.anonymous ? '익명' : data.writerInfo.nickname} // 수정: 익명 여부에 따른 닉네임 표시
+                  title={data.title}
+                  time={data.createdAt}
+                  content={data.content}
+                  nickName={data.anonymous ? '익명' : data.writerInfo.nickname}
                   verified={
                     data.writerInfo.userStatus === 'ACTIVE' ? 'true' : 'false'
-                  } // 수정: userStatus 필드 사용
-                  comment={data.commentCount.toString()} // 수정: commentCount 필드 사용
-                  boardType={data.boardType} // 수정: boardType 필드 사용
+                  }
+                  comment={data.commentCount.toString()}
+                  boardType={data.boardType}
                 />
-              ))}
-              <s.LastText>검색 내역의 마지막입니다.</s.LastText>
-            </>
-          ) : (
-            <s.LastText>검색 결과가 없습니다.</s.LastText> // 수정: 검색 결과가 없을 때 메시지 표시
+              )),
+            )
+          )}
+          {isFetchingNextPage && <Loading />}
+          {!hasNextPage && !isEmpty && (
+            <s.LastText>검색 내역의 마지막입니다.</s.LastText>
           )}
         </s.SearchResultContainer>
-      ) : (
+      )}
+      {!searchTarget && (
         <s.PreSearchWrapper>
           <s.PreSearchIcon />
           <s.ONIcon />

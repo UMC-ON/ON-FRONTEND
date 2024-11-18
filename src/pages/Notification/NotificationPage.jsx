@@ -1,16 +1,15 @@
 import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './NotificationPageStyled';
-import notification_circle from '../../assets/images/notification_circle.svg';
 import NoContent from '../../components/NoContent/NoContent';
 import { getData } from '../../api/Functions';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GET_ALERT_LIST } from '../../api/urls';
 import Loading from '../../components/Loading/Loading';
 import SingleNotification from '../../components/Notification/SingleNotification';
 import { useInfiniteQuery } from 'react-query';
 
 const Notification = () => {
-  const [notification, setNotification] = useState([]);
+  // const [notification, setNotification] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchNotifications = async ({ pageParam = 0 }) => {
