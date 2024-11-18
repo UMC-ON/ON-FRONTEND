@@ -144,9 +144,9 @@ const AccompanyHomeComponent =
                 </GreyPicker>
 
               </Span>
-              {!isDateClicked && !isGenderClicked && !isCountryClicked ? (
+              {/* {!isDateClicked && !isGenderClicked && !isCountryClicked ? (
               <Icon src={searchIcon} size={'25px'} />
-              ) : null }
+              ) : null } */}
             </FlexContainer>
           </RoundContainer>
     

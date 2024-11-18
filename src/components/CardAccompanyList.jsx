@@ -83,7 +83,12 @@ const CardAccompanyList = ({ color, cards }) => {
         </Card>
       </CardContainer>
     ))
-  ) : <></>}
+  ) : 
+    <LeftContainer>
+      <LeftSpace/>
+      <SubText>아무것도 없습니다.</SubText>
+    </LeftContainer>
+            }
 </CardListContainer>
   );
 };
@@ -92,6 +97,21 @@ export default CardAccompanyList;
 
 const SmallSpace = styled.div`
   margin-top: 1vh;
+`;
+
+const LeftContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const LeftSpace = styled.div`
+  margin-left: 0.65rem;
+`;
+
+const SubText = styled.div`
+  color: #5C5C5C;
+  font-family: 'Inter-Bold';
+  font-size: 1em;
 `;
 
 const Space = styled.div`

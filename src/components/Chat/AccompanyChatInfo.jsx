@@ -5,7 +5,7 @@ import { getData } from '../../api/Functions';
 import Loading from '../Loading/Loading';
 
 const AccompanyChatInfo = ({
-  user,
+  messageInitiator,
   defaultColor,
   pointColor,
   userName,
@@ -53,7 +53,7 @@ const AccompanyChatInfo = ({
   }
   return (
     <s.InfoWrapper color={pointColorOpacity(0.2)}>
-      {user === 1 ? (
+      {messageInitiator ? (
         <s.Info>
           <span style={{ color: pointColor, fontWeight: '900' }}>
             {userName}
@@ -75,7 +75,6 @@ const AccompanyChatInfo = ({
               padding: '0 0.4rem',
             }}
           >
-            {' '}
             모집 완료
           </span>
           를 눌러주세요.
@@ -91,7 +90,14 @@ const AccompanyChatInfo = ({
       <s.LocationIcon />
       <s.Location>
         <s.Category>지역</s.Category>
-        <s.Content>{infoResult.location}</s.Content>
+        <s.LocationContent>
+          {infoResult?.location?.map((data, index) => (
+            <span key={index}>
+              {data}
+              {index < infoResult.location.length - 1 && ', '}
+            </span>
+          ))}
+        </s.LocationContent>
       </s.Location>
       <s.NumIcon />
       <s.NumberOfPeople>

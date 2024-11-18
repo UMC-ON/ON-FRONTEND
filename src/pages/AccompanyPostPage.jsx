@@ -11,6 +11,7 @@ import plusButton from '../assets/images/plusButton.svg';
 import closeIcon from '../assets/images/close_button.svg';
 import cameraIcon from '../assets/images/camera_icon.svg';
 import purplePlusButton from '../assets/images/purplePlusButton.svg';
+import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import CustomCheckbox from '../components/CustomCheckBox';
 import CameraBottom from '../components/CameraBottom';
@@ -18,6 +19,7 @@ import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SelectCity from './SelectCity/SelectCity.jsx';
 import Loading from '../components/Loading/Loading.jsx';
+import AlertModal from '../components/AlertModal.jsx';
 
 import { multiFilePostData, getData } from '../api/Functions';
 import { WRITE_ACCOMPANY, GET_USER_INFO } from '../api/urls';
@@ -62,6 +64,9 @@ function AccompanyPostPage() {
     const [fileSize, setFileSize] = useState(null);
 
     const [userData, setUserData] = useState(null);
+
+    const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
 
     const formatDate = (dateString) => {
       return dateString.replace(/-/g, '/');
@@ -259,6 +264,39 @@ function AccompanyPostPage() {
       fileInputRef.current.click();
     };
 
+    const handleDeleteImage = () => {
+      setSelectedFile(null);
+      setPreviewUrl(null);
+    };
+
+    const handleDeleteCity = () => {
+      if (city2 != null)
+      {
+        setCity(city2);
+        setCity2(null);
+        setIsCityClicked2(false);
+      }
+      else
+      {
+        setIsCityClicked(false);
+        setCity(null);
+      }
+    };
+
+    const handleDeleteCity2 = () => {
+      setIsCityClicked2(false);
+      setCity2(null);
+    };
+
+    const handleModalOpen = (content) => {
+      setModalContent(content);
+      setIsAlertModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+      setIsAlertModalOpen(false);
+    };
+
     const handleFileChange = (event) => {
       const file = event.target.files[0];
       setSelectedFile(file);
@@ -295,7 +333,7 @@ function AccompanyPostPage() {
           imageFiles: [selectedFile],
         }));
       }
-    }, [userData, ageChecked, country, schoolChecked, city, city2, personValue, daysDifference, startDate, endDate, selectedFile]);
+    }, [userData, ageChecked, country, schoolChecked, city, city2, personValue, daysDifference, startDate, endDate, selectedFile, previewUrl]);
 
     const postData = async () => {
       const formData = new FormData();
@@ -344,23 +382,23 @@ function AccompanyPostPage() {
       console.log(input);
       if (personValue == 0)
       {
-          alert('모집 인원을 입력해주세요.');
+        handleModalOpen('모집 인원을');
       }
       else if (city == null)
       {
-          alert('여행 지역을 입력해주세요.');
+        handleModalOpen('여행 지역을');
       }
       else if (startDate == null)
       {
-        alert('예상 일정을 입력해주세요.');
+        handleModalOpen('예상 일정을');
       }
       else if (input.title =='')
       {
-        alert('제목을 입력해주세요.');
+        handleModalOpen('제목을');
       }
       else if (input.content == '')
       {
-        alert('요청사항을 입력해주세요.');
+        handleModalOpen('요청사항을');
       }
       else
       {
@@ -368,7 +406,7 @@ function AccompanyPostPage() {
           navigate('/accompany', { state: { refresh: true } });
         });
       }
-      alert(input);
+      // alert(input);
     };
 
     if (isLoading) {
@@ -445,8 +483,9 @@ function AccompanyPostPage() {
                     )}
                     {isCityClicked && (
                       <>
-                      <CircleContainer onClick={handleCityClick}>{`${city}`}
-                      <SmallIcon src={postIcon} $left="5px"/>
+                      <CircleContainer>
+                        <CircleText onClick={handleCityClick}>{`${city}`}</CircleText>
+                        <SmallIcon src={whiteCloseIcon} $left="5px" onClick={handleDeleteCity}/>
                       </CircleContainer>
                       </>
                     )}
@@ -457,8 +496,9 @@ function AccompanyPostPage() {
                           <PlusButton src={plusButton} onClick={handleCityClick2}/>
                         )}
                         {isCityClicked2 && (
-                          <CircleContainer onClick={handleCityClick2}>{`${city2}`}
-                          <SmallIcon src={postIcon} $left="5px"/>
+                          <CircleContainer>
+                            <CircleText onClick={handleCityClick2}>{`${city2}`}</CircleText>
+                            <SmallIcon src={whiteCloseIcon} $left="5px" onClick={handleDeleteCity2}/>
                           </CircleContainer>
                         )}
                 </Left>
@@ -549,7 +589,29 @@ function AccompanyPostPage() {
         />
         {previewUrl && 
           <>
+            <Container>
             <ImagePreview src={previewUrl}/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 15 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                position: 'absolute',
+                right: '1.7rem', 
+                top: '0.3rem',
+                zIndex: '2',
+              }}
+              onClick={handleDeleteImage} 
+            >
+            <path
+              d="M14.4433 0.0955087C14.5707 -0.0318362 14.7771 -0.0318362 14.9045 0.0955087C15.0318 0.222854 15.0318 0.42932 14.9045 0.556665L7.96116 7.5L14.9045 14.4433C15.0318 14.5707 15.0318 14.7771 14.9045 14.9045C14.7771 15.0318 14.5707 15.0318 14.4433 14.9045L7.5 7.96116L0.556665 14.9045C0.42932 15.0318 0.222853 15.0318 0.0955081 14.9045C-0.031836 14.7771 -0.031836 14.5707 0.0955081 14.4433L7.03884 7.5L0.095509 0.556665C-0.0318359 0.42932 -0.0318359 0.222854 0.095509 0.0955087C0.222854 -0.0318362 0.429321 -0.0318362 0.556666 0.0955087L7.5 7.03884L14.4433 0.0955087Z"
+              fill="#000000"
+            />
+
+            </svg>
+            </Container>
 
             <Right>
             <SmallGreyText>({fileSize} KB)</SmallGreyText>
@@ -564,11 +626,24 @@ function AccompanyPostPage() {
         <BottomTabLayout2>
             <LeftButton src={cameraIcon} onClick={handleButtonClick}/>
         </BottomTabLayout2>
+
+
+        {isAlertModalOpen && (
+          <AlertModal 
+            closeModal={handleModalClose} 
+            line1={modalContent}
+          />
+        )}
       </>
     );
 }
 
 export default AccompanyPostPage;
+
+const Container = styled.div`
+  position: relative;
+  width: '100%'
+`;
 
 const TopHeader = styled.div`
   font-size: 12px;
@@ -592,11 +667,16 @@ const CircleContainer = styled.section`
   font-size: 0.8rem;
   color: white;
   padding: 5px;
-  justify-content: center;
+  display: flex;
   align-items: center;
   margin-left: 10px;
   margin-top: 5px;
   padding-left: 6px;
+`;
+
+const CircleText = styled.section`
+  font-size: 0.8rem;
+  color: white;
 `;
 
 const CircleContainer2 = styled.section`
@@ -892,6 +972,7 @@ const ImagePreview = styled.img`
   width: 89%;
   height: auto;
   border-radius: 10px;
+  display: 'block'
 `;
 
 const Right = styled.div`

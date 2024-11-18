@@ -185,7 +185,6 @@ function AccompanyPage() {
       return <Loading/>
   }
 
-  // ... rest of your component JSX
 
     return (
       <>

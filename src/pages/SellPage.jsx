@@ -14,6 +14,7 @@ import TransactionPicker from "../components/TransactionPicker";
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
 import Loading from '../components/Loading/Loading';
+import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 import { getData } from '../api/Functions';
 import { GET_FILTER_ITEM, GET_ITEM_SEARCH, GET_ITEM_LIST } from '../api/urls';
 
@@ -50,24 +51,15 @@ function SellPage() {
 
   const fetchItems = async (dealType = '', currentCountry = '') => {
     try {
-      if (showAvailable) {
-        // 거래 가능한 물품만 불러오기
-        const response = await getData(
-          '/api/v1/market-post/available', {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        });
-        if (response) {
-          setItems(response.data.content);
-        }
-      } else {
+      
         // 필터링된 물품 불러오기
         const params = {
           page: 0,
           size: 20,
           sort: 'DESC',
-          dealType: dealType === '직거래' ? 'DIRECT' : 'DIRECT',
+          dealType: dealType ? (dealType === '직거래' ? 'DIRECT' : 'DELIVERY') : '', // 거래방식이 없으면 빈 문자열로 처리
           currentCountry,
-          dealStatus: showAvailable? 'AWAIT' : null // 거래 불가능한 물품 (showAvailable이 true일 때)
+          dealStatus: showAvailable ? 'AWAIT' : ''
         };
   
         const response = await getData(
@@ -76,10 +68,12 @@ function SellPage() {
         }, params);
   
         if (response) {
+          console.log(params);
           setItems(response.data.content);
+          console.log(currentCountry);
+          console.log(response.data);
         }
-      }
-    } catch (error) {
+      }catch (error) {
       console.error('필터링 중 오류 발생:', error);
     }
   };
@@ -226,6 +220,7 @@ function SellPage() {
         onApply={handleApply}
         onClose={() => setIsPickerVisible(false)}
       />
+      <BottomTabNav />
     </>
   );
 }
@@ -243,8 +238,8 @@ const SearchContainer = styled.div`
   position: relative;
   width: 96%;
   margin: 0 auto;
-  background-color: #FFFFFF; /* 밝은 배경색 */
-  color: #000000; /* 텍스트 색상 */
+  background-color: #FFFFFF;
+  color: #000000;
 `;
 
 const Search = styled.textarea`
@@ -266,8 +261,8 @@ const Search = styled.textarea`
   font-size: 15px;
   font-family: Inter;
   }
-  background-color: #FFFFFF; /* 밝은 배경색 */
-  color: #000000; /* 텍스트 색상 */
+  background-color: #FFFFFF;
+  color: #000000;
 `;
 
 const SearchIcon = styled.img`
@@ -334,11 +329,11 @@ const WriteButton = styled.button`
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 70px;
-
-
+  bottom: 110px;
   border-radius: 55px;
   border: 1px solid #cccccc;
+  font-family: Inter;
+  font-style: normal;
   width: 148px;
   height: 50px;
   padding: 15px 26px;
@@ -358,11 +353,11 @@ const WriteButton = styled.button`
   &:focus {
     outline: 1px solid #9279f8;
   }
-
   -webkit-tap-highlight-color: transparent;
 `;
 
 const ButtonContainer = styled.div`
+padding-bottom: 100px;
   box-sizing: border-box;
   display: flex;
   width: 100%;
