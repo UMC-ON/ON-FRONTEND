@@ -30,8 +30,9 @@ export const GET_MY_POST = (boardType) => `/api/v1/post/user/${boardType}`;
 ///국가필터링///
 export const GET_FILTERED_POST_IN = (boardType) =>
   `/api/v1/post/filter/${boardType}`;
-
 export const GET_SEARCH_RESULT = '/api/v1/post/search';
+export const DELETE_MY_POST = (boardType, postId) =>
+  `/api/v1/post/user/${boardType}/${postId}`;
 
 //댓글 작성
 export const GET_COMMENT_OF = (postId) => `/api/v1/comment/${postId}`;
@@ -61,6 +62,8 @@ export const GET_FILTER_ITEM = `/api/v1/market-post/filter`;
 export const POST_ITEM = `/api/v1/market-post`;
 export const GET_MARKET_ROOMID = `/api/v1/chat/request`;
 export const GET_MY_MARKET_POST = `/api/v1/market-post/user`;
+export const DELETE_MY_MARKET_POST = (marketPostId) =>
+  `/api/v1/market-post/user/${marketPostId}`;
 
 //스크랩
 export const POST_SCRAP = `/api/v1/scrap`;
@@ -84,6 +87,8 @@ export const GET_SIMILAR_ACCOMPANY = (companyPostId) =>
   `/api/v1/company-post/${companyPostId}/nearby`;
 export const GET_ROOM_ID = '/api/v1/chat/request';
 export const GET_MY_ACCOMPANY_POST = '/api/v1/company-post/user';
+export const DELETE_MY_ACCOMPANY_POST = (companyPostId) =>
+  `/api/v1/company-post/user/${companyPostId}`;
 
 //동행 구하기 글 작성
 export const WRITE_ACCOMPANY = `/api/v1/company-post`;

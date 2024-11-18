@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import EditButton from '../../assets/images/mypage_edit_button.svg';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { DELETE_ACCOUNT } from '../../api/urls';
 import { deleteData } from '../../api/Functions';
 import DeleteAccountModal from './DeleteAccountModal';
@@ -49,6 +49,7 @@ const MyInfo = ({ loginId, name, phone, universityUrl, userNickname }) => {
       setIsLoading(false);
     }
   };
+
   return (
     <MyInfoContainer>
       <Wrapper>
