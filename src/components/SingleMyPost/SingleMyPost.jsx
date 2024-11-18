@@ -1,6 +1,10 @@
 import * as s from './SingleMyPostStyled';
 import { showDate } from '../Common/InfoExp';
 import { useNavigate } from 'react-router-dom';
+import { deleteData } from '../../api/Functions';
+import { DELETE_MY_POST } from '../../api/urls';
+import Loading from '../../components/Loading/Loading';
+import { useState } from 'react';
 
 const SingleMyPost = ({
   postId,
@@ -12,9 +16,41 @@ const SingleMyPost = ({
   comment,
   boardType,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false); //삭제 누르는 순간 화면에서 바로 삭제를 위해
   const formatTime = showDate(time);
   const navigate = useNavigate();
-  const deletePost = () => {};
+
+  const deletePost = async () => {
+    setIsLoading(true);
+    try {
+      const response = await deleteData(
+        DELETE_MY_POST(boardType, postId),
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        {},
+      );
+      console.log(response);
+      if (response.status === 200) {
+        console.log('성공');
+        setIsDeleted(true); // 삭제 상태 업데이트
+      }
+    } catch (error) {
+      console.error('delete error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  // 삭제된 경우 렌더링하지 않음
+  if (isDeleted) {
+    return null;
+  }
 
   return (
     <s.PostWrapper
@@ -45,7 +81,14 @@ const SingleMyPost = ({
           <span style={{ color: '#92A5BC' }}>{comment}</span>
         </s.Info>
       </s.PostContainer>
-      <s.Delete>삭제</s.Delete>
+      <s.Delete
+        onClick={(e) => {
+          e.stopPropagation(); // 이벤트 버블링 방지
+          deletePost();
+        }}
+      >
+        삭제
+      </s.Delete>
     </s.PostWrapper>
   );
 };
