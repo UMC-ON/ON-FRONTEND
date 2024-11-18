@@ -86,47 +86,47 @@ const TradeChat = () => {
     scrollToBottom();
   }, [chatList]);
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    pollingRef.current = true;
+  // useEffect(() => {
+  //   const abortController = new AbortController();
+  //   pollingRef.current = true;
 
-    const startLongPolling = async () => {
-      while (pollingRef.current) {
-        try {
-          const response = await getData(
-            GET_TRADE_CHAT(roomId),
-            {
-              Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-              signal: abortController.signal, // signal 추가
-            },
-            { roomId: roomId },
-          );
+  //   const startLongPolling = async () => {
+  //     while (pollingRef.current) {
+  //       try {
+  //         const response = await getData(
+  //           GET_TRADE_CHAT(roomId),
+  //           {
+  //             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+  //             signal: abortController.signal, // signal 추가
+  //           },
+  //           { roomId: roomId },
+  //         );
 
-          if (response) {
-            const newMessages = response.data.result.chatList;
-            if (newMessages.length !== chatListRef.current.length) {
-              setChatList(newMessages);
-              scrollToBottom();
-            }
-          }
-        } catch (error) {
-          if (error.name !== 'AbortError') {
-            console.error('Error fetching new messages:', error);
-          }
-        }
+  //         if (response) {
+  //           const newMessages = response.data.result.chatList;
+  //           if (newMessages.length !== chatListRef.current.length) {
+  //             setChatList(newMessages);
+  //             scrollToBottom();
+  //           }
+  //         }
+  //       } catch (error) {
+  //         if (error.name !== 'AbortError') {
+  //           console.error('Error fetching new messages:', error);
+  //         }
+  //       }
 
-        // 3초 간격으로 폴링
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-      }
-    };
+  //       // 3초 간격으로 폴링
+  //       await new Promise((resolve) => setTimeout(resolve, 3000));
+  //     }
+  //   };
 
-    startLongPolling();
+  //   startLongPolling();
 
-    return () => {
-      pollingRef.current = false; // 컴포넌트 언마운트 시 polling 중지
-      abortController.abort(); // 요청 취소
-    };
-  }, [roomId]);
+  //   return () => {
+  //     pollingRef.current = false; // 컴포넌트 언마운트 시 polling 중지
+  //     abortController.abort(); // 요청 취소
+  //   };
+  // }, [roomId]);
 
   // navigate(-1)을 사용한 뒤로가기 버튼 클릭 시 롱 폴링을 중지
   const handleBackNavigation = () => {

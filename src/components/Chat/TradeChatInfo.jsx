@@ -22,8 +22,8 @@ const TradeChatInfo = ({ user, roomId }) => {
         );
 
         if (response) {
-          console.log(response.data.result);
-          setInfoResult(response.data.result);
+          console.log('위 인포 ', response.data);
+          setInfoResult(response.data);
           if (infoResult.tradeMethod === 'DIRECT') {
             setTradeMethod('직접 만나서 거래');
           } else {

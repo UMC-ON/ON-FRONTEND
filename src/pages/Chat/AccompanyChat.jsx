@@ -61,7 +61,14 @@ const AccompanyChat = () => {
 
         if (response) {
           console.log('콘솔', response.data);
-          setChatList(response.data.content[0].chatList);
+          if (
+            response.data.content[0].chatList &&
+            response.data.content[0].chatList.length > 0
+          ) {
+            setChatList(response.data.content[0].chatList);
+          } else {
+            setChatList([]);
+          }
           // 첫 번째 채팅 메시지의 userId와 currentUserId 비교
           if (response.data.content[0].chatUserOne === userInfo.id) {
             setMessageInitiator(true); // 현재 유저가 첫 번째 메시지를 보낸 경우
@@ -158,9 +165,10 @@ const AccompanyChat = () => {
       <ChatHeader
         receiver={senderName}
         pointColor={pointColor}
-        user={receiver}
+        messageInitiator={messageInitiator}
         isAccompany={true}
         onBackClick={handleBackNavigation}
+        roomId={roomId}
       />
       <AccompanyChatInfo
         messageInitiator={messageInitiator}
@@ -205,7 +213,7 @@ const AccompanyChat = () => {
         roomId={roomId}
         currentUserId={userInfo.id}
         addNewMessage={addNewMessage}
-      />{' '}
+      />
     </s.ChatLayout>
   );
 };
