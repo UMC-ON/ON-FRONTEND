@@ -1,7 +1,7 @@
 import useMultiStepForm from '../../hooks/useMultiStepForm';
 import * as s from './SignUpStyled';
 import * as FormElement from './FormElements';
-import groupLogo from '../../assets/images/groupLogo.svg';
+import groupLogo from '../../assets/images/NewLogo.svg';
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../../api/Functions';

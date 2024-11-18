@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import replyBtnImg from '../../assets/images/replyBtnImg.svg';
+import { forwardRef } from 'react';
 
 const Comment = ({
   comment,
