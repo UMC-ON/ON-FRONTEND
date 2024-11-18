@@ -46,19 +46,19 @@ const cities = [
   {
     id: '10000',
     continent: '아프리카',
-    country: '남아프리카 공화국',
+    country: '남아프리카공화국',
     city: '전체',
   },
   {
     id: '10001',
     continent: '아프리카',
-    country: '남아프리카 공화국',
+    country: '남아프리카공화국',
     city: '케이프타운',
   },
   {
     id: '10002',
     continent: '아프리카',
-    country: '남아프리카 공화국',
+    country: '남아프리카공화국',
     city: '요하네스버그',
   },
   //2 북미
@@ -301,7 +301,7 @@ const countries = [
   { id: '009', continent: '아시아', country: '대만' },
   { id: '010', continent: '아시아', country: '홍콩' },
   { id: '011', continent: '아시아', country: '카자흐스탄' },
-  { id: '100', continent: '아프리카', country: '남아프리카 공화국' },
+  { id: '100', continent: '아프리카', country: '남아프리카공화국' },
   { id: '201', continent: '북미', country: '캐나다' },
   { id: '210', continent: '북미', country: '미국' },
   { id: '300', continent: '남미', country: '브라질' },
