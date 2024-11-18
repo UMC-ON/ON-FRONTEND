@@ -20,20 +20,21 @@ export const ModeContainer = styled.section`
   padding-left: 1.5rem;
   box-sizing: border-box;
   align-content: flex-start;
+  z-index: 3;
 `;
 
 export const ModeButton = styled.div`
-  width: 5.0625rem;
+  width: 7rem;
   height: 2.125rem;
+  flex-shrink: 0;
   flex-shrink: 0;
   border-radius: 1.25rem;
   border: 1px solid #c2c7ff;
-  color: #ad99ff;
   text-align: center;
   font-family: Inter;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 2.125rem;
   margin-right: 0.5rem;
 

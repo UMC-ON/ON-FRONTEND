@@ -1,6 +1,5 @@
 import * as s from './SingleChatStyled';
 import { useNavigate } from 'react-router-dom';
-import defaultImg from '../../../assets/images/country_flag/default.svg';
 import { ChatCountryIcon } from '../../CountryIcon';
 import locationImg from '../../../assets/images/location.svg';
 
@@ -29,7 +28,7 @@ const SingleAccompanyChat = ({
         })
       }
     >
-      <ChatCountryIcon country={'독일'} />
+      <ChatCountryIcon country={location} />
       <s.Nickname>{senderName}</s.Nickname>
       <s.Location>
         <img src={locationImg} />
