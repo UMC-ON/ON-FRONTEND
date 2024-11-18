@@ -52,6 +52,8 @@ export const GET_ACCOMPANY_INFO = (roomId) => `/api/v1/chat/company/${roomId}`;
 export const GET_ACCOMPANY_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
 export const GET_TRADE_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
 export const POST_CHAT = (roomId) => `/api/v1/chat/${roomId}/send`;
+export const POST_RECRUIT_COMPLETE = (roomId) =>
+  `/api/v1/chat/${roomId}/recruit`;
 
 //물품거래글
 export const GET_ITEM_LIST = `/api/v1/market-post`;
