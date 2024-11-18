@@ -6,7 +6,7 @@ export const DiaryCalendar = styled.div`
     align-items: center;
     padding: 10px;
     box-sizing: border-box;
-    
+        
     .react-calendar {
         width: 100%;
         max-width: 350px;
@@ -49,7 +49,6 @@ export const DiaryCalendar = styled.div`
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1em;
-        border-bottom: 2px dashed white;
         padding: 0 10px;
     }
 

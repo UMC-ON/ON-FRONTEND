@@ -32,7 +32,7 @@ const CardAccompanyList = ({ color, cards }) => {
           window.location.href = `/accompany/detail/${id}`;
         }
       }}>
-        <Card>
+        <Card $width={cards.length === 1 ? "40vh" : undefined} >
           {card.postImg ? (
             <CardImage src={card.postImg} />
           ) : (
@@ -73,17 +73,22 @@ const CardAccompanyList = ({ color, cards }) => {
               <GreyText>{card.currentRecruitNumber}/{card.totalRecruitNumber}</GreyText>
               <Padding />
               <CardIcon src={placeIcon} />
-              <GreyText>{card.travelArea[0]}</GreyText>
+              {/* <GreyText>{card.travelArea[0]}</GreyText> */}
             
               {card.travelArea[1] ? (
-                <GreyText $left="0px">, {card.travelArea[1]}</GreyText>
-              ) : null}
+                <GreyText $left="0px">{card.travelArea[0]}, {card.travelArea[1]}</GreyText>
+              ) : <GreyText>{card.travelArea[0]}</GreyText>}
             </Left2>
           </GreyCard>
         </Card>
       </CardContainer>
     ))
-  ) : <></>}
+  ) : 
+    <LeftContainer>
+      <LeftSpace/>
+      <SubText>아무것도 없습니다.</SubText>
+    </LeftContainer>
+            }
 </CardListContainer>
   );
 };
@@ -92,6 +97,21 @@ export default CardAccompanyList;
 
 const SmallSpace = styled.div`
   margin-top: 1vh;
+`;
+
+const LeftContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const LeftSpace = styled.div`
+  margin-left: 0.65rem;
+`;
+
+const SubText = styled.div`
+  color: #5C5C5C;
+  font-family: 'Inter-Bold';
+  font-size: 1em;
 `;
 
 const Space = styled.div`
@@ -121,8 +141,9 @@ const CardListContainer = styled.div`
 
 const CardContainer = styled.div`
   display: inline-block; 
-  margin: 0 0.8vh;
+  margin: 0;
   min-width: 22vh;
+  margin-right: 18.5vh;
 `;
 
 const Card = styled.div`
@@ -134,7 +155,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 42vh;
+  width: ${props => props.$width || "38vh"};
   height: 34vh; 
 `;
 
@@ -194,6 +215,12 @@ const GreyText = styled.p`
   padding-bottom: 9px;
   color: #5c5c5c;
   margin-top: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 20%;
+  padding-right: 20px;
 `;
 
 const GreyCard = styled.div`

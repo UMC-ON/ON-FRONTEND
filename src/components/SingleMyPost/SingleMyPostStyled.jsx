@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const PostWrapper = styled.div`
   height: 8.68rem;
+  width: 100%;
   border: 0.5px solid transparent;
   border-image: linear-gradient(90deg, #ffffff 0%, #d9d9d9 50%, #fff 100%);
   border-image-slice: 1;
@@ -13,7 +14,7 @@ export const PostWrapper = styled.div`
 export const Delete = styled.span`
   position: absolute;
   bottom: 0.31rem;
-  right: 1.81rem;
+  right: 2rem;
   color: #7a7a7a;
   font-family: Inter;
   font-size: 0.5rem;
@@ -21,6 +22,7 @@ export const Delete = styled.span`
   font-weight: 400;
   line-height: 150%; /* 0.75rem */
   text-decoration-line: underline;
+  z-index: 3;
 `;
 export const PostContainer = styled.div`
   width: 100%;
@@ -33,7 +35,10 @@ export const PostContainer = styled.div`
     'content img'
     'info img';
   grid-template-columns: 1fr auto;
-  gap: 0.6rem;
+  grid-template-rows: auto 3.55rem 1rem;
+
+  row-gap: 0.45rem;
+  column-gap: 0.35rem;
   justify-content: space-between;
   align-content: center;
   align-items: center;
@@ -45,6 +50,7 @@ export const Top = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 `;
 
 export const Title = styled.span`
@@ -97,11 +103,11 @@ export const ContentText = styled.span`
 // `;
 export const ContentImg = styled.img`
   grid-area: img;
-  display: ${(props) => (props.showimg ? 'inline' : 'none')};
-  width: 4rem;
-  height: 4rem;
-  border-radius: 1rem;
+  display: inline;
+  width: 5rem;
+  height: 5rem;
   align-self: start;
+  object-fit: cover;
 `;
 
 export const Info = styled.div`
@@ -109,12 +115,13 @@ export const Info = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  align-self: end;
   span {
     font-family: Inter;
     font-size: 0.5rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 150%; /* 0.75rem */
+    line-height: 150%;
   }
 `;
 
@@ -125,6 +132,17 @@ export const Nickname = styled.span`
   font-style: normal;
   font-weight: 400;
   line-height: 150%;
+`;
+
+export const LastText = styled.div`
+  margin-top: 0.81rem;
+  color: #b8b8b8;
+  text-align: center;
+  font-family: Inter;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
 
 export const VerifiedSvg = () => {

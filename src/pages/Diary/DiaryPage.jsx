@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
@@ -33,6 +32,7 @@ const Diary = () => {
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
+  console.log(userInfo);
 
 
   useEffect(() => {
@@ -144,7 +144,7 @@ const Diary = () => {
           </DDay>
         </Information><br/>
         <div style={{height: "100px", marginTop: "30px"}}>
-          <SubText>나의 교환교</SubText>
+          <SubText>나의 {userInfo?.dispatchType === "DISPATCHED" ? '교환교' : '파견교'}</SubText>
           <SchoolContainer>
             <BigText>{userInfo.country},</BigText>
             <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>{userInfo.dispatchedUniversity}</BigText>
@@ -254,7 +254,6 @@ const DatePickerStyled = styled(DatePicker)`
     background-color: #3E73B2;
     color: white;
   }
-  
 `;
 
 
@@ -274,7 +273,10 @@ const DDay = styled.div`
   border: 5px solid #DCDFFF;
   z-index: 1;
   background-color: white;
+  }
 `;
+
+
 
 
 
@@ -287,7 +289,6 @@ const DDayText = styled.div`
   background-clip: text;
   text-fill-color: transparent;
 `;
-
 
 const Today = styled.div`
   background: ${props => props.theme.lightPurple};

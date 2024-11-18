@@ -341,7 +341,9 @@ const WriteButton = styled.button`
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
   color: white;
   text-align: center;
+  font-family: Inter;
   font-size: 16px;
+  font-style: normal;
   font-weight: 600;
   line-height: normal;
   z-index: 2;

@@ -22,7 +22,7 @@ export const BottomTabLayout = styled.div`
 export const IconContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 40px;
+  width: 50px;
   height: 40px;
   align-items: center;
   justify-content: space-between;

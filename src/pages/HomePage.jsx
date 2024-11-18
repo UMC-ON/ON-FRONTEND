@@ -7,17 +7,113 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import CardList from '../components/CardList';
 
-import schoolIcon from '../assets/images/new_school_icon.svg';
-import migrationIcon from '../assets/images/new_immigration_icon.svg';
-import companyIcon from '../assets/images/new_accompany_icon.svg';
-import informationIcon from '../assets/images/new_info_icon.svg';
-import writeIcon from '../assets/images/new_free_icon.svg';
-import diaryIcon from '../assets/images/new_diary_icon.svg';
+// import schoolIcon from '../assets/images/new_school_icon.svg';
+// import migrationIcon from '../assets/images/new_immigration_icon.svg';
+// import companyIcon from '../assets/images/new_accompany_icon.svg';
+// import informationIcon from '../assets/images/new_info_icon.svg';
+// import writeIcon from '../assets/images/new_free_icon.svg';
+// import diaryIcon from '../assets/images/new_diary_icon.svg';
 import bannerimg from '../assets/images/home_banner.svg';
 import londonImg from '../assets/images/london_gallery.svg';
 import rightIcon from '../assets/images/right_arrow.svg';
 import marketImg from '../assets/images/borough_market.svg';
 import sliderImage from '../assets/images/slider_image.svg';
+
+const diaryIconData = `<svg width="91" height="186" viewBox="0 0 91 186" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="90.25" y="185.25" width="89.5" height="184.5" rx="10.25" transform="rotate(-180 90.25 185.25)" fill="url(#paint0_linear_3826_2624)" stroke="#D9D9D9" stroke-width="0.5"/>
+<circle cx="45.5" cy="140.5" r="21.5" fill="url(#paint1_linear_3826_2624)" fill-opacity="0.3"/>
+<path d="M78 148V173H53" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M70.8261 141C71.4744 141 72 141.526 72 142.174V166.826C72 167.474 71.4744 168 70.8261 168H46.1739C45.5256 168 45 167.474 45 166.826V142.174C45 141.526 45.5256 141 46.1739 141H70.8261ZM66 148C66.5523 148 67 148.448 67 149C67 149.552 66.5523 150 66 150H51C50.4477 150 50 149.552 50 149C50 148.448 50.4477 148 51 148H66ZM67 154C67 153.448 66.5523 153 66 153H51C50.4477 153 50 153.448 50 154C50 154.552 50.4477 155 51 155H66C66.5523 155 67 154.552 67 154ZM66 158C66.5523 158 67 158.448 67 159C67 159.552 66.5523 160 66 160H56C55.4477 160 55 159.552 55 159C55 158.448 55.4477 158 56 158H66Z" fill="white"/>
+<defs>
+<linearGradient id="paint0_linear_3826_2624" x1="90" y1="185" x2="234.251" y2="254.774" gradientUnits="userSpaceOnUse">
+<stop stop-color="#C2C7FF"/>
+<stop offset="1" stop-color="#AD99FF"/>
+</linearGradient>
+<linearGradient id="paint1_linear_3826_2624" x1="24" y1="119" x2="67" y2="162" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</linearGradient>
+</defs>
+</svg>`;
+const schoolIconData = `<svg width="192" height="87" viewBox="0 0 192 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.75" y="86.25" width="85.5" height="190.5" rx="10.25" transform="rotate(-90 0.75 86.25)" fill="url(#paint0_linear_3826_2575)" stroke="#D9D9D9" stroke-width="0.5"/>
+<path d="M134 60C134 58.8954 134.895 58 136 58H139C139.552 58 140 58.4477 140 59V71C140 71.5523 139.552 72 139 72H136C134.895 72 134 71.1046 134 70V60Z" fill="white"/>
+<path d="M173 60C173 58.8954 172.105 58 171 58H168C167.448 58 167 58.4477 167 59V71C167 71.5523 167.448 72 168 72H171C172.105 72 173 71.1046 173 70V60Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M153 34H159C159.553 34 160 34.4477 160 35V37C160 37.5523 159.553 38 159 38H154V40.8829L167.584 46.6181C168.347 46.9404 168.704 47.8203 168.382 48.5835C168.06 49.3466 167.18 49.7041 166.417 49.3819L165 48.7838V70C165 71.1046 164.105 72 163 72H160C158.896 72 158 71.1046 158 70V65C158 63.8954 157.38 63 156.616 63H150.385C149.62 63 149 63.8954 149 65V70C149 71.1046 148.105 72 147 72H144C142.896 72 142 71.1046 142 70V48.7186L140.637 49.358C139.887 49.7098 138.994 49.3871 138.642 48.6371C138.291 47.8871 138.613 46.9939 139.363 46.642L152 40.7135V35C152 34.4477 152.448 34 153 34ZM153.5 58C156.538 58 159 55.5376 159 52.5C159 49.4624 156.538 47 153.5 47C150.463 47 148 49.4624 148 52.5C148 55.5376 150.463 58 153.5 58Z" fill="white"/>
+<circle cx="141.5" cy="40.5" r="21.5" fill="url(#paint1_linear_3826_2575)" fill-opacity="0.3"/>
+<defs>
+<linearGradient id="paint0_linear_3826_2575" x1="1" y1="86" x2="142.65" y2="149.37" gradientUnits="userSpaceOnUse">
+<stop stop-color="#C2C7FF"/>
+<stop offset="1" stop-color="#AD99FF"/>
+</linearGradient>
+<linearGradient id="paint1_linear_3826_2575" x1="120" y1="19" x2="163" y2="62" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</linearGradient>
+</defs>
+</svg>`;
+const migrationIconData = `<svg width="191" height="87" viewBox="0 0 191 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.75" y="86.25" width="85.5" height="189.5" rx="10.25" transform="rotate(-90 0.75 86.25)" fill="url(#paint0_linear_3826_2588)" stroke="#D9D9D9" stroke-width="0.5"/>
+<path d="M140 44C140 43.4477 139.552 43 139 43H137C136.448 43 136 43.4477 136 44V68C136 68.5523 136.448 69 137 69H172C172.552 69 173 68.5523 173 68V44C173 43.4477 172.552 43 172 43H170C169.448 43 169 43.4477 169 44V64C169 64.5523 168.552 65 168 65H141C140.448 65 140 64.5523 140 64V44Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M142 40C142 39.4477 142.448 39 143 39H166C166.552 39 167 39.4477 167 40V46C167 46.5523 166.552 47 166 47H143C142.448 47 142 46.5523 142 46V40ZM148 43C148 44.1046 147.105 45 146 45C144.895 45 144 44.1046 144 43C144 41.8954 144.895 41 146 41C147.105 41 148 41.8954 148 43ZM151 45C152.105 45 153 44.1046 153 43C153 41.8954 152.105 41 151 41C149.895 41 149 41.8954 149 43C149 44.1046 149.895 45 151 45Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M143 49C142.448 49 142 49.4477 142 50V62C142 62.5523 142.448 63 143 63H166C166.552 63 167 62.5523 167 62V50C167 49.4477 166.552 49 166 49H143ZM146 51.5C145.448 51.5 145 51.9477 145 52.5C145 53.0523 145.448 53.5 146 53.5H152.5C153.052 53.5 153.5 53.0523 153.5 52.5C153.5 51.9477 153.052 51.5 152.5 51.5H146ZM145 57C145 56.4477 145.448 56 146 56H152.5C153.052 56 153.5 56.4477 153.5 57C153.5 57.5523 153.052 58 152.5 58H146C145.448 58 145 57.5523 145 57ZM160 59C162.209 59 164 57.2091 164 55C164 52.7909 162.209 51 160 51C157.791 51 156 52.7909 156 55C156 57.2091 157.791 59 160 59Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M150 71C149.448 71 149 71.4477 149 72V73H145C144.448 73 144 73.4477 144 74C144 74.5523 144.448 75 145 75H164C164.552 75 165 74.5523 165 74C165 73.4477 164.552 73 164 73H160V72C160 71.4477 159.552 71 159 71H150Z" fill="white"/>
+<circle cx="141.5" cy="43.5" r="21.5" fill="url(#paint1_linear_3826_2588)" fill-opacity="0.3"/>
+<defs>
+<linearGradient id="paint0_linear_3826_2588" x1="1" y1="86" x2="142.4" y2="149.593" gradientUnits="userSpaceOnUse">
+<stop stop-color="#C2C7FF"/>
+<stop offset="1" stop-color="#AD99FF"/>
+</linearGradient>
+<linearGradient id="paint1_linear_3826_2588" x1="120" y1="22" x2="163" y2="65" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</linearGradient>
+</defs>
+</svg>
+`;
+const companyIconData = `<svg width="91" height="91" viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.75" y="0.75" width="89.5" height="89.5" rx="10.25" fill="url(#paint0_linear_3826_2623)"/>
+<rect x="0.75" y="0.75" width="89.5" height="89.5" rx="10.25" stroke="#D9D9D9" stroke-width="0.5"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M67.8333 51.6667C65.6242 51.6667 63.8333 53.4576 63.8333 55.6667V58.7542H61.8182C60.814 58.7542 60 59.4515 60 60.3116V79.0003C60 79.8605 60.814 80.5577 61.8182 80.5577L62.5 80.5577C62.5 81.3605 63.2462 82.0113 64.1667 82.0113C65.0871 82.0113 65.8333 81.3605 65.8333 80.5577H74.1667C74.1667 81.3605 74.9129 82.0113 75.8333 82.0113C76.7538 82.0113 77.5 81.3605 77.5 80.5577L78.1818 80.5577C79.186 80.5577 80 79.8605 80 79.0003V60.3116C80 59.4515 79.186 58.7542 78.1818 58.7542H76.1667V55.6667C76.1667 53.4576 74.3758 51.6667 72.1667 51.6667H67.8333ZM72.1667 58.7542V55.6667L67.8333 55.6667V58.7542H72.1667ZM75 61.7516C75.5523 61.7516 76 62.1993 76 62.7516V76.9239C76 77.4762 75.5523 77.9239 75 77.9239C74.4477 77.9239 74 77.4762 74 76.9239V62.7516C74 62.1993 74.4477 61.7516 75 61.7516ZM66 62.7516C66 62.1993 65.5523 61.7516 65 61.7516C64.4477 61.7516 64 62.1993 64 62.7516V76.9239C64 77.4762 64.4477 77.9239 65 77.9239C65.5523 77.9239 66 77.4762 66 76.9239V62.7516ZM70 61.7516C70.5523 61.7516 71 62.1993 71 62.7516V76.9239C71 77.4762 70.5523 77.9239 70 77.9239C69.4477 77.9239 69 77.4762 69 76.9239V62.7516C69 62.1993 69.4477 61.7516 70 61.7516Z" fill="white"/>
+<defs>
+<linearGradient id="paint0_linear_3826_2623" x1="1" y1="1" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D6EBFF"/>
+<stop offset="1" stop-color="#C2C7FF"/>
+</linearGradient>
+</defs>
+</svg>
+`;
+const informationIconData = `<svg width="91" height="91" viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.75" y="0.75" width="89.5" height="89.5" rx="10.25" fill="url(#paint0_linear_3826_2621)"/>
+<rect x="0.75" y="0.75" width="89.5" height="89.5" rx="10.25" stroke="#D9D9D9" stroke-width="0.5"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M54.5 55C53.6716 55 53 55.7289 53 56.6281V73.7226C53 74.6217 53.6716 75.3506 54.5 75.3506H60.9873C61.298 75.3506 61.5819 75.5314 61.7201 75.8172L63.5172 79.5335C63.818 80.1555 64.682 80.1555 64.9828 79.5335L66.7799 75.8172C66.9181 75.5314 67.202 75.3506 67.5127 75.3506H78.5C79.3284 75.3506 80 74.6217 80 73.7226V56.6281C80 55.7289 79.3284 55 78.5 55H54.5ZM66.0909 62.5626C66.9946 62.5626 67.7273 63.315 67.7273 64.2431V70.1251C67.7273 71.0533 66.9946 71.8057 66.0909 71.8057C65.1872 71.8057 64.4545 71.0533 64.4545 70.1251V64.2431C64.4545 63.315 65.1872 62.5626 66.0909 62.5626ZM66.0909 61.7223C66.9946 61.7223 67.7273 60.9699 67.7273 60.0417C67.7273 59.1136 66.9946 58.3611 66.0909 58.3611C65.1872 58.3611 64.4545 59.1136 64.4545 60.0417C64.4545 60.9699 65.1872 61.7223 66.0909 61.7223Z" fill="white"/>
+<defs>
+<linearGradient id="paint0_linear_3826_2621" x1="1" y1="1" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D6EBFF"/>
+<stop offset="1" stop-color="#C2C7FF"/>
+</linearGradient>
+</defs>
+</svg>`;
+const writeIconData = `<svg width="91" height="91" viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.75" y="0.75" width="89.5" height="89.5" rx="10.25" fill="url(#paint0_linear_3826_2622)"/>
+<rect x="0.75" y="0.75" width="89.5" height="89.5" rx="10.25" stroke="#D9D9D9" stroke-width="0.5"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M74.4465 54.1213C73.2749 52.9497 71.3754 52.9497 70.2039 54.1213L54.0126 70.3126C53.5373 70.7879 53.2354 71.409 53.1553 72.0765L52.5358 77.2395C52.3041 79.1697 53.9415 80.8072 55.8718 80.5755L61.0348 79.956C61.7022 79.8759 62.3234 79.574 62.7987 79.0986L78.99 62.9074C80.1615 61.7358 80.1615 59.8363 78.99 58.6648L74.4465 54.1213ZM65.6604 61.4932L55.4268 71.7268C55.2684 71.8852 55.1678 72.0923 55.1411 72.3147L54.5215 77.4777C54.4443 78.1212 54.9901 78.667 55.6335 78.5898L60.7965 77.9702C61.019 77.9435 61.2261 77.8429 61.3845 77.6844L71.6181 67.4508L65.6604 61.4932Z" fill="white"/>
+<defs>
+<linearGradient id="paint0_linear_3826_2622" x1="1" y1="1" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D6EBFF"/>
+<stop offset="1" stop-color="#C2C7FF"/>
+</linearGradient>
+</defs>
+</svg>
+`;
+
+// 각 SVG 데이터를 인코딩
+const encodedDiaryIcon = encodeURIComponent(diaryIconData).replace(/'/g, "%27").replace(/"/g, "%22");
+const encodedSchoolIcon = encodeURIComponent(schoolIconData).replace(/'/g, "%27").replace(/"/g, "%22");
+const encodedMigrationIcon = encodeURIComponent(migrationIconData).replace(/'/g, "%27").replace(/"/g, "%22");
+const encodedCompanyIcon = encodeURIComponent(companyIconData).replace(/'/g, "%27").replace(/"/g, "%22");
+const encodedInformationIcon = encodeURIComponent(informationIconData).replace(/'/g, "%27").replace(/"/g, "%22");
+const encodedWriteIcon = encodeURIComponent(writeIconData).replace(/'/g, "%27").replace(/"/g, "%22");
 
 
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
@@ -257,7 +353,7 @@ function HomePage() {
                 {card.country?
                 <Button onClick={goToMigration}>
                     <Icon $iconType='migrationIcon' $ratio='2.1 / 1'>
-                      <WhiteText>영국 이민국</WhiteText>
+                      <WhiteText>{card.country} 이민국</WhiteText>
                     </Icon>
                 </Button>
                 :
@@ -267,14 +363,14 @@ function HomePage() {
                     </Icon>
                 </Button>
                 }
-                <Button onClick={goToInfoPost}>
+                <Button onClick={goToInfoCommunity}>
                   <Icon $iconType='informationIcon' $ratio='1 / 1'>
-                  <SmallWhiteText>정보<br/>글쓰기</SmallWhiteText>
+                  <SmallWhiteText>정보<br/>게시판</SmallWhiteText>
                   </Icon>
                 </Button>
-                <Button onClick={goToGeneralPost}>
+                <Button onClick={goToGeneralCommunity}>
                   <Icon $iconType='writeIcon' $ratio='1 / 1'>
-                    <SmallWhiteText>자유<br/>글쓰기</SmallWhiteText>
+                    <SmallWhiteText>자유<br/>게시판</SmallWhiteText>
                   </Icon>
                 </Button>
                 <Button onClick={goToAccompany}>
@@ -285,8 +381,10 @@ function HomePage() {
             </Container>
             ))}
            
-           <Space/>
-           <LeftContainer>
+           {/* <Space/> */}
+
+           
+           {/* <LeftContainer>
                   <BigText spacing="1vh">나를 위한 </BigText>
                   <BigText color="#3E73B2">꿀팁 정보</BigText>
            </LeftContainer>
@@ -302,7 +400,7 @@ function HomePage() {
                 {images.map((_, index) => (
                 <Dot key={index} active={index === currentSlide} onClick={() => goToSlide(index)} />
                 ))}
-            </DotContainer>
+            </DotContainer> */}
           </BigContainer>
           
           <SmallSpace/>
@@ -358,20 +456,29 @@ function HomePage() {
           <Space></Space>
           <Space></Space>
 
-          {userData.map((card, index) => (
-            card.country && accompanyData.length > 0 ? (
-              <FlexContainer onClick={goToAccompany} key={index}>
-                <MiddleText spacing="1vh">내 주변 동행글</MiddleText>
-                <RightIcon src={rightIcon} />
-              </FlexContainer>
-            ) : null
-          ))}
+          <FlexContainer onClick={goToAccompany}>
+            <MiddleText spacing="1vh">내 주변 동행글</MiddleText>
+            <RightIcon src={rightIcon} />
+          </FlexContainer>
           <SmallSpace/>
 
           <FixContainer>
-            <CardAccompanyList cards={accompanyData}></CardAccompanyList>
-            <OverlayBox/>
-          </FixContainer>
+                <CardAccompanyList cards={accompanyData}></CardAccompanyList>
+                <OverlayBox/>
+              </FixContainer>
+
+          {/* {userData.map((card, index) => (
+            card.country && accompanyData.length > 0 ? (
+              <FixContainer key={index}>
+                <CardAccompanyList cards={accompanyData}></CardAccompanyList>
+                <OverlayBox/>
+              </FixContainer>
+            ) : 
+            <LeftContainer>
+              <LeftSpace/>
+              <SubText>아무것도 없습니다.</SubText>
+            </LeftContainer>
+          ))} */}
           <BigSpace/>
 
 
@@ -381,6 +488,11 @@ function HomePage() {
 }
 
 export default HomePage;
+
+const LeftSpace = styled.div`
+  margin-left: 1.5rem;
+  padding: 5px; 
+`;
 
 const FlexContainer = styled.div`
   margin-top: 1.5rem;
@@ -460,6 +572,7 @@ const BigText = styled.div`
   font-family: 'Inter-Regular';
   font-size: 1.5em;
   margin-bottom: 2vh;
+  flex-shrink: 0;
 `;
 
 const MiddleText = styled.div`
@@ -544,24 +657,24 @@ const Button = styled.button`
 const Icon = styled.div`
   width: 100%; 
   aspect-ratio: ${props => props.$ratio || '1 / 2'};
-  background-image: url(${(props) => {
+  background-image: ${(props) => {
     switch (props.$iconType) {
       case 'diaryIcon':
-        return diaryIcon;
+        return `url('data:image/svg+xml,${encodedDiaryIcon}')`;
       case 'schoolIcon':
-        return schoolIcon;
+        return `url('data:image/svg+xml,${encodedSchoolIcon}')`;
       case 'migrationIcon':
-        return migrationIcon;
+        return `url('data:image/svg+xml,${encodedMigrationIcon}')`;
       case 'informationIcon':
-        return informationIcon;
+        return `url('data:image/svg+xml,${encodedInformationIcon}')`;
       case 'writeIcon':
-        return writeIcon;
+        return `url('data:image/svg+xml,${encodedWriteIcon}')`;
       case 'companyIcon':
-        return companyIcon;
+        return `url('data:image/svg+xml,${encodedCompanyIcon}')`;
       default:
         return '';
     }
-  }});
+  }};
   background-size: contain; /* Ensure the image fits within the div */
   background-repeat: no-repeat; /* Prevent repeating of the image */
   background-position: center; /* Center the image */

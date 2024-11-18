@@ -39,7 +39,7 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
   };
 
   return (
-    <DDayCalendar>
+    <>
       <DatePickerWrapper>
         <DatePicker
           showPopperArrow={false}
@@ -70,11 +70,12 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
           onClickOutside={() => setCalendarOpen(false)}
         />
       </DatePickerWrapper>
-    </DDayCalendar>
+    </>
   );
 };
 
 export default DDayCalendarComponent;
+
 
 const DDayCalendar = styled.div`
   display: flex;
@@ -85,10 +86,11 @@ const DDayCalendar = styled.div`
 `;
 
 const DatePickerWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+
+  position: absolute;
+  left: 5%;
+  top: 45%;
+
   z-index: 2;
 
   .inputDate::placeholder {
@@ -106,6 +108,7 @@ const DatePickerWrapper = styled.div`
 `;
 
 const HeaderContainer = styled.div`
+
   display: flex;
   justify-content: center;
   align-items: center;

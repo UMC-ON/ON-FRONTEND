@@ -2,18 +2,14 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import * as s from './ChatListStyled';
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
 import SingleAccompanyChat from '../../components/ChatList/SingleChat/SingleAccompanyChat';
 import SingleTradeChat from '../../components/ChatList/SingleChat/SingleTradeChat';
 import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
-import img from '../../assets/images/country_flag/000.svg';
 import useFetchChatList from '../../hooks/useFetchChatList';
-import { showDate } from '../../components/Common/InfoExp';
 
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
-import { getData } from '../../api/Functions';
-
+//test
 const ChatList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentMode, setCurrentMode] = useState('accompany');
@@ -86,7 +82,7 @@ const ChatList = () => {
                       : '채팅을 시작해보새요!'
                   }
                   senderName={data.senderName}
-                  location={data.location}
+                  location={data.country}
                 />
                 <s.Line />
               </s.ChatListWrapper>
@@ -106,19 +102,15 @@ const ChatList = () => {
               <s.ChatListWrapper>
                 <SingleTradeChat
                   key={data.roomId}
+                  nickName={data.senderName}
                   roomId={data.roomId}
                   img={data.profileImg}
-                  time={
-                    data.lastChatTime !== null
-                      ? showDate(data.lastChatTime)
-                      : ''
-                  }
+                  time={data.lastChatTime !== null ? data.lastChatTime : ''}
                   message={
                     data.lastMessage !== null
                       ? data.lastMessage
                       : '새로운 채팅을 시작해보새요!'
                   }
-                  senderName={data.senderName}
                 />
                 <s.Line />
               </s.ChatListWrapper>

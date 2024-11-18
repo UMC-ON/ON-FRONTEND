@@ -1,6 +1,8 @@
 import * as s from './DetailPageStyled.jsx';
 import styled from 'styled-components';
-import commentImg from '../../assets/images/commentImg.svg';
+import profilePic from '../../assets/images/profilepic.svg';
+import PageHeader from '../../components/PageHeader/PageHeader.jsx';
+import commentImg from '../../assets/images/replyBtnImg.svg';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
 import { showDispatchedInfo } from '../../components/Common/InfoExp.jsx';
@@ -34,7 +36,48 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const [isLoading, setLoading] = useState(false);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const openedImg = useRef(null);
+  const currentPage = useRef(0);
+  const totalPage = useRef(0);
+  const newCommentLoading = useRef(0);
+  const myCommentId = useRef(null);
+
+  const fetchCommentData = async (order = 'DESC') => {
+    if (currentPage.current == 0) {
+      //최초 로딩 시에는 슝 로딩 화면
+      setLoading(true);
+    } else {
+      //댓글 로딩마다 슝 보여줄 순 없음
+      newCommentLoading.current = true;
+    }
+    const response = await getData(
+      GET_COMMENT_OF(currentPost_id),
+      {
+        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+      },
+      { page: currentPage.current, size: 20, sort: 'ASC' },
+    );
+    if (response) {
+      totalPage.current = response.data.totalPages;
+      if (currentPage.current > 0) {
+        //추가 댓글 로딩 시 기존 댓글+새 댓글로 commentList 설정
+        setCommentList((commentList) => [
+          ...commentList,
+          ...response.data.content,
+        ]);
+        setCommentCount(response.data.totalElements); //포스트 정보는 새로고침 이전에 갱신될 일이 없으니 댓글 데이터로부터 총 개수를 초기화해줘야한다.
+        newCommentLoading.current = false;
+        console.log('내용 존재');
+      } else {
+        //최초 로딩 시 기본 실행
+        setCommentList(response.data.content);
+        setCommentCount(response.data.totalElements);
+        //setLoading(false);는 함수 외부에서 실행시켜줌(useEffect에서)
+        console.log('이거 실행');
+      }
+    }
+  };
   useEffect(() => {
+    //최초 로딩 시에만 포스트 정보를 불러오는 게 좋을 듯!
     if (userInfo) {
       const fetchPostData = async () => {
         setLoading(true);
@@ -52,25 +95,11 @@ const DetailPage = ({ color1, color2, boardType }) => {
         }
       };
 
-      const fetchCommentData = async () => {
-        const response = await getData(GET_COMMENT_OF(currentPost_id), {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-        });
-        if (response) {
-          setCommentList(response.data.content);
-        }
-        setLoading(false);
-      };
-      let res = fetchPostData();
+      fetchPostData(); //포스트 먼저
       fetchCommentData();
+      setLoading(false);
     }
   }, [userInfo]);
-  useEffect(() => {
-    if (currentPost && commentList && userInfo) {
-      setLoading(false);
-      setCommentCount(currentPost.commentCount);
-    }
-  }, [currentPost, userInfo, commentList]);
 
   /// 여기서부터 메인 변수들 ///
   const [content, setContent] = useState('');
@@ -89,7 +118,42 @@ const DetailPage = ({ color1, color2, boardType }) => {
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
-  const nav = useNavigate();
+
+  const onScroll = async () => {
+    if (
+      window.scrollY + document.documentElement.clientHeight >
+      document.documentElement.scrollHeight - 50
+    ) {
+      if (
+        !isLoading &&
+        !newCommentLoading.current &&
+        currentPage.current < totalPage.current - 1
+      ) {
+        currentPage.current++;
+        console.log(currentPage.current);
+        console.log(totalPage.current);
+        console.log(isLoading);
+        await fetchCommentData();
+        console.log(isLoading);
+        newCommentLoading.current = false;
+      }
+    }
+  };
+
+  useEffect(() => {
+    let throttleCheck = false;
+    if (!throttleCheck) {
+      throttleCheck = setTimeout(() => {
+        onScroll();
+        throttleCheck = false;
+      }, 10000);
+    }
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      clearTimeout(throttleCheck);
+    };
+  }, []);
 
   const onCommentSelection = (e) => {
     if (selectedComment === null) {
@@ -114,33 +178,42 @@ const DetailPage = ({ color1, color2, boardType }) => {
       commentEditor.current.focus();
       return;
     }
-    if (selectedComment === null) {
-      //댓글일 경우
-      if (logInInfo.isAuthenticated) {
+    if (logInInfo.isAuthenticated) {
+      //로그인 여부부터 확인
+      if (selectedComment === null) {
+        //댓글일 경우
         addComment(WRITE_COMMENT_ON(currentPost_id));
       } else {
-        return alert('로그인이 필요합니다.');
-      }
-    } else {
-      //답글일 경우
-      if (logInInfo.isAuthenticated) {
+        //답글일 경우
         console.log(selectedComment.commentId);
         addComment(WRITE_REPLY_ON(selectedComment.commentId));
-      } else {
-        return alert('로그인이 필요합니다.');
       }
+    } else {
+      return alert('로그인이 필요합니다.');
     }
+
     setContent('');
     setSelectedComment(null);
     replyToText.current = null;
     const textarea = document.querySelector('.commentEditor');
     textarea.style.height = 'auto';
+    console.log(myCommentId.current);
+
+    const element = document.getElementById(`comment${myCommentId.current}`);
+    console.log(element);
+    if (myCommentId.current) {
+      element.scrollIntoView('smooth');
+      console.log(element);
+    }
+    window.scrollTo(0, 0);
+    myCommentId.current = null;
   };
 
   const addComment = async (url) => {
+    //댓글 형식 제작 함수
     const comment = {
       id: userInfo.id,
-      contents: content,
+      contents: content + ' ',
       anonymous: isAnonymous.current,
     };
     const jsonData = JSON.stringify(comment);
@@ -148,13 +221,14 @@ const DetailPage = ({ color1, color2, boardType }) => {
     const res = await postData(url, jsonData, {
       Authorization: `Bearer ${localStorage.getItem('AToken')}`,
     });
-    console.log('res는');
-    console.log(res);
+    console.log(res); //지금 내가 등록한 댓글 정보
     const commentFE = res.data;
+    myCommentId.current = res.data.commentId;
     setCommentList([...commentList, commentFE]);
     //답글일 경우 선택된 댓글의 replyCount 1증가
     if (selectedComment) {
       selectedComment.replyCount++;
+      myCommentId.current = res.data.replyId;
     }
 
     setCommentCount((prev) => prev + 1);
@@ -162,7 +236,8 @@ const DetailPage = ({ color1, color2, boardType }) => {
 
     //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     //자식에게 ref전달 알아보기
-    location.reload(true); // 너무 느려지는데?ㅜㅜ
+    fetchCommentData(); //등록 후 바로 다시 댓글 정보 로딩한다. . . 그런데 어디서부터 어디까지?..
+    setLoading(false);
   };
 
   if (isLoading) {
@@ -172,37 +247,12 @@ const DetailPage = ({ color1, color2, boardType }) => {
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
   if (userInfo && currentPost && commentList) {
-    //return <div>{currentPost.postId}</div>;
-
     return (
       <div ref={mobileViewRef}>
-        <s.PostInfoHeader>
-          <s.BackButton onClick={() => nav(-1)}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="10"
-              height="16"
-              viewBox="0 0 10 16"
-              fill="none"
-              positions="fixed"
-            >
-              <path
-                d="M8 2L1.8858 7.24074C1.42019 7.63984 1.42019 8.36016 1.8858 8.75926L8 14"
-                stroke="#7A7A7A"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-            </svg>
-          </s.BackButton>
-          <s.PostInfo>
-            <s.InfoLabel>
-              {currentPost.anonymous ? '익명' : currentPost.writerInfo.nickname}
-            </s.InfoLabel>
-            <s.InfoLabel>
-              {new Date(currentPost.createdAt).toLocaleString('ko-KR')}
-            </s.InfoLabel>
-          </s.PostInfo>
-        </s.PostInfoHeader>
+        <PageHeader
+          pageName={boardType === 'INFO' ? '정보 게시판' : '자유 게시판'}
+          color={boardType === 'INFO' ? '#3E73B2' : '#6458BF'}
+        ></PageHeader>
         <s.DetailPageLayout>
           <s.Title color={titleColor}>
             {currentPost.title}
@@ -211,6 +261,20 @@ const DetailPage = ({ color1, color2, boardType }) => {
                 ? '파견교 비공개'
                 : `${showDispatchedInfo(currentPost.writerInfo, 'BOTH')}`}
             </s.DispatchedInfo>
+            <s.InfoLabel>
+              <img
+                src={profilePic}
+                style={{ padding: '0 0.5rem 0 0' }}
+              />
+              <s.NameInfo>
+                {currentPost.anonymous
+                  ? '익명'
+                  : currentPost.writerInfo.nickname}
+              </s.NameInfo>
+              <s.DateInfo>
+                {'· ' + new Date(currentPost.createdAt).toLocaleString('ko-KR')}
+              </s.DateInfo>
+            </s.InfoLabel>
           </s.Title>
           <s.Content>
             {currentPost.content}
@@ -230,7 +294,10 @@ const DetailPage = ({ color1, color2, boardType }) => {
             </s.ImgSection>
           </s.Content>
           <s.CommentNumSection>
-            <img src={commentImg} />
+            <img
+              src={commentImg}
+              style={{ width: '0.96rem', height: '1.04rem' }}
+            />
             {commentCount}
           </s.CommentNumSection>
           <s.CommentSection ref={scrollRef}>
@@ -238,9 +305,11 @@ const DetailPage = ({ color1, color2, boardType }) => {
               let commentElement;
               if (comment.replyId === null) {
                 //map 돌 때 comment만 돌고있음
+
                 commentElement = (
                   <Comment
                     key={index}
+                    id={`comment${comment.commentId}`}
                     comment={comment}
                     onCommentClick={onCommentSelection}
                     clickedComment={selectedComment}
@@ -265,6 +334,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
                       {commentElement}
                       {replyList.map((reply, index) => (
                         <Reply
+                          id={`comment${reply.replyId}`}
                           reply={reply}
                           key={index}
                           postWriter_id={currentPost.writerInfo.id}
@@ -312,16 +382,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
               onInput={handleResizeHeight}
               rows={1}
               onChange={(e) => setContent(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && e.shiftKey) {
-                  return;
-                } else if (e.key === 'Enter') {
-                  onCommentSubmit();
-                  e.preventDefault();
-                } else {
-                  return;
-                }
-              }}
               value={content}
               ref={commentEditor}
               disabled={!logInInfo.isAuthenticated}
@@ -334,7 +394,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
             height="22"
             viewBox="0 0 22 22"
             fill="none"
-            onClick={onCommentSubmit}
+            onClick={(e) => {
+              onCommentSubmit();
+            }}
           >
             <circle
               cx="11"

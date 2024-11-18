@@ -18,7 +18,7 @@ export const NavbarLayout = styled.div`
   padding: 0 16px 0 27px;
 `;
 
-export const ComponentConatiner = styled.div`
+export const ComponentContainer = styled.div`
   width: 120px;
   height: auto;
   max-height: 24px;
@@ -36,4 +36,23 @@ export const Item = styled.img`
   object-fit: contain;
   max-height: 24px;
   width: auto;
+`;
+
+export const NotificationBox = styled.div`
+  display: flex;
+  position: relative;
+`;
+export const NotificationCount = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: red;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  font-size: 7px;
+  color: white;
 `;

@@ -4,6 +4,7 @@ import theme from '../../styles/theme';
 export const PageLayout = styled.div`
   width: 100vw;
   height: 100vh;
+  overflow: auto;
   max-width: 480px;
   display: flex;
   box-sizing: border-box;
@@ -39,16 +40,17 @@ export const SearchInput = styled.input`
   height: 100%;
   background: none;
   border: none;
-  padding-inline-start: 3.63rem;
-  padding-inline-end: 2.75rem;
+  padding-inline-end: 3.3rem;
+  padding-inline-start: 1.5rem;
   outline: none;
+  color: black;
 `;
 
 export const SearchButton = styled.img`
   width: 1.49769rem;
   height: 1.5rem;
   position: absolute;
-  left: 1.25rem;
+  right: 1.25rem;
 `;
 
 export const Exit = styled.img`
@@ -59,7 +61,7 @@ export const Exit = styled.img`
 
 export const PreSearchWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +93,7 @@ export const LastText = styled.span`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-top: 1.3rem;
+  margin: 1.3rem 0 1.3rem;
 `;
 
 const ONIconSVG = styled.svg`

@@ -139,7 +139,7 @@ const Photo = styled.img`
 `;
 
 const Information = styled.div`
-  padding-top: 10px;
+  padding-top: 5px;
   padding-left: 10px;
   display: flex;
   height: 16vh;

@@ -28,54 +28,74 @@ function AccompanyList({datas}) {
 
     return (
       <>
-       {datas.map((data, index) => (
-        <RoundContainer key={index} onClick={() => goDetail(data.companyPostId)}>
-
-          <ImageWrapper>
-            {data.imageUrls[0] ?
-            <Image src={data.imageUrls[0]}/>:
-            <Image src={defaultImg}/>
-            }    
-          </ImageWrapper>         
-            <TextContainer>
+        {(datas && datas.length > 0) ? (
+          datas.map((data, index) => (
+            <RoundContainer key={index} onClick={() => goDetail(data.companyPostId)}>
+              <ImageWrapper>
+                {data.imageUrls[0] ? 
+                  <Image src={data.imageUrls[0]} /> : 
+                  <Image src={defaultImg} />
+                }
+              </ImageWrapper>
+              
+              <TextContainer>
                 <CardName>{data.title}</CardName>
-
+    
                 <Left>
-                    <CardIcon src={calendarIcon} $top="1px"/>
-                    <GreyText>{formatDateToMD(data.startDate)}</GreyText>
-                    <CardIcon src={plusIcon} $top="1px"/>
-                    <GreyText>{data.currentRecruitNumber}/{data.totalRecruitNumber}</GreyText>
-                    <CardIcon src={placeIcon} $top="1px"/>
-                    <GreyText>{data.travelArea[0]}</GreyText>
+                  <CardIcon src={calendarIcon} $top="1px"/>
+                  <GreyText>{formatDateToMD(data.startDate)}</GreyText>
+                  <CardIcon src={plusIcon} $top="1px"/>
+                  <GreyText>{data.currentRecruitNumber}/{data.totalRecruitNumber}</GreyText>
+                  <CardIcon src={placeIcon} $top="1px"/>
+                  <GreyText>{data.travelArea[0]}</GreyText>
                 </Left>
-                
+    
                 <Left>
-                    <GreyMiddleText>{data.content}</GreyMiddleText>
+                  <GreyMiddleText>{data.content}</GreyMiddleText>
                 </Left>
-
+    
                 <Left>
-                    <CardIcon src={personIcon} $top="2px"/>
-                    <SmallGreyText>{data.nickname}</SmallGreyText>
-                    {(!data.ageAnonymous) ?
-                    <><SmallGreyText>·</SmallGreyText>
-                    <SmallGreyText>{data.age}세</SmallGreyText></>:
-                    null
-                    }
-                    <SmallGreyText>·</SmallGreyText>
-                    {(data.gender == 'FEMALE') ?
-                    <SmallGreyText>여</SmallGreyText>:
-                    <SmallGreyText>남</SmallGreyText>
-                    }
-              </Left>
-            </TextContainer>
-            <Overlay $isClosed={data.recruitCompletd} />
-        </RoundContainer>
-        ))}
+                  <CardIcon src={personIcon} $top="2px"/>
+                  <SmallGreyText>{data.nickname}</SmallGreyText>
+                  {!data.ageAnonymous && (
+                    <>
+                      <SmallGreyText>·</SmallGreyText>
+                      <SmallGreyText>{data.age}세</SmallGreyText>
+                    </>
+                  )}
+                  <SmallGreyText>·</SmallGreyText>
+                  <SmallGreyText>{data.gender === 'FEMALE' ? '여' : '남'}</SmallGreyText>
+                </Left>
+              </TextContainer>
+              <Overlay $isClosed={data.recruitCompletd} />
+            </RoundContainer>
+          ))
+        ) : (
+          <LeftContainer>
+            <LeftSpace/>
+            <SubText>아무것도 없습니다.</SubText>
+          </LeftContainer>
+        )}
       </>
     );
-}
+  }
 
 export default AccompanyList;
+
+const LeftContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const LeftSpace = styled.div`
+  margin-left: 1.7rem;
+`;
+
+const SubText = styled.div`
+  color: #5C5C5C;
+  font-family: 'Inter-Bold';
+  font-size: 1em;
+`;
 
 const Left = styled.div`
   display: flex;
@@ -121,7 +141,7 @@ const GreyMiddleText = styled.p`
   font-size: 0.5em;
   color: #7a7a7a;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   // width: 20vh;
@@ -146,11 +166,11 @@ const RoundContainer = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  width: 16vh;  /* Fixed width for a perfect square */
-  height: 16vh; /* Fixed height for a perfect square */
-  flex-shrink: 0;  /* Prevent shrinking or stretching due to flexbox */
-  overflow: hidden;  /* Ensure no overflow is visible */
-  border-radius: 20px;  /* Optional: For rounded corners */
+  width: 16vh;  
+  height: 16vh; 
+  flex-shrink: 0;  
+  overflow: hidden;  
+  border-radius: 20px;  
 `;
 
 const Image = styled.img`

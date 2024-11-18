@@ -14,10 +14,10 @@ import gradientRec from '../../assets/images/gradientRec.svg';
 import { useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getData } from '../../api/Functions.jsx';
 import { GET_FILTERED_POST_IN, GET_POST_OF } from '../../api/urls.jsx';
-import { loadUser, logout } from '../../redux/actions.jsx';
+import { throttle } from 'rxjs';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
@@ -29,12 +29,16 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
   const [country, setCountry] = useState(null); //선택된 국가
   const [isLoading, setIsLoading] = useState(false);
   const [postList, setPostList] = useState(null);
+  const totalPage = useRef(0);
+  const currentPage = useRef(0);
+  const newDataLoading = useRef(false);
 
   const handleCountryClick = () => {
     setShowCountry(!showCountry);
   };
   const resetCountry = () => {
     setCountry(null);
+    currentPage.page = 0;
   };
 
   const nav = () => {
@@ -50,40 +54,60 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
   };
   const currentBoardType = boardType;
 
-  //let response;
-  const dispatch = useDispatch();
+  const fetchData = async () => {
+    if (currentPage.current == 0) {
+      setIsLoading(true);
+    } else {
+      newDataLoading.current = true;
+    }
+    const response = await getData(
+      GET_POST_OF(currentBoardType),
+      {
+        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+      },
+      { page: currentPage.current, size: 5, sort: 'DESC' },
+    );
+    if (response) {
+      totalPage.current = response.data.totalPages;
+      if (currentPage.current > 0) {
+        setPostList((postList) => [...postList, ...response.data.content]);
+        console.log('내용 존재');
+      } else {
+        setPostList(response.data.content);
+        console.log('이거 실행');
+      }
+    }
+    return response;
+  };
+  const fetchFilteredData = async () => {
+    if (currentPage.current == 0) {
+      setIsLoading(true);
+    } else {
+      newDataLoading.current = true;
+    }
+    const response = await getData(
+      GET_FILTERED_POST_IN(currentBoardType),
+      {
+        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+      },
+      { country: country, page: currentPage.current, size: 5, sort: 'DESC' },
+    );
+    if (response) {
+      totalPage.current = response.data.totalPages;
+      if (currentPage.current > 0) {
+        setPostList((postList) => [...postList, ...response.data.content]);
+        console.log('내용 존재');
+      } else {
+        setPostList(response.data.content);
+        console.log('이거 실행');
+      }
+    }
+  };
+
   useEffect(() => {
     console.log('유저인포');
     console.log(userInfo);
     if (userInfo) {
-      const fetchData = async () => {
-        setIsLoading(true);
-        const response = await getData(
-          GET_POST_OF(currentBoardType),
-          {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          },
-          { page: 0, size: 20, sort: 'DESC' },
-        );
-        if (response) {
-          //console.log(response.data.imageUrls);
-          setPostList(response.data.content);
-        }
-        return response;
-      };
-      const fetchFilteredData = async () => {
-        setIsLoading(true);
-        const response = await getData(
-          GET_FILTERED_POST_IN(currentBoardType),
-          {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          },
-          { country },
-        );
-        if (response) {
-          setPostList(response.data);
-        }
-      };
       if (country === null) {
         fetchData();
         setIsLoading(false);
@@ -93,6 +117,46 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
       }
     }
   }, [country, userInfo]);
+
+  const onScroll = async () => {
+    if (
+      window.scrollY + document.documentElement.clientHeight >
+      document.documentElement.scrollHeight - 50
+    ) {
+      if (
+        !isLoading &&
+        !newDataLoading.current &&
+        currentPage.current < totalPage.current
+      ) {
+        currentPage.current++;
+        console.log(currentPage.current);
+        console.log(totalPage.current);
+        console.log(isLoading);
+        if (country === null) {
+          await fetchData();
+        } else {
+          await fetchFilteredData();
+        }
+        console.log(isLoading);
+        newDataLoading.current = false;
+      }
+    }
+  };
+
+  useEffect(() => {
+    let throttleCheck = false;
+    if (!throttleCheck) {
+      throttleCheck = setTimeout(() => {
+        onScroll();
+        throttleCheck = false;
+      }, 10000);
+    }
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      clearTimeout(throttleCheck);
+    };
+  }, []);
 
   if (isLoading) {
     return <Loading />;
@@ -104,7 +168,6 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         <PageHeader
           pageName={boardType === 'INFO' ? '정보 게시판' : '자유 게시판'}
           color={boardType === 'INFO' ? '#3E73B2' : '#6458BF'}
-          nav="/community"
         ></PageHeader>
         <s.SliderWrapper>
           <DotInslideSlider images={images}></DotInslideSlider>
@@ -136,7 +199,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
                 <CommunityPost
                   key={post.postId}
                   post={post}
-                  postImg={post.imageUrls[0]}
+                  postImg={post.imageUrls ? post.imageUrls[0] : null}
                 />
               );
             })
@@ -175,6 +238,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
             }}
             getCountry={(country) => {
               setCountry(country);
+              currentPage.current = 0;
               setShowCountry(false);
             }}
           />

@@ -338,8 +338,7 @@ function AccompanyDetailPage() {
 
             <Line />
 
-            {accompanyData.length > 0 ? (
-              <>
+            
                 <BigContainer>
                   <LeftContainer>
                     <MiddleText
@@ -356,8 +355,7 @@ function AccompanyDetailPage() {
                   color="#c5d3e0"
                   cards={accompanyData}
                 ></CardAccompanyList>
-              </>
-            ) : null}
+ 
             <BigSpace />
 
             {infoData[0].userId !== userId ? (

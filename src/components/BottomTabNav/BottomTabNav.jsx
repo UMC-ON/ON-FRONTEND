@@ -28,14 +28,14 @@ const BottomTabNav = () => {
           <s.IconTag>홈</s.IconTag>
         </s.IconContainer>
       </NavLink>
-      {/*커뮤니티 버튼*/}
-      <NavLink to="/community">
-        <s.IconContainer className={currentPath === '/community' ? 'active' : ''}>
+      {/*동행구하기 버튼*/}
+      <NavLink to="/accompany">
+        <s.IconContainer className={currentPath === '/accompany' ? 'active' : ''}>
           <s.Icon
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
+            width="23"
             height="24"
-            viewBox="0 0 24 24"
+            viewBox="0 0 23 24"
             fill="current"
           >
             <path
@@ -45,7 +45,7 @@ const BottomTabNav = () => {
               fill="current"
             />
           </s.Icon>
-          <s.IconTag>커뮤니티</s.IconTag>
+          <s.IconTag>동행 구하기</s.IconTag>
         </s.IconContainer>
       </NavLink>
       {/*물품거래 버튼*/}

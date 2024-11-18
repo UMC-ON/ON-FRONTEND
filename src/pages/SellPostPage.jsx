@@ -7,6 +7,7 @@ import camera from "../assets/images/camera.svg";
 import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import SellPostHeader from "../components/SellPostHeader";
+
 import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
 import SellPostCitySelect from "../components/SellPostShowCitySelect";
 import { postData, multiFilePostData } from '../api/Functions';

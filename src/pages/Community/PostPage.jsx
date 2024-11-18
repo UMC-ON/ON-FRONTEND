@@ -13,6 +13,7 @@ const PostPage = ({ color, boardType }) => {
   const navigate = useNavigate();
   const [imageFiles, setImageFiles] = useState([]);
   const [isLoading, setLoading] = useState(false);
+
   let userInfo = useSelector((state) => state.user.user);
 
   const [input, setInput] = useState({
@@ -54,17 +55,17 @@ const PostPage = ({ color, boardType }) => {
     setInput({
       ...input,
       [name]: value,
-    });
+    }); //useRef로 바꾸기
   };
 
-  const onChangeImgFile = (fileList) => {
+  const onChangeImgFile = (e) => {
+    const fileList = e.target.files;
     if (fileList) {
       const imgList = Array.from(fileList);
       console.log(imgList);
-      const previewURLs = imgList.map((file) => {
-        return URL.createObjectURL(file);
-      });
+
       setImageFiles((prev) => prev.concat(imgList));
+      e.target.value = '';
     }
   };
   const onSubmit = async () => {
@@ -98,15 +99,17 @@ const PostPage = ({ color, boardType }) => {
       );
       if (response) {
         console.log(response.data.result);
+        return response;
       }
-
-      setLoading(false);
     };
-    sendData();
+    const sendingComplete = await sendData();
+    if (sendingComplete) {
+      setLoading(false);
 
-    navigate(`/community/${boardType == 'FREE' ? 'general' : 'info'}`, {
-      replace: true,
-    });
+      navigate(`/community/${boardType == 'FREE' ? 'general' : 'info'}`, {
+        replace: true,
+      });
+    }
   };
 
   return (
@@ -133,14 +136,14 @@ const PostPage = ({ color, boardType }) => {
         </s.HeadingTitle>
         <s.PostInfoSection>
           <s.InfoLabel>
-            교환 국가:
+            파견 국가:
             <s.ColorButtonTag color={color}>
               {showDispatchedInfo(userInfo, 'COUNTRY')}
             </s.ColorButtonTag>
           </s.InfoLabel>
           <s.SpaceBetweenContainer>
             <s.InfoLabel>
-              <div style={{ whiteSpace: 'nowrap' }}>교환교:</div>
+              <div style={{ whiteSpace: 'nowrap' }}>파견교:</div>
 
               <s.ColorButtonTag color={color}>
                 {showDispatchedInfo(userInfo, 'UNIV')}
@@ -228,7 +231,7 @@ const PostPage = ({ color, boardType }) => {
             style={{ display: 'none' }}
             multiple
             onChange={(e) => {
-              onChangeImgFile(e.target.files);
+              onChangeImgFile(e);
             }}
           />
           <img src={camera} />
