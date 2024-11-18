@@ -77,6 +77,7 @@ export const SingleCountryContainer = styled.div`
 `;
 
 export const Flag = styled.span`
+  color: black;
   width: 2rem;
   text-align: center;
   font-family: Inter;

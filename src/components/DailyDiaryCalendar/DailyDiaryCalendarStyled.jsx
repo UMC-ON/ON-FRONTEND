@@ -163,3 +163,10 @@ export const ApplyButton = styled.button`
 export const Controls = styled.div`
 
 `;
+
+export const StyledDatePicker = styled.div`
+  .react-datepicker__day--disabled {
+    color: #E0E0E0; /* 비활성화된 날짜 색상 */
+    pointer-events: none; /* 클릭 불가능 */
+  }
+`;
