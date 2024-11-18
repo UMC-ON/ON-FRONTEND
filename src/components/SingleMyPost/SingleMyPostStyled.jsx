@@ -22,6 +22,7 @@ export const Delete = styled.span`
   font-weight: 400;
   line-height: 150%; /* 0.75rem */
   text-decoration-line: underline;
+  z-index: 3;
 `;
 export const PostContainer = styled.div`
   width: 100%;
