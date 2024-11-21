@@ -7,8 +7,9 @@ import camera from "../assets/images/camera.svg";
 import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import SellPostHeader from "../components/SellPostHeader";
+
 import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
-import SellPostCitySelect from "../components/SellPostCitySelect";
+import SellPostCitySelect from "../components/SellPostShowCitySelect";
 import { postData, multiFilePostData } from '../api/Functions';
 import { POST_ITEM } from '../api/urls';
 
@@ -74,7 +75,7 @@ function SellPost() {
         formData.append('requestDTO', jsonBlob);
 
         if (image) {
-            formData.append('imageFiles', image); // 한 장의 이미지만 첨부
+            formData.append('imageFiles', image);
         }
 
         try {
@@ -100,7 +101,7 @@ function SellPost() {
         <>
             <SellPostHeader onSubmit={handleSubmit} />
             <Space />
-            <Photo isImageUploaded={image}>
+            <Photo isImageUploaded={image} onClick={handleCameraClick}>
                 {image ? (
                     <ImageWrapper>
                         <img src={URL.createObjectURL(image)} alt="Preview" />
@@ -109,7 +110,7 @@ function SellPost() {
                         </DeleteButton>
                     </ImageWrapper>
                 ) : (
-                    <Camera src={camera} onClick={handleCameraClick} />
+                    <Camera src={camera} />
                 )}
                 <FileInput
                     type="file"
@@ -266,6 +267,11 @@ const Add = styled.input`
     align-items: center;
     margin-top: 1vh;
     width: 95%;
+    &::placeholder {
+        color: #838383;
+        font-size: 13px;
+        font-family: 'Inter';
+  }
 `;
 
 const CheckboxContainer = styled.div`
@@ -324,10 +330,12 @@ const Description = styled.textarea`
     line-height: 1.5;
     margin-top: 1vh;
     
+    
     &::placeholder {
-        color: #B9B9B9;
-        font-size: 14px;
-    }
+        color: #838383;
+        font-size: 13px;
+        font-family: 'Inter';
+  }
 `;
 
 const DeleteButton = styled.div`

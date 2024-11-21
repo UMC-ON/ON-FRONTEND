@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
@@ -33,6 +32,7 @@ const Diary = () => {
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
+  console.log(userInfo);
 
 
   useEffect(() => {
@@ -44,10 +44,11 @@ const Diary = () => {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           }
         );
-        setDiaries(response?.data?.result?.diaryList || []);
-        setDday(response?.data?.result?.dday || null); // extract dday from response
-        setDateList(response?.data?.result?.dateList || []);
-        console.log(response?.data?.result);
+        setDiaries(response?.data?.diaryList);
+        setDday(response?.data?.dday);
+        setDateList(response?.data?.dateList);
+        console.log(response.data.diaryList);
+        console.log(userInfo);
       } catch (error) {
         console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
       }
@@ -59,22 +60,7 @@ const Diary = () => {
     setSelectedDate1(date);
     setCalendarOpen(false);
 
-    const dday = await getDdayFromServer(); // dday 값을 가져오는 함수 호출
-
-    try {
-      const response = await postData(
-        POST_DDAY,
-        { dday: dday }, // dday를 서버로 전송
-        {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          'Content-Type': 'application/json',
-        }
-      );
-      console.log('서버 응답:', response?.data);
-    } catch (error) {
-      console.error('서버로 dday 전달 중 오류 발생:', error);
-    }
-  };
+  }
 
   const getDdayFromServer = async () => {
     try {
@@ -107,7 +93,6 @@ const Diary = () => {
     setShowDatePicker(false); // 달력을 숨깁니다.
   };
 
-  const todayDate = moment().format('YYYY.MM.DD');
 
   const handleSaveDiary = async () => {
     const formattedDate = moment(selectedDate2).format('YYYY-MM-DD');
@@ -146,7 +131,7 @@ const Diary = () => {
         <Information>
           <DDay>
             {dday !== null ? (
-              <DDayText>{`D${dday}`}</DDayText> // Display the dday value
+              <DDayText>{`D${dday}`}</DDayText>
             ) : (
               <DDayCalendar
                 selectedDate={selectedDate1}
@@ -157,12 +142,14 @@ const Diary = () => {
               />
             )}
           </DDay>
-        </Information>
-        <SubText>나의 교환교</SubText>
+        </Information><br/>
+        <div style={{height: "100px", marginTop: "30px"}}>
+          <SubText>나의 {userInfo?.dispatchType === "DISPATCHED" ? '교환교' : '파견교'}</SubText>
           <SchoolContainer>
-            <BigText>영국,</BigText>
-            <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>King’s College London</BigText>
+            <BigText>{userInfo.country},</BigText>
+            <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>{userInfo.dispatchedUniversity}</BigText>
           </SchoolContainer>
+        </div>
         <CalendarContainer>
           <DiaryCalendar diaries={diaries} dateList={dateList} />
         </CalendarContainer>
@@ -172,12 +159,12 @@ const Diary = () => {
         </AddDiary>
 
         {showDatePicker && (
-          <BottomTabLayout $height="50vh">
+          <BottomTabLayout>
             <TopHeader>
               날짜
             </TopHeader>
             <Close src={closeIcon} onClick={handleCalendarClick} />
-            <DailyDiaryCalendar onApply={handleDateChange2} /> {/* DailyDiaryCalendar에만 적용되는 상태 */}
+            <DailyDiaryCalendar onApply={handleDateChange2} />
           </BottomTabLayout>
         )}
 
@@ -211,8 +198,8 @@ const DiaryContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   font-family: 'Inter';
-  overflow-y: auto; // 필요시 스크롤 허용
-  position: relative; // 자식 요소가 absolute일 경우 기준이 될 수 있도록 설정
+  overflow-y: auto;
+  position: relative;
 `;
 
 
@@ -222,14 +209,21 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding-bottom: 100px; // BottomTabNav 컴포넌트와의 간격을 확보
+  padding-bottom: 100px;
+  gap: 20px;
 `;
+
 
 const Information = styled.div`
   width: 100%;
   height: 30vh;
   position: relative;
+
+  @media (max-width: 360px) {
+    height: 35vh;
+  }
 `;
+
 
 const DatePickerWrapper = styled.div`
   position: fixed;  // 화면에 고정되도록 설정
@@ -252,35 +246,37 @@ const DatePickerStyled = styled(DatePicker)`
   }
   
   .react-datepicker__header {
-    background-color: #f7f8fa;  // 헤더 배경색 변경
-    border-bottom: 1px solid #eaeaea;  // 하단에 경계선 추가
+    background-color: #f7f8fa;
+    border-bottom: 1px solid #eaeaea;
   }
   
   .react-datepicker__day--selected {
-    background-color: #3E73B2;  // 선택된 날짜 배경색 설정
-    color: white;  // 선택된 날짜 텍스트 색상 설정
+    background-color: #3E73B2;
+    color: white;
   }
-  
-  // 필요에 따라 추가적인 스타일을 설정
 `;
 
 
 
 const DDay = styled.div`
   position: absolute; // 부모 요소를 기준으로 위치 고정
-  width: 130px;
-  height: 130px;
-  top: 30%; 
-  left: 6%;
+  width: 238px;
+  height: 238px;
+  transform: translate(-50%, -50%);
+  top: 75%; 
+  left: 50%;
   font-size: 1.2em !important;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 5px solid #DCDFFF;
-  z-index: 1; // 다른 요소들 위에 나타나도록 우선순위 설정
-  background-color: white; // 필요시 배경색 설정
+  z-index: 1;
+  background-color: white;
+  }
 `;
+
+
 
 
 
@@ -293,7 +289,6 @@ const DDayText = styled.div`
   background-clip: text;
   text-fill-color: transparent;
 `;
-
 
 const Today = styled.div`
   background: ${props => props.theme.lightPurple};
@@ -310,20 +305,20 @@ const Today = styled.div`
 const RightContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start; // Ensures left alignment for all children
+  align-items: flex-start;
   margin-top: 2.5em;
-  margin-left: 11em; // Adjust this value as needed to achieve the desired spacing from the DDay component
+  margin-left: 11em;
 `;
 
 const SubText = styled.div`
-  margin-top: 1em; // Adjust this value to add some spacing between Today and SubText
-  margin-bottom: 0.5em;
 `;
 
 const SchoolContainer = styled.div`
-  text-align: center;
   display: flex;
-  flex-wrap: wrap; // Ensures that text will wrap if there's not enough space
+  justify-content: center;  // 수평 가운데 정렬
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
 `;
 
 const BigText = styled.div`
@@ -331,7 +326,7 @@ const BigText = styled.div`
   color: ${props => props.color || '#000000'};
   font-weight: bold;
   font-family: 'Inter-Regular';
-  font-size: 1em;
+  font-size: 22px;
   margin-bottom: 3.5vh;
   margin-left: ${props => props.spacing || '0'};
 `;
@@ -347,7 +342,7 @@ const CalendarContainer = styled.div`
 const AddDiary = styled.div`
   width: 30%;
   height: 5vh;
-  margin-left: 1.5em;
+  margin-left: 2.5em;
   margin-top: 1em;
   margin-bottom: 1em;
   background: ${props => props.theme.lightPurple};
@@ -410,7 +405,7 @@ const Save = styled.div`
 const BottomTabLayout = styled.div`
   width: 100%;
   max-width: 480px;
-  height: ${props => props.$height || 'auto'};
+  height: auto;
   position: fixed;
   bottom: 0;
   border-radius: 14px 14px 0px 0px;
@@ -422,6 +417,7 @@ const BottomTabLayout = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   box-shadow: 0px -1px 4px 0px #e2e2e2;
+
 `;
 
 const TopHeader = styled.div`

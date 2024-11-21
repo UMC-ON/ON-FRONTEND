@@ -14,6 +14,7 @@ import TransactionPicker from "../components/TransactionPicker";
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
 import Loading from '../components/Loading/Loading';
+import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 import { getData } from '../api/Functions';
 import { GET_FILTER_ITEM, GET_ITEM_SEARCH, GET_ITEM_LIST } from '../api/urls';
 
@@ -50,24 +51,15 @@ function SellPage() {
 
   const fetchItems = async (dealType = '', currentCountry = '') => {
     try {
-      if (showAvailable) {
-        // 거래 가능한 물품만 불러오기
-        const response = await getData(
-          '/api/v1/market-post/available', {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        });
-        if (response) {
-          setItems(response.data.content);
-        }
-      } else {
+      
         // 필터링된 물품 불러오기
         const params = {
           page: 0,
           size: 20,
           sort: 'DESC',
-          dealType: dealType === '직거래' ? 'DIRECT' : 'DELIVERY',
+          dealType: dealType ? (dealType === '직거래' ? 'DIRECT' : 'DELIVERY') : '', // 거래방식이 없으면 빈 문자열로 처리
           currentCountry,
-          dealStatus: 'COMPLETE', // 거래 불가능한 물품 (showAvailable이 false일 때)
+          dealStatus: showAvailable ? 'AWAIT' : ''
         };
   
         const response = await getData(
@@ -76,10 +68,12 @@ function SellPage() {
         }, params);
   
         if (response) {
+          console.log(params);
           setItems(response.data.content);
+          console.log(currentCountry);
+          console.log(response.data);
         }
-      }
-    } catch (error) {
+      }catch (error) {
       console.error('필터링 중 오류 발생:', error);
     }
   };
@@ -212,10 +206,12 @@ function SellPage() {
         </Span>
       </FlexContainer><br />
       <ItemList items={items} />
-      <WriteButton onClick={goPost}>
-        <img src={pencilImg} alt="pencil icon" />
-        글쓰기
-      </WriteButton>
+      <ButtonContainer>
+        <WriteButton onClick={goPost}>
+          <img src={pencilImg} alt="pencil icon" />
+          글 쓰기
+        </WriteButton>
+      </ButtonContainer>
 
       <TransactionPicker
         isVisible={isPickerVisible}
@@ -224,6 +220,7 @@ function SellPage() {
         onApply={handleApply}
         onClose={() => setIsPickerVisible(false)}
       />
+      <BottomTabNav />
     </>
   );
 }
@@ -241,6 +238,8 @@ const SearchContainer = styled.div`
   position: relative;
   width: 96%;
   margin: 0 auto;
+  background-color: #FFFFFF;
+  color: #000000;
 `;
 
 const Search = styled.textarea`
@@ -262,6 +261,8 @@ const Search = styled.textarea`
   font-size: 15px;
   font-family: Inter;
   }
+  background-color: #FFFFFF;
+  color: #000000;
 `;
 
 const SearchIcon = styled.img`
@@ -326,13 +327,13 @@ const WriteButton = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   position: fixed;
-  bottom: 70px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 110px;
   border-radius: 55px;
-  border: none;
+  border: 1px solid #cccccc;
+  font-family: Inter;
+  font-style: normal;
   width: 148px;
   height: 50px;
   padding: 15px 26px;
@@ -340,9 +341,31 @@ const WriteButton = styled.button`
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
   color: white;
   text-align: center;
+  font-family: Inter;
   font-size: 16px;
+  font-style: normal;
   font-weight: 600;
   line-height: normal;
   z-index: 2;
-  border: 1px solid #CCCCCC;
+  &:hover {
+    outline: 1px solid #9279f8;
+  }
+  &:focus {
+    outline: 1px solid #9279f8;
+  }
+  -webkit-tap-highlight-color: transparent;
+`;
+
+const ButtonContainer = styled.div`
+padding-bottom: 100px;
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  flex-direction: column;
+  align-content: start;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
 `;

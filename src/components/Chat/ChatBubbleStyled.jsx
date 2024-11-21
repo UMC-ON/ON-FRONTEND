@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-export const SentChatContainer = styled.div`
+export const SentChatBubble = styled.div`
   margin: 0.6rem 0;
   max-width: 85%;
   align-self: flex-end;

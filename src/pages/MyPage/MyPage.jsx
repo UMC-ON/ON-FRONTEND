@@ -1,22 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './MyPageStyled';
-import theme from '../../styles/theme';
 
-import { PUT_NICKNAME, PUT_UNIV, LOGOUT, DELETE_ACCOUNT } from '../../api/urls';
-import { getData, postData, putData, deleteData } from '../../api/Functions';
+import { SIGN_IN_URL, PUT_NICKNAME } from '../../api/urls';
+import { postData, putData } from '../../api/Functions';
 import Loading from '../../components/Loading/Loading';
 import { useSelector } from 'react-redux';
+import MyInfoCard from '../../components/MyPage/MyInfoCard';
+import arrow from '../../assets/images/mypage_arrow.svg';
+import MyInfo from '../../components/MyPage/MyInfo';
 
 const MyPage = () => {
   // const [userInfo, setUserInfo] = useState(null);
   const [error, setError] = useState(null); // 에러를 저장할 상태
   const [isLoading, setIsLoading] = useState(false);
-
-  const [editSchoolName, setEditSchoolName] = useState(false);
-  const [schoolName, setSchoolName] = useState('');
-  const [originalSchoolName, setOriginalSchoolName] = useState('');
 
   const [editLink, setEditLink] = useState(false);
   const [link, setLink] = useState('');
@@ -26,9 +24,8 @@ const MyPage = () => {
   const [nickname, setNickname] = useState('');
   const [nicknameInput, setNicknameInput] = useState('');
 
-  const inputRef = useRef(null);
-  const spanRef = useRef(null);
-  const [inputWidth, setInputWidth] = useState('auto');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(false);
 
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.user.user);
@@ -37,6 +34,7 @@ const MyPage = () => {
     setNickname(userInfo.nickname);
   }, []);
 
+  //닉네임 바꾸기 api
   const putEditedNickname = async (nicknameInput) => {
     try {
       setIsLoading(true);
@@ -53,55 +51,20 @@ const MyPage = () => {
     }
   };
 
-  const handleLogout = async () => {
+  //비밀번호 입력
+  const handelPassword = async (passwordInput) => {
     setIsLoading(true);
     try {
-      const response = await postData(
-        LOGOUT,
-        {
-          accessToken: localStorage.getItem('AToken'),
-          refreshToken: localStorage.getItem('RToken'),
-        },
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        {},
-      );
-
-      console.log(response);
+      const response = await postData(SIGN_IN_URL, {
+        loginId: `${userInfo.loginId}`,
+        password: `${passwordInput}`,
+      });
       if (response.status == 200) {
-        localStorage.removeItem('AToken');
-        localStorage.removeItem('RToken');
-        localStorage.removeItem('grantType');
-
-        navigate('/landing');
+        setIsPasswordConfirmed(true);
       }
     } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const handleDeleteAccount = async () => {
-    setIsLoading(true);
-    try {
-      const response = await deleteData(
-        DELETE_ACCOUNT,
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        {},
-      );
-
-      console.log(response);
-      if (response.status == 200) {
-        localStorage.removeItem('AToken');
-        localStorage.removeItem('RToken');
-        localStorage.removeItem('grantType');
-        navigate('/landing');
-      }
-    } catch (error) {
-      console.error('delete account error:', error);
+      console.error('error:', error);
+      alert('다시 시도해주세요.');
     } finally {
       setIsLoading(false);
     }
@@ -129,159 +92,65 @@ const MyPage = () => {
     }
   }
 
-  // useEffect(() => {
-  //   console.log('수정 상태', editNickname);
-  // }, []);
-
-  //   //수정하기
-  // const clickEditSchoolName = () => {
-  //   setEditSchoolName(!editSchoolName);
-  //   if (!editSchoolName) {
-  //     //수정중이 아닐 때
-  //     setSchoolName(originalSchoolName);
-  //   }
-  // };
-
-  // const clickEditLink = () => {
-  //   setEditLink(!editLink);
-  //   if (!editLink) {
-  //     setLink(originalLink);
-  //   }
-  // };
-  // //입력에 따라 인풋 길이 바꾸기
-  // useEffect(() => {
-  //   if (spanRef.current) {
-  //     setInputWidth(`${spanRef.current.offsetWidth}px`);
-  //   }
-  // }, [schoolName]);
-
   if (isLoading) {
     return <Loading />;
   }
-  return (
-    <s.MyPageLayout>
-      <PageHeader pageName="마이페이지" />
-      <NavLink
-        to="/mypage/mypost"
-        style={{ width: '100%' }}
-      >
-        <s.MyPosts>
-          <span>내 글 보기</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="8"
-            height="20"
-            viewBox="0 0 6 11"
-            fill="none"
-          >
-            <path
-              d="M1 9.57153L5.1142 6.04508C5.57981 5.64598 5.57981 4.92566 5.1142 4.52656L1 1.00011"
-              stroke="black"
-              strokeLinecap="round"
-            />
-          </svg>
-        </s.MyPosts>
-      </NavLink>
+  if (!userInfo) {
+    return <>오류</>;
+  } else {
+    return (
+      <>
+        <s.MyPageLayout>
+          <PageHeader pageName="마이페이지" />
 
-      <s.MyInfoTitle>나의 정보 확인</s.MyInfoTitle>
-      <s.MyInfoWrapper>
-        <s.InfoContainer>
-          <s.Title>파견교 정보를 수정하세요!</s.Title>
-          <s.EditBtn
-            onClick={() => navigate('./schoolAuth')}
-            color={theme.lightGray}
-          >
-            수정
-          </s.EditBtn>
-        </s.InfoContainer>
-        <s.InfoContainer>
-          {/* -------------------------- 파견교 ----------더미데이터 바꾸기---------------- */}
-          <s.Title>나의 파견교</s.Title>
-          <s.InfoBox>
-            {userInfo.userStatus === 'ACTIVE' ? (
-              <>
-                <span>{userInfo.dispatchedUniversity}</span>
-                <s.VerifyButton>인증 완료</s.VerifyButton>
-              </>
-            ) : userInfo.userStatus === 'AWAIT' ? (
-              <>
-                <span>{userInfo.dispatchedUniversity}</span>
-                <s.VerifyButton>인증 대기중</s.VerifyButton>
-              </>
-            ) : userInfo.userStatus === 'NON_CERTIFIED' ? (
-              <>
-                <span>{userInfo.dispatchedUniversity}</span>
-                <s.VerifyButton>미인증</s.VerifyButton>
-              </>
-            ) : (
-              //등록 안 된 상태
-              <></>
-            )}
-          </s.InfoBox>
-        </s.InfoContainer>
-        {/* -------------------------- 파견교 홈페이지 링크 -------------------------- */}
-        <s.InfoContainer>
-          <s.Title>파견교 홈페이지 링크</s.Title>
-
-          <s.TextInput
-            disabled={!editLink}
-            value={
-              link && link.length > 0
-                ? { link }
-                : '파견교 홈페이지 링크를 등록하세요'
+          <MyInfoCard
+            nickname={userInfo.nickname ? userInfo?.nickname : ''}
+            country={userInfo.country ? userInfo.country : ''}
+            university={
+              userInfo.dispatchedUniversity ? userInfo.dispatchedUniversity : ''
             }
-            placeholder={link}
+            dispatchType={userInfo.dispatchType ? userInfo.dispatchType : ''}
+            userStatus={userInfo.userStatus ? userInfo.userStatus : ''}
+            isPassword={isPasswordConfirmed}
+            setIsLoading={setIsLoading}
           />
-        </s.InfoContainer>
-        {/* -------------------------- 파견교 국가 -------------------------- */}
-        <div style={{ display: 'flex', margin: '2rem 0' }}>
-          <s.Title>파견교 소재 국가</s.Title>
-          <s.Country>{userInfo?.country ? userInfo.country : '없음'}</s.Country>
-        </div>
-
-        {/* <s.InfoContainer>
-            <s.Title>Email</s.Title>
-            <s.InfoBox>
-              <span>{userInfo?.email ? userInfo.email : '없음'}</span>
-            </s.InfoBox>
-          </s.InfoContainer> */}
-
-        <s.InfoContainer>
-          <s.Title>이름</s.Title>
-          <s.InfoBox>
-            <span>{userInfo?.name ? userInfo.name : '없음'}</span>
-          </s.InfoBox>
-        </s.InfoContainer>
-
-        <s.InfoContainer>
-          <s.Title>전화번호</s.Title>
-          <s.InfoBox>
-            <span>
-              {userInfo?.phone ? formatPhoneNumber(userInfo.phone) : '없음'}
-            </span>
-          </s.InfoBox>
-        </s.InfoContainer>
-
-        <s.InfoContainer style={{ paddingBottom: '2rem' }}>
-          <s.Title>닉네임</s.Title>
-          <s.EditBtn
-            color={theme.lightGray}
-            onClick={() => clickEditNickname()}
+          <NavLink
+            to="/mypage/mypost"
+            style={{ width: '100%' }}
           >
-            {editNickname ? <span>수정 완료</span> : <span>수정</span>}
-          </s.EditBtn>
-          <s.TextInput
-            disabled={!editNickname} // 수정 모드일 때만 활성화
-            value={editNickname ? nicknameInput : nickname} // 닉네임 입력 상태를 바인딩
-            onChange={(e) => setNicknameInput(e.target.value)} // 닉네임 입력 변화 처리
-            placeholder="닉네임을 입력하세요"
-          />
-        </s.InfoContainer>
-        <div onClick={() => handleLogout()}>로그아웃</div>
-        <div onClick={() => handleDeleteAccount()}>탈퇴</div>
-      </s.MyInfoWrapper>
-    </s.MyPageLayout>
-  );
+            <s.MyPosts>
+              <span>내 글 보기</span>
+              <img src={arrow} />
+            </s.MyPosts>
+          </NavLink>
+
+          <s.MyInfoTitle>내 정보 확인</s.MyInfoTitle>
+          {!isPasswordConfirmed ? (
+            <s.PasswordContainer>
+              <s.PasswordTextInput
+                type="password"
+                placeholder="개인정보 보호를 위해 비밀번호를 입력해 주세요."
+                onChange={(e) => setPasswordInput(e.target.value)}
+              />
+              <s.ConfirmButton onClick={() => handelPassword(passwordInput)}>
+                확인
+              </s.ConfirmButton>
+            </s.PasswordContainer>
+          ) : (
+            <MyInfo
+              loginId={userInfo.loginId ? userInfo.loginId : ''}
+              name={userInfo.name ? userInfo.name : ''}
+              phone={userInfo.phone ? userInfo.phone : ''}
+              universityUrl={
+                userInfo.universityUrl ? userInfo.universityUrl : '없음'
+              }
+              userNickname={userInfo.nickname ? userInfo.nickname : ''}
+            />
+          )}
+        </s.MyPageLayout>
+      </>
+    );
+  }
 };
 
 export default MyPage;

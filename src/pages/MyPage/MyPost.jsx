@@ -7,7 +7,6 @@ import NoContent from '../../components/NoContent/NoContent';
 import SingleMyPost from '../../components/SingleMyPost/SingleMyPost';
 import SingleMyAccompany from '../../components/SingleMyPost/SingleMyAccompany';
 import SingleMyTrade from '../../components/SingleMyPost/SingleMyTrade';
-import Img from '../../assets/images/postImgExample.svg';
 import {
   GET_MY_POST,
   GET_MY_ACCOMPANY_POST,
@@ -66,7 +65,10 @@ const MyPost = () => {
         style={{ marginBottom: '10rem' }}
       />
     ) : (
-      <s.PostWrapper>{postResult.map((data) => component(data))}</s.PostWrapper>
+      <s.PostWrapper>
+        {postResult.map((data) => component(data))}
+        <s.LastText>마지막 글입니다.</s.LastText>
+      </s.PostWrapper>
     );
   };
 
@@ -113,10 +115,6 @@ const MyPost = () => {
             nickName={data.anonymous ? '익명' : data.writerInfo.nickname}
             image={data.imageUrls}
             comment={data.commentCount}
-            categories="정보 커뮤니티"
-            verified={
-              data.writerInfo.userStatus === 'ACTIVE' ? 'true' : 'false'
-            }
             boardType={data.boardType}
           />
         ))
@@ -124,14 +122,13 @@ const MyPost = () => {
         renderPosts(freePostResult, (data) => (
           <SingleMyPost
             key={data.postId}
+            postId={data.postId}
             title={data.title}
             time={data.createdAt}
             content={data.content}
             nickName={data.writerInfo.nickname}
             image={data.imageUrls}
-            verified={data.anonymous}
             comment={data.commentCount}
-            categories="자유 커뮤니티"
             isAnonymous={data.anonymous}
             isAnonymousUniv={data.isAnonymousUniv}
             userStatus={data.writerInfo.userStatus}
@@ -142,18 +139,25 @@ const MyPost = () => {
         renderPosts(accompanyPostResult, (data) => (
           <SingleMyAccompany
             key={data.companyPostId}
+            postId={data.companyPostId}
             title={data.title}
-            date={data.createdAt}
+            date={data.startDate}
             content={data.content}
             image={data.imageUrls}
-            numberOfPeople={data.totalRecruitNumber}
-            location={data.location}
+            totalRecruitNumber={data.totalRecruitNumber}
+            currentRecruitNumber={data.currentRecruitNumber}
+            location={data.travelArea[0]}
+            locationNum={data.travelArea.length}
+            nickName={data.nickname}
+            age={data.age}
+            gender={data.gender}
           />
         ))
       ) : (
         renderPosts(tradePostResult, (data) => (
           <SingleMyTrade
             key={data.marketPostId}
+            postId={data.marketPostId}
             title={data.title}
             time={data.createdAt}
             tradeStyle={data.dealType}

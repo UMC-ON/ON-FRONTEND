@@ -31,7 +31,7 @@ export const InfoLabel = styled.div`
   overflow: hidden;
   color: #000;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: wrap;
   font-family: Inter;
   font-size: 12px;
   font-style: normal;
@@ -60,6 +60,7 @@ export const Title = styled.div`
 
   color: #1e1e1e;
   font-family: Inter;
+  text-align: left;
   font-size: 1.4375rem;
   font-style: normal;
   font-weight: 600;
@@ -97,6 +98,8 @@ export const NameInfo = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  flex-shrink: 0;
+  white-space: wrap;
   color: #5c5c5c;
   text-overflow: ellipsis;
   font-family: Inter;

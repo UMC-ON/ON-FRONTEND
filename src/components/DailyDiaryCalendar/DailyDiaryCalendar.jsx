@@ -48,15 +48,18 @@ const DateRangePicker = ({ onApply }) => {
     <s.CompanyCalendar>
       <div className="date-range-picker">
         <div className='top-header'>
-          <p style={{fontSize: "12px", color: "#CCCCCC"}}></p>
+          <p style={{fontSize: "12px", color: "#CCCCCC", marginTop: "10px"}}></p>
         </div>
-        <DatePicker
-          locale={ko}
-          selected={selectedDate}  // 선택된 날짜를 DatePicker에 전달
-          onChange={handleDateChange}  // 날짜 선택 핸들러
-          inline
-          renderCustomHeader={renderCustomHeader}
-        />
+        <s.StyledDatePicker>
+          <DatePicker
+            locale={ko}
+            selected={selectedDate}
+            onChange={handleDateChange}
+            inline
+            renderCustomHeader={renderCustomHeader}
+            maxDate={new Date()}
+          />
+        </s.StyledDatePicker>
         <s.Controls>
           <s.ResetButton onClick={handleReset}>초기화</s.ResetButton>
           <s.ApplyButton disabled={!selectedDate} onClick={handleApply}>

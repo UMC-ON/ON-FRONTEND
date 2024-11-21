@@ -4,7 +4,7 @@ import { GET_TRADE_INFO } from '../../api/urls';
 import { getData } from '../../api/Functions';
 import Loading from '../Loading/Loading';
 
-const TradeChatInfo = ({ user, roomId }) => {
+const TradeChatInfo = ({ messageInitiator, roomId }) => {
   const [infoResult, setInfoResult] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [tradeMethod, setTradeMethod] = useState('');
@@ -22,8 +22,8 @@ const TradeChatInfo = ({ user, roomId }) => {
         );
 
         if (response) {
-          console.log(response.data.result);
-          setInfoResult(response.data.result);
+          console.log(response.data);
+          setInfoResult(response.data);
           if (infoResult.tradeMethod === 'DIRECT') {
             setTradeMethod('직접 만나서 거래');
           } else {
@@ -46,7 +46,7 @@ const TradeChatInfo = ({ user, roomId }) => {
 
   return (
     <s.InfoWrapper>
-      {user === 1 ? (
+      {messageInitiator ? (
         <s.InfoText>
           아래 글에 대해 궁금한 것을 판매자에게 물어보고 거래하세요.
         </s.InfoText>
