@@ -110,9 +110,8 @@ const Title = styled.h4`
 const Date = styled.div`
   white-space: nowrap;
   color: #7a7a7a;
-
   font-family: Inter;
-  font-size: 10px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 15px */
@@ -174,13 +173,13 @@ const PostInfoWrapper = styled.div`
 `;
 const Writer = styled.div`
   color: #7a7a7a;
-  font-size: 8px;
+  font-size: 12px;
   display: flex;
   flex-direction: row;
   align-content: center;
 `;
 const VerifiedImg = styled.img`
-  padding: 0 2px;
+  padding: 0 4px;
   display: ${(props) =>
     props.is_verified === 'ACTIVE' ? 'inline-block' : 'none'};
 `;
@@ -191,7 +190,7 @@ const Comment = styled.div`
   align-content: center;
   color: #92a5bc;
   font-family: Inter;
-  font-size: 8px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 12px */
