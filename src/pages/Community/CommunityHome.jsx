@@ -104,7 +104,6 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
     }
   };
 
-  //let response;
   useEffect(() => {
     console.log('유저인포');
     console.log(userInfo);
@@ -144,19 +143,20 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
     }
   };
 
-  let throttleCheck = false;
-  if (!throttleCheck) {
-    throttleCheck = setTimeout(() => {
-      onScroll();
-      throttleCheck = false;
-    }, 10000);
-  }
   useEffect(() => {
+    let throttleCheck = false;
+    if (!throttleCheck) {
+      throttleCheck = setTimeout(() => {
+        onScroll();
+        throttleCheck = false;
+      }, 10000);
+    }
     window.addEventListener('scroll', onScroll);
     return () => {
       window.removeEventListener('scroll', onScroll);
+      clearTimeout(throttleCheck);
     };
-  }, [throttleCheck]);
+  }, []);
 
   if (isLoading) {
     return <Loading />;
@@ -168,7 +168,6 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         <PageHeader
           pageName={boardType === 'INFO' ? '정보 게시판' : '자유 게시판'}
           color={boardType === 'INFO' ? '#3E73B2' : '#6458BF'}
-          nav="/community"
         ></PageHeader>
         <s.SliderWrapper>
           <DotInslideSlider images={images}></DotInslideSlider>

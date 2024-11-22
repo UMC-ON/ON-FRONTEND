@@ -1,8 +1,7 @@
 import * as s from './SignUpStyled';
 import styled from 'styled-components';
-import groupLogo from '../../assets/images/groupLogo.svg';
+import groupLogo from '../../assets/images/NewLogo.svg';
 import { useNavigate } from 'react-router-dom';
-import { UserList } from '../../components/Common/TempDummyData/PostList';
 import { loginSuccess, loginFailure } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { useRef, useState } from 'react';

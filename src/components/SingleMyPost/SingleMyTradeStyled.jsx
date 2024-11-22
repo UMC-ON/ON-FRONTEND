@@ -4,6 +4,8 @@ export const PostWrapper = styled.div`
   flex-direction: column;
   height: 8.68rem;
   width: 100%;
+  padding: 0 1.31rem;
+  box-sizing: border-box;
   display: flex;
   position: relative;
   justify-content: center;
@@ -11,7 +13,6 @@ export const PostWrapper = styled.div`
 `;
 
 export const Delete = styled.span`
-  grid-area: delete;
   color: #7a7a7a;
   font-family: Inter;
   font-size: 0.5rem;
@@ -20,36 +21,42 @@ export const Delete = styled.span`
   line-height: 150%;
   text-decoration-line: underline;
   justify-self: right;
-  margin-bottom: 0.88rem;
+  margin-bottom: 0.4rem;
+  position: absolute;
+  bottom: 0.31rem;
+  right: 2rem;
 `;
 export const PostContainer = styled.div`
-  width: 22.375rem;
+  width: 100%;
   height: 8.375rem;
   border-radius: 1.25rem;
   border: 1px solid #dfdfdf;
   background: linear-gradient(90deg, #d0d6da 0%, #e7ebed 29.9%, #fff 66.83%);
+  opacity: ${(props) => (props.isAvailable === 'COMPLETE' ? `50%` : `100%`)};
   box-sizing: border-box;
   display: grid;
   grid-template-areas:
-    'img title title'
-    'img style style'
-    'img location user'
-    'img price delete';
-  grid-template-columns: 8.4375rem auto auto;
+    'img title '
+    'img style '
+    'img location '
+    'img price ';
+  grid-template-columns: 8.4375rem auto;
   grid-template-rows: 2.2rem 1.1rem 1.1rem auto;
-  justify-content: space-between;
   align-content: center;
   align-items: end;
   justify-items: baseline;
-  column-gap: 0.4rem;
+  column-gap: 1rem;
   padding-right: 1rem;
+  overflow: hidden;
 `;
 
 export const TitleContainer = styled.div`
   grid-area: title;
   display: flex;
-  align-self: end;
+  align-self: start;
   align-items: center;
+  padding-top: 0.87rem;
+  gap: 0.3rem;
 `;
 
 export const Title = styled.span`
@@ -77,14 +84,13 @@ export const Time = styled.span`
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.01rem;
-  text-wrap: nowrap;
 `;
 
 export const TradingStyle = styled.div`
   grid-area: style;
   display: flex;
+  gap: 0.2rem;
   span {
-    margin-right: 0.1rem;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -98,12 +104,28 @@ export const TradingStyle = styled.div`
     line-height: normal;
     letter-spacing: 0.0125rem;
   }
+  div {
+    width: 1.5px;
+    background-color: #a3a3a3;
+    transform: scaleX(0.5);
+    height: 0.625rem;
+  }
 `;
 
-export const Location = styled.div`
+export const Info = styled.div`
   grid-area: location;
   display: flex;
   align-items: center;
+  gap: 0.9rem;
+  overflow: hidden;
+  width: 100%;
+`;
+
+export const Location = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
   span {
     color: #838383;
     font-family: Inter;
@@ -115,9 +137,11 @@ export const Location = styled.div`
 `;
 
 export const User = styled.div`
-  grid-area: user;
   display: flex;
   align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+
   span {
     color: #838383;
     font-family: Inter;
@@ -125,6 +149,7 @@ export const User = styled.div`
     font-style: normal;
     font-weight: 300;
     line-height: normal;
+    overflow: hidden;
   }
 `;
 
@@ -137,14 +162,19 @@ export const Price = styled.span`
   font-weight: 700;
   line-height: normal;
   margin-bottom: 0.88rem;
+  overflow: hidden;
+  width: 100%;
+  text-align: left;
 `;
 
 export const ContentImg = styled.img`
   grid-area: img;
-  /* display: ${(props) => (props.showimg ? 'inline' : 'none')}; */
+  height: 8.375rem;
+  width: 8.375rem;
   height: 8.3rem;
   border-radius: 1.25rem;
   align-self: start;
+  object-fit: cover;
 `;
 
 export const LocationSvg = () => {

@@ -44,10 +44,11 @@ const Diary = () => {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           }
         );
-        setDiaries(response?.data?.result?.diaryList || []);
-        setDday(response?.data?.result?.dday || null); // extract dday from response
-        setDateList(response?.data?.result?.dateList || []);
-        console.log(response?.data?.result);
+        setDiaries(response?.data?.diaryList);
+        setDday(response?.data?.dday);
+        setDateList(response?.data?.dateList);
+        console.log(response.data.diaryList);
+        console.log(userInfo);
       } catch (error) {
         console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
       }
@@ -59,22 +60,7 @@ const Diary = () => {
     setSelectedDate1(date);
     setCalendarOpen(false);
 
-    const dday = await getDdayFromServer(); // dday 값을 가져오는 함수 호출
-
-    try {
-      const response = await postData(
-        POST_DDAY,
-        { dday: dday }, // dday를 서버로 전송
-        {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          'Content-Type': 'application/json',
-        }
-      );
-      console.log('서버 응답:', response?.data);
-    } catch (error) {
-      console.error('서버로 dday 전달 중 오류 발생:', error);
-    }
-  };
+  }
 
   const getDdayFromServer = async () => {
     try {
@@ -156,12 +142,14 @@ const Diary = () => {
               />
             )}
           </DDay>
-        </Information>
-        <SubText>나의 {userInfo?.dispatchType === "DISPATCHED" ? '교환교' : '파견교'}</SubText>
+        </Information><br/>
+        <div style={{height: "100px", marginTop: "30px"}}>
+          <SubText>나의 {userInfo?.dispatchType === "DISPATCHED" ? '교환교' : '파견교'}</SubText>
           <SchoolContainer>
-            <BigText>{userInfo?.country},</BigText>
-            <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>{userInfo?.dispatchedUniversity}</BigText>
+            <BigText>{userInfo.country},</BigText>
+            <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>{userInfo.dispatchedUniversity}</BigText>
           </SchoolContainer>
+        </div>
         <CalendarContainer>
           <DiaryCalendar diaries={diaries} dateList={dateList} />
         </CalendarContainer>
@@ -171,12 +159,12 @@ const Diary = () => {
         </AddDiary>
 
         {showDatePicker && (
-          <BottomTabLayout $height="50vh">
+          <BottomTabLayout>
             <TopHeader>
               날짜
             </TopHeader>
             <Close src={closeIcon} onClick={handleCalendarClick} />
-            <DailyDiaryCalendar onApply={handleDateChange2} /> {/* DailyDiaryCalendar에만 적용되는 상태 */}
+            <DailyDiaryCalendar onApply={handleDateChange2} />
           </BottomTabLayout>
         )}
 
@@ -210,8 +198,8 @@ const DiaryContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   font-family: 'Inter';
-  overflow-y: auto; // 필요시 스크롤 허용
-  position: relative; // 자식 요소가 absolute일 경우 기준이 될 수 있도록 설정
+  overflow-y: auto;
+  position: relative;
 `;
 
 
@@ -221,54 +209,71 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding-bottom: 100px; // BottomTabNav 컴포넌트와의 간격을 확보
+  padding-bottom: 100px;
+  gap: 20px;
 `;
+
 
 const Information = styled.div`
   width: 100%;
   height: 30vh;
   position: relative;
-  margin-bottom: 30px;
+
+  @media (max-width: 360px) {
+    height: 35vh;
+  }
+`;
+
+
+const DatePickerWrapper = styled.div`
+  position: fixed;  // 화면에 고정되도록 설정
+  bottom: 0;  // 화면의 맨 아래에 위치하도록 설정
+  left: 0;  // 화면의 왼쪽에 맞춤
+  width: 100%;  // 전체 화면 너비를 차지하도록 설정
+  background-color: white;  // 배경색 설정
+  z-index: 1000;  // 다른 요소들 위에 나타나도록 우선순위 설정
+  padding: 10px 0;  // 상하 패딩 추가
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);  // 그림자 추가로 상단에 약간의 분리감을 줌
+  border-top: 1px solid #E0E0E0;  // 상단에 경계선 추가
+  display: flex;
+  justify-content: center;  // DatePicker를 중앙에 위치하도록 설정
+`;
+
+const DatePickerStyled = styled(DatePicker)`
+  .react-datepicker {
+    width: 100%;  // 달력 너비를 전체로 확장
+    border: none;  // 테두리 제거
+  }
+  
+  .react-datepicker__header {
+    background-color: #f7f8fa;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .react-datepicker__day--selected {
+    background-color: #3E73B2;
+    color: white;
+  }
 `;
 
 
 
 const DDay = styled.div`
-  position: absolute;
+  position: absolute; // 부모 요소를 기준으로 위치 고정
   width: 238px;
   height: 238px;
-  top: 30%; 
-  left: 17%;
+  transform: translate(-50%, -50%);
+  top: 75%; 
+  left: 50%;
   font-size: 1.2em !important;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 5px solid #DCDFFF;
   z-index: 1;
-  background-color: white; 
-
-  /* ::before를 이용해 테두리 생성 */
-  &::before {
-    content: '';
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    padding: 10px; /* 테두리 두께 설정 */
-    background: linear-gradient(to bottom right, #D6EBFF, #C2C7FF);
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) content-box, 
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
+  background-color: white;
   }
-
-  /* 텍스트를 가상 테두리 위에 표시 */
-  position: relative;
 `;
 
 
@@ -285,9 +290,27 @@ const DDayText = styled.div`
   text-fill-color: transparent;
 `;
 
-const SubText = styled.div`
-  margin-top: 5em;
+const Today = styled.div`
+  background: ${props => props.theme.lightPurple};
+  margin-top: 4em;
+  width: 6em;
+  height: 1.5em;
+  border-radius: 30px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
+const RightContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 2.5em;
+  margin-left: 11em;
+`;
+
+const SubText = styled.div`
 `;
 
 const SchoolContainer = styled.div`
@@ -295,6 +318,7 @@ const SchoolContainer = styled.div`
   justify-content: center;  // 수평 가운데 정렬
   align-items: center;
   flex-wrap: wrap;
+  margin-top: 20px;
 `;
 
 const BigText = styled.div`
@@ -318,7 +342,7 @@ const CalendarContainer = styled.div`
 const AddDiary = styled.div`
   width: 30%;
   height: 5vh;
-  margin-left: 1.5em;
+  margin-left: 2.5em;
   margin-top: 1em;
   margin-bottom: 1em;
   background: ${props => props.theme.lightPurple};
@@ -381,7 +405,7 @@ const Save = styled.div`
 const BottomTabLayout = styled.div`
   width: 100%;
   max-width: 480px;
-  height: ${props => props.$height || 'auto'};
+  height: auto;
   position: fixed;
   bottom: 0;
   border-radius: 14px 14px 0px 0px;
@@ -393,6 +417,7 @@ const BottomTabLayout = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   box-shadow: 0px -1px 4px 0px #e2e2e2;
+
 `;
 
 const TopHeader = styled.div`
