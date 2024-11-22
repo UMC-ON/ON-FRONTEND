@@ -47,7 +47,7 @@ const NavBar = () => {
         <NavLink to="/notification">
           <s.NotificationBox>
             <s.Item src={notification} />
-            <s.NotificationCount>{notificationNumber}</s.NotificationCount>
+            <s.NotificationCount></s.NotificationCount>
           </s.NotificationBox>
         </NavLink>
         <NavLink to="/mypage">

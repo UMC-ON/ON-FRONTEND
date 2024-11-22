@@ -79,21 +79,18 @@ export const ColorButtonTag = styled(ColorButton)`
   width: auto;
   height: auto;
   max-width: 156px;
-  min-height: 22px;
-
+  min-height: 24px;
   background: ${(props) => props.color || '#BFD8E5'};
-
-  padding: 0 8px;
+  padding: 0 9px;
   flex-shrink: 1;
   color: #fff;
   text-align: center;
   font-family: Inter;
-  font-size: 12px;
+  font-size: 14px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   line-height: normal;
   letter-spacing: 0.24px;
-
   white-space: wrap;
 `;
 
@@ -109,7 +106,6 @@ export const CheckBoxWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-
   color: #b2b2b2;
   font-family: Inter;
   font-size: 11px;
@@ -117,7 +113,6 @@ export const CheckBoxWrapper = styled.div`
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.22px;
-
   height: 18px;
   width: auto;
 `;
@@ -137,6 +132,7 @@ export const TitleSection = styled.section`
   flex-direction: column;
   align-content: center;
   padding: 10px 0;
+  margin-top: 10px;
 `;
 
 export const EditorWrapper = styled.div`
@@ -262,3 +258,19 @@ export const PreviewImg = styled.img`
   border-radius: 13px;
   flex-shrink: 0;
 `;
+
+export const RadioButton = styled.input`
+  vertical-align: -0.188rem;
+  appearance: none;
+  border: max(2px, 0.05em) solid lightgray;
+  border-radius: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  background: ${(props) => (props.checked ? props.activeColor || '#bfd8e5' : props.inactiveColor || '#ffffff')};
+  cursor: pointer;
+
+  &:checked {
+    background: ${(props) => props.activeColor || '#bfd8e5'};
+  }
+`;
+

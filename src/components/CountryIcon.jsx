@@ -73,7 +73,7 @@ const ProfileImg = styled.img`
   object-fit: cover;
   object-position: center;
   // border: 1px solid #D9D9D9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
 `;
 
 const AccompanyPicture = styled.img`
