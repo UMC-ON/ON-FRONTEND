@@ -21,6 +21,10 @@ const SignUpPage = () => {
   const nav = useNavigate();
   const [userInfo, setUserInfo] = useState(userInfoBE);
   const [dupCheck, setDupCheck] = useState({ loginId: 0, nickname: 0 });
+  const [verifyCode, setVerifyCode] = useState({
+    isSent: false,
+    verified: false,
+  });
   //0==유효성검사도, 중복검사도 진행X
   //1== 유효성,중복검사 OK
   const [isActive, setActive] = useState(false);
@@ -34,6 +38,7 @@ const SignUpPage = () => {
         //이메일이나 닉네임이 바뀔 경우 중복체크 역사 초기화
         setDupCheck({ ...dupCheck, [name]: 0 });
       }
+      console.log(userInfo);
     }
   };
   const { currentTitle, currentStep, prev, next, isFirstStep, isLastStep } =
@@ -54,6 +59,8 @@ const SignUpPage = () => {
               setDupCheck(a);
             }}
             dupCheck={dupCheck}
+            verifyCode={verifyCode}
+            setVerifyCode={setVerifyCode}
           />
         ),
       },

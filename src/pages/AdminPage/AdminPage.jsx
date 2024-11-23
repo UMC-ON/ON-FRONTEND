@@ -58,9 +58,9 @@ const AdminPage = () => {
           { page: 0, size: 20, sort: 'DESC' },
         );
         if (response) {
-          console.log(response.data.result.content);
-          setRequestList(response.data.result.content);
-          return response.data.result.content;
+          console.log(response.data.content);
+          setRequestList(response.data.content);
+          return response.data.content;
         }
       };
       fetchData();
