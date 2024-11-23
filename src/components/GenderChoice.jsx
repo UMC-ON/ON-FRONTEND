@@ -23,9 +23,6 @@ const GenderChoice = ({ getGender }) => {
 
   return (
     <Container>
-      <Header>
-        <p style={{ fontSize: "12px", color: "#CCCCCC", margin: "10px 0" }}>성별</p>
-      </Header>
       <Center>
         <Button onClick={setWoman} $isActive={gender === '여자'}>여자</Button>
         <Button onClick={setMan} $isActive={gender === '남자'}>남자</Button>

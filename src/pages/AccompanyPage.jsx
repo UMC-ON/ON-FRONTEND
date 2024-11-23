@@ -239,11 +239,13 @@ function AccompanyPage() {
         <>
           <Overlay onClick={handleCalendarClick} />
           <BottomTabLayout $height="53vh">
-            <TopHeader>날짜</TopHeader>
-            <Close
-              src={closeIcon}
-              onClick={handleCalendarClick}
-            />
+            <TopBar>
+              <TopHeader>날짜</TopHeader>
+              <Close
+                src={closeIcon}
+                onClick={handleCalendarClick}
+              />
+            </TopBar>
             <DateRangePicker onApply={handleApplyClick} />
           </BottomTabLayout>
         </>
@@ -253,10 +255,13 @@ function AccompanyPage() {
         <>
           <Overlay onClick={handleGenderClick} />
           <BottomTabLayout>
-            <Close
-              src={closeIcon}
-              onClick={handleGenderClick}
-            />
+            <TopBar>
+              <TopHeader>성별</TopHeader>
+              <Close
+                src={closeIcon}
+                onClick={handleGenderClick}
+              />
+            </TopBar>
             <GenderChoice getGender={handleGetGender} />
           </BottomTabLayout>
         </>
@@ -277,9 +282,14 @@ export default AccompanyPage;
 const TopHeader = styled.div`
   font-size: 12px;
   color: #cccccc;
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  
+`;
+
+const TopBar = styled.div`
+  display: flex;
+  justify-content: space-between; /* X 버튼과 텍스트를 양쪽 정렬 */
+  align-items: center; /* 세로 정렬 */
+  width: 100%;
 `;
 
 const Overlay = styled.div`
@@ -293,16 +303,17 @@ const Overlay = styled.div`
 `;
 
 const Close = styled.img`
-  position: absolute;
-  top: 20px;
-  right: 20px;
+
   cursor: pointer;
 `;
 
+
 const BottomTabLayout = styled.div`
   width: 100%;
+  height: auto; /* 높이를 내용에 맞게 조정 */
+  min-height: 300px;
+  max-height: calc(100vh - 50px);
   max-width: 480px;
-  height: ${(props) => props.$height || 'auto'};
   position: fixed;
   bottom: 0;
   border-radius: 14px 14px 0px 0px;
@@ -310,8 +321,9 @@ const BottomTabLayout = styled.div`
   background: #ffffff;
   z-index: 10;
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  flex-direction: column; /* 위에서 아래로 배치 */
+  align-items: flex-start; /* 왼쪽 정렬 */
   box-sizing: border-box;
   box-shadow: 0px -1px 4px 0px #e2e2e2;
+  padding: 20px; /* 내부 여백 추가 */
 `;

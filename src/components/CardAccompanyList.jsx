@@ -110,7 +110,7 @@ const LeftSpace = styled.div`
 
 const SubText = styled.div`
   color: #5C5C5C;
-  font-family: 'Inter-Bold';
+  font-family: 'Inter';
   font-size: 1em;
 `;
 
