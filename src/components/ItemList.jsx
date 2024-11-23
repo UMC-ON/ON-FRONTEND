@@ -43,6 +43,7 @@ const ItemList = ({ items }) => {
       if (Array.isArray(response.data.content)) {
         const scrappedIds = response.data.content.map(post => post.marketPost.marketPostId);
         setScrappedMarketPostIds(scrappedIds);
+        console.log(scrappedIds);
       } else {
         console.error('Unexpected response structure:', response.data);
       }
@@ -57,12 +58,12 @@ const ItemList = ({ items }) => {
 
   return (
     <>
-      {items && items.map((item, index) => {
+      {items && items.map((item, index, lastItemRef) => {
         const isCompleted = item.dealStatus === "COMPLETE";
         const isScrapped = scrappedMarketPostIds.includes(item.marketPostId);
 
         return (
-          <ItemDiv key={index} isCompleted={isCompleted}>
+          <ItemDiv key={index} isCompleted={isCompleted} ref={index === items.length - 1 ? lastItemRef : null}>
             <Photo src={item.imageUrls.length > 0 ? item.imageUrls : defaultImg} />
             <Information>
               <StarContainer
@@ -78,7 +79,7 @@ const ItemList = ({ items }) => {
                 </TitleTimeContainer><br/>
                 <State how={item.dealType === 'DIRECT' ? '직거래' : '택배거래'} now={item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
                 <LocationAndUser>
-                  <Place><Compas src={compas} />{item.currentCountry} {item.currentLocation}</Place>
+                  <Place><img src={compas} />{item.currentCountry} {item.currentLocation}</Place>
                   <User><Profile src={profile} />{item.nickname}</User>
                 </LocationAndUser>
                 <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
@@ -92,7 +93,7 @@ const ItemList = ({ items }) => {
 };
 
 
-const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrappedMarketPostIds }) => {
+const StarContainer = ({ marketPostId, isFilled, setScrappedMarketPostIds }) => {
   const [isStarFilled, setIsStarFilled] = useState(isFilled);
   let userInfo = useSelector((state) => state.user.user);
 
@@ -212,7 +213,7 @@ const Time = styled.span`
 `;
 
 const TitleTimeContainer = styled.div`
-  width: 155px;
+  width: 145px;
   display: flex; /* Flexbox를 사용하여 수평 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
 `;
@@ -263,18 +264,11 @@ const Place = styled.p`
   font-size: 0.7em;
   align-items: center;
   margin-right: 10px;
-  margin-top: 6px;
+  margin-top: 5px;
   color: #838383;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-
-const Compas = styled.img`
-  width: 1.2em;
-  height: 1.2em;
-  margin-right: 2px;
+  text-overflow: ellipsis !important;
 `;
 
 const User = styled.p`
