@@ -247,6 +247,8 @@ const DetailPage = ({ color1, color2, boardType }) => {
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
   if (userInfo && currentPost && commentList) {
+    //return <div>{currentPost.postId}</div>;
+
     return (
       <div ref={mobileViewRef}>
         <PageHeader

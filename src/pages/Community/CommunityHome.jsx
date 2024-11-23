@@ -18,6 +18,7 @@ import { useState, useEffect, useRef } from 'react';
 import { getData } from '../../api/Functions.jsx';
 import { GET_FILTERED_POST_IN, GET_POST_OF } from '../../api/urls.jsx';
 import { throttle } from 'rxjs';
+import { loadUser, logout } from '../../redux/actions.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 

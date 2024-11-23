@@ -36,9 +36,9 @@ const SinglePost = ({
       </s.Info>
 
       {boardType === 'INFO' ? (
-        <s.Categories $fontcolor="#3E73B2">정보 커뮤니티</s.Categories>
+        <s.Categories $fontcolor="#3E73B2">정보 게시판</s.Categories>
       ) : (
-        <s.Categories $fontcolor="#6458BF">자유 커뮤니티</s.Categories>
+        <s.Categories $fontcolor="#6458BF">자유 게시판</s.Categories>
       )}
     </s.SearchWrapper>
   );

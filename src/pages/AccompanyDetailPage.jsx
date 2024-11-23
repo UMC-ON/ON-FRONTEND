@@ -330,7 +330,7 @@ function AccompanyDetailPage() {
               </FlexContainer>
             </PurpleContainer>
 
-            <Left>
+            <Left style={{}}>
               <LittleButton onClick={openReportModal}>
                 이 게시물 신고하기
               </LittleButton>
@@ -338,24 +338,23 @@ function AccompanyDetailPage() {
 
             <Line />
 
-            
-                <BigContainer>
-                  <LeftContainer>
-                    <MiddleText
-                      color="#3E73B2"
-                      spacing="1vh"
-                    >
-                      비슷한
-                    </MiddleText>
-                    <MiddleText>동행글 추천</MiddleText>
-                  </LeftContainer>
-                </BigContainer>
+            <BigContainer>
+              <LeftContainer>
+                <MiddleText
+                  color="#3E73B2"
+                  spacing="1vh"
+                >
+                  비슷한
+                </MiddleText>
+                <MiddleText>동행글 추천</MiddleText>
+              </LeftContainer>
+            </BigContainer>
 
-                <CardAccompanyList
-                  color="#c5d3e0"
-                  cards={accompanyData}
-                ></CardAccompanyList>
- 
+            <CardAccompanyList
+              color="#c5d3e0"
+              cards={accompanyData}
+            ></CardAccompanyList>
+
             <BigSpace />
 
             {infoData[0].userId !== userId ? (
@@ -574,7 +573,8 @@ const LittleButton = styled.button`
   color: #7a7a7a;
   margin-left: 25px;
   background: rgb(110, 186, 255, 0);
-  margin-bottom: 4vh;
+  margin-bottom: 1vh;
+  margin-top: 3.5vh;
 `;
 
 const Line = styled.div`
