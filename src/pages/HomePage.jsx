@@ -474,7 +474,7 @@ function HomePage() {
       ))}
 
       <FlexContainer onClick={goToInfoCommunity}>
-        <BigText spacing="1vh">최신 정보글</BigText>
+        <BigText spacing="1rem">최신 정보글</BigText>
         <RightIcon src={rightIcon}></RightIcon>
       </FlexContainer>
       <SmallSpace2 />
@@ -485,7 +485,7 @@ function HomePage() {
       <Space></Space>
 
       <FlexContainer onClick={goToGeneralCommunity}>
-        <BigText spacing="1vh">최신 자유글</BigText>
+        <BigText spacing="1rem">최신 자유글</BigText>
         <RightIcon src={rightIcon}></RightIcon>
       </FlexContainer>
 
@@ -531,11 +531,6 @@ function HomePage() {
 
 export default HomePage;
 
-const LeftSpace = styled.div`
-  margin-left: 1.5rem;
-  padding: 5px;
-`;
-
 const FlexContainer = styled.div`
   margin-top: 1.5rem;
   margin-left: 1.5rem;
@@ -545,6 +540,7 @@ const FlexContainer = styled.div`
   align-items: center;
   padding: 10px;
   padding-bottom: 0px;
+  cursor:pointer;
 `;
 
 const FixContainer = styled.div`
@@ -557,19 +553,19 @@ const RightIcon = styled.img`
 `;
 
 const Space = styled.div`
-  margin-top: 8vh;
+  margin-top: 4rem;
 `;
 
 const SmallSpace = styled.div`
-  margin-top: 4vh;
+  margin-top: 2rem;
 `;
 
 const SmallSpace2 = styled.div`
-  margin-top: 3vh;
+  margin-top: 1.5rem;
 `;
 
 const BigSpace = styled.div`
-  margin-top: 15vh;
+  margin-top: 7.5rem;
 `;
 
 const BigContainer = styled.div`
@@ -583,13 +579,13 @@ const LeftContainer = styled.div`
 
 const SubText = styled.div`
   color: #5c5c5c;
-  font-family: 'Inter-Bold';
+  font-family: 'Inter';
   font-size: 1em;
 `;
 
 const WhiteText = styled.div`
   color: #ffffff;
-  font-family: 'Inter-Bold';
+  font-family: 'Inter';
   font-weight: bold;
   font-size: 1.2em;
   padding-top: 15px;
@@ -599,7 +595,7 @@ const WhiteText = styled.div`
 
 const SmallWhiteText = styled.div`
   color: #ffffff;
-  font-family: 'Inter-Bold';
+  font-family: 'Inter';
   font-weight: bold;
   font-size: 1em;
   padding-top: 15px;
@@ -612,7 +608,7 @@ const BigText = styled.div`
   color: ${(props) => props.color || '#000000'};
   margin-right: ${(props) => props.spacing || '0'};
   font-weight: bold;
-  font-family: 'Inter-Regular';
+  font-family: 'Inter';
   font-size: 1.5em;
   margin-bottom: 1vh;
   flex-shrink: 0;

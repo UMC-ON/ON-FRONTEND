@@ -59,6 +59,7 @@ function FirstModal({ closeModal, openNextModal, nickname}) {
     display: flex;
     align-items: center;
     justify-content: center;
+    max-width: 480px;
   `;
   
   const ModalContent = styled.div`

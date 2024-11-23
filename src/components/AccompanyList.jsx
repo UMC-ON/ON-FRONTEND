@@ -54,7 +54,7 @@ function AccompanyList({datas}) {
                   <GreyMiddleText>{data.content}</GreyMiddleText>
                 </Left>
     
-                <Left>
+                <Bottom>
                   <CardIcon src={personIcon} $top="2px"/>
                   <SmallGreyText>{data.nickname}</SmallGreyText>
                   {!data.ageAnonymous && (
@@ -65,7 +65,7 @@ function AccompanyList({datas}) {
                   )}
                   <SmallGreyText>·</SmallGreyText>
                   <SmallGreyText>{data.gender === 'FEMALE' ? '여' : '남'}</SmallGreyText>
-                </Left>
+                </Bottom>
               </TextContainer>
               <Overlay $isClosed={data.recruitCompletd} />
             </RoundContainer>
@@ -100,6 +100,13 @@ const SubText = styled.div`
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
+  
+`;
+
+const Bottom = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  margin-top: auto;
 `;
 
 const CardIcon = styled.img`
@@ -141,16 +148,20 @@ const GreyMiddleText = styled.p`
   font-size: 0.5em;
   color: #7a7a7a;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2; /* 기본은 두 줄 */
   -webkit-box-orient: vertical;
   overflow: hidden;
-  // width: 20vh;
-  line-height: 1.5vh;
+  line-height: 1.5; /* 줄 간격 */
   text-align: left;
   margin-top: 10px;
   margin-bottom: 10px;
   width: 99%;
-  height: 4vh;
+  max-height: calc(1.5em * 2); /* 두 줄 이상 넘지 않음 */
+
+  @media (max-width: 480px) { /* 작은 화면에서는 3줄 */
+    -webkit-line-clamp: 2;
+    max-height: calc(1.5em * 3);
+  }
 `;
 
 const RoundContainer = styled.div`
@@ -163,11 +174,12 @@ const RoundContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 2vh;
+  cursor: pointer;
 `;
 
 const ImageWrapper = styled.div`
-  width: 16vh;  
-  height: 16vh; 
+  width: 8.2rem;  
+  height: 8.2rem; 
   flex-shrink: 0;  
   overflow: hidden;  
   border-radius: 20px;  
@@ -202,7 +214,7 @@ const CardName = styled.p`
   white-space: nowrap;         
   overflow: hidden;            
   text-overflow: ellipsis;    
-  width: 23vh;
+  width: 11.5rem;
 `;
 
 const Overlay = styled.div`

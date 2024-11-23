@@ -567,6 +567,7 @@ function AccompanyPostPage() {
               <MarginLeft />
               <CircleButton
                 src={minusSrc}
+                disabled={daysDifference === 0}
                 onClick={decreaseDays}
               />
               <Input
@@ -577,6 +578,7 @@ function AccompanyPostPage() {
               />
               <CircleButton
                 src={plusSrc}
+                disabled={daysDifference === limitDays}
                 onClick={increaseDays}
               />
               <GreyText $left="6px">일</GreyText>
@@ -589,11 +591,13 @@ function AccompanyPostPage() {
         <>
           <Overlay onClick={handleCalendarClick} />
           <BottomTabLayout>
-            <Close
-              src={closeIcon}
-              onClick={handleCalendarClick}
-            />
-            <TopHeader>날짜</TopHeader>
+            <TopBar>
+              <TopHeader>날짜</TopHeader>
+              <Close
+                src={closeIcon}
+                onClick={handleCalendarClick}
+              />
+            </TopBar>
             <LabelText>여행 가고 싶은 기간을 설정해 주세요!</LabelText>
             <LabelText2>
               일정이 확정되지 않았다면 범위를 넓게 설정할 수 있어요.
@@ -637,7 +641,7 @@ function AccompanyPostPage() {
       </BigContainer>
       <GreyInput
         placeholder="제목을 입력해 주세요."
-        $height="2.5vh"
+        $height="2.7rem"
         onChange={onChangeInput}
         name="title"
       />
@@ -673,8 +677,8 @@ function AccompanyPostPage() {
               xmlns="http://www.w3.org/2000/svg"
               style={{
                 position: 'absolute',
-                right: '1.7rem',
-                top: '0.3rem',
+                right: '9%',
+                top: '5%',
                 zIndex: '2',
               }}
               onClick={handleDeleteImage}
@@ -705,6 +709,8 @@ function AccompanyPostPage() {
         <AlertModal
           closeModal={handleModalClose}
           line1={modalContent}
+          line2={'동행인 신청을 위해서는'}
+          line3={'동행인에 대한 정보가 필요합니다.'}
         />
       )}
     </>
@@ -718,16 +724,53 @@ const Container = styled.div`
   width: '100%';
 `;
 
+const BottomTabLayout = styled.div`
+  width: 100%;
+  height: auto; /* 높이를 내용에 맞게 조정 */
+  min-height: 300px;
+  max-height: calc(100vh - 50px);
+  max-width: 480px;
+  position: fixed;
+  bottom: 0;
+  border-radius: 14px 14px 0px 0px;
+  border: 1px solid white;
+  background: #ffffff;
+  z-index: 10;
+  display: flex;
+  flex-direction: column; /* 위에서 아래로 배치 */
+  align-items: flex-start; /* 왼쪽 정렬 */
+  box-sizing: border-box;
+  box-shadow: 0px -1px 4px 0px #e2e2e2;
+  padding: 20px; /* 내부 여백 추가 */
+  overflow-y: auto; /* 내용이 많을 경우 스크롤 가능 */
+`;
+
+const LabelText = styled.div`
+  font-family: Inter;
+  font-weight: bold;
+  color: #3e73b2;
+  margin-bottom: 10px; /* 아래 요소와 간격 추가 */
+  font-size: 0.85em;
+`;
+
+const LabelText2 = styled.div`
+  font-family: Inter;
+  color: #7a7a7a;
+  margin-bottom: 5px; /* 아래 요소와 간격 추가 */
+  font-size: 0.85em;
+`;
+
 const TopHeader = styled.div`
   font-size: 12px;
   color: #cccccc;
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  margin-bottom: 10px;
 `;
 
-const LeftSpace = styled.section`
-  margin-left: 27%;
+const TopBar = styled.div`
+  display: flex;
+  justify-content: space-between; /* X 버튼과 텍스트를 양쪽 정렬 */
+  align-items: center; /* 세로 정렬 */
+  width: 100%;
 `;
 
 const Space = styled.section`
@@ -745,6 +788,7 @@ const CircleContainer = styled.section`
   margin-left: 10px;
   margin-top: 5px;
   padding-left: 6px;
+  cursor:pointer;
 `;
 
 const CircleText = styled.section`
@@ -786,14 +830,16 @@ const GreyInput = styled.textarea`
   font-size: 1rem;
   padding: 10px;
   font-family: Inter;
-  width: 83%;
+  width: 90%;
   margin-top: 1vh;
   margin-bottom: 3vh;
   height: ${(props) => props.$height || 'auto'};
   background-color: white;
+  box-sizing: border-box; /* padding과 border를 크기에 포함 */
+   resize: none;
 
   &:hover {
-    border: none;
+    border-color: #b5b5b5; /* hover 상태에서 border 색상만 변경 */
   }
 
   &:focus {
@@ -837,7 +883,8 @@ const RightContainer = styled.div`
   position: fixed;
   width: 100%;
   padding: 2vh 0;
-  z-index: 100;
+  z-index: 2;
+  max-width: 480px;
 `;
 
 const SpaceBetween = styled.div`
@@ -856,6 +903,8 @@ const GreyButton = styled.button`
   line-height: normal;
   margin-right: 8px;
   padding: 5px 15px;
+  border: none;
+  box-sizing: border-box;
 
   &:hover {
     border: none;
@@ -883,6 +932,8 @@ const BlueButton = styled.button`
   line-height: normal;
   margin-right: 20px;
   padding: 5px 15px;
+  border: none;
+  box-sizing: border-box;
 
   &:hover {
     border: none;
@@ -937,28 +988,10 @@ const BlackText = styled.div`
     $isChecked ? 'line-through' : 'none'};
 `;
 
-const LabelText = styled.div`
-  font-family: Inter;
-  font-weight: bold;
-  color: #3e73b2;
-  position: absolute;
-  top: 50px;
-  left: 20px;
-  font-size: 0.85em;
-`;
-
-const LabelText2 = styled.div`
-  font-family: Inter;
-  color: #7a7a7a;
-  position: absolute;
-  top: 67px;
-  left: 20px;
-  font-size: 0.85em;
-`;
-
 const PlusButton = styled.img`
   margin-top: 7px;
   margin-left: 7px;
+  cursor:pointer;
 `;
 
 const Overlay = styled.div`
@@ -972,31 +1005,15 @@ const Overlay = styled.div`
 `;
 
 const Close = styled.img`
-  position: absolute;
-  top: 20px;
-  right: 20px;
+
   cursor: pointer;
 `;
 
-const BottomTabLayout = styled.div`
-  width: 100%;
-  height: 59vh;
-  max-width: 480px;
-  position: fixed;
-  bottom: 0;
-  border-radius: 14px 14px 0px 0px;
-  border: 1px solid white;
-  background: #ffffff;
-  z-index: 10;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  box-sizing: border-box;
-  box-shadow: 0px -1px 4px 0px #e2e2e2;
-`;
+
 
 const CircleButton = styled.img`
   margin-left: 8px;
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
 `;
 
 const MarginLeft = styled.div`
@@ -1012,6 +1029,7 @@ const MarginLeft2 = styled.div`
 export const LeftButton = styled.img`
   position: absolute;
   left: 25px;
+  cursor:pointer;
 `;
 
 const BottomTabLayout2 = styled.div`
@@ -1023,7 +1041,7 @@ const BottomTabLayout2 = styled.div`
   border-radius: 14px 14px 0px 0px;
   border: 1px solid white;
   background: #ffffff;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;

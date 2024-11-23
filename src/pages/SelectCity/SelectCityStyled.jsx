@@ -45,6 +45,7 @@ export const PageLayout = styled.div`
   display: flex;
   align-items: center;
   overflow-y: auto;
+  max-width: 480px;
 `;
 export const ContinentWrapper = styled.div`
   width: 100%;

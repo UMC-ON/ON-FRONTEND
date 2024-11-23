@@ -34,6 +34,12 @@ export const CompanyCalendar = styled.div`
     border: none;
   }
 
+  .react-datepicker__day--disabled {
+  color: #cccccc; /* 회색 */
+  background-color: #E0E0E0; /* 필요하면 배경 색상 */
+  cursor: not-allowed; /* 클릭 불가 */
+}
+
 
   .react-datepicker__month {
     padding: 10px;
@@ -145,7 +151,7 @@ export const ResetButton = styled.button`
   font-size: 0.8em;
   cursor: pointer;
   width: 6em;
-  margin-right: 6em;
+  margin-right: 5em;
 `;
 
 export const ApplyButton = styled.button`
