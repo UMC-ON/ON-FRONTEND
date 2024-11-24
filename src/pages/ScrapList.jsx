@@ -7,7 +7,7 @@ import PageHeader from '../components/PageHeader/PageHeader';
 import ScrapListComponent from '../components/ScrapListComponent';
 import LoadingScreen from '../components/LoadingScreen';
 
-import nothing from "../assets/images/no_content.svg";
+import nothing from '../assets/images/no_content.svg';
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
@@ -15,62 +15,67 @@ import { getData } from '../api/Functions';
 import { GET_SCRAP } from '../api/urls';
 
 function ScrapList() {
-    const [items, setItems] = useState([]);
+  const [items, setItems] = useState([]);
 
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          params: {
+            page: 0,
+            size: 20,
+            sort: 'DESC',
+          },
+        });
 
-    useEffect(() => {
-      const fetchItems = async () => {
-        try {
-          const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-            },
-            params: {
-              page: 0, size: 20, sort: 'DESC'
-            }
-            
-          });
-    
-          // 응답 데이터 확인
-          console.log("API response:", response.data.content);
-    
-          if (response.data.content) {
-            setItems(response.data.content);
-          } else {
-            console.warn('스크랩 물품 데이터를 찾을 수 없습니다.');
-          }
-        } catch (error) {
-          console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
+        // 응답 데이터 확인
+        console.log('API response:', response.data.content);
+
+        if (response.data.content) {
+          setItems(response.data.content);
+        } else {
+          console.warn('스크랩 물품 데이터를 찾을 수 없습니다.');
         }
-      };
-    
-      fetchItems();
-    }, []); // 빈 배열을 추가하여 useEffect가 한 번만 실행되도록 함
-    
-    return (
-        <>
-          <PageHeader pageName={'스크랩한 물품'} />
-            <Space /><br /><br />
-            {items.length === 0 ? (
-                <NoContentWrapper>
-                    <NoContentContainer>
-                        <NoContentImage src={nothing} alt="No content" />
-                    </NoContentContainer><br /><br />
-                    <NoContentMessage>앗, 스크랩한 내역이 없어요!</NoContentMessage>
-                </NoContentWrapper>
-            ) : (
-                <>
-                    <ScrapListComponent items={items} />
-                    <LastItemMessage>마지막 물품입니다.</LastItemMessage>
-                </>
-            )}
+      } catch (error) {
+        console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
+      }
+    };
 
+    fetchItems();
+  }, []); // 빈 배열을 추가하여 useEffect가 한 번만 실행되도록 함
+
+  return (
+    <>
+      <PageHeader pageName={'스크랩한 물품'} />
+      <Space />
+      <br />
+      <br />
+      {items.length === 0 ? (
+        <NoContentWrapper>
+          <NoContentContainer>
+            <NoContentImage
+              src={nothing}
+              alt="No content"
+            />
+          </NoContentContainer>
+          <br />
+          <br />
+          <NoContentMessage>앗, 스크랩한 내역이 없어요!</NoContentMessage>
+        </NoContentWrapper>
+      ) : (
+        <>
+          <ScrapListComponent items={items} />
+          <LastItemMessage>마지막 물품입니다.</LastItemMessage>
         </>
-    );
+      )}
+    </>
+  );
 }
 
 export default ScrapList;
-
 
 const Space = styled.div`
   margin-top: 7vh;
@@ -79,8 +84,8 @@ const Space = styled.div`
 const LastItemMessage = styled.div`
   text-align: center;
   margin: 20px;
-  color: #B8B8B8;
-  font-size: 10px;
+  color: #b8b8b8;
+  font-size: 13px;
 `;
 
 const NoContentWrapper = styled.div`
@@ -104,5 +109,5 @@ const NoContentImage = styled.img`
 
 const NoContentMessage = styled.p`
   font-size: 14px;
-  color: #B8B8B8;
+  color: #b8b8b8;
 `;

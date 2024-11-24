@@ -10,7 +10,7 @@ import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import SellPageHeader from '../components/SellPageHeader';
 import ItemList from '../components/ItemList';
-import TransactionPicker from "../components/TransactionPicker";
+import TransactionPicker from '../components/TransactionPicker';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
 import Loading from '../components/Loading/Loading';
@@ -22,7 +22,7 @@ function SellPage() {
   const [showAvailable, setShowAvailable] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState('');
   const [isPickerVisible, setIsPickerVisible] = useState(false);
-  const [tempTransaction, setTempTransaction] = useState(''); 
+  const [tempTransaction, setTempTransaction] = useState('');
   const [showCountry, setShowCountry] = useState(false);
   const [country, setCountry] = useState(null);
   const [isCountryClicked, setIsCountryClicked] = useState(false);
@@ -35,13 +35,15 @@ function SellPage() {
   const fetchAllItems = async () => {
     try {
       const response = await getData(
-        GET_ITEM_LIST, {
-        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-      }, 
-      { page: 0, size: 20, sort: 'DESC' },);
-      
+        GET_ITEM_LIST,
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        { page: 0, size: 20, sort: 'DESC' },
+      );
+
       if (response) {
-        console.log("모든 물품 불러오기 성공");
+        console.log('모든 물품 불러오기 성공');
         setItems(response.data.content);
       }
     } catch (error) {
@@ -51,44 +53,51 @@ function SellPage() {
 
   const fetchItems = async (dealType = '', currentCountry = '') => {
     try {
-      
-        // 필터링된 물품 불러오기
-        const params = {
-          page: 0,
-          size: 20,
-          sort: 'DESC',
-          dealType: dealType ? (dealType === '직거래' ? 'DIRECT' : 'DELIVERY') : '', // 거래방식이 없으면 빈 문자열로 처리
-          currentCountry,
-          dealStatus: showAvailable ? 'AWAIT' : ''
-        };
-  
-        const response = await getData(
-          GET_FILTER_ITEM, {
+      // 필터링된 물품 불러오기
+      const params = {
+        page: 0,
+        size: 20,
+        sort: 'DESC',
+        dealType: dealType
+          ? dealType === '직거래'
+            ? 'DIRECT'
+            : 'DELIVERY'
+          : '', // 거래방식이 없으면 빈 문자열로 처리
+        currentCountry,
+        dealStatus: showAvailable ? 'AWAIT' : '',
+      };
+
+      const response = await getData(
+        GET_FILTER_ITEM,
+        {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }, params);
-  
-        if (response) {
-          console.log(params);
-          setItems(response.data.content);
-          console.log(currentCountry);
-          console.log(response.data);
-        }
-      }catch (error) {
+        },
+        params,
+      );
+
+      if (response) {
+        console.log(params);
+        setItems(response.data.content);
+        console.log(currentCountry);
+        console.log(response.data);
+      }
+    } catch (error) {
       console.error('필터링 중 오류 발생:', error);
     }
   };
-  
-  
+
   const fetchSearchResults = async () => {
     try {
       const response = await getData(
-        GET_ITEM_SEARCH, {
-        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-      }, 
-      { keyword: searchKeyword, page: 0, size: 20, sort: 'DESC' },);
-      
+        GET_ITEM_SEARCH,
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        { keyword: searchKeyword, page: 0, size: 20, sort: 'DESC' },
+      );
+
       if (response) {
-        console.log("검색 성공");
+        console.log('검색 성공');
         setItems(response.data.content);
       }
     } catch (error) {
@@ -158,10 +167,11 @@ function SellPage() {
   return (
     <>
       <SellPageHeader pageName={'거래하기'} />
-      <Space /><br />
+      <Space />
+      <br />
       <SearchContainer>
         <Search
-          placeholder='국가 / 물품으로 검색해 보세요.'
+          placeholder="국가 / 물품으로 검색해 보세요."
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
           onKeyPress={(e) => {
@@ -171,9 +181,14 @@ function SellPage() {
             }
           }}
         />
-        <SearchIcon src={search_icon} onClick={fetchSearchResults} /> {/* 검색 아이콘 클릭 시 검색 요청 */}
+        <SearchIcon
+          src={search_icon}
+          onClick={fetchSearchResults}
+        />{' '}
+        {/* 검색 아이콘 클릭 시 검색 요청 */}
       </SearchContainer>
-      <br /><br />
+      <br />
+      <br />
       <FlexContainer>
         <Span>
           <SellPageCountrySelect
@@ -182,10 +197,16 @@ function SellPage() {
             isCountryClicked={isCountryClicked}
             updateIsCountryClicked={resetCountryClick}
           />
-          {showCountry &&
-            <SelectCountry closeModal={handleCountryClick} getCountry={handleGetCountry} />
-          }
-          <GreyPicker onClick={togglePickerVisibility} selected={!!selectedTransaction}>
+          {showCountry && (
+            <SelectCountry
+              closeModal={handleCountryClick}
+              getCountry={handleGetCountry}
+            />
+          )}
+          <GreyPicker
+            onClick={togglePickerVisibility}
+            selected={!!selectedTransaction}
+          >
             {selectedTransaction || '거래방식'}
             <Icon
               src={selectedTransaction ? whiteCloseIcon : arrowIcon}
@@ -200,15 +221,22 @@ function SellPage() {
             />
           </GreyPicker>
           <Available>
-            <Check onClick={handleCheckClick} checked={showAvailable} />
+            <Check
+              onClick={handleCheckClick}
+              checked={showAvailable}
+            />
             <span>거래 가능 물품만 보기</span>
           </Available>
         </Span>
-      </FlexContainer><br />
+      </FlexContainer>
+      <br />
       <ItemList items={items} />
       <ButtonContainer>
         <WriteButton onClick={goPost}>
-          <img src={pencilImg} alt="pencil icon" />
+          <img
+            src={pencilImg}
+            alt="pencil icon"
+          />
           글 쓰기
         </WriteButton>
       </ButtonContainer>
@@ -227,9 +255,6 @@ function SellPage() {
 
 export default SellPage;
 
-
-
-
 const Space = styled.div`
   margin-top: 7vh;
 `;
@@ -238,7 +263,7 @@ const SearchContainer = styled.div`
   position: relative;
   width: 96%;
   margin: 0 auto;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: #000000;
 `;
 
@@ -258,10 +283,10 @@ const Search = styled.textarea`
   resize: none;
   overflow: hidden;
   &::placeholder {
-  font-size: 15px;
-  font-family: Inter;
+    font-size: 15px;
+    font-family: Inter;
   }
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: #000000;
 `;
 
@@ -274,20 +299,19 @@ const SearchIcon = styled.img`
 
 const FlexContainer = styled.div`
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   margin-left: 1em;
 `;
 
 const Span = styled.span`
   display: flex;
-  align-items: center; 
+  align-items: center;
 `;
 
 const GreyPicker = styled.button`
-  background: ${({ selected }) => selected 
-    ? 'linear-gradient(135deg, #C2C7FF, #AD99FF)' 
-    : '#E8E8E8'};
+  background: ${({ selected }) =>
+    selected ? 'linear-gradient(135deg, #C2C7FF, #AD99FF)' : '#E8E8E8'};
   font-family: 'Inter-Regular';
   font-size: 0.8em;
   padding: 3px;
@@ -295,14 +319,14 @@ const GreyPicker = styled.button`
   padding-left: 8px;
   padding-right: 8px;
   margin-right: 8px;
-  color: ${({ selected }) => selected ? '#FFFFFF' : '#363636'};
+  color: ${({ selected }) => (selected ? '#FFFFFF' : '#363636')};
 `;
 
 const Available = styled.div`
   display: flex;
   align-items: center;
   font-size: 12px;
-  color: #7A7A7A;
+  color: #7a7a7a;
   margin-left: 14vw;
   margin-left: 60px;
 `;
@@ -312,9 +336,7 @@ const Check = styled.div`
   height: 14px;
   border-radius: 50%;
   border: 1px solid transparent;
-  background: ${({ checked }) => checked 
-    ? "#C2C7FF" 
-    : "#E8E8E8"};
+  background: ${({ checked }) => (checked ? '#C2C7FF' : '#E8E8E8')};
   margin-right: 5px;
   cursor: pointer;
 `;
@@ -338,7 +360,7 @@ const WriteButton = styled.button`
   height: 50px;
   padding: 15px 26px;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+  background: linear-gradient(135deg, #d6ebff, #c2c7ff);
   color: white;
   text-align: center;
   font-family: Inter;
@@ -357,7 +379,7 @@ const WriteButton = styled.button`
 `;
 
 const ButtonContainer = styled.div`
-padding-bottom: 100px;
+  padding-bottom: 100px;
   box-sizing: border-box;
   display: flex;
   width: 100%;

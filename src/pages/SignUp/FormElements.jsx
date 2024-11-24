@@ -230,7 +230,7 @@ export const UserInfoForm1 = ({
   return (
     <>
       <s.InputWrapper>
-        <s.Div>이메일</s.Div>
+        <s.Div>아이디</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"

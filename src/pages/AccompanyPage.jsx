@@ -313,5 +313,4 @@ const BottomTabLayout = styled.div`
   align-items: flex-end;
   justify-content: space-between;
   box-sizing: border-box;
-  box-shadow: 0px -1px 4px 0px #e2e2e2;
 `;

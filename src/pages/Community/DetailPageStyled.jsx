@@ -277,7 +277,7 @@ export const Reply = styled.div`
 export const CommentNumSection = styled.div`
   box-sizing: border-box;
   border: none;
-  border-bottom: 3px solid;
+  border-bottom: 1px solid;
   border-image: linear-gradient(190deg, #d6ebff 0%, #c2c7ff 100%);
   border-image-slice: 1;
   width: 100%;
