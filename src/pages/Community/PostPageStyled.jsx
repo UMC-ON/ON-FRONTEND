@@ -266,11 +266,13 @@ export const RadioButton = styled.input`
   border-radius: 50%;
   width: 1.25em;
   height: 1.25em;
-  background: ${(props) => (props.checked ? props.activeColor || '#bfd8e5' : props.inactiveColor || '#ffffff')};
+  background: ${(props) =>
+    props.checked
+      ? props.activeColor || '#bfd8e5'
+      : props.inactiveColor || '#ffffff'};
   cursor: pointer;
 
   &:checked {
     background: ${(props) => props.activeColor || '#bfd8e5'};
   }
 `;
-
