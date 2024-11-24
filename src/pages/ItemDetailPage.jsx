@@ -112,7 +112,7 @@ function ItemDetailPage() {
         const roomId = response.data.roomId;
         const senderName = userInfo.nickname;
         console.log('Application successful:', roomId);
-        navigate(`/chat/market/${roomId}`, { state: { roomId, senderName } });
+        navigate(`/chat/trade/${roomId}`, { state: { roomId, senderName } });
       } else {
         console.error('Application failed');
       }

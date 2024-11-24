@@ -24,79 +24,59 @@ function AccompanyList({ datas }) {
     return `${month}/${day}`;
   }
 
-  return (
-    <>
-      {datas && datas.length > 0 ? (
-        datas.map((data, index) => (
-          <RoundContainer
-            key={index}
-            onClick={() => goDetail(data.companyPostId)}
-          >
-            <ImageWrapper>
-              {data.imageUrls[0] ? (
-                <Image src={data.imageUrls[0]} />
-              ) : (
-                <Image src={defaultImg} />
-              )}
-            </ImageWrapper>
-
-            <TextContainer>
-              <CardName>{data.title}</CardName>
-
-              <Left>
-                <CardIcon
-                  src={calendarIcon}
-                  $top="1px"
-                />
-                <GreyText>{formatDateToMD(data.startDate)}</GreyText>
-                <CardIcon
-                  src={plusIcon}
-                  $top="1px"
-                />
-                <GreyText>
-                  {data.currentRecruitNumber}/{data.totalRecruitNumber}
-                </GreyText>
-                <CardIcon
-                  src={placeIcon}
-                  $top="1px"
-                />
-                <GreyText>{data.travelArea[0]}</GreyText>
-              </Left>
-
-              <Left>
-                <GreyMiddleText>{data.content}</GreyMiddleText>
-              </Left>
-
-              <Left>
-                <CardIcon
-                  src={personIcon}
-                  $top="2px"
-                />
-                <SmallGreyText>{data.nickname}</SmallGreyText>
-                {!data.ageAnonymous && (
-                  <>
-                    <SmallGreyText>·</SmallGreyText>
-                    <SmallGreyText>{data.age}세</SmallGreyText>
-                  </>
-                )}
-                <SmallGreyText>·</SmallGreyText>
-                <SmallGreyText>
-                  {data.gender === 'FEMALE' ? '여' : '남'}
-                </SmallGreyText>
-              </Left>
-            </TextContainer>
-            <Overlay $isClosed={data.recruitCompletd} />
-          </RoundContainer>
-        ))
-      ) : (
-        <LeftContainer>
-          <LeftSpace />
-          <SubText>아무것도 없습니다.</SubText>
-        </LeftContainer>
-      )}
-    </>
-  );
-}
+    return (
+      <>
+        {(datas && datas.length > 0) ? (
+          datas.map((data, index) => (
+            <RoundContainer key={index} onClick={() => goDetail(data.companyPostId)}>
+              <ImageWrapper>
+                {data.imageUrls[0] ? 
+                  <Image src={data.imageUrls[0]} /> : 
+                  <Image src={defaultImg} />
+                }
+              </ImageWrapper>
+              
+              <TextContainer>
+                <CardName>{data.title}</CardName>
+    
+                <Left>
+                  <CardIcon src={calendarIcon} $top="1px"/>
+                  <GreyText>{formatDateToMD(data.startDate)}</GreyText>
+                  <CardIcon src={plusIcon} $top="1px"/>
+                  <GreyText>{data.currentRecruitNumber}/{data.totalRecruitNumber}</GreyText>
+                  <CardIcon src={placeIcon} $top="1px"/>
+                  <GreyText>{data.travelArea[0]}</GreyText>
+                </Left>
+    
+                <Left>
+                  <GreyMiddleText>{data.content}</GreyMiddleText>
+                </Left>
+    
+                <Bottom>
+                  <CardIcon src={personIcon} $top="2px"/>
+                  <SmallGreyText>{data.nickname}</SmallGreyText>
+                  {!data.ageAnonymous && (
+                    <>
+                      <SmallGreyText>·</SmallGreyText>
+                      <SmallGreyText>{data.age}세</SmallGreyText>
+                    </>
+                  )}
+                  <SmallGreyText>·</SmallGreyText>
+                  <SmallGreyText>{data.gender === 'FEMALE' ? '여' : '남'}</SmallGreyText>
+                </Bottom>
+              </TextContainer>
+              <Overlay $isClosed={data.recruitCompletd} />
+            </RoundContainer>
+          ))
+        ) : (
+          <LeftContainer>
+            <LeftSpace/>
+            <SubText>아무것도 없습니다.</SubText>
+          </LeftContainer>
+        )}
+      </>
+    );
+  }
 
 export default AccompanyList;
 
@@ -119,6 +99,13 @@ const SubText = styled.div`
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
+  
+`;
+
+const Bottom = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  margin-top: auto;
 `;
 
 const CardIcon = styled.img`
@@ -158,16 +145,20 @@ const GreyMiddleText = styled.p`
   font-size: 0.75em;
   color: #7a7a7a;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2; /* 기본은 두 줄 */
   -webkit-box-orient: vertical;
   overflow: hidden;
-  // width: 20vh;
-  line-height: 1.5vh;
+  line-height: 1.5; /* 줄 간격 */
   text-align: left;
   margin-top: 10px;
   margin-bottom: 10px;
   width: 99%;
-  height: 4vh;
+  max-height: calc(1.5em * 2); /* 두 줄 이상 넘지 않음 */
+
+  @media (max-width: 480px) { /* 작은 화면에서는 3줄 */
+    -webkit-line-clamp: 2;
+    max-height: calc(1.5em * 3);
+  }
 `;
 
 const RoundContainer = styled.div`
@@ -180,6 +171,7 @@ const RoundContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 2vh;
+  cursor: pointer;
 `;
 
 const ImageWrapper = styled.div`
@@ -219,7 +211,7 @@ const CardName = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 23vh;
+  width: 11.5rem;
 `;
 
 const Overlay = styled.div`

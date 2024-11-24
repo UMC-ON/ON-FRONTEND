@@ -40,86 +40,60 @@ const ItemList = ({ items }) => {
           },
         });
 
-        // Extract marketPostId from each marketPost object
-        if (Array.isArray(response.data.content)) {
-          const scrappedIds = response.data.content.map(
-            (post) => post.marketPost.marketPostId,
-          );
-          setScrappedMarketPostIds(scrappedIds);
-        } else {
-          console.error('Unexpected response structure:', response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching scrapped posts:', error);
+      // Extract marketPostId from each marketPost object
+      if (Array.isArray(response.data.content)) {
+        const scrappedIds = response.data.content.map(post => post.marketPost.marketPostId);
+        setScrappedMarketPostIds(scrappedIds);
+        console.log(scrappedIds);
+      } else {
+        console.error('Unexpected response structure:', response.data);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching scrapped posts:', error);
+    }
+  };
 
     fetchScrappedPosts();
   }, [userInfo]); // Ensure userInfo is available before making the request
 
   return (
     <>
-      {items &&
-        items.map((item, index) => {
-          const isCompleted = item.dealStatus === 'COMPLETE';
-          const isScrapped = scrappedMarketPostIds.includes(item.marketPostId);
+      {items && items.map((item, index, lastItemRef) => {
+        const isCompleted = item.dealStatus === "COMPLETE";
+        const isScrapped = scrappedMarketPostIds.includes(item.marketPostId);
 
-          return (
-            <ItemDiv
-              key={index}
-              isCompleted={isCompleted}
-            >
-              <Photo
-                src={item.imageUrls.length > 0 ? item.imageUrls : defaultImg}
+        return (
+          <ItemDiv key={index} isCompleted={isCompleted} ref={index === items.length - 1 ? lastItemRef : null}>
+            <Photo src={item.imageUrls.length > 0 ? item.imageUrls : defaultImg} />
+            <Information>
+              <StarContainer
+                marketPostId={item.marketPostId}
+                isFilled={isScrapped} // Pass isScrapped as isFilled prop
+                scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
+                setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
               />
-              <Information>
-                <StarContainer
-                  marketPostId={item.marketPostId}
-                  isFilled={isScrapped} // Pass isScrapped as isFilled prop
-                  scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
-                  setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
-                />
-                <Description
-                  onClick={() => navigate(`/sell/${item.marketPostId}`)}
-                >
-                  <TitleTimeContainer>
-                    <Title>{item.title}</Title>
-                    <Time>{showDate(item.createdAt)}</Time>
-                  </TitleTimeContainer>
-                  <br />
-                  <State
-                    how={item.dealType === 'DIRECT' ? '직거래' : '택배거래'}
-                    now={
-                      item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'
-                    }
-                    isCompleted={isCompleted}
-                  />
-                  <LocationAndUser>
-                    <Place>
-                      <Compas src={compas} />
-                      {item.currentCountry} {item.currentLocation}
-                    </Place>
-                    <User>
-                      <Profile src={profile} />
-                      {item.nickname}
-                    </User>
-                  </LocationAndUser>
-                  <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
-                </Description>
-              </Information>
-            </ItemDiv>
-          );
-        })}
+              <Description onClick={() => navigate(`/sell/${item.marketPostId}`)}>
+                <TitleTimeContainer>
+                  <Title>{item.title}</Title>
+                  <Time>{showDate(item.createdAt)}</Time>
+                </TitleTimeContainer><br/>
+                <State how={item.dealType === 'DIRECT' ? '직거래' : '택배거래'} now={item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
+                <LocationAndUser>
+                  <Place><img src={compas} />{item.currentCountry} {item.currentLocation}</Place>
+                  <User><Profile src={profile} />{item.nickname}</User>
+                </LocationAndUser>
+                <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
+              </Description>
+            </Information>
+          </ItemDiv>
+        );
+      })}
     </>
   );
 };
 
-const StarContainer = ({
-  marketPostId,
-  isFilled,
-  scrappedMarketPostIds,
-  setScrappedMarketPostIds,
-}) => {
+
+const StarContainer = ({ marketPostId, isFilled, setScrappedMarketPostIds }) => {
   const [isStarFilled, setIsStarFilled] = useState(isFilled);
   let userInfo = useSelector((state) => state.user.user);
 
@@ -237,7 +211,7 @@ const Time = styled.span`
 `;
 
 const TitleTimeContainer = styled.div`
-  width: 155px;
+  width: 145px;
   display: flex; /* Flexbox를 사용하여 수평 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
 `;
@@ -288,9 +262,11 @@ const Place = styled.p`
   font-size: 0.75em;
   align-items: center;
   margin-right: 10px;
+  margin-top: 5px;
   color: #838383;
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis !important;
   text-overflow: ellipsis;
 `;
 

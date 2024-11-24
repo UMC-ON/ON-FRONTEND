@@ -222,10 +222,11 @@ const FlexContainer = styled.div`
 `;
 
 const Icon = styled.img`
-  width: ${(props) => props.size || '10px'};
-  height: ${(props) => props.size || '10px'};
-  padding-left: 3px;
-  padding-right: ${(props) => props.$right || '0'};
+    width: ${props => props.size || '10px'};
+    height: ${props => props.size || '10px'};
+    padding-left: 3px;
+    padding-right: ${props => props.$right || '0'};
+    cursor:pointer;
 `;
 
 const RoundContainer = styled.div`
@@ -241,21 +242,16 @@ const RoundContainer = styled.div`
 
 const GreyPicker = styled.div`
   background-color: #e8e8e8;
-  font-family: 'Inter-Regular';
+  font-family: 'Inter';
   font-size: 0.8em;
   padding: 5px;
   border-radius: 18px;
   padding-left: 8px;
   padding-right: 8px;
   margin-right: 8px;
-  color: ${(props) =>
-    props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked
-      ? '#FFFFFF'
-      : '#363636'};
-  background: ${(props) =>
-    props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked
-      ? 'linear-gradient(135deg, #C2C7FF, #AD99FF);'
-      : ''};
+  color: ${props => props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked ? '#FFFFFF' : '#363636'};
+  background: ${props => props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked ?  'linear-gradient(135deg, #C2C7FF, #AD99FF);' : ''};
+  cursor:pointer;
 `;
 
 const SmallSpace = styled.div`
@@ -294,10 +290,12 @@ const WriteButton = styled.button`
   line-height: normal;
   z-index: 2;
   &:hover {
-    outline: 1px solid #9279f8;
+    outline: none; /* hover 상태에서도 outline 제거 */
+    border-color: #b0c4de; /* 선택적으로 hover 시 border 색 변경 */
   }
+
   &:focus {
-    outline: 1px solid #9279f8;
+    outline: none; /* focus 상태에서 outline 제거 */
   }
 
   -webkit-tap-highlight-color: transparent;

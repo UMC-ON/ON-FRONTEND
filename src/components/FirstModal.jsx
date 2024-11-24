@@ -59,6 +59,7 @@ const Box = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+    max-width: 480px;
 `;
 
 const ModalContent = styled.div`

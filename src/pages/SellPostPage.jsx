@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -7,9 +7,10 @@ import camera from "../assets/images/camera.svg";
 import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import SellPostHeader from "../components/SellPostHeader";
-
 import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
 import SellPostCitySelect from "../components/SellPostShowCitySelect";
+import AlertModal from '../components/SellAlertModal.jsx';
+
 import { postData, multiFilePostData } from '../api/Functions';
 import { POST_ITEM } from '../api/urls';
 
@@ -24,7 +25,18 @@ function SellPost() {
     const [showCity, setShowCity] = useState(false);
     const [city, setCity] = useState({ country: '', city: '' });
     const [isCityClicked, setIsCityClicked] = useState(false);
+    const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
     const userInfo = useSelector((state) => state.user.user);
+
+    const handleModalOpen = (content) => {
+        setModalContent(content);
+        setIsAlertModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setIsAlertModalOpen(false);
+    };
 
     const resetCityClick = () => {
         setIsCityClicked(false);
@@ -55,8 +67,10 @@ function SellPost() {
     };
 
     const navigate = useNavigate();
+    
 
-    const handleSubmit = async () => {
+    const postData = async () => {
+
         const formData = new FormData();
 
         const jsonData = {
@@ -73,6 +87,7 @@ function SellPost() {
 
         const jsonBlob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
         formData.append('requestDTO', jsonBlob);
+
 
         if (image) {
             formData.append('imageFiles', image);
@@ -97,9 +112,26 @@ function SellPost() {
         }
     };
 
+    const onSubmit = () => {
+        if (city.city == '') {
+            handleModalOpen('현재 위치를');
+        } else if (title == '') {
+            handleModalOpen('제목을');
+        } else if (cost == '') {
+            handleModalOpen('가격을');
+        } else if (dealType == '') {
+            handleModalOpen('거래 형식을');
+        } else if (content == '') {
+            handleModalOpen('상품 설명을');
+        } else {
+            postData()
+        }
+    }
+
+
     return (
         <>
-            <SellPostHeader onSubmit={handleSubmit} />
+            <SellPostHeader onSubmit={onSubmit} />
             <Space />
             <Photo isImageUploaded={image} onClick={handleCameraClick}>
                 {image ? (
@@ -141,8 +173,17 @@ function SellPost() {
                 </Section><br />
                 <Section>
                     <Label>판매 금액</Label>
-                    <Add placeholder="₩ 판매 금액을 입력해 주세요." type="number" value={cost} onChange={(e) => setCost(e.target.value)} />
+                    <Add
+                        placeholder="₩ 판매 금액을 입력해 주세요."
+                        type="text"
+                        value={cost ? `₩ ${cost}` : ''}
+                        onChange={(e) => {
+                            const inputValue = e.target.value.replace(/[^0-9]/g, ''); // 숫자만 허용
+                            setCost(inputValue);
+                        }}
+                    />
                 </Section>
+
                 <CheckboxContainer>
                     <input type="checkbox" checked={share} onChange={(e) => setShare(e.target.checked)} /><span style={{ fontSize: "11px" }}>나눔</span>
                 </CheckboxContainer>
@@ -169,6 +210,12 @@ function SellPost() {
                     <Description placeholder="상품에 대한 상세한 설명을 입력해 주세요. 거래 가능 기간을 작성해 주시면 더 빠르게 거래가 진행될 수 있어요." value={content} onChange={(e) => setContent(e.target.value)} />
                 </Section>
             </Information>
+            {isAlertModalOpen && (
+                <AlertModal 
+                    closeModal={handleModalClose} 
+                    line1={modalContent}
+                />
+            )}
         </>
     );
 }
@@ -218,6 +265,7 @@ const ImageWrapper = styled.div`
 
 
 const Information = styled.div`
+    color: black;
     width: 100%;
     padding: 20px 26px; 
     box-sizing: border-box;
@@ -260,7 +308,8 @@ const Add = styled.input`
     height: 1.5em;
     border: 1px solid #CABCCB;
     font-size: 14px;
-    color: #B9B9B9;
+    color: #838383;
+    background-color: white;
     padding: 10px;
     display: flex;
     justify-content: left;
@@ -278,7 +327,36 @@ const CheckboxContainer = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 2vh;
+
+    input[type="checkbox"] {
+        appearance: none; /* 기본 체크박스 스타일 제거 */
+        width: 1.2em;
+        height: 1.2em;
+        background-color: white; /* 기본 배경 흰색 */
+        border: 2px solid #868EE8; /* 테두리 추가 */
+        border-radius: 4px; /* 둥근 모서리 */
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 5px;
+
+        &:checked {
+            background-color: #868EE8; /* 체크된 상태 배경 */
+            border-color: #868EE8; /* 체크된 상태 테두리 색상 */
+        }
+
+        &:checked::after {
+            content: "✔"; /* 체크 표시 추가 */
+            color: white; /* 체크 표시 색상 */
+            font-size: 0.8em; /* 체크 표시 크기 */
+            font-weight: bold; /* 체크 표시 강조 */
+            background-color: rgba(134, 142, 232, 0.2);
+        }
+    }
 `;
+
+
 
 const Options = styled.div`
     display: flex;
@@ -317,6 +395,7 @@ const Delivery = styled.div`
 `;
 
 const Description = styled.textarea`
+    background-color: white;
     border-radius: 20px;
     height: 20em;
     border: 1px solid #CABCCB;
@@ -326,7 +405,7 @@ const Description = styled.textarea`
     width: 99%;
     resize: none;
     font-size: 14px;
-    color: #B9B9B9;
+    color: #838383;
     line-height: 1.5;
     margin-top: 1vh;
     

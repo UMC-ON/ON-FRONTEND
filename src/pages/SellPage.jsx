@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -28,6 +28,7 @@ function SellPage() {
   const [isCountryClicked, setIsCountryClicked] = useState(false);
   const [items, setItems] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [page, setPage] = useState(0);
 
   const navigate = useNavigate();
 
@@ -35,16 +36,18 @@ function SellPage() {
   const fetchAllItems = async () => {
     try {
       const response = await getData(
-        GET_ITEM_LIST,
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        { page: 0, size: 20, sort: 'DESC' },
-      );
-
-      if (response) {
-        console.log('모든 물품 불러오기 성공');
+        GET_ITEM_LIST, {
+        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+      }, 
+      { page: page, size: 5, sort: 'DESC' },);
+      
+      if (page === 0) {
+        console.log("모든 물품 불러오기 성공");
+        console.log(response.data.content);
         setItems(response.data.content);
+      } else{
+        console.log("extra data");
+        setItems(prevItems => [...prevItems, ...response.data.content]);
       }
     } catch (error) {
       console.error('모든 물품 불러오기 중 오류 발생:', error);
@@ -55,31 +58,31 @@ function SellPage() {
     try {
       // 필터링된 물품 불러오기
       const params = {
-        page: 0,
-        size: 20,
+        page: page,
+        size: 5,
         sort: 'DESC',
-        dealType: dealType
-          ? dealType === '직거래'
-            ? 'DIRECT'
-            : 'DELIVERY'
-          : '', // 거래방식이 없으면 빈 문자열로 처리
+        dealType: dealType ? (dealType === '직거래' ? 'DIRECT' : 'DELIVERY') : '', // 거래방식이 없으면 빈 문자열로 처리
         currentCountry,
-        dealStatus: showAvailable ? 'AWAIT' : '',
+        dealStatus: showAvailable ? 'AWAIT' : ''
       };
-
+  
       const response = await getData(
-        GET_FILTER_ITEM,
-        {
+        GET_FILTER_ITEM, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        params,
-      );
-
-      if (response) {
+        }, params);
+  
+      // response가 유효한지 확인
+      if (response && response.data) {
         console.log(params);
-        setItems(response.data.content);
-        console.log(currentCountry);
+        // 페이지가 0일 때 새로 불러오고, 그 외 페이지에서는 기존 데이터에 추가
+        if (page === 0) {
+          setItems(response.data.content);
+        } else {
+          setItems(prevItems => [...prevItems, ...response.data.content]);
+        }
         console.log(response.data);
+      } else {
+        console.error('응답이 유효하지 않습니다:', response);
       }
     } catch (error) {
       console.error('필터링 중 오류 발생:', error);
@@ -89,16 +92,23 @@ function SellPage() {
   const fetchSearchResults = async () => {
     try {
       const response = await getData(
-        GET_ITEM_SEARCH,
-        {
+        GET_ITEM_SEARCH, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         },
-        { keyword: searchKeyword, page: 0, size: 20, sort: 'DESC' },
+        { keyword: searchKeyword, page: page, size: 5, sort: 'DESC' },
       );
-
-      if (response) {
-        console.log('검색 성공');
-        setItems(response.data.content);
+  
+      // response가 유효한지 확인
+      if (response && response.data) {
+        console.log("검색 성공");
+        // 페이지가 0일 때 새로 불러오고, 그 외 페이지에서는 기존 데이터에 추가
+        if (page === 0) {
+          setItems(response.data.content);
+        } else {
+          setItems(prevItems => [...prevItems, ...response.data.content]);
+        }
+      } else {
+        console.error('검색 응답이 유효하지 않습니다:', response);
       }
     } catch (error) {
       console.error('검색 중 오류 발생:', error);
@@ -113,28 +123,53 @@ function SellPage() {
       // 필터링 조건이 있을 때는 필터링된 물품 가져오기
       fetchItems(selectedTransaction, country);
     }
-  }, [selectedTransaction, country, showAvailable]);
+  }, [page, selectedTransaction, country, showAvailable]);
+  const handleScroll = useCallback(() => {
+    const scrolledToBottom = 
+        window.innerHeight + document.documentElement.scrollTop 
+        >= document.documentElement.offsetHeight - 10;
 
-  const resetCountryClick = () => {
+    if (scrolledToBottom) {
+        setPage(prevPage => prevPage + 1);
+    }
+}, []);
+
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  const handleFilterClick = useCallback(() => {
+    console.log("handleFilterClick");
+    setPage(0);
+    setItems([]); 
+  }, []);
+
+  const resetCountryClick = useCallback(() => {
     setIsCountryClicked(false);
     setCountry(null);
-  };
+    handleFilterClick();
+  }, [handleFilterClick]);
 
-  const handleGetCountry = (country) => {
-    setCountry(country);
-    setIsCountryClicked(true);
-    setShowCountry(false);
-  };
+  const handleGetCountry = useCallback((country) => {
+    console.log("handleGetCountry");
+      setCountry(country);
+      setIsCountryClicked(true);
+      setShowCountry(false);
+      handleFilterClick();
+   }, [handleFilterClick]);
 
   const handleCountryClick = () => {
     setShowCountry(!showCountry);
   };
 
-  const handleResetTransaction = () => {
+  const handleResetTransaction = useCallback(() => {
     setSelectedTransaction('');
     setTempTransaction('');
     setIsPickerVisible(false);
-  };
+    handleFilterClick();
+  }, [handleFilterClick]);
 
   const togglePickerVisibility = () => {
     if (selectedTransaction) {
@@ -158,6 +193,8 @@ function SellPage() {
 
   const handleCheckClick = () => {
     setShowAvailable(!showAvailable);
+    setPage(0);
+    setItems([]);
   };
 
   const goPost = () => {
@@ -233,10 +270,8 @@ function SellPage() {
       <ItemList items={items} />
       <ButtonContainer>
         <WriteButton onClick={goPost}>
-          <img
-            src={pencilImg}
-            alt="pencil icon"
-          />
+          <img src={pencilImg} alt="pencil icon" />
+          <LeftPadding />
           글 쓰기
         </WriteButton>
       </ButtonContainer>
@@ -376,6 +411,10 @@ const WriteButton = styled.button`
     outline: 1px solid #9279f8;
   }
   -webkit-tap-highlight-color: transparent;
+`;
+
+const LeftPadding = styled.div`
+    padding-left: 10px;
 `;
 
 const ButtonContainer = styled.div`
