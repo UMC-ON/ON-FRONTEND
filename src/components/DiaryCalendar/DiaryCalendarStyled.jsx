@@ -12,7 +12,7 @@ export const DiaryCalendar = styled.div`
         max-width: 350px;
         background: #F3F9FF;
         border-radius: 10px;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: Inter;
         line-height: 1.125em;
         padding: 10px;
         position: relative;
@@ -57,6 +57,7 @@ export const DiaryCalendar = styled.div`
         transform: scale(1.8);
         line-height: 0.5;
         background: none;
+        color: #363636;
     }
 
     .react-calendar__navigation__label {
@@ -67,6 +68,7 @@ export const DiaryCalendar = styled.div`
         line-height: 0.5;
         background: none;
         height: 2em;
+        color: #363636;
     }
 
     .react-calendar__tile {
@@ -75,6 +77,7 @@ export const DiaryCalendar = styled.div`
         font: inherit;
         font-size: 0.833em;
         height: 60px;
+        color: #363636;
     }
 
     .react-calendar__tile--now {
