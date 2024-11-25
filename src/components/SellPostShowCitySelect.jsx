@@ -6,45 +6,52 @@ import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import theme from '../styles/theme';
 
-function SellPostCitySelect({ cityClick, city, isCityClicked, updateIsCityClicked }) {
+function SellPostCitySelect({
+  cityClick,
+  city,
+  isCityClicked,
+  updateIsCityClicked,
+}) {
   const resetCity = () => {
-      updateIsCityClicked();
+    updateIsCityClicked();
   };
 
   return (
-      <>
-          <GreyPicker $isCityClicked={isCityClicked}>
-              <span onClick={cityClick}>
-                  {city && city.country && city.city ? `${city.country} ${city.city}` : '도시'}  {/* city.country와 city.city 값이 모두 있을 때만 표시 */}
-                  {!isCityClicked && (
-                      <Icon src={postIcon} />
-                  )}
-              </span>
-              {isCityClicked && (
-                  <Icon src={whiteCloseIcon} onClick={resetCity} />
-              )}
-          </GreyPicker>
-      </>
+    <>
+      <GreyPicker $isCityClicked={isCityClicked}>
+        <span onClick={cityClick}>
+          {city && city.country && city.city
+            ? `${city.country} ${city.city}`
+            : '도시'}{' '}
+          {/* city.country와 city.city 값이 모두 있을 때만 표시 */}
+          {!isCityClicked && <Icon src={postIcon} />}
+        </span>
+        {isCityClicked && (
+          <Icon
+            src={whiteCloseIcon}
+            onClick={resetCity}
+          />
+        )}
+      </GreyPicker>
+    </>
   );
 }
 
-
-
 export default SellPostCitySelect;
-
 
 const GreyPicker = styled.div`
   background: ${theme.purpleGra};
   font-family: 'Inter-Regular';
-  font-size: 0.8em;
-  padding: 5px;
+  font-size: 0.85em;
+  padding: 4px;
   border-radius: 18px;
-  padding-left: 8px;
+  padding-left: 11px;
   padding-right: 8px;
   margin-right: 8px;
   margin-left: 2px;
   color: white;
-  background: ${props => props.$isCityClicked ?  'linear-gradient(135deg, #C2C7FF, #AD99FF);' : ''};
+  background: ${(props) =>
+    props.$isCityClicked ? 'linear-gradient(135deg, #C2C7FF, #AD99FF);' : ''};
   height: 1.5em;
   width: auto;
   display: flex;

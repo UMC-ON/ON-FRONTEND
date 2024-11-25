@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import * as s from './NavBarStyled.jsx';
-import on_logo from '../../assets/images/on_logo.svg';
+import on_logo from '../../assets/images/On_FinalLogo.svg';
 import profile from '../../assets/images/profile.svg';
 import search_button from '../../assets/images/search_button.svg';
 import notification from '../../assets/images/notification.svg';
@@ -47,7 +47,7 @@ const NavBar = () => {
         <NavLink to="/notification">
           <s.NotificationBox>
             <s.Item src={notification} />
-            <s.NotificationCount>{notificationNumber}</s.NotificationCount>
+            <s.NotificationCount></s.NotificationCount>
           </s.NotificationBox>
         </NavLink>
         <NavLink to="/mypage">

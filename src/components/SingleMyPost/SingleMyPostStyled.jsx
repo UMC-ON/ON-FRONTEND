@@ -17,12 +17,11 @@ export const Delete = styled.span`
   right: 2rem;
   color: #7a7a7a;
   font-family: Inter;
-  font-size: 0.5rem;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 0.75rem */
   text-decoration-line: underline;
-  z-index: 3;
 `;
 export const PostContainer = styled.div`
   width: 100%;
@@ -59,7 +58,7 @@ export const Title = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: Inter;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
@@ -118,7 +117,7 @@ export const Info = styled.div`
   align-self: end;
   span {
     font-family: Inter;
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 400;
     line-height: 150%;

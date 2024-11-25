@@ -6,7 +6,7 @@ export const NavbarLayout = styled.div`
   max-width: 480px;
   height: 61px;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   top: 0;
   align-items: center;
@@ -51,8 +51,8 @@ export const NotificationCount = styled.div`
   top: 0;
   background-color: red;
   border-radius: 50%;
-  height: 10px;
-  width: 10px;
+  height: 7px;
+  width: 7px;
   font-size: 7px;
   color: white;
 `;

@@ -91,6 +91,7 @@ const ImgContainer = styled.div`
   margin: 0 auto;
   margin-bottom: 15px;
   filter: drop-shadow(8px 8px 8px rgba(0, 0, 0, 0.1));
+  cursor:pointer;
 `;
 
 const PaddingTop = styled.div`

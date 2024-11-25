@@ -25,6 +25,12 @@ const PostPage = ({ color, boardType }) => {
     content: '',
   });
 
+  // radiobutton 제어를 위한 상태변수 추가
+  const [isChecked, setIsChecked] = useState(false);
+  const handleClick = () => {
+    setIsChecked((prev) => !prev);
+  };
+
   const BETest = true;
 
   useEffect(() => {
@@ -149,12 +155,26 @@ const PostPage = ({ color, boardType }) => {
                 {showDispatchedInfo(userInfo, 'UNIV')}
               </s.ColorButtonTag>
             </s.InfoLabel>
-            <DefaultCheckBox
+            {/* <DefaultCheckBox
               after="파견교 비공개"
               onChange={onChangeInput}
               name="anonymousUniv"
               checkBoxStyle={{ color: `${color}` }}
-            />
+            /> */}
+            <label style={{ color: '#b2b2b2' }}>
+              <s.RadioButton
+                type="radio"
+                after="파견교 비공개"
+                name="anonymousUniv"
+                value="disagree"
+                checked={isChecked}
+                onClick={handleClick}
+                onChange={onChangeInput}
+                activeColor={color}
+                inactiveColor={'#ffffff'}
+              />
+              파견교 비공개
+            </label>
           </s.SpaceBetweenContainer>
         </s.PostInfoSection>
         <s.TitleSection>

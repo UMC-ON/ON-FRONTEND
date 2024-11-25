@@ -9,7 +9,7 @@ const StoredDiary = ({ diaries }) => {
       {diaries && diaries.map((item, index) => (
         <DailyDiary key={index}>
           <Content>{item.content}</Content>
-          <DDay>{`D${item.writtenDday}`}</DDay>
+          <DDay>{`D ${item.writtenDday < 0 ? `+ ${Math.abs(item.writtenDday)}` : `- ${item.writtenDday}`}`}</DDay>
           <Date>{item.writtenDate}</Date>
         </DailyDiary>
       ))}
@@ -50,9 +50,9 @@ const DDay = styled.div`
 
 const Content = styled.p`
   padding: 20px;
-  color: #D9D9D9;
+  color: #838383;
   font-size: 13px;
-  flex-grow: 1; /* Content가 가능한 모든 공간을 차지하도록 설정 */
+  flex-grow: 1;
 `;
 
 const Date = styled.p`
