@@ -113,7 +113,7 @@ function SellPost() {
       handleModalOpen('제목을');
     } else if (cost == '') {
       handleModalOpen('가격을');
-    } else if (dealType == '') {
+    } else if (selectedOption == null) {
       handleModalOpen('거래 형식을');
     } else if (content == '') {
       handleModalOpen('상품 설명을');

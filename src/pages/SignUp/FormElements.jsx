@@ -226,7 +226,7 @@ export const UserInfoForm1 = ({
     //if(verifyCode.verified)
     //인증코드 put 제대로 작동하면 추가
     setActive(isValid);
-  }, [isValid]);
+  }, [isValid, verifyCode.verified]);
 
   return (
     <>
@@ -369,7 +369,7 @@ export const UserInfoForm1 = ({
         )}
       </s.Explanation>
       <s.InputWrapper>
-        <s.Div>비밀번호 확인</s.Div>
+        <div>비밀번호 확인</div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="password"
@@ -418,6 +418,16 @@ export const UserInfoForm2 = ({
     formState: { errors, isValid },
     watch,
   } = useForm({ mode: 'onChange' });
+
+  useEffect(() => {
+    //if(verifyCode.verified)
+    //인증코드 put 제대로 작동하면 추가
+    if (dupCheck.nickname == 1) {
+      setActive(isValid);
+    } else {
+      setActive(false);
+    }
+  }, [isValid, dupCheck.nickname]);
 
   return (
     <>
@@ -543,7 +553,7 @@ export const UserInfoForm2 = ({
           {...register('phone', {
             required: '전화번호는 필수입니다.',
             pattern: {
-              value: /[\D{11}]$/,
+              value: /^[0-9]*$/,
               message: '숫자로만 적어주세요.',
             },
             onChange: (e) => {

@@ -17,6 +17,7 @@ export const BottomTabLayout = styled.div`
   box-sizing: border-box;
   padding: 0px 32px 30px 32px;
   box-shadow: 0px -1px 4px 0px #e2e2e2;
+  white-space: nowrap;
 `;
 
 export const IconContainer = styled.div`
