@@ -157,14 +157,7 @@ export const CommentWritingDiv = styled.div`
 
   width: 100%;
   max-width: 480px;
-
-<<<<<<< HEAD
   height: 7.8rem;
-
-=======
-  height: auto;
-  //min-height: 70px;
->>>>>>> 23b358d0feadf3ae7767215434387b20bddc9735
   background: linear-gradient(
     135deg,
     ${(props) => props.color1 || '#f1f8ff 0%'},
@@ -175,31 +168,9 @@ export const CommentWritingDiv = styled.div`
   padding: 0.5rem 1.2rem 1.2rem 1.2rem;
 `;
 
-<<<<<<< HEAD
 export const ReplyToDiv = styled.div`
   grid-area: replyTo;
   position: relative;
-=======
-export const RadioButton = styled.input`
-  vertical-align: -0.188rem;
-  appearance: none;
-  border: max(2px, 0.05em) solid lightgray;
-  border-radius: 50%;
-  width: 1.25em;
-  height: 1.25em;
-  background: ${(props) =>
-    props.checked
-      ? props.activeColor || '#bfd8e5'
-      : props.inactiveColor || '#ffffff'};
-  cursor: pointer;
-
-  &:checked {
-    background: ${(props) => props.activeColor || '#bfd8e5'};
-  }
-`;
-
-export const EditorWrapper = styled.div`
->>>>>>> 23b358d0feadf3ae7767215434387b20bddc9735
   color: black;
   box-sizing: border-box;
   display: grid;
@@ -247,20 +218,10 @@ export const EditorDiv = styled.div`
 `;
 export const CommentEditor = styled.textarea`
   box-sizing: border-box;
-<<<<<<< HEAD
   background: transparent;
 
   border-radius: 1.875rem;
   border: 0.5px solid #d9d9d9;
-=======
-  border-radius: 30px;
-  border: 0.5px solid #d9d9d9;
-  background: linear-gradient(
-    135deg,
-    rgba(214, 235, 255, 0.8) 0%,
-    rgba(194, 199, 255, 0.8) 100%
-  );
->>>>>>> 23b358d0feadf3ae7767215434387b20bddc9735
 
   flex: auto;
   width: 100%;
