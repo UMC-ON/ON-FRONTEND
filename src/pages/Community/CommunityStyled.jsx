@@ -20,7 +20,7 @@ export const FilterSection = styled.section`
   flex-wrap: wrap;
   flex-direction: column;
   align-content: start;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
   height: 54px;
   width: 100%;
