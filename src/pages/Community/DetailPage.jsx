@@ -299,7 +299,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
           <s.CommentNumSection>
             <img
               src={commentImg}
-              style={{ width: '0.96rem', height: '1.04rem' }}
+              style={{ width: '1rem', height: '1rem', marginRight: '5px' }}
             />
             {commentCount}
           </s.CommentNumSection>

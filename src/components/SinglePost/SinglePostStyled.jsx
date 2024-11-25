@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const SearchWrapper = styled.div`
   width: 100%;
-  height: 8.5rem;
+  height: 8rem;
   padding: 0 1.75rem;
   box-sizing: border-box;
   border: 0.5px solid transparent;
@@ -30,7 +30,7 @@ export const Title = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: Inter;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
@@ -54,7 +54,7 @@ export const Content = styled.span`
   min-height: 2rem;
   color: #838383;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 1.125rem */

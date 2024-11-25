@@ -6,7 +6,7 @@ export const ChatHeaderLayout = styled.div`
   max-width: 480px;
   height: 61px;
   position: fixed;
-  z-index: 2;
+  z-index: 10;
   display: flex;
   top: 0;
   align-items: center;

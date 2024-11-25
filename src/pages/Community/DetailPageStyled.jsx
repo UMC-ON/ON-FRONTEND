@@ -37,8 +37,7 @@ export const InfoLabel = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-
-  gap: 0.38rem;
+  gap: 0.4rem;
 `;
 export const Title = styled.div`
   display: flex;
@@ -48,9 +47,7 @@ export const Title = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: start;
-  gap: 0.625rem;
-  border: 3px solid transparent;
-
+  gap: 0.5rem;
   border: 3px solid transparent;
   border-radius: 10px;
   background-image: linear-gradient(#f3f9ff, #f3f9ff),
@@ -72,12 +69,12 @@ export const DispatchedInfo = styled.div`
   color: #5c5c5c;
   text-overflow: ellipsis;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.015rem;
-  padding-top: 0.75rem;
+  padding-top: 0.25rem;
 `;
 export const DetailPageLayout = styled.div`
   position: relative;
@@ -103,7 +100,7 @@ export const NameInfo = styled.div`
   color: #5c5c5c;
   text-overflow: ellipsis;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -125,7 +122,8 @@ export const Content = styled.pre`
   display: flex;
   flex-direction: column;
 
-  padding: 2rem 1.5rem;
+  padding: 0.5rem 1.5rem;
+  padding-bottom: 1rem;
 
   text-align: left;
   white-space: pre-wrap;
@@ -139,9 +137,9 @@ export const Content = styled.pre`
   line-height: normal;
 `;
 
+// TODO: CommnetWritingDiv 스타일수정사항에 따라 바꾸기
 export const CommentWritingDiv = styled.div`
   box-sizing: border-box;
-
   position: fixed;
   bottom: 0;
   left: 0;
@@ -160,20 +158,48 @@ export const CommentWritingDiv = styled.div`
   width: 100%;
   max-width: 480px;
 
+<<<<<<< HEAD
   height: 7.8rem;
 
+=======
+  height: auto;
+  //min-height: 70px;
+>>>>>>> 23b358d0feadf3ae7767215434387b20bddc9735
   background: linear-gradient(
     135deg,
     ${(props) => props.color1 || '#f1f8ff 0%'},
     ${(props) => props.color1 || '#f2f3ff 100%'}
   );
+  background: #f3f9ff;
   box-shadow: 0px -3px 3px 0px rgba(0, 0, 0, 0.05);
   padding: 0.5rem 1.2rem 1.2rem 1.2rem;
 `;
 
+<<<<<<< HEAD
 export const ReplyToDiv = styled.div`
   grid-area: replyTo;
   position: relative;
+=======
+export const RadioButton = styled.input`
+  vertical-align: -0.188rem;
+  appearance: none;
+  border: max(2px, 0.05em) solid lightgray;
+  border-radius: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  background: ${(props) =>
+    props.checked
+      ? props.activeColor || '#bfd8e5'
+      : props.inactiveColor || '#ffffff'};
+  cursor: pointer;
+
+  &:checked {
+    background: ${(props) => props.activeColor || '#bfd8e5'};
+  }
+`;
+
+export const EditorWrapper = styled.div`
+>>>>>>> 23b358d0feadf3ae7767215434387b20bddc9735
   color: black;
   box-sizing: border-box;
   display: grid;
@@ -221,10 +247,20 @@ export const EditorDiv = styled.div`
 `;
 export const CommentEditor = styled.textarea`
   box-sizing: border-box;
+<<<<<<< HEAD
   background: transparent;
 
   border-radius: 1.875rem;
   border: 0.5px solid #d9d9d9;
+=======
+  border-radius: 30px;
+  border: 0.5px solid #d9d9d9;
+  background: linear-gradient(
+    135deg,
+    rgba(214, 235, 255, 0.8) 0%,
+    rgba(194, 199, 255, 0.8) 100%
+  );
+>>>>>>> 23b358d0feadf3ae7767215434387b20bddc9735
 
   flex: auto;
   width: 100%;
@@ -248,7 +284,7 @@ export const CommentEditor = styled.textarea`
   &::-webkit-scrollbar {
     display: none;
   }
-
+  padding: 13px;
   resize: none;
 `;
 const grad = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -341,7 +377,7 @@ export const Reply = styled.div`
 export const CommentNumSection = styled.div`
   box-sizing: border-box;
   border: none;
-  border-bottom: 3px solid;
+  border-bottom: 0.5px solid;
   border-image: linear-gradient(190deg, #d6ebff 0%, #c2c7ff 100%);
   border-image-slice: 1;
   width: 100%;
@@ -356,7 +392,7 @@ export const CommentNumSection = styled.div`
 
   color: #92a5bc;
   font-family: Inter;
-  font-size: 8px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 12px */

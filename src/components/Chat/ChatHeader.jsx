@@ -31,7 +31,7 @@ const ChatHeader = ({
   };
 
   return (
-    <s.ChatHeaderLayout color={pointColorOpacity(0.4)}>
+    <s.ChatHeaderLayout color={'#DED6FF'}>
       <s.BackButton onClick={onBackClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

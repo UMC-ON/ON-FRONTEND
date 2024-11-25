@@ -31,6 +31,7 @@ import {
   GET_SIMILAR_ACCOMPANY,
   GET_USER_INFO,
   GET_ROOM_ID,
+  APPLY_ACCOMPANY,
 } from '../api/urls';
 
 function AccompanyDetailPage() {
@@ -133,8 +134,20 @@ function AccompanyDetailPage() {
         },
       );
 
-      if (response) {
-        console.log(response.data);
+      const response2 = await postData(
+        APPLY_ACCOMPANY,
+        { companyPostId: postId },
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+      );
+
+      if (response && response2) {
+        // console.log("response: ");
+        // console.log(response.data);
+        // console.log("response2: ");
+        // console.log(response2.data);
+
         const roomId = response.data.roomId;
         const senderName = infoData[0].nickname;
         console.log('Application successful:', roomId);
@@ -569,7 +582,7 @@ const RowText = styled.div`
 `;
 
 const LittleButton = styled.button`
-  font-size: 0.7em;
+  font-size: 0.75em;
   color: #7a7a7a;
   margin-left: 25px;
   background: rgb(110, 186, 255, 0);
