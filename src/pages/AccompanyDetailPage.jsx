@@ -611,7 +611,7 @@ const MiddleText = styled.div`
   color: ${(props) => props.color || '#000000'};
   margin-right: ${(props) => props.spacing || '0'};
   font-weight: bold;
-  font-family: 'Inter-Regular';
+  font-family: 'Inter';
   font-size: 1.2em;
 `;
 

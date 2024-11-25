@@ -50,6 +50,7 @@ const SliderContainer = styled.div`
   margin: 0 auto;
   overflow: hidden;
   height: 172px;
+  top: 15px;
 `;
 
 const SliderWrapper = styled.div.withConfig({
@@ -65,7 +66,8 @@ const SliderWrapper = styled.div.withConfig({
 const Slide = styled.div`
   min-width: 100%;
   height: 172px;
-  background-size: cover;
+  background-size: cover; /* 컨테이너를 완전히 덮도록 설정 */
+  background-repeat: no-repeat;
   background-position: center;
 `;
 
