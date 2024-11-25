@@ -7,16 +7,19 @@ import SentChatBubble from '../../components/Chat/SentChatBubble';
 import ReceivedChatBubble from '../../components/Chat/ReceivedChatBubble';
 import ChatInput from '../../components/Chat/ChatInput';
 import Loading from '../../components/Loading/Loading';
+import { useSelector } from 'react-redux';
+import { showDate } from '../../components/Common/InfoExp';
 
 import { GET_TRADE_CHAT } from '../../api/urls';
 import { getData } from '../../api/Functions';
 
 const TradeChat = () => {
-  const [user, setUser] = useState(); // 채팅을 시작한 사람(1은 현재 유저)
+  const [messageInitiator, setMessageInitiator] = useState();
   const [defaultColor, setDefaultColor] = useState(''); // 채팅 버블의 기본 색상 설정
   const [currentUserId, setCurrentUserId] = useState(null); // 현재 유저의 ID 저장
   const [chatList, setChatList] = useState([]); // 채팅 메시지 리스트 저장
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 관리
+  const [receiver, setReceiver] = useState('');
 
   const location = useLocation();
   const { roomId, senderName } = location.state || {}; // URL에서 전달된 roomId와 senderName 가져오기
@@ -25,6 +28,8 @@ const TradeChat = () => {
   const chatWrapperRef = useRef(null); // 채팅 메시지 영역에 대한 참조 생성
   const chatListRef = useRef(chatList); // 최신 chatList를 관리하는 ref
   const pollingRef = useRef(true); // 롱 폴링 상태를 관리하는 ref
+
+  const userInfo = useSelector((state) => state.user.user);
 
   // chatList 상태가 변경될 때마다 chatListRef도 업데이트
   useEffect(() => {
@@ -44,17 +49,23 @@ const TradeChat = () => {
         );
 
         if (response) {
-          setCurrentUserId(response.data.result.currentUserId);
-          setChatList(response.data.result.chatList);
+          if (
+            response.data.content[0].chatList &&
+            response.data.content[0].chatList.length > 0
+          ) {
+            setChatList(response.data.content[0].chatList);
+          } else {
+            setChatList([]);
+          }
+          console.log('콘솔', response.data.content[0]);
 
-          const firstChatUserId = response.data.result.chatList[0]?.userId;
-          const currentUserId = response.data.result.currentUserId;
-
-          if (firstChatUserId === currentUserId) {
-            setUser(1); // 현재 유저가 첫 번째 메시지를 보낸 경우
+          if (response.data.content[0].chatUserOne === userInfo.id) {
+            setMessageInitiator(true);
+            setReceiver(response.data.content[0].chatUserTwo);
             setDefaultColor('#C2C7FF'); // 보라색 배경
           } else {
-            setUser(2); // 현재 유저가 첫 번째 메시지를 보내지 않은 경우
+            setMessageInitiator(false); // 현재 유저가 첫 번째 메시지를 보내지 않은 경우
+            setReceiver(response.data.content[0].chatUserOne);
             setDefaultColor('#D1E2FF'); // 파란색 배경
           }
         }
@@ -64,7 +75,6 @@ const TradeChat = () => {
         setIsLoading(false);
       }
     };
-
     fetchTradeChat();
   }, [roomId]);
 
@@ -86,47 +96,47 @@ const TradeChat = () => {
     scrollToBottom();
   }, [chatList]);
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    pollingRef.current = true;
+  // useEffect(() => {
+  //   const abortController = new AbortController();
+  //   pollingRef.current = true;
 
-    const startLongPolling = async () => {
-      while (pollingRef.current) {
-        try {
-          const response = await getData(
-            GET_TRADE_CHAT(roomId),
-            {
-              Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-              signal: abortController.signal, // signal 추가
-            },
-            { roomId: roomId },
-          );
+  //   const startLongPolling = async () => {
+  //     while (pollingRef.current) {
+  //       try {
+  //         const response = await getData(
+  //           GET_TRADE_CHAT(roomId),
+  //           {
+  //             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+  //             signal: abortController.signal, // signal 추가
+  //           },
+  //           { roomId: roomId },
+  //         );
 
-          if (response) {
-            const newMessages = response.data.result.chatList;
-            if (newMessages.length !== chatListRef.current.length) {
-              setChatList(newMessages);
-              scrollToBottom();
-            }
-          }
-        } catch (error) {
-          if (error.name !== 'AbortError') {
-            console.error('Error fetching new messages:', error);
-          }
-        }
+  //         if (response) {
+  //           const newMessages = response.data.result.chatList;
+  //           if (newMessages.length !== chatListRef.current.length) {
+  //             setChatList(newMessages);
+  //             scrollToBottom();
+  //           }
+  //         }
+  //       } catch (error) {
+  //         if (error.name !== 'AbortError') {
+  //           console.error('Error fetching new messages:', error);
+  //         }
+  //       }
 
-        // 3초 간격으로 폴링
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-      }
-    };
+  //       // 3초 간격으로 폴링
+  //       await new Promise((resolve) => setTimeout(resolve, 3000));
+  //     }
+  //   };
 
-    startLongPolling();
+  //   startLongPolling();
 
-    return () => {
-      pollingRef.current = false; // 컴포넌트 언마운트 시 polling 중지
-      abortController.abort(); // 요청 취소
-    };
-  }, [roomId]);
+  //   return () => {
+  //     pollingRef.current = false; // 컴포넌트 언마운트 시 polling 중지
+  //     abortController.abort(); // 요청 취소
+  //   };
+  // }, [roomId]);
 
   // navigate(-1)을 사용한 뒤로가기 버튼 클릭 시 롱 폴링을 중지
   const handleBackNavigation = () => {
@@ -143,20 +153,21 @@ const TradeChat = () => {
       <ChatHeader
         receiver={senderName}
         pointColor="#fff"
-        user={user}
+        messageInitiator={messageInitiator}
         isAccompany={false}
         onBackClick={handleBackNavigation}
       />
       <TradeChatInfo
-        user={user}
+        messageInitiator={messageInitiator}
         roomId={roomId}
       />
       <s.ChatWrapper ref={chatWrapperRef}>
         {chatList && chatList.length > 0 ? (
           chatList.map((data, index) => (
             <s.ChatContainer key={index}>
-              {data.userId === currentUserId ? (
+              {data.userId === userInfo.id ? (
                 <s.SentChatWrapper>
+                  <s.Time>{showDate(data.createdAt)}</s.Time>
                   <SentChatBubble
                     color={defaultColor}
                     text={data.message}
@@ -168,6 +179,7 @@ const TradeChat = () => {
                     color={defaultColor}
                     text={data.message}
                   />
+                  <s.Time>{showDate(data.createdAt)}</s.Time>
                 </s.ReceivedChatWrapper>
               )}
             </s.ChatContainer>
@@ -179,7 +191,7 @@ const TradeChat = () => {
       <s.TradeBackground />
       <ChatInput
         roomId={roomId}
-        currentUserId={currentUserId}
+        currentUserId={userInfo.id}
         addNewMessage={addNewMessage}
       />
     </s.ChatLayout>

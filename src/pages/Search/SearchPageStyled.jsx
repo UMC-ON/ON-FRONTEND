@@ -43,7 +43,8 @@ export const SearchInput = styled.input`
   padding-inline-end: 3.3rem;
   padding-inline-start: 1.5rem;
   outline: none;
-  color: black;
+  color: #363636;
+  font-size: 1rem;
 `;
 
 export const SearchButton = styled.img`

@@ -2,9 +2,9 @@ import * as s from './ChatBubbleStyled';
 
 const SentChatBubble = ({ color, text }) => {
   return (
-    <s.SentChatContainer color={color}>
+    <s.SentChatBubble color={color}>
       <s.Text>{text} </s.Text>
-    </s.SentChatContainer>
+    </s.SentChatBubble>
   );
 };
 

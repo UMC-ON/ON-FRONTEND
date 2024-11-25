@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -10,10 +10,11 @@ import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import SellPageHeader from '../components/SellPageHeader';
 import ItemList from '../components/ItemList';
-import TransactionPicker from "../components/TransactionPicker";
+import TransactionPicker from '../components/TransactionPicker';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
 import Loading from '../components/Loading/Loading';
+import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 import { getData } from '../api/Functions';
 import { GET_FILTER_ITEM, GET_ITEM_SEARCH, GET_ITEM_LIST } from '../api/urls';
 
@@ -21,12 +22,13 @@ function SellPage() {
   const [showAvailable, setShowAvailable] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState('');
   const [isPickerVisible, setIsPickerVisible] = useState(false);
-  const [tempTransaction, setTempTransaction] = useState(''); 
+  const [tempTransaction, setTempTransaction] = useState('');
   const [showCountry, setShowCountry] = useState(false);
   const [country, setCountry] = useState(null);
   const [isCountryClicked, setIsCountryClicked] = useState(false);
   const [items, setItems] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [page, setPage] = useState(0);
 
   const navigate = useNavigate();
 
@@ -37,11 +39,15 @@ function SellPage() {
         GET_ITEM_LIST, {
         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
       }, 
-      { page: 0, size: 20, sort: 'DESC' },);
+      { page: page, size: 5, sort: 'DESC' },);
       
-      if (response) {
+      if (page === 0) {
         console.log("모든 물품 불러오기 성공");
+        console.log(response.data.content);
         setItems(response.data.content);
+      } else{
+        console.log("extra data");
+        setItems(prevItems => [...prevItems, ...response.data.content]);
       }
     } catch (error) {
       console.error('모든 물품 불러오기 중 오류 발생:', error);
@@ -50,52 +56,59 @@ function SellPage() {
 
   const fetchItems = async (dealType = '', currentCountry = '') => {
     try {
-      if (showAvailable) {
-        // 거래 가능한 물품만 불러오기
-        const response = await getData(
-          '/api/v1/market-post/available', {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        });
-        if (response) {
-          setItems(response.data.content);
-        }
-      } else {
-        // 필터링된 물품 불러오기
-        const params = {
-          page: 0,
-          size: 20,
-          sort: 'DESC',
-          dealType: dealType === '직거래' ? 'DIRECT' : 'DIRECT',
-          currentCountry,
-          dealStatus: showAvailable? 'AWAIT' : null // 거래 불가능한 물품 (showAvailable이 true일 때)
-        };
+      // 필터링된 물품 불러오기
+      const params = {
+        page: page,
+        size: 5,
+        sort: 'DESC',
+        dealType: dealType ? (dealType === '직거래' ? 'DIRECT' : 'DELIVERY') : '', // 거래방식이 없으면 빈 문자열로 처리
+        currentCountry,
+        dealStatus: showAvailable ? 'AWAIT' : ''
+      };
   
-        const response = await getData(
-          GET_FILTER_ITEM, {
+      const response = await getData(
+        GET_FILTER_ITEM, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }, params);
   
-        if (response) {
+      // response가 유효한지 확인
+      if (response && response.data) {
+        console.log(params);
+        // 페이지가 0일 때 새로 불러오고, 그 외 페이지에서는 기존 데이터에 추가
+        if (page === 0) {
           setItems(response.data.content);
+        } else {
+          setItems(prevItems => [...prevItems, ...response.data.content]);
         }
+        console.log(response.data);
+      } else {
+        console.error('응답이 유효하지 않습니다:', response);
       }
     } catch (error) {
       console.error('필터링 중 오류 발생:', error);
     }
   };
-  
-  
+
   const fetchSearchResults = async () => {
     try {
       const response = await getData(
         GET_ITEM_SEARCH, {
-        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-      }, 
-      { keyword: searchKeyword, page: 0, size: 20, sort: 'DESC' },);
-      
-      if (response) {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        { keyword: searchKeyword, page: page, size: 5, sort: 'DESC' },
+      );
+  
+      // response가 유효한지 확인
+      if (response && response.data) {
         console.log("검색 성공");
-        setItems(response.data.content);
+        // 페이지가 0일 때 새로 불러오고, 그 외 페이지에서는 기존 데이터에 추가
+        if (page === 0) {
+          setItems(response.data.content);
+        } else {
+          setItems(prevItems => [...prevItems, ...response.data.content]);
+        }
+      } else {
+        console.error('검색 응답이 유효하지 않습니다:', response);
       }
     } catch (error) {
       console.error('검색 중 오류 발생:', error);
@@ -110,28 +123,53 @@ function SellPage() {
       // 필터링 조건이 있을 때는 필터링된 물품 가져오기
       fetchItems(selectedTransaction, country);
     }
-  }, [selectedTransaction, country, showAvailable]);
+  }, [page, selectedTransaction, country, showAvailable]);
+  const handleScroll = useCallback(() => {
+    const scrolledToBottom = 
+        window.innerHeight + document.documentElement.scrollTop 
+        >= document.documentElement.offsetHeight - 10;
 
-  const resetCountryClick = () => {
+    if (scrolledToBottom) {
+        setPage(prevPage => prevPage + 1);
+    }
+}, []);
+
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  const handleFilterClick = useCallback(() => {
+    console.log("handleFilterClick");
+    setPage(0);
+    setItems([]); 
+  }, []);
+
+  const resetCountryClick = useCallback(() => {
     setIsCountryClicked(false);
     setCountry(null);
-  };
+    handleFilterClick();
+  }, [handleFilterClick]);
 
-  const handleGetCountry = (country) => {
-    setCountry(country);
-    setIsCountryClicked(true);
-    setShowCountry(false);
-  };
+  const handleGetCountry = useCallback((country) => {
+    console.log("handleGetCountry");
+      setCountry(country);
+      setIsCountryClicked(true);
+      setShowCountry(false);
+      handleFilterClick();
+   }, [handleFilterClick]);
 
   const handleCountryClick = () => {
     setShowCountry(!showCountry);
   };
 
-  const handleResetTransaction = () => {
+  const handleResetTransaction = useCallback(() => {
     setSelectedTransaction('');
     setTempTransaction('');
     setIsPickerVisible(false);
-  };
+    handleFilterClick();
+  }, [handleFilterClick]);
 
   const togglePickerVisibility = () => {
     if (selectedTransaction) {
@@ -155,6 +193,8 @@ function SellPage() {
 
   const handleCheckClick = () => {
     setShowAvailable(!showAvailable);
+    setPage(0);
+    setItems([]);
   };
 
   const goPost = () => {
@@ -164,10 +204,11 @@ function SellPage() {
   return (
     <>
       <SellPageHeader pageName={'거래하기'} />
-      <Space /><br />
+      <Space />
+      <br />
       <SearchContainer>
         <Search
-          placeholder='국가 / 물품으로 검색해 보세요.'
+          placeholder="국가 / 물품으로 검색해 보세요."
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
           onKeyPress={(e) => {
@@ -177,9 +218,14 @@ function SellPage() {
             }
           }}
         />
-        <SearchIcon src={search_icon} onClick={fetchSearchResults} /> {/* 검색 아이콘 클릭 시 검색 요청 */}
+        <SearchIcon
+          src={search_icon}
+          onClick={fetchSearchResults}
+        />{' '}
+        {/* 검색 아이콘 클릭 시 검색 요청 */}
       </SearchContainer>
-      <br /><br />
+      <br />
+      <br />
       <FlexContainer>
         <Span>
           <SellPageCountrySelect
@@ -188,10 +234,16 @@ function SellPage() {
             isCountryClicked={isCountryClicked}
             updateIsCountryClicked={resetCountryClick}
           />
-          {showCountry &&
-            <SelectCountry closeModal={handleCountryClick} getCountry={handleGetCountry} />
-          }
-          <GreyPicker onClick={togglePickerVisibility} selected={!!selectedTransaction}>
+          {showCountry && (
+            <SelectCountry
+              closeModal={handleCountryClick}
+              getCountry={handleGetCountry}
+            />
+          )}
+          <GreyPicker
+            onClick={togglePickerVisibility}
+            selected={!!selectedTransaction}
+          >
             {selectedTransaction || '거래방식'}
             <Icon
               src={selectedTransaction ? whiteCloseIcon : arrowIcon}
@@ -206,15 +258,20 @@ function SellPage() {
             />
           </GreyPicker>
           <Available>
-            <Check onClick={handleCheckClick} checked={showAvailable} />
+            <Check
+              onClick={handleCheckClick}
+              checked={showAvailable}
+            />
             <span>거래 가능 물품만 보기</span>
           </Available>
         </Span>
-      </FlexContainer><br />
+      </FlexContainer>
+      <br />
       <ItemList items={items} />
       <ButtonContainer>
         <WriteButton onClick={goPost}>
           <img src={pencilImg} alt="pencil icon" />
+          <LeftPadding />
           글 쓰기
         </WriteButton>
       </ButtonContainer>
@@ -226,14 +283,12 @@ function SellPage() {
         onApply={handleApply}
         onClose={() => setIsPickerVisible(false)}
       />
+      <BottomTabNav />
     </>
   );
 }
 
 export default SellPage;
-
-
-
 
 const Space = styled.div`
   margin-top: 7vh;
@@ -243,8 +298,8 @@ const SearchContainer = styled.div`
   position: relative;
   width: 96%;
   margin: 0 auto;
-  background-color: #FFFFFF; /* 밝은 배경색 */
-  color: #000000; /* 텍스트 색상 */
+  background-color: #ffffff;
+  color: #000000;
 `;
 
 const Search = styled.textarea`
@@ -263,11 +318,11 @@ const Search = styled.textarea`
   resize: none;
   overflow: hidden;
   &::placeholder {
-  font-size: 15px;
-  font-family: Inter;
+    font-size: 15px;
+    font-family: Inter;
   }
-  background-color: #FFFFFF; /* 밝은 배경색 */
-  color: #000000; /* 텍스트 색상 */
+  background-color: #ffffff;
+  color: #000000;
 `;
 
 const SearchIcon = styled.img`
@@ -279,20 +334,19 @@ const SearchIcon = styled.img`
 
 const FlexContainer = styled.div`
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   margin-left: 1em;
 `;
 
 const Span = styled.span`
   display: flex;
-  align-items: center; 
+  align-items: center;
 `;
 
 const GreyPicker = styled.button`
-  background: ${({ selected }) => selected 
-    ? 'linear-gradient(135deg, #C2C7FF, #AD99FF)' 
-    : '#E8E8E8'};
+  background: ${({ selected }) =>
+    selected ? 'linear-gradient(135deg, #C2C7FF, #AD99FF)' : '#E8E8E8'};
   font-family: 'Inter-Regular';
   font-size: 0.8em;
   padding: 3px;
@@ -300,14 +354,14 @@ const GreyPicker = styled.button`
   padding-left: 8px;
   padding-right: 8px;
   margin-right: 8px;
-  color: ${({ selected }) => selected ? '#FFFFFF' : '#363636'};
+  color: ${({ selected }) => (selected ? '#FFFFFF' : '#363636')};
 `;
 
 const Available = styled.div`
   display: flex;
   align-items: center;
   font-size: 12px;
-  color: #7A7A7A;
+  color: #7a7a7a;
   margin-left: 14vw;
   margin-left: 60px;
 `;
@@ -317,9 +371,7 @@ const Check = styled.div`
   height: 14px;
   border-radius: 50%;
   border: 1px solid transparent;
-  background: ${({ checked }) => checked 
-    ? "#C2C7FF" 
-    : "#E8E8E8"};
+  background: ${({ checked }) => (checked ? '#C2C7FF' : '#E8E8E8')};
   margin-right: 5px;
   cursor: pointer;
 `;
@@ -334,16 +386,16 @@ const WriteButton = styled.button`
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 70px;
-
-
+  bottom: 110px;
   border-radius: 55px;
   border: 1px solid #cccccc;
+  font-family: Inter;
+  font-style: normal;
   width: 148px;
   height: 50px;
   padding: 15px 26px;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+  background: linear-gradient(135deg, #d6ebff, #c2c7ff);
   color: white;
   text-align: center;
   font-family: Inter;
@@ -358,11 +410,15 @@ const WriteButton = styled.button`
   &:focus {
     outline: 1px solid #9279f8;
   }
-
   -webkit-tap-highlight-color: transparent;
 `;
 
+const LeftPadding = styled.div`
+    padding-left: 10px;
+`;
+
 const ButtonContainer = styled.div`
+  padding-bottom: 100px;
   box-sizing: border-box;
   display: flex;
   width: 100%;

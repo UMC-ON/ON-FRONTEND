@@ -42,11 +42,11 @@ const CheckBoxWrapper = styled.label`
   display: flex;
   flex-direction: row;
   align-items: center;
-
+  transform: translateY(-50%);
   flex-wrap: nowrap;
-  color: #b2b2b2;
+  color: #5c5c5c;
   font-family: Inter;
-  font-size: 11px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;

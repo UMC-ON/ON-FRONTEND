@@ -425,20 +425,20 @@ const CardListContainer = styled.div`
   position: relative;
   display: flex;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
   white-space: nowrap; 
   padding-bottom: 3vh;
+  
 `;
 
 const CardContainer = styled.div`
   position: relative;
   display: inline-block; 
-  margin-right: 8.5vh;
-  min-width: 15vh;
+  margin-right: 2.5rem;
+  min-width: 10rem;
 `;
 
 const Card = styled.div`
@@ -449,14 +449,21 @@ overflow: hidden;
 text-align: center;
 display: flex;
 flex-direction: column;
-width: 21vh;
-height: 35vh;
+width: 11rem;
+height: 17.5rem;
+position: relative;
+backface-visibility: hidden; /* 추가 */
+  transform: translate3d(0, 0, 0); /* 추가: 사파리에서 렌더링 성능 개선 */
+  cursor:pointer;
 `;
 
 const CardImage = styled.img`
   width: 100%;        
   height: 18vh;        
-  object-fit: cover;   
+  object-fit: cover;  
+  z-index: 0;
+  min-height: 18vh; /* 최소 높이 설정 */
+  display: block; /* Safari에서 이미지 렌더링 안정화 */ 
 `;
 
 const CardContent = styled.div`
@@ -465,6 +472,7 @@ const CardContent = styled.div`
   justify-content: space-between;
   flex: 1; 
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+  -webkit-background-clip: padding-box;
 `;
 
 const CardDistance = styled.h2`
@@ -535,6 +543,9 @@ const GradientOverlay = styled.div`
   height: 30%;
   background: linear-gradient(to bottom, #D6EBFF, transparent);
   opacity: 1; 
+  z-index: 2;
+  border-radius: inherit;
+  -webkit-border-radius: inherit;
 `;
 
 const OverlayBox = styled.div`

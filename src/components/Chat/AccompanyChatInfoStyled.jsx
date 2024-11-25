@@ -35,6 +35,7 @@ export const Info = styled.div`
   line-height: normal;
   letter-spacing: 0.0175rem;
   text-align: left;
+  color: black;
 `;
 
 export const Finish = styled.div`
@@ -66,7 +67,7 @@ export const Location = styled.div`
   grid-area: location;
   display: flex;
   justify-content: left;
-  align-items: center;
+  align-items: flex-start;
 `;
 export const NumberOfPeople = styled.div`
   grid-area: num;
@@ -83,9 +84,21 @@ export const Category = styled.span`
   letter-spacing: 0.01625rem;
   text-align: left;
   margin-right: 0.4rem;
+  white-space: nowrap;
 `;
 
-export const Content = styled.span`
+export const LocationContent = styled.div`
+  span {
+    color: #7a7a7a;
+    font-family: Inter;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0.015rem;
+    text-align: left;
+  }
+`;
+export const Content = styled.div`
   color: #7a7a7a;
   font-family: Inter;
   font-size: 0.75rem;

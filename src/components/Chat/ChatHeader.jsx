@@ -1,22 +1,37 @@
-import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import * as s from './ChatHeaderStyled.jsx';
+import { POST_RECRUIT_COMPLETE } from '../../api/urls.jsx';
+import { postData } from '../../api/Functions.jsx';
 
 const ChatHeader = ({
-  user,
+  messageInitiator,
   receiver,
   pointColor,
   isAccompany,
   onBackClick,
+  roomId,
 }) => {
   const pointColorOpacity = (e) => {
     return `${pointColor.replace('1)', ` ${e})`)}`;
   };
 
-  const handleComplete = () => {}; //해당 함수 구현하기
+  const handleComplete = () => {
+    try {
+      postData(
+        POST_RECRUIT_COMPLETE(roomId),
+        {},
+        {
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+        },
+        {},
+      );
+    } catch (error) {
+      console.error('Error posting data', error);
+    }
+  };
 
   return (
-    <s.ChatHeaderLayout color={pointColorOpacity(0.4)}>
+    <s.ChatHeaderLayout color={'#DED6FF'}>
       <s.BackButton onClick={onBackClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -39,7 +54,7 @@ const ChatHeader = ({
         {receiver}
       </s.PageName>
 
-      {user === 2 && (
+      {!messageInitiator && (
         <s.CompleteBtn onClick={handleComplete}>
           {isAccompany ? '모집 완료' : '거래 완료'}
         </s.CompleteBtn>

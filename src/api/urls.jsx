@@ -4,6 +4,8 @@ export const GET_USER_STATUS = 'api/v1/user/current/status';
 export const SIGN_UP_URL = 'api/v1/user/sign-up';
 export const CHECK_DUPLICATE_NICK = 'api/v1/user/duplicate_check/nickname';
 export const CHECK_DUPLICATE_ID = '/api/v1/user/duplicate_check/email';
+export const VERIFY_CODE = '/api/v1/user/sign-up/check-auth-num';
+export const SEND_VERIFICATION_CODE = '/api/v1/user/sign-up/send-auth-num';
 export const FIND_ID = '/api/v1/user/find-id';
 export const FIND_PW = '/api/v1/user/find-password';
 export const SIGN_IN_URL = 'api/v1/user/sign-in';
@@ -52,6 +54,8 @@ export const GET_ACCOMPANY_INFO = (roomId) => `/api/v1/chat/company/${roomId}`;
 export const GET_ACCOMPANY_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
 export const GET_TRADE_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
 export const POST_CHAT = (roomId) => `/api/v1/chat/${roomId}/send`;
+export const POST_RECRUIT_COMPLETE = (roomId) =>
+  `/api/v1/chat/${roomId}/recruit`;
 
 //물품거래글
 export const GET_ITEM_LIST = `/api/v1/market-post`;
@@ -88,6 +92,7 @@ export const GET_DETAIL_ACCOMPANY = (companyPostId) =>
 export const GET_SIMILAR_ACCOMPANY = (companyPostId) =>
   `/api/v1/company-post/${companyPostId}/nearby`;
 export const GET_ROOM_ID = '/api/v1/chat/request';
+export const APPLY_ACCOMPANY = '/api/v1/company-participant/apply';
 export const GET_MY_ACCOMPANY_POST = '/api/v1/company-post/user';
 export const DELETE_MY_ACCOMPANY_POST = (companyPostId) =>
   `/api/v1/company-post/user/${companyPostId}`;
