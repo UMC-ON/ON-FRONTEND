@@ -31,6 +31,7 @@ import {
   GET_SIMILAR_ACCOMPANY,
   GET_USER_INFO,
   GET_ROOM_ID,
+  APPLY_ACCOMPANY,
 } from '../api/urls';
 
 function AccompanyDetailPage() {
@@ -119,11 +120,11 @@ function AccompanyDetailPage() {
 
   const applyData = async () => {
     try {
-      // console.log("userId: ");
-      // console.log(typeof infoData[0].userId);
+      console.log("userId: ");
+      console.log(infoData[0].userId);
       // console.log(typeof infoData[0].userId);
       // console.log("postId: ");
-      // console.log(typeof postId);
+      // console.log(postId);
 
       const response = await postData(
         GET_ROOM_ID,
@@ -133,9 +134,23 @@ function AccompanyDetailPage() {
         },
       );
 
-      if (response) {
-        console.log(response.data);
+      const response2 = await postData(
+        APPLY_ACCOMPANY,
+        { companyPostId: postId },
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+      );
+
+      if (response && response2) {
+        // console.log("response: ");
+        // console.log(response.data);
+        // console.log("response2: ");
+        // console.log(response2.data);
+
         const roomId = response.data.roomId;
+        console.log("roomId: ");
+        console.log(response.data);
         const senderName = infoData[0].nickname;
         console.log('Application successful:', roomId);
         navigate(`/chat/accompany/${roomId}`, {
@@ -330,7 +345,7 @@ function AccompanyDetailPage() {
               </FlexContainer>
             </PurpleContainer>
 
-            <Left>
+            <Left style={{}}>
               <LittleButton onClick={openReportModal}>
                 이 게시물 신고하기
               </LittleButton>
@@ -338,24 +353,23 @@ function AccompanyDetailPage() {
 
             <Line />
 
-            
-                <BigContainer>
-                  <LeftContainer>
-                    <MiddleText
-                      color="#3E73B2"
-                      spacing="1vh"
-                    >
-                      비슷한
-                    </MiddleText>
-                    <MiddleText>동행글 추천</MiddleText>
-                  </LeftContainer>
-                </BigContainer>
+            <BigContainer>
+              <LeftContainer>
+                <MiddleText
+                  color="#3E73B2"
+                  spacing="1vh"
+                >
+                  비슷한
+                </MiddleText>
+                <MiddleText>동행글 추천</MiddleText>
+              </LeftContainer>
+            </BigContainer>
 
-                <CardAccompanyList
-                  color="#c5d3e0"
-                  cards={accompanyData}
-                ></CardAccompanyList>
- 
+            <CardAccompanyList
+              color="#c5d3e0"
+              cards={accompanyData}
+            ></CardAccompanyList>
+
             <BigSpace />
 
             {infoData[0].userId !== userId ? (
@@ -570,11 +584,12 @@ const RowText = styled.div`
 `;
 
 const LittleButton = styled.button`
-  font-size: 0.7em;
+  font-size: 0.75em;
   color: #7a7a7a;
   margin-left: 25px;
   background: rgb(110, 186, 255, 0);
-  margin-bottom: 4vh;
+  margin-bottom: 1vh;
+  margin-top: 3.5vh;
 `;
 
 const Line = styled.div`
@@ -598,7 +613,7 @@ const MiddleText = styled.div`
   color: ${(props) => props.color || '#000000'};
   margin-right: ${(props) => props.spacing || '0'};
   font-weight: bold;
-  font-family: 'Inter-Regular';
+  font-family: 'Inter';
   font-size: 1.2em;
 `;
 

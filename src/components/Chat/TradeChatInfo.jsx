@@ -57,12 +57,21 @@ const TradeChatInfo = ({ messageInitiator, roomId }) => {
         </s.InfoText>
       )}
       <s.ProductWrapper>
-        <s.ProductInfoContainer>
-          <s.ProductName>{infoResult.productName}</s.ProductName>
-          <s.ProductPrice>&#8361; {infoResult.productPrice}</s.ProductPrice>
-          <s.ProductInfo>{tradeMethod} | 거래완료여부추가필요</s.ProductInfo>
-        </s.ProductInfoContainer>
-        <s.ProductImg $link={infoResult.imageUrl} />
+        {infoResult.imageUrl ? (
+          <s.ProductInfoContainer>
+            <s.ProductName>{infoResult.productName}</s.ProductName>
+            <s.ProductPrice>&#8361; {infoResult.productPrice}</s.ProductPrice>
+            <s.ProductInfo>{tradeMethod} | 거래완료여부추가필요</s.ProductInfo>
+          </s.ProductInfoContainer>
+        ) : (
+          <s.NoImgProductInfoContainer>
+            <s.ProductName>{infoResult.productName}</s.ProductName>
+            <s.ProductPrice>&#8361; {infoResult.productPrice}</s.ProductPrice>
+            <s.ProductInfo>{tradeMethod} | 거래완료여부추가필요</s.ProductInfo>
+          </s.NoImgProductInfoContainer>
+        )}
+
+        {infoResult.imageUrl && <s.ProductImg $link={infoResult.imageUrl} />}
       </s.ProductWrapper>
     </s.InfoWrapper>
   );

@@ -9,22 +9,20 @@ import defaultImg from '../assets/images/bannerDefault.svg';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
+function AccompanyList({ datas }) {
+  const navigate = useNavigate();
+  const goDetail = (postId) => {
+    navigate(`./detail/${postId}`);
+  };
 
-function AccompanyList({datas}) {
+  function formatDateToMD(dateStr) {
+    const dateObj = new Date(dateStr);
 
-    const navigate = useNavigate();
-    const goDetail = (postId) => {
-      navigate(`./detail/${postId}`);
-    };
+    const month = dateObj.getMonth() + 1;
+    const day = dateObj.getDate();
 
-    function formatDateToMD(dateStr) {
-      const dateObj = new Date(dateStr);
-      
-      const month = dateObj.getMonth() + 1; 
-      const day = dateObj.getDate();
-      
-      return `${month}/${day}`;
-    }
+    return `${month}/${day}`;
+  }
 
     return (
       <>
@@ -54,7 +52,7 @@ function AccompanyList({datas}) {
                   <GreyMiddleText>{data.content}</GreyMiddleText>
                 </Left>
     
-                <Left>
+                <Bottom>
                   <CardIcon src={personIcon} $top="2px"/>
                   <SmallGreyText>{data.nickname}</SmallGreyText>
                   {!data.ageAnonymous && (
@@ -65,9 +63,9 @@ function AccompanyList({datas}) {
                   )}
                   <SmallGreyText>·</SmallGreyText>
                   <SmallGreyText>{data.gender === 'FEMALE' ? '여' : '남'}</SmallGreyText>
-                </Left>
+                </Bottom>
               </TextContainer>
-              <Overlay $isClosed={data.recruitCompletd} />
+              <Overlay $isClosed={data.recruitCompleted} />
             </RoundContainer>
           ))
         ) : (
@@ -85,6 +83,7 @@ export default AccompanyList;
 const LeftContainer = styled.div`
   display: flex;
   justify-content: flex-start;
+  margin-left: 5px;
 `;
 
 const LeftSpace = styled.div`
@@ -92,7 +91,7 @@ const LeftSpace = styled.div`
 `;
 
 const SubText = styled.div`
-  color: #5C5C5C;
+  color: #5c5c5c;
   font-family: 'Inter-Bold';
   font-size: 1em;
 `;
@@ -102,34 +101,38 @@ const Left = styled.div`
   justify-content: flex-start;
 `;
 
+const Bottom = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  margin-top: auto;
+`;
+
 const CardIcon = styled.img`
-  width: 11px;
-  height: 11px;
-  padding-right: 3px;
-  padding-top: ${props => props.$top || '0'};
+  width: 12px;
+  height: 12px;
+  padding-right: 0px;
+  padding-top: ${(props) => props.$top || '0'};
 `;
 
 const GreyText = styled.p`
-  font-size: 0.5em;
+  font-size: 0.75em;
   padding-top: 2px;
   color: #7a7a7a;
   padding-right: 17px;
-   display: -webkit-box;
+  display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 `;
 
-
 const SmallGreyText = styled.p`
-  font-size: 0.3em;  you want */
-  padding-left: 10px;
+  font-size: 0.75em;
+  padding-left: 4px;
   padding-top: 2px;
   padding-bottom: 13px;
   color: #7a7a7a;
-  margin-left: 5px;
-
-  display: inline-block; 
+  margin-left: 0px;
+  display: inline-block;
   max-width: 88px;
   white-space: nowrap;
   overflow: hidden;
@@ -138,71 +141,76 @@ const SmallGreyText = styled.p`
 `;
 
 const GreyMiddleText = styled.p`
-  font-size: 0.5em;
+  font-size: 0.75em;
   color: #7a7a7a;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2; /* 기본은 두 줄 */
   -webkit-box-orient: vertical;
   overflow: hidden;
-  // width: 20vh;
-  line-height: 1.5vh;
+  line-height: 1.5; /* 줄 간격 */
   text-align: left;
   margin-top: 10px;
   margin-bottom: 10px;
   width: 99%;
-  height: 4vh;
+  max-height: calc(1.5em * 2); /* 두 줄 이상 넘지 않음 */
+
+  @media (max-width: 480px) { /* 작은 화면에서는 3줄 */
+    -webkit-line-clamp: 2;
+    max-height: calc(1.5em * 3);
+  }
 `;
 
 const RoundContainer = styled.div`
   position: relative;
-  margin: 0 auto;
   width: 90%;
   border-radius: 20px;
-  background: linear-gradient(90deg, #E7EBED, #FFFFFF);
+  background: linear-gradient(90deg, #e7ebed, #ffffff);
   border: 1px solid #d9d9d9;
   display: flex;
+  flex-direction: row; /* 내부 요소 가로 배치 */
+  flex-wrap: nowrap; /* 줄 바꿈 방지 */
   align-items: center;
-  margin-bottom: 2vh;
+  margin: 0 auto 2vh auto;
+  cursor: pointer;
+  box-sizing: border-box;
 `;
 
 const ImageWrapper = styled.div`
-  width: 16vh;  
-  height: 16vh; 
-  flex-shrink: 0;  
-  overflow: hidden;  
-  border-radius: 20px;  
+  width: 8rem;
+  height: 8rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 20px;
 `;
 
 const Image = styled.img`
-  width: 100%; 
-  height: 100%;  
-  object-fit: cover; 
-  object-position: center; 
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 `;
 
 const TextContainer = styled.div`
-  margin-left: 10px;
   display: flex;
-  height: 130px;
   flex-direction: column;
-  box-sizing: border-box; 
-  margin-right: 15px;
+  flex: 1; /* 남은 공간 채우기 */
+  margin: 0 15px; /* 좌우 간격 */
+  box-sizing: border-box;
+  overflow: hidden; /* 내부 요소가 넘치지 않도록 설정 */
 `;
 
 const CardName = styled.p`
-  font-size: 0.9em;
-  padding: 0px;
+ font-size: 1rem;
   font-weight: bold;
-  text-align: left;
-  line-height: 17px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   color: #363636;
+  line-height: 1.2; /* 줄 높이 */
+  margin: 10px 0;
 
-  white-space: nowrap;         
-  overflow: hidden;            
-  text-overflow: ellipsis;    
-  width: 23vh;
+  text-align: left; /* 왼쪽 정렬 */
+  white-space: nowrap; /* 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 내용 숨기기 */
+  text-overflow: ellipsis; /* 넘치는 내용은 ...으로 표시 */
+  max-width: 100%; /* 부모 컨테이너 너비를 초과하지 않음 */
 `;
 
 const Overlay = styled.div`
@@ -211,9 +219,8 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(to right, rgba(208,214,218,0.5), rgba(231,235,237,0.5), rgba(255,255,255,0.5));
+  background-color: rgba(1000,1000,1000,0.5);
   display: ${(props) => (props.$isClosed ? 'block' : 'none')};
   border-radius: 20px;
-  z-index: 1; 
+  z-index: 1;
 `;
-

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
@@ -7,7 +7,7 @@ import PageHeader from '../components/PageHeader/PageHeader';
 import ScrapListComponent from '../components/ScrapListComponent';
 import LoadingScreen from '../components/LoadingScreen';
 
-import nothing from "../assets/images/no_content.svg";
+import nothing from '../assets/images/no_content.svg';
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
@@ -16,6 +16,7 @@ import { GET_SCRAP } from '../api/urls';
 
 function ScrapList() {
     const [items, setItems] = useState([]);
+    const [page, setPage] = useState(0);
 
 
     useEffect(() => {
@@ -26,18 +27,18 @@ function ScrapList() {
               Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             },
             params: {
-              page: 0, size: 20, sort: 'DESC'
+              page: page, size: 5, sort: 'DESC'
             }
             
           });
     
           // 응답 데이터 확인
-          console.log("API response:", response.data.content);
+          console.log("API response:", response.data);
     
-          if (response.data.content) {
+          if (page === 0) {
             setItems(response.data.content);
           } else {
-            console.warn('스크랩 물품 데이터를 찾을 수 없습니다.');
+            setItems(prevItems => [...prevItems, ...response.data.content]);
           }
         } catch (error) {
           console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
@@ -45,7 +46,22 @@ function ScrapList() {
       };
     
       fetchItems();
-    }, []); // 빈 배열을 추가하여 useEffect가 한 번만 실행되도록 함
+    }, [page]);
+
+    const handleScroll = useCallback(() => {
+      const scrolledToBottom = 
+          window.innerHeight + document.documentElement.scrollTop 
+          >= document.documentElement.offsetHeight - 10;
+
+      if (scrolledToBottom) {
+          setPage(prevPage => prevPage + 1);
+      }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+}, [handleScroll]);
     
     return (
         <>
@@ -71,7 +87,6 @@ function ScrapList() {
 
 export default ScrapList;
 
-
 const Space = styled.div`
   margin-top: 7vh;
 `;
@@ -79,8 +94,8 @@ const Space = styled.div`
 const LastItemMessage = styled.div`
   text-align: center;
   margin: 20px;
-  color: #B8B8B8;
-  font-size: 10px;
+  color: #b8b8b8;
+  font-size: 13px;
 `;
 
 const NoContentWrapper = styled.div`
@@ -104,5 +119,5 @@ const NoContentImage = styled.img`
 
 const NoContentMessage = styled.p`
   font-size: 14px;
-  color: #B8B8B8;
+  color: #b8b8b8;
 `;

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import profilePic from '../../assets/images/profilepic.svg';
 import PageHeader from '../../components/PageHeader/PageHeader.jsx';
 import commentImg from '../../assets/images/replyBtnImg.svg';
+import sendCommentBtn from '../../assets/images/commentSendBtn.svg';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
 import { showDispatchedInfo } from '../../components/Common/InfoExp.jsx';
@@ -247,6 +248,8 @@ const DetailPage = ({ color1, color2, boardType }) => {
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
   if (userInfo && currentPost && commentList) {
+    //return <div>{currentPost.postId}</div>;
+
     return (
       <div ref={mobileViewRef}>
         <PageHeader
@@ -296,7 +299,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
           <s.CommentNumSection>
             <img
               src={commentImg}
-              style={{ width: '0.96rem', height: '1.04rem' }}
+              style={{ width: '1rem', height: '1rem', marginRight: '5px' }}
             />
             {commentCount}
           </s.CommentNumSection>
@@ -357,21 +360,41 @@ const DetailPage = ({ color1, color2, boardType }) => {
           )}
         </s.DetailPageLayout>
         <s.CommentWritingDiv id="commentDiv">
-          <DefaultCheckBox
-            before="익명"
-            checkBoxStyle={{
-              border: '0.2px solid rgba(0, 0, 0, 0.50)',
-              width: '14px',
-              height: '14px',
-              borderRadius: '5px',
+          <div
+            style={{
+              gridArea: 'isAnonymous',
+              alignSelf: 'start',
+              padding: '35% 0',
             }}
-            onChange={(e) => {
-              isAnonymous.current = e.target.value;
-              commentEditor.current.focus();
-            }}
-          />
-          <s.EditorWrapper>
-            {replyToText.current}
+          >
+            <DefaultCheckBox
+              before="익명"
+              checkBoxStyle={{
+                border: '0.2px solid #D9D9D9',
+                width: '1.25rem',
+                height: '1.25rem',
+                borderRadius: '50%',
+              }}
+              wrapperStyle={{
+                //gridArea: isAnonymous,
+                color: '#5C5C5C',
+                fontFamily: 'Inter',
+                fontSize: '0.9375rem',
+                fontStyle: 'normal',
+                fontWeight: '700',
+                lineHeight: 'normal',
+                letterSpacing: '0.01875rem',
+                alignSelf: 'center',
+              }}
+              onChange={(e) => {
+                isAnonymous.current = e.target.value;
+                commentEditor.current.focus();
+              }}
+            />
+          </div>
+
+          <s.ReplyToDiv>{replyToText.current}</s.ReplyToDiv>
+          <s.EditorDiv>
             <s.CommentEditor
               className="commentEditor"
               placeholder={
@@ -385,49 +408,18 @@ const DetailPage = ({ color1, color2, boardType }) => {
               value={content}
               ref={commentEditor}
               disabled={!logInInfo.isAuthenticated}
+            >
+              <img
+                style={{ position: 'fixed' }}
+                src={sendCommentBtn}
+              />
+            </s.CommentEditor>
+            <img
+              src={sendCommentBtn}
+              style={{ padding: '0.65rem' }}
+              onClick={onCommentSubmit}
             />
-          </s.EditorWrapper>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 22 22"
-            fill="none"
-            onClick={(e) => {
-              onCommentSubmit();
-            }}
-          >
-            <circle
-              cx="11"
-              cy="11"
-              r="11"
-              fill="url(#paint0_linear_2168_7179)"
-            />
-            <path
-              d="M11.0002 6L6.8335 10.1667M11.0002 6L15 10.1667M11.0002 6V16"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <defs>
-              <linearGradient
-                id="paint0_linear_2168_7179"
-                x1="0"
-                y1="0"
-                x2="22"
-                y2="22"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor={color1} />
-                <stop
-                  offset="1"
-                  stopColor={color2}
-                />
-              </linearGradient>
-            </defs>
-          </svg>
+          </s.EditorDiv>
         </s.CommentWritingDiv>
       </div>
     );

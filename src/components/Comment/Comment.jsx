@@ -50,7 +50,7 @@ const CommentAndReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 1.2rem 0 0 0;
+  margin: 0.44rem 0 0 0;
 `;
 
 const CommentDiv = styled.div`

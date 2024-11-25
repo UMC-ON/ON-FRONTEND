@@ -9,6 +9,7 @@ const DefaultCheckBox = ({
   onChange = () => {},
   name = {},
   defaultValue = false,
+  option = 'grad',
 }) => {
   let checked = useRef(defaultValue);
   return (
@@ -18,6 +19,7 @@ const DefaultCheckBox = ({
       <StyledCheckBox
         type="checkBox"
         style={checkBoxStyle}
+        option={option}
         name={name}
         onClick={() => {
           checked.current = !checked.current;
@@ -42,11 +44,11 @@ const CheckBoxWrapper = styled.label`
   display: flex;
   flex-direction: row;
   align-items: center;
-
+  transform: translateY(-50%);
   flex-wrap: nowrap;
-  color: #b2b2b2;
+  color: #5c5c5c;
   font-family: Inter;
-  font-size: 11px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -102,12 +104,15 @@ const StyledCheckBox = styled.input`
   padding: 0 4px;
   background-color: white;
   &:checked {
-    background: ${(props) =>
-      props.style.color === '#BFD8E5'
-        ? `url('data:image/svg+xml,${encodedBlueCheck}') no-repeat center
-      white`
-        : `url('data:image/svg+xml,${encodedPurpleCheck}') no-repeat center
-      white`};
+    background: ${(props) => {
+      if (props.option === 'grad') {
+        return props.style.color === '#BFD8E5'
+          ? '#BFD8E5'
+          : 'linear-gradient(135deg, #C2C7FF 0%, #AD99FF 100%)';
+      } else {
+        return props.style.color === '#BFD8E5' ? '#BFD8E5' : '#C2C7FF';
+      }
+    }};
   }
 `;
 

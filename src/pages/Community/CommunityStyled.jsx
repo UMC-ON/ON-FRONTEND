@@ -20,20 +20,20 @@ export const FilterSection = styled.section`
   flex-wrap: wrap;
   flex-direction: column;
   align-content: start;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
   height: 54px;
   width: 100%;
-  padding: 0 14px;
+  padding: 0 28px;
 `;
 export const GreyPicker = styled.div`
   background-color: #e8e8e8;
   font-family: 'Inter-Regular';
-  font-size: 0.8em;
+  font-size: 0.9em;
   padding: 5px;
   border-radius: 18px;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
   margin-right: 8px;
   color: ${(props) => (props.$isCountryClicked ? '#FFFFFF' : '#363636')};
   background: ${(props) =>
@@ -45,7 +45,7 @@ export const GreyPicker = styled.div`
 export const Icon = styled.img`
   width: ${(props) => props.size || '10px'};
   height: ${(props) => props.size || '10px'};
-  padding-left: 3px;
+  padding-left: 6px;
   padding-right: ${(props) => props.$right || '0'};
 `;
 

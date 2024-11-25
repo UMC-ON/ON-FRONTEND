@@ -20,6 +20,7 @@ export const PageHeaderLayout = styled.div`
 export const BackButton = styled.div`
   position: absolute;
   left: 17px;
+  cursor:pointer;
 `;
 export const PageName = styled.p`
   text-align: center;

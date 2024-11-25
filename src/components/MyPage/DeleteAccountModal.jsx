@@ -247,7 +247,7 @@ const DropDownMainBox = styled.div`
   height: 1.75rem;
   flex-shrink: 0;
   border: 1px solid #b0b0b0;
-  border-radius: 0.75rem;
+  border-radius: 10px;
   display: flex;
   padding: 0 0.5rem;
   box-sizing: border-box;

@@ -156,18 +156,18 @@ const TextInput = styled.input`
   width: 100%;
   height: 1.5rem;
   border: none;
-  border-bottom: solid #b0b0b0 1px;
+  border-bottom: 1px solid #b0b0b0;
   background: none;
-  color: #838383;
+  color: #5c5c5c;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
   line-height: 2rem;
   ::placeholder {
-    color: #838383;
+    color: #5c5c5c;
     font-family: Inter;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
