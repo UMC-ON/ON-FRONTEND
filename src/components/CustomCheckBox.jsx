@@ -4,7 +4,7 @@ import React from 'react';
 function CustomCheckbox({ checked, onChange }) {
   return (
     <StyledCheckbox checked={checked} onClick={() => onChange({ target: { checked: !checked } })}>
-      {checked && <Checkmark>✓</Checkmark>}
+      {checked && <Checkmark></Checkmark>}
     </StyledCheckbox>
   );
 }
@@ -18,11 +18,12 @@ const StyledCheckbox = styled.div`
   width: 16px;
   height: 16px;
   background: ${({ checked }) => (checked ? '#868EE8' : 'rgba(134, 142, 232, 0.2)')};
-  border-radius: 30%;
-  border: 2px solid #868EE8;
+  border-radius: 50%;
+  border: 2px solid #D3D3D3;
   transition: all 150ms;
   position: relative;
   font-weight: bold;
+  cursor:pointer;
 `;
 
 const Checkmark = styled.div`
