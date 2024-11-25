@@ -90,6 +90,7 @@ export const GET_DETAIL_ACCOMPANY = (companyPostId) =>
 export const GET_SIMILAR_ACCOMPANY = (companyPostId) =>
   `/api/v1/company-post/${companyPostId}/nearby`;
 export const GET_ROOM_ID = '/api/v1/chat/request';
+export const APPLY_ACCOMPANY = '/api/v1/company-participant/apply';
 export const GET_MY_ACCOMPANY_POST = '/api/v1/company-post/user';
 export const DELETE_MY_ACCOMPANY_POST = (companyPostId) =>
   `/api/v1/company-post/user/${companyPostId}`;
