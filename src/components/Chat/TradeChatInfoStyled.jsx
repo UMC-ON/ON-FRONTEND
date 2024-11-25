@@ -57,7 +57,22 @@ export const ProductInfoContainer = styled.div`
   gap: 0.3rem;
   grid-template-columns: 1fr auto;
 `;
-
+export const NoImgProductInfoContainer = styled.div`
+  width: 100%;
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
+  border-radius: 0.625rem;
+  background: #f3f4ff;
+  display: grid;
+  grid-template-areas:
+    'name price'
+    'info price';
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  grid-template-columns: 1fr auto;
+`;
 export const ProductImg = styled.div`
   width: 100%;
   height: 10rem;
