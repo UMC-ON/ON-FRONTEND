@@ -99,7 +99,6 @@ const SubText = styled.div`
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
-  
 `;
 
 const Bottom = styled.div`
@@ -163,20 +162,22 @@ const GreyMiddleText = styled.p`
 
 const RoundContainer = styled.div`
   position: relative;
-  margin: 0 auto;
   width: 90%;
   border-radius: 20px;
   background: linear-gradient(90deg, #e7ebed, #ffffff);
   border: 1px solid #d9d9d9;
   display: flex;
+  flex-direction: row; /* 내부 요소 가로 배치 */
+  flex-wrap: nowrap; /* 줄 바꿈 방지 */
   align-items: center;
-  margin-bottom: 2vh;
+  margin: 0 auto 2vh auto;
   cursor: pointer;
+  box-sizing: border-box;
 `;
 
 const ImageWrapper = styled.div`
-  width: 16vh;
-  height: 16vh;
+  width: 8rem;
+  height: 8rem;
   flex-shrink: 0;
   overflow: hidden;
   border-radius: 20px;
@@ -190,28 +191,26 @@ const Image = styled.img`
 `;
 
 const TextContainer = styled.div`
-  margin-left: 11px;
   display: flex;
-  height: 130px;
   flex-direction: column;
+  flex: 1; /* 남은 공간 채우기 */
+  margin: 0 15px; /* 좌우 간격 */
   box-sizing: border-box;
-  margin-right: 15px;
+  overflow: hidden; /* 내부 요소가 넘치지 않도록 설정 */
 `;
 
 const CardName = styled.p`
-  font-size: 1rem;
-  padding: 0px;
+ font-size: 1rem;
   font-weight: bold;
-  text-align: left;
-  line-height: 17px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   color: #363636;
+  line-height: 1.2; /* 줄 높이 */
+  margin: 10px 0;
 
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 11.5rem;
+  text-align: left; /* 왼쪽 정렬 */
+  white-space: nowrap; /* 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 내용 숨기기 */
+  text-overflow: ellipsis; /* 넘치는 내용은 ...으로 표시 */
+  max-width: 100%; /* 부모 컨테이너 너비를 초과하지 않음 */
 `;
 
 const Overlay = styled.div`

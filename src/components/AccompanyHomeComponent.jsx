@@ -259,7 +259,7 @@ const SmallSpace = styled.div`
 `;
 
 const Space = styled.div`
-  margin-top: 7vh;
+  margin-top: 5vh;
 `;
 
 const BigSpace = styled.div`

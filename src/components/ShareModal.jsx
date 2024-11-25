@@ -105,6 +105,10 @@ import closeIcon from '../assets/images/close_button.svg';
     margin-bottom: 0.5vh;
     color: #b0b0b0;
     text-decoration: underline;
+    white-space: nowrap;
+    width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
 `;
 
   const SuccessText = styled.div`
