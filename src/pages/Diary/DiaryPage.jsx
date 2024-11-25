@@ -6,6 +6,7 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import DailyDiary from "../../components/DailyDiary";
 import DDayCalendar from '../../components/DDayCalendar.jsx';
 import DailyDiaryCalendar from "../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx";
+import DiaryAlertModal from "../../components/DiaryAlertModal.jsx";
 
 import styled from 'styled-components';
 import moment from 'moment';
@@ -27,8 +28,11 @@ const Diary = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [newDiaryContent, setNewDiaryContent] = useState('');
   const [diaries, setDiaries] = useState([]);
-  const [dday, setDday] = useState(null); // state to hold the dday value
+  const [dday, setDday] = useState(null);
+  const [showAlertModal, setShowAlertModal] = useState(false);
   const [dateList, setDateList] = useState([]);
+  const [formattedDates, setFormattedDates] = useState({});
+
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
@@ -49,6 +53,7 @@ const Diary = () => {
         setDateList(response?.data?.dateList);
         console.log(response.data.diaryList);
         console.log(userInfo);
+        console.log(diaries);
       } catch (error) {
         console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
       }
@@ -80,22 +85,33 @@ const Diary = () => {
 
   const handleDateChange2 = (date) => {
     setSelectedDate2(date);
-    setShowDatePicker(false); // 달력 닫기
-    setNewDiaryVisible(true); // 날짜 선택 후 일기 작성 컨테이너 보이기
+    setShowDatePicker(false);
+    setNewDiaryVisible(true);
   };
 
   const handleAddDiaryClick = () => {
-    setShowDatePicker(true); // 달력을 엽니다.
-    setNewDiaryVisible(false); // 일기 작성 컨테이너는 숨깁니다.
+    if (dday === null) {  // dday가 null일 경우 모달을 띄운다
+      setShowAlertModal(true);
+    } else {
+      setShowDatePicker(true);
+      setNewDiaryVisible(false);
+    }
+
   };
 
   const handleCalendarClick = () => {
-    setShowDatePicker(false); // 달력을 숨깁니다.
+    setShowDatePicker(false);
   };
 
 
   const handleSaveDiary = async () => {
     const formattedDate = moment(selectedDate2).format('YYYY-MM-DD');
+  
+    // 새로운 날짜와 데이터를 추가
+    setFormattedDates((prevDates) => ({
+      ...prevDates,
+      [formattedDate]: newDiaryContent,
+    }));
   
     try {
       const response = await postData(
@@ -111,45 +127,48 @@ const Diary = () => {
       );
       
       if (response) {
-        console.log('일기 저장 응답:', response.data);
+        console.log('Diary saved:', response.data);
         window.location.reload();
       } else {
-        console.error('일기 저장 중 오류 발생: 응답이 없습니다.');
+        console.error('Error saving diary: no response.');
       }
-      
     } catch (error) {
-      console.error('일기 저장 중 오류 발생:', error);
+      console.error('Error saving diary:', error);
     }
   };
   
   
+  
   return (
-    <>
       <DiaryContainer>
       <PageHeader pageName="나의 일기" />
       <Content>
         <Information>
-          <DDay>
-            {dday !== null ? (
-              <DDayText>{`D${dday}`}</DDayText>
-            ) : (
-              <DDayCalendar
-                selectedDate={selectedDate1}
-                handleDateChange={handleDateChange1}
-                setCalendarOpen={setCalendarOpen}
-                datePickerRef={datePickerRef}
-                userId= {userInfo?.id}
-              />
-            )}
-          </DDay>
+        <DDay>
+          {dday !== null ? (
+            <DDayText>{`D ${dday < 0 ? `+ ${Math.abs(dday)}` : `- ${dday}`}`}</DDayText>
+          ) : (
+            <DDayCalendar
+              selectedDate={selectedDate1}
+              handleDateChange={handleDateChange1}
+              setCalendarOpen={setCalendarOpen}
+              datePickerRef={datePickerRef}
+              userId={userInfo?.id}
+            />
+          )}
+      </DDay>
+
         </Information><br/>
-        <div style={{height: "100px", marginTop: "30px"}}>
-          <SubText>나의 {userInfo?.dispatchType === "DISPATCHED" ? '교환교' : '파견교'}</SubText>
-          <SchoolContainer>
-            <BigText>{userInfo.country},</BigText>
-            <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>{userInfo.dispatchedUniversity}</BigText>
-          </SchoolContainer>
-        </div>
+        <div style={{ height: "10%", marginTop: "60px" }} />
+        {userInfo.dispatchedUniversity && (
+          <div style={{ height: "100px", marginTop: "60px" }}>
+            <SubText>나의 파견교</SubText>
+            <SchoolContainer>
+              <BigText>{userInfo.country},</BigText>
+              <BigText style={{ color: "#3E73B2", marginLeft: "0.1em" }}>{userInfo.dispatchedUniversity}</BigText>
+            </SchoolContainer>
+          </div>
+        )}
         <CalendarContainer>
           <DiaryCalendar diaries={diaries} dateList={dateList} />
         </CalendarContainer>
@@ -157,6 +176,14 @@ const Diary = () => {
           <div>기록 남기기</div>
           <AddButton src={plus_button} />
         </AddDiary>
+        {showAlertModal && (
+          <DiaryAlertModal
+            closeModal={() => setShowAlertModal(false)}
+            line1="파견 날짜를"
+            line2="일기 작성을 위해서는"
+            line3="파견 날짜에 대한 정보가 필요합니다."
+          />
+        )}
 
         {showDatePicker && (
           <BottomTabLayout>
@@ -179,11 +206,11 @@ const Diary = () => {
           </NewDiaryContainer>
         )}
 
-        <DailyDiary diaries={diaries} />
+        <DailyDiary diaries={diaries} formattedDates={formattedDates} />
+        <Space />
       </Content>
       <BottomTabNav />
     </DiaryContainer>
-    </>
   );
 };
 
@@ -194,6 +221,7 @@ export default Diary;
 
 
 const DiaryContainer = styled.div`
+  color: black;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -205,12 +233,10 @@ const DiaryContainer = styled.div`
 
 
 const Content = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  padding-bottom: 100px;
-  gap: 20px;
+  margin-top: 3%;
+  @media (min-width: 370px) and (max-width: 385px) {
+  margin-top: 8vh;
+  }
 `;
 
 
@@ -221,38 +247,6 @@ const Information = styled.div`
 
   @media (max-width: 360px) {
     height: 35vh;
-  }
-`;
-
-
-const DatePickerWrapper = styled.div`
-  position: fixed;  // 화면에 고정되도록 설정
-  bottom: 0;  // 화면의 맨 아래에 위치하도록 설정
-  left: 0;  // 화면의 왼쪽에 맞춤
-  width: 100%;  // 전체 화면 너비를 차지하도록 설정
-  background-color: white;  // 배경색 설정
-  z-index: 1000;  // 다른 요소들 위에 나타나도록 우선순위 설정
-  padding: 10px 0;  // 상하 패딩 추가
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);  // 그림자 추가로 상단에 약간의 분리감을 줌
-  border-top: 1px solid #E0E0E0;  // 상단에 경계선 추가
-  display: flex;
-  justify-content: center;  // DatePicker를 중앙에 위치하도록 설정
-`;
-
-const DatePickerStyled = styled(DatePicker)`
-  .react-datepicker {
-    width: 100%;  // 달력 너비를 전체로 확장
-    border: none;  // 테두리 제거
-  }
-  
-  .react-datepicker__header {
-    background-color: #f7f8fa;
-    border-bottom: 1px solid #eaeaea;
-  }
-  
-  .react-datepicker__day--selected {
-    background-color: #3E73B2;
-    color: white;
   }
 `;
 
@@ -290,27 +284,12 @@ const DDayText = styled.div`
   text-fill-color: transparent;
 `;
 
-const Today = styled.div`
-  background: ${props => props.theme.lightPurple};
-  margin-top: 4em;
-  width: 6em;
-  height: 1.5em;
-  border-radius: 30px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
-const RightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 2.5em;
-  margin-left: 11em;
-`;
 
 const SubText = styled.div`
+  @media (max-width: 385px) {
+    padding-top: 2vh;
+  }
 `;
 
 const SchoolContainer = styled.div`
@@ -342,7 +321,7 @@ const CalendarContainer = styled.div`
 const AddDiary = styled.div`
   width: 30%;
   height: 5vh;
-  margin-left: 2.5em;
+  margin-left: 5%;
   margin-top: 1em;
   margin-bottom: 1em;
   background: ${props => props.theme.lightPurple};
@@ -362,12 +341,16 @@ const AddButton = styled.img`
 `;
 
 const NewDiaryContainer = styled.div`
+  color: black;
   position: relative;
   width: 90%;
   margin: 10px auto;
 `;
 
 const NewDiary = styled.textarea`
+  font-family: 'Inter';
+  color: #838383;
+  background-color: white;
   font-size: 14px;
   width: 89%;
   height: 10vh;
@@ -405,7 +388,7 @@ const Save = styled.div`
 const BottomTabLayout = styled.div`
   width: 100%;
   max-width: 480px;
-  height: auto;
+  height: 50vh;
   position: fixed;
   bottom: 0;
   border-radius: 14px 14px 0px 0px;
@@ -417,6 +400,12 @@ const BottomTabLayout = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   box-shadow: 0px -1px 4px 0px #e2e2e2;
+  @media (min-width: 365px) and (max-width: 380px) {
+  height: 66%;
+  }
+  @media (max-width: 360px) {
+  height: 60%;
+}
 
 `;
 
@@ -434,3 +423,8 @@ const Close = styled.img`
   right: 20px;
   cursor: pointer;
 `;
+
+const Space = styled.div`
+  height: 100px;
+
+`

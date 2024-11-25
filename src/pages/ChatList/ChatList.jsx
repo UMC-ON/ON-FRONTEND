@@ -1,55 +1,82 @@
 import PageHeader from '../../components/PageHeader/PageHeader';
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import * as s from './ChatListStyled';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SingleAccompanyChat from '../../components/ChatList/SingleChat/SingleAccompanyChat';
 import SingleTradeChat from '../../components/ChatList/SingleChat/SingleTradeChat';
 import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
+import { useInfiniteQuery } from 'react-query';
+import { getData } from '../../api/Functions';
 import useFetchChatList from '../../hooks/useFetchChatList';
 import { showDate } from '../../components/Common/InfoExp';
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
-//test
-const ChatList = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentMode, setCurrentMode] = useState('accompany');
 
-  //채팅 모드 바꾸는 함수
+const ChatList = () => {
+  const [currentMode, setCurrentMode] = useState('accompany');
+  const token = localStorage.getItem('AToken');
+
+  const fetchChatList = async ({ pageParam = 0 }) => {
+    const url =
+      currentMode === 'accompany' ? GET_ACCOMPANY_LIST : GET_TRADE_LIST;
+
+    const response = await getData(
+      url,
+      { Authorization: `Bearer ${token}` },
+      { page: pageParam, size: 20 },
+    );
+
+    const data = response.data.content[0].roomList;
+
+    // 추가된 for 루프: country 필드 추가
+    if (currentMode === 'accompany') {
+      for (let i = 0; i < data.length; i++) {
+        data[i].country = data[i].location.split(' ')[0];
+        console.log(data[i]); // 디버깅용 로그
+      }
+    }
+
+    return { content: data };
+  };
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery(['chatList', currentMode], fetchChatList, {
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.content.length < 20) return undefined; // 마지막 페이지 도달
+        return allPages.length; // 다음 페이지 번호 반환
+      },
+    });
+
   const handleModeChange = (mode) => () => {
     if (currentMode !== mode) {
       setCurrentMode(mode);
     }
   };
 
-  useEffect(() => {
-    console.log('Current Mode:', currentMode);
-  }, [currentMode]);
+  const handleScroll = (e) => {
+    if (
+      e.target.scrollHeight - e.target.scrollTop <=
+        e.target.clientHeight + 50 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  };
 
-  const token = localStorage.getItem('AToken');
-
-  const { chatList: accompanyChatResult } = useFetchChatList(
-    GET_ACCOMPANY_LIST,
-    token,
-    { page: 0, size: 20 },
-    currentMode,
-    'accompany',
-  );
-
-  const { chatList: tradeChatResult } = useFetchChatList(
-    GET_TRADE_LIST,
-    token,
-    { page: 0, size: 20 },
-    currentMode,
-    'trade',
-  );
+  const isEmpty =
+    !data || (data.pages.length === 1 && data.pages[0].content.length === 0);
 
   return (
-    <s.ChatListLayout>
+    <s.ChatListLayout
+      style={{ overflowY: 'auto', height: '100vh' }}
+      onScroll={handleScroll}
+    >
       <PageHeader
         pageName="채팅"
         nav="/"
       />
-      {/*위쪽 버튼*/}
+      {/* 위쪽 버튼 */}
       <s.ModeContainer>
         <s.ModeButton
           onClick={handleModeChange('accompany')}
@@ -67,13 +94,18 @@ const ChatList = () => {
 
       {isLoading ? (
         <Loading />
-      ) : currentMode === 'accompany' ? ( //동행 구하기
-        <>
-          {accompanyChatResult && accompanyChatResult.length > 0 ? (
-            accompanyChatResult.map((data) => (
-              <s.ChatListWrapper>
+      ) : isEmpty ? (
+        <NoContent
+          content="채팅 내역"
+          style={{ paddingBottom: '10rem' }}
+        />
+      ) : (
+        data?.pages.map((page) =>
+          page.content.map((data) => (
+            <s.ChatListWrapper key={data.roomId}>
+              {console.log(data)}
+              {currentMode === 'accompany' ? (
                 <SingleAccompanyChat
-                  key={data.roomId}
                   roomId={data.roomId}
                   time={
                     data.lastChatTime !== null
@@ -86,26 +118,10 @@ const ChatList = () => {
                       : '채팅을 시작해보새요!'
                   }
                   senderName={data.senderName}
-                  location={data.country}
+                  location={data.country} // country 필드 사용
                 />
-                <s.Line />
-              </s.ChatListWrapper>
-            ))
-          ) : (
-            <NoContent
-              content="채팅 내역"
-              style={{ paddingBottom: '10rem' }}
-            />
-          )}
-        </>
-      ) : (
-        //물품거래
-        <>
-          {tradeChatResult && tradeChatResult.length > 0 ? (
-            tradeChatResult.map((data) => (
-              <s.ChatListWrapper>
+              ) : (
                 <SingleTradeChat
-                  key={data.roomId}
                   nickName={data.senderName}
                   roomId={data.roomId}
                   img={data.profileImg}
@@ -120,17 +136,13 @@ const ChatList = () => {
                       : '새로운 채팅을 시작해보새요!'
                   }
                 />
-                <s.Line />
-              </s.ChatListWrapper>
-            ))
-          ) : (
-            <NoContent
-              content="채팅 내역"
-              style={{ paddingBottom: '10rem' }}
-            />
-          )}
-        </>
+              )}
+              <s.Line />
+            </s.ChatListWrapper>
+          )),
+        )
       )}
+      {isFetchingNextPage && <Loading />}
 
       <BottomTabNav />
     </s.ChatListLayout>
