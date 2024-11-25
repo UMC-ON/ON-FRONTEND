@@ -155,13 +155,14 @@ const PostPage = ({ color, boardType }) => {
                 {showDispatchedInfo(userInfo, 'UNIV')}
               </s.ColorButtonTag>
             </s.InfoLabel>
-            {/* <DefaultCheckBox
+            <DefaultCheckBox
               after="파견교 비공개"
               onChange={onChangeInput}
               name="anonymousUniv"
-              checkBoxStyle={{ color: `${color}` }}
-            /> */}
-            <label style={{ color: '#b2b2b2' }}>
+              checkBoxStyle={{ color: `${color}`, borderRadius: '50%' }}
+              option="noGrad"
+            />
+            {/* <label style={{ color: '#b2b2b2' }}>
               <s.RadioButton
                 type="radio"
                 after="파견교 비공개"
@@ -174,7 +175,7 @@ const PostPage = ({ color, boardType }) => {
                 inactiveColor={'#ffffff'}
               />
               파견교 비공개
-            </label>
+            </label> */}
           </s.SpaceBetweenContainer>
         </s.PostInfoSection>
         <s.TitleSection>
@@ -261,7 +262,7 @@ const PostPage = ({ color, boardType }) => {
           wrapperStyle={{ fontSize: '14px' }}
           onChange={onChangeInput}
           name="anonymous"
-          checkBoxStyle={{ color: `${color}` }}
+          checkBoxStyle={{ color: `${color}`, borderRadius: '50%' }}
         />
       </s.Footer>
     </>

@@ -364,8 +364,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
             style={{
               gridArea: 'isAnonymous',
               alignSelf: 'start',
-              padding: '0.9rem 0',
-              justifySelf: 'center',
+              padding: '35% 0',
             }}
           >
             <DefaultCheckBox
@@ -418,6 +417,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
             <img
               src={sendCommentBtn}
               style={{ padding: '0.65rem' }}
+              onClick={onCommentSubmit}
             />
           </s.EditorDiv>
         </s.CommentWritingDiv>
