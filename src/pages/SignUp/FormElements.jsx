@@ -230,7 +230,7 @@ export const UserInfoForm1 = ({
   return (
     <>
       <s.InputWrapper>
-        <div>아이디</div>
+        <s.Div>아이디</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"
@@ -267,7 +267,7 @@ export const UserInfoForm1 = ({
         <s.Explanation>이미 존재하는 아이디입니다.</s.Explanation>
       )}
       <s.InputWrapper>
-        <div>비밀번호</div>
+        <s.Div>비밀번호</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="password"
@@ -296,7 +296,7 @@ export const UserInfoForm1 = ({
           : '*영문, 숫자, 특수문자를 모두 사용하여 8자리 이상'}
       </s.Explanation>
       <s.InputWrapper>
-        <div>비밀번호 확인</div>
+        <s.Div>비밀번호 확인</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="password"
@@ -358,7 +358,7 @@ export const UserInfoForm2 = ({
   return (
     <>
       <s.InputWrapper>
-        <div>이름</div>
+        <s.Div>이름</s.Div>
         <s.TransparentInput
           placeholder="본명으로 작성해 주세요"
           onChange={updateUserInfo}
@@ -375,7 +375,7 @@ export const UserInfoForm2 = ({
       <s.TwoColumnWrapper>
         <div>
           <s.InputWrapper>
-            <div
+            <s.Div
               style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -386,13 +386,14 @@ export const UserInfoForm2 = ({
               <s.Explanation
                 style={{
                   display: 'inline-block',
-                  fontSize: '0.5rem',
+                  fontSize: '0.8rem',
                   lineHeight: 'normal',
+                  marginLeft: '5px',
                 }}
               >
                 *만나이 기준
               </s.Explanation>
-            </div>
+            </s.Div>
             <s.TransparentInput
               type="number"
               placeholder="숫자만 입력해주세요"
@@ -414,7 +415,15 @@ export const UserInfoForm2 = ({
 
         <EmptyDiv></EmptyDiv>
         <s.InputWrapper style={{ border: 'none' }}>
-          <div>성별</div>
+          <s.Div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            성별
+          </s.Div>
           <s.StyledComboBox
             onChange={(e) => {
               updateUserInfo(e);
@@ -437,7 +446,7 @@ export const UserInfoForm2 = ({
         </s.InputWrapper>
       </s.TwoColumnWrapper>
       <s.InputWrapper>
-        <div>전화번호</div>
+        <s.Div>전화번호</s.Div>
         <s.TransparentInput
           type="tel"
           placeholder="'-' 없이 숫자만 입력해주세요"
@@ -454,7 +463,7 @@ export const UserInfoForm2 = ({
           : '올바른 형식으로 작성해주세요'}
       </s.Explanation>
       <s.InputWrapper>
-        <div>닉네임</div>
+        <s.Div>닉네임</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             onChange={updateUserInfo}

@@ -247,6 +247,8 @@ const DetailPage = ({ color1, color2, boardType }) => {
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
   if (userInfo && currentPost && commentList) {
+    //return <div>{currentPost.postId}</div>;
+
     return (
       <div ref={mobileViewRef}>
         <PageHeader
@@ -296,7 +298,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
           <s.CommentNumSection>
             <img
               src={commentImg}
-              style={{ width: '0.96rem', height: '1.04rem' }}
+              style={{ width: '1rem', height: '1rem', marginRight: '5px' }}
             />
             {commentCount}
           </s.CommentNumSection>
@@ -357,6 +359,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
           )}
         </s.DetailPageLayout>
         <s.CommentWritingDiv id="commentDiv">
+          {/* 스타일 수정사항에 따라 Radio 버튼으로 바꾸기 */}
           <DefaultCheckBox
             before="익명"
             checkBoxStyle={{
@@ -394,6 +397,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
             height="22"
             viewBox="0 0 22 22"
             fill="none"
+            style={{ transform: 'translateY(-50%)' }}
             onClick={(e) => {
               onCommentSubmit();
             }}

@@ -41,10 +41,10 @@ function ItemDetailPage() {
 
   const [modalImage, setModalImage] = useState(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-  const [hasBottomTab, setHasBottomTab] = useState(true)
+  //const [hasBottomTab, setHasBottomTab] = useState(true)
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
-  const [infoData, setInfoData] = useState([]);
+  //const [infoData, setInfoData] = useState([]);
   
 
   const openChatModal = () => {
@@ -112,7 +112,7 @@ function ItemDetailPage() {
         const roomId = response.data.roomId;
         const senderName = userInfo.nickname;
         console.log('Application successful:', roomId);
-        navigate(`/chat/market/${roomId}`, { state: { roomId, senderName } });
+        navigate(`/chat/trade/${roomId}`, { state: { roomId, senderName } });
       } else {
         console.error('Application failed');
       }

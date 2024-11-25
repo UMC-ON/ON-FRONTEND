@@ -23,7 +23,7 @@ const FindPassword = () => {
                 <s.TransparentInput placeholder="가입하신 아이디를 입력해주세요" />
               </s.InputWrapper>
               <s.InputWrapper>
-                이메일
+                아이디
                 <s.TransparentInput />
               </s.InputWrapper>
             </s.ContentSection>
