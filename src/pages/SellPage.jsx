@@ -257,14 +257,14 @@ function SellPage() {
               }}
             />
           </GreyPicker>
-          <Available>
+        </Span>
+        <Available>
             <Check
               onClick={handleCheckClick}
               checked={showAvailable}
             />
             <span>거래 가능 물품만 보기</span>
           </Available>
-        </Span>
       </FlexContainer>
       <br />
       <ItemList items={items} />
@@ -362,8 +362,7 @@ const Available = styled.div`
   align-items: center;
   font-size: 12px;
   color: #7a7a7a;
-  margin-left: 14vw;
-  margin-left: 60px;
+  margin-right: 5%;
 `;
 
 const Check = styled.div`
