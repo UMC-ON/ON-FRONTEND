@@ -143,17 +143,21 @@ export const CommentWritingDiv = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  /* flex-direction: row;
   justify-content: start;
-  align-items: end;
-  flex-wrap: wrap;
+  align-items: center;
+  flex-wrap: wrap; */
+  grid-template-columns: 5rem auto;
+  grid-template-rows: 1.5rem auto;
+  grid-template-areas:
+    '. replyTo'
+    'isAnonymous  editor';
+  align-items: center;
 
   width: 100%;
   max-width: 480px;
-
-  height: auto;
-  //min-height: 70px;
+  height: 7.8rem;
   background: linear-gradient(
     135deg,
     ${(props) => props.color1 || '#f1f8ff 0%'},
@@ -161,52 +165,69 @@ export const CommentWritingDiv = styled.div`
   );
   background: #f3f9ff;
   box-shadow: 0px -3px 3px 0px rgba(0, 0, 0, 0.05);
-  padding: 14px 15px;
+  padding: 0.5rem 1.2rem 1.2rem 1.2rem;
 `;
 
-export const RadioButton = styled.input`
-  vertical-align: -0.188rem;
-  appearance: none;
-  border: max(2px, 0.05em) solid lightgray;
-  border-radius: 50%;
-  width: 1.25em;
-  height: 1.25em;
-  background: ${(props) =>
-    props.checked
-      ? props.activeColor || '#bfd8e5'
-      : props.inactiveColor || '#ffffff'};
-  cursor: pointer;
-
-  &:checked {
-    background: ${(props) => props.activeColor || '#bfd8e5'};
-  }
-`;
-
-export const EditorWrapper = styled.div`
+export const ReplyToDiv = styled.div`
+  grid-area: replyTo;
+  position: relative;
   color: black;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  /* flex-direction: column;
   align-content: start;
   flex: auto;
   flex-wrap: nowrap;
+  
+  align-items: start; */
   justify-content: start;
-  align-items: start;
-  padding: 0 0.94rem;
+  align-items: center;
+  padding: 0 0.94rem 0.5rem 0.94rem;
   font-size: 12px;
+  flex-shrink: 1;
 `;
-export const CommentEditor = styled.textarea`
+export const EditorDiv = styled.div`
+  grid-area: editor;
+  display: flex;
+  flex-direction: row;
+  position: relative;
   box-sizing: border-box;
-  border-radius: 30px;
-  border: 0.5px solid #d9d9d9;
   background: linear-gradient(
     135deg,
     rgba(214, 235, 255, 0.8) 0%,
     rgba(194, 199, 255, 0.8) 100%
   );
 
+  border-radius: 1.875rem;
+  border: 0.5px solid #d9d9d9;
+
+  flex-grow: 1;
+  width: 100%;
+  height: fit-content;
+  align-self: start;
+  flex-shrink: 0;
+
+  &:focus {
+    outline: none;
+  }
+  min-height: 2.75rem;
+  max-height: 4rem;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+export const CommentEditor = styled.textarea`
+  box-sizing: border-box;
+  background: transparent;
+
+  border-radius: 1.875rem;
+  border: 0.5px solid #d9d9d9;
+
   flex: auto;
   width: 100%;
+  min-height: 2.75rem;
+  max-height: 4rem;
+  flex-shrink: 1;
 
   &:focus {
     outline: none;
@@ -219,10 +240,7 @@ export const CommentEditor = styled.textarea`
   font-weight: 400;
   line-height: normal;
   text-align: left;
-
-  height: auto;
-  min-height: 28px;
-  max-height: 104px;
+  padding: 0.65rem 0.5rem 0.5rem 1rem;
 
   &::-webkit-scrollbar {
     display: none;
@@ -230,7 +248,30 @@ export const CommentEditor = styled.textarea`
   padding: 13px;
   resize: none;
 `;
-
+const grad = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="10" cy="10" r="9.5" fill="url(#paint0_linear_424_4500)" stroke="#E7E7E7"/>
+<defs>
+<linearGradient id="paint0_linear_424_4500" x1="0" y1="0" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D6EBFF"/>
+<stop offset="1" stop-color="#C2C7FF"/>
+</linearGradient>
+</defs>
+</svg>
+`;
+const encodedGrad = encodeURIComponent(grad)
+  .replace(/'/g, '%27')
+  .replace(/"/g, '%22');
+export const RadioButton = styled.input`
+  vertical-align: -0.188rem;
+  appearance: none;
+  border: max(2px, 0.1em) solid lightgray;
+  border-radius: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  &:checked {
+    background: url('data:image/svg+xml,${encodedGrad}') no-repeat center;
+  }
+`;
 export const CommentSection = styled.section`
   box-sizing: border-box;
   display: flex;

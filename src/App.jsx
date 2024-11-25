@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom';
 import theme from './styles/theme.js';
 // 페이지, 컴포넌트 import
+import Forms from './pages/SignUp/Forms.jsx';
 import NavBar from './components/NavBar/NavBar.jsx';
 import MyPage from './pages/MyPage/MyPage.jsx';
 import MyPost from './pages/MyPage/MyPost.jsx';
@@ -110,6 +111,10 @@ function App() {
     return (
       <ThemeProvider theme={theme}>
         <Routes>
+          <Route
+            path="/test"
+            element={<Forms />}
+          />
           <Route
             path="/landing"
             element={<LandingPage />}
