@@ -77,7 +77,7 @@ export const Info = styled.div`
   margin-top: 0.25rem;
   span {
     font-family: Inter;
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 400;
     line-height: 150%; /* 0.75rem */
@@ -91,7 +91,7 @@ export const Nickname = styled.div`
   span {
     color: #7a7a7a;
     font-family: Inter;
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 400;
     line-height: 150%;
@@ -103,7 +103,7 @@ export const Categories = styled.span`
   grid-area: categories;
   color: ${(props) => props.$fontcolor};
   font-family: Inter;
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
@@ -115,11 +115,11 @@ export const VerifiedSvg = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="8"
-      height="8"
+      width="10"
+      height="10"
       viewBox="0 0 8 8"
       fill="none"
-      style={{ marginRight: '0.5rem' }}
+      style={{ marginRight: '0.65rem' }}
     >
       <path
         d="M0 4C0 6.20914 1.79086 8 4 8C6.20914 8 8 6.20914 8 4C8 1.79086 6.20914 0 4 0C1.79086 0 0 1.79086 0 4Z"

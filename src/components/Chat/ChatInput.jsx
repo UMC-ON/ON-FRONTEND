@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import * as s from './ChatInputStyled';
 import { POST_CHAT } from '../../api/urls';
+import { postData } from '../../api/Functions';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
-const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
-
+import send from '../../assets/images/send.svg';
 const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  const apiClient = axios.create({
-    baseURL: serverAddress + '/',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
   const messageInputChange = (e) => {
     setMessage(e.target.value);
   };
-
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
@@ -51,6 +44,15 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
     }
   };
 
+  const handleResizeHeight = () => {
+    const textarea = document.querySelector('.input');
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
+  const handleResetHeight = (e) => {
+    const textarea = e.target;
+    textarea.style.height = 'auto'; // 기본 높이로 재설정
+  };
   if (isLoading) {
     return <Loading />;
   }
@@ -59,11 +61,17 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
     <s.InputField>
       <s.TextInputContainer>
         <s.TextInput
+          rows={1}
+          className="input"
+          onInput={handleResizeHeight}
+          onFocus={handleResizeHeight}
+          onBlur={handleResetHeight}
           onChange={messageInputChange}
           value={message}
           disabled={isLoading}
         />
         <s.SendButton
+          src={send}
           disabled={isLoading}
           onClick={handleSendMessage}
         />

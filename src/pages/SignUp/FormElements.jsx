@@ -209,6 +209,8 @@ export const UserInfoForm1 = ({
   setActive,
   setDupCheck,
   dupCheck,
+  verifyCode,
+  setVerifyCode,
 }) => {
   const pw = useRef(state.password);
   const id = useRef(state.loginId);
@@ -221,13 +223,15 @@ export const UserInfoForm1 = ({
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
+    //if(verifyCode.verified)
+    //인증코드 put 제대로 작동하면 추가
     setActive(isValid);
   }, [isValid]);
 
   return (
     <>
       <s.InputWrapper>
-        <div>아이디</div>
+        <s.Div>이메일</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"
@@ -276,6 +280,7 @@ export const UserInfoForm1 = ({
               });
               if (res.status == 200) {
                 alert('메일로 인증번호가 발송되었습니다.');
+                setVerifyCode({ ...verifyCode, isSent: true });
               }
             }}
           >
@@ -300,6 +305,7 @@ export const UserInfoForm1 = ({
             name="code"
             aria-invalid={errors.code ? 'true' : 'false'}
             {...register('code', {
+              //disabled: !verifyCode.isSent,
               required: '인증코드를 입력해주세요.',
               onChange: (e) => {
                 code.current = e.target.value;
@@ -308,7 +314,7 @@ export const UserInfoForm1 = ({
           />
           {/* {!errors.code && <img src={validImg} />} */}
           <s.GrayButton
-            disabled={dupCheck.loginId != 1}
+            disabled={!verifyCode.isSent}
             onClick={async (e) => {
               e.preventDefault();
               const data = {
@@ -363,7 +369,7 @@ export const UserInfoForm1 = ({
         )}
       </s.Explanation>
       <s.InputWrapper>
-        <div>비밀번호 확인</div>
+        <s.Div>비밀번호 확인</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="password"
@@ -407,53 +413,41 @@ export const UserInfoForm2 = ({
   setDupCheck,
   dupCheck,
 }) => {
-  const isAllValid = useRef({
-    name: false,
-    age: false,
-    gender: false,
-    phone: false,
-  });
-  useEffect(() => {
-    if (
-      isAllValid.current.name &&
-      isAllValid.current.age &&
-      isAllValid.current.gender &&
-      isAllValid.current.phone &&
-      dupCheck.nickname === 1
-    ) {
-      setActive(true);
-    } else {
-      setActive(false);
-    }
-  }, [state, dupCheck]);
-  useEffect(() => {
-    //이전 단계를 눌로 페이지에 다시 돌아왔을 때, 렌더링하며 조건 상태 체크
-    for (let key in state) {
-      SignUpValidCheck({ name: key, value: state[key] }, isAllValid);
-    }
-  }, [state]);
+  const {
+    register,
+    formState: { errors, isValid },
+    watch,
+  } = useForm({ mode: 'onChange' });
 
   return (
     <>
       <s.InputWrapper>
-        <div>이름</div>
+        <s.Div>이름</s.Div>
         <s.TransparentInput
           placeholder="본명으로 작성해 주세요"
-          onChange={updateUserInfo}
           name="name"
           defaultValue={state.name}
+          aria-invalid={errors.name ? 'true' : 'false'}
+          {...register('name', {
+            required: '이름은 필수입니다.',
+            onChange: (e) => {
+              updateUserInfo(e);
+            },
+            pattern: {
+              value: /^[가-힣]+$/,
+              message: '올바른 형식으로 입력해주세요.',
+            },
+          })}
         />
       </s.InputWrapper>
       <s.Explanation>
-        {SignUpValidCheck({ name: 'name', value: state.name }, isAllValid)
-          ? null
-          : '올바른 이름을 작성해주세요.'}
+        {errors.name && <small role="alert">{errors.name.message}</small>}
       </s.Explanation>
 
       <s.TwoColumnWrapper>
         <div>
           <s.InputWrapper>
-            <div
+            <s.Div
               style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -464,77 +458,117 @@ export const UserInfoForm2 = ({
               <s.Explanation
                 style={{
                   display: 'inline-block',
-                  fontSize: '0.5rem',
+                  fontSize: '0.8rem',
                   lineHeight: 'normal',
+                  marginLeft: '5px',
                 }}
               >
                 *만나이 기준
               </s.Explanation>
-            </div>
+            </s.Div>
             <s.TransparentInput
               type="number"
-              placeholder="숫자만 입력해주세요"
+              placeholder="숫자만 입력"
               inputMode="numeric"
               onChange={updateUserInfo}
               pattern="[0-9]"
               name="age"
               defaultValue={state.age}
+              aria-invalid={errors.age ? 'true' : 'false'}
+              {...register('age', {
+                required: '나이는 필수입니다.',
+                onChange: (e) => {
+                  updateUserInfo(e);
+                },
+              })}
             />
           </s.InputWrapper>
           <s.Explanation>
-            {!state.age
-              ? null
-              : SignUpValidCheck({ name: 'age', value: state.age }, isAllValid)
-                ? null
-                : '올바른 형식으로 작성해주세요'}
+            {errors.age && <small role="alert">{errors.age.message}</small>}
           </s.Explanation>
         </div>
 
         <EmptyDiv></EmptyDiv>
         <s.InputWrapper style={{ border: 'none' }}>
-          <div>성별</div>
-          <s.StyledComboBox
-            onChange={(e) => {
-              updateUserInfo(e);
-              SignUpValidCheck(
-                { name: 'gender', value: e.target.value },
-                isAllValid,
-              );
+          <s.Div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
             }}
+          >
+            성별
+          </s.Div>
+          <s.StyledComboBox
             name="gender"
             defaultValue={state.gender}
             pattern="[0-9]"
+            aria-invalid={errors.gender ? 'true' : 'false'}
+            {...register('gender', {
+              required: '성별은 필수입니다.',
+              onChange: (e) => {
+                updateUserInfo(e);
+              },
+            })}
           >
             <option
               value=""
               hidden
             ></option>
-            <option value="MALE">남자</option>
-            <option value="FEMALE">여자</option>
+            <option
+              value="MALE"
+              style={{ background: 'white' }}
+            >
+              남자
+            </option>
+            <option
+              value="FEMALE"
+              style={{ background: 'white' }}
+            >
+              여자
+            </option>
           </s.StyledComboBox>
         </s.InputWrapper>
       </s.TwoColumnWrapper>
       <s.InputWrapper>
-        <div>전화번호</div>
+        <s.Div>전화번호</s.Div>
         <s.TransparentInput
           type="tel"
           placeholder="'-' 없이 숫자만 입력해주세요"
-          inputMode="numeric"
-          onChange={updateUserInfo}
+          //inputMode="numeric"
           pattern="\d*"
           name="phone"
           defaultValue={state.phone}
+          aria-invalid={errors.phone ? 'true' : 'false'}
+          {...register('phone', {
+            required: '전화번호는 필수입니다.',
+            pattern: {
+              value: /[\D{11}]$/,
+              message: '숫자로만 적어주세요.',
+            },
+            onChange: (e) => {
+              updateUserInfo(e);
+            },
+          })}
         />
       </s.InputWrapper>
-      <s.Explanation>//밸리드체크</s.Explanation>
+      <s.Explanation>
+        {errors.phone && <small role="alert">{errors.phone.message}</small>}
+      </s.Explanation>
       <s.InputWrapper>
-        <div>닉네임</div>
+        <s.Div>닉네임</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
-            onChange={updateUserInfo}
             type="text"
             name="nickname"
             defaultValue={state.nickname}
+            aria-invalid={errors.nickname ? 'true' : 'false'}
+            {...register('nickname', {
+              required: '닉네임을 입력해주세요.',
+              onChange: (e) => {
+                updateUserInfo(e);
+              },
+            })}
           />
           {dupCheck.nickname < 1 ? (
             <s.GrayButton
@@ -769,6 +803,7 @@ const RadioBtnDiv = styled.div`
 
 import addPhoto from '../../assets/images/addPhoto.svg';
 import { postData, putData } from '../../api/Functions';
+import { Background } from '../MyPage/MyPageStyled';
 
 export const SchoolAuthForm = ({ state, setFile }) => {
   const [preview, setPreview] = useState(null);

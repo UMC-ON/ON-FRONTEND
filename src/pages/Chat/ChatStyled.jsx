@@ -53,6 +53,15 @@ export const SentChatWrapper = styled.div`
   display: flex;
   width: 100%;
   justify-content: flex-end; // 오른쪽 정렬
+  gap: 3px;
+`;
+
+export const Time = styled.div`
+  font-size: 10px;
+  color: #7a7a7a;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 0.65rem;
 `;
 
 // ReceivedChatWrapper - 전체 컨테이너
@@ -60,6 +69,7 @@ export const ReceivedChatWrapper = styled.div`
   display: flex;
   width: 100%;
   justify-content: flex-start; // 왼쪽 정렬
+  gap: 3px;
 `;
 
 // ChatWrapper - 전체 채팅 레이아웃

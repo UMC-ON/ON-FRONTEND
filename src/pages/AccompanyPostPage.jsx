@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, {useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
@@ -11,6 +11,7 @@ import plusButton from '../assets/images/plusButton.svg';
 import closeIcon from '../assets/images/close_button.svg';
 import cameraIcon from '../assets/images/camera_icon.svg';
 import purplePlusButton from '../assets/images/purplePlusButton.svg';
+import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 
 import CustomCheckbox from '../components/CustomCheckBox';
 import CameraBottom from '../components/CameraBottom';
@@ -18,561 +19,708 @@ import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SelectCity from './SelectCity/SelectCity.jsx';
 import Loading from '../components/Loading/Loading.jsx';
+import AlertModal from '../components/AlertModal.jsx';
 
 import { multiFilePostData, getData } from '../api/Functions';
 import { WRITE_ACCOMPANY, GET_USER_INFO } from '../api/urls';
 
-
 function AccompanyPostPage() {
-    const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const [ageChecked, setAgeChecked] = useState(false);
-    const [schoolChecked, setSchoolChecked] = useState(false);
+  const [ageChecked, setAgeChecked] = useState(false);
+  const [schoolChecked, setSchoolChecked] = useState(false);
 
-    const [age, setAge] = useState(null);
-    const [school, setSchool] = useState('');
+  const [age, setAge] = useState(null);
+  const [school, setSchool] = useState('');
 
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [daysDifference, setDaysDifference] = useState(0);
-    const [limitDays, setLimitDays] = useState(0);
-    const [isDateClicked, setIsDateClicked] = useState(false);
-    const [showCalendar, setShowCalendar] = useState(false);
-    const [personValue, setPersonValue] = useState(0);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [daysDifference, setDaysDifference] = useState(0);
+  const [limitDays, setLimitDays] = useState(0);
+  const [isDateClicked, setIsDateClicked] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [personValue, setPersonValue] = useState(0);
 
-    const [showCountry, setShowCountry] = useState(false);
-    const [country, setCountry] = useState('');
-    const [isCountryClicked, setIsCountryClicked] = useState(false);
+  const [showCountry, setShowCountry] = useState(false);
+  const [country, setCountry] = useState('');
+  const [isCountryClicked, setIsCountryClicked] = useState(false);
 
-    const [showCity, setShowCity] = useState(false);
-    const [city, setCity] = useState(null);
+  const [showCity, setShowCity] = useState(false);
+  const [city, setCity] = useState(null);
 
-    const [showCity2, setShowCity2] = useState(false);
-    const [city2, setCity2] = useState(null);
+  const [showCity2, setShowCity2] = useState(false);
+  const [city2, setCity2] = useState(null);
 
-    const [isCityClicked, setIsCityClicked] = useState(false);
-    const [isCityClicked2, setIsCityClicked2] = useState(false);
+  const [isCityClicked, setIsCityClicked] = useState(false);
+  const [isCityClicked2, setIsCityClicked2] = useState(false);
 
-    const minusSrc = (daysDifference == 0) ? greyMinusButton : minusButton;
-    const plusSrc = (daysDifference == limitDays) ? greyPlusButton : plusButton;
+  const minusSrc = daysDifference == 0 ? greyMinusButton : minusButton;
+  const plusSrc = daysDifference == limitDays ? greyPlusButton : plusButton;
 
-    const fileInputRef = useRef(null);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState(null);
-    const [fileSize, setFileSize] = useState(null);
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [fileSize, setFileSize] = useState(null);
 
-    const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(null);
 
-    const formatDate = (dateString) => {
-      return dateString.replace(/-/g, '/');
-    };
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState('');
 
-    useEffect(() => {
-      console.log(endDate);
-    }, [endDate]);
+  const formatDate = (dateString) => {
+    return dateString.replace(/-/g, '/');
+  };
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          setIsLoading(true);
+  useEffect(() => {
+    console.log(endDate);
+  }, [endDate]);
 
-          const user_data = await getData(GET_USER_INFO,{
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          }); 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
 
-          const data = user_data.data;
-          setUserData(data);
-          console.log("user data");
-          console.log(user_data.data);
-        
-          setAge(data.age);
-          setCountry(data.country);
-          console.log(data.country);
-          setSchool(data.dispatchedUniversity);
+        const user_data = await getData(GET_USER_INFO, {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        });
 
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-  
-      fetchData(); 
-    }, []); 
+        const data = user_data.data;
+        setUserData(data);
+        console.log('user data');
+        console.log(user_data.data);
 
-    
-
-    const [input, setInput] = useState({
-      userId: null,
-      ageAnonymous: ageChecked,
-      currentCountry: '',
-      universityAnonymous: schoolChecked,
-      title: '',
-      content: '',
-      travelArea: [city, city2],
-      totalRecruitNumber: personValue,
-      schedulePeriodDay: daysDifference,
-      startDate: startDate,
-      endDate: endDate,
-      imageFiles: [null],
-    });
-
-    useEffect(() => {
-      if (userData) {
-        setInput((prevInput) => ({
-          ...prevInput,
-          userId: userData.id,
-          ageAnonymous: ageChecked,
-          currentCountry: userData.country,
-          universityAnonymous: schoolChecked,
-          travelArea: [city, city2],
-          totalRecruitNumber: personValue,
-          schedulePeriodDay: daysDifference,
-          startDate: startDate,
-          endDate: endDate,
-          imageFiles: [selectedFile],
-        }));
-      }
-    }, [userData, ageChecked, country, schoolChecked, city, city2, personValue, daysDifference, startDate, endDate, selectedFile]);
-  
-
-    const onChangeInput = (e) => {
-      let name = e.target.name;
-      let value = e.target.value;
-  
-      setInput({
-        ...input,
-        [name]: value,
-      });
-    };
-
-
-    const handlePerson = (event) => {
-      const newValue = event.target.value;
-      if (!isNaN(newValue) && newValue.trim() !== '') {
-        setPersonValue(parseInt(newValue, 10)); 
-      } else {
-        setPersonValue(0); 
+        setAge(data.age);
+        setCountry(data.country);
+        console.log(data.country);
+        setSchool(data.dispatchedUniversity);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    const handleChange = (event) => {
-      const newValue = event.target.value;
-      if (!isNaN(newValue) && newValue.trim() !== '') {
-        if (newValue <= limitDays)
-        {
-          setDaysDifference(parseInt(newValue, 10)); 
-        }
-        else
-        {
-          setDaysDifference(limitDays);
-        }
-      } else {
-        setDaysDifference(0); 
-      }
-    };
+    fetchData();
+  }, []);
 
-    const increaseDays = () => {
-      if (daysDifference < limitDays)
-      {
-        setDaysDifference(daysDifference+1);
-        console.log("Limit", limitDays);
-        console.log("Days", daysDifference);
-      }
-    };
+  const [input, setInput] = useState({
+    userId: null,
+    ageAnonymous: ageChecked,
+    currentCountry: '',
+    universityAnonymous: schoolChecked,
+    title: '',
+    content: '',
+    travelArea: [city, city2],
+    totalRecruitNumber: personValue,
+    schedulePeriodDay: daysDifference,
+    startDate: startDate,
+    endDate: endDate,
+    imageFiles: [null],
+  });
 
-    const decreaseDays = () => {
-      if (daysDifference > 0)
-        {
-          setDaysDifference(daysDifference-1);
-          console.log("Limit", limitDays);
-          console.log("Days", daysDifference);
-        }
-    };
-
-    const handleApplyClick = (start, end) => {
-      setStartDate(moment(start).format('YYYY-MM-DD'));
-      setEndDate((moment(end).format('YYYY-MM-DD')));
-
-      const startMoment = moment(start);
-      const endMoment = moment(end);
-      const difference = endMoment.diff(startMoment, 'days');
-      setDaysDifference(difference+1);
-      setLimitDays(difference+1);
-      setIsDateClicked(true);
-      setShowCalendar(false);
-    };
-
-    const handleGetCountry = (country) => {
-      setCountry(country);
-      setIsCountryClicked(true);
-      setShowCountry(false);
-    };
-
-    const handleGetCity = (city) => {
-      setCity(city);
-      setIsCityClicked(true);
-      setShowCity(false);
-    };
-
-    const handleGetCity2 = (city) => {
-      setCity2(city);
-      setIsCityClicked2(true);
-      setShowCity2(false);
-    };
-
-    const checkAge = (e) => {
-      setAgeChecked(e.target.checked);
-    };
-
-    const checkSchool = (e) => {
-      setSchoolChecked(e.target.checked);
-    };
-
-    const navigate = useNavigate();
-
-    const onClickBackButton = () => {
-      navigate(-1);
-    };
-
-    // function goToAccompany() {
-    //   navigate("/accompany");
-    // }
-
-    const handleCalendarClick = () => {
-      setShowCalendar(!showCalendar);
-    };
-
-    const handleCountryClick = () => {
-      setShowCountry(!showCountry);
-    };
-
-    const handleCityClick = () => {
-      setShowCity(!showCity);
-    };
-
-    const handleCityClick2 = () => {
-      setShowCity2(!showCity2);
-    };
-
-    const handleButtonClick = () => {
-      fileInputRef.current.click();
-    };
-
-    const handleFileChange = (event) => {
-      const file = event.target.files[0];
-      setSelectedFile(file);
-      setFileSize((file.size / 1024).toFixed(2));
-      // send to server
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreviewUrl(reader.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-
-
-    // const formData = new FormData();
-    // const json = JSON.stringify(input);
-    // const blob = new Blob([json], {type: 'application/json'});
-    // formData.append('dispatchCertifyApplyRequestDto', blob);
-
-    useEffect(() => {
-      if (userData) {
-        setInput((prevInput) => ({
-          ...prevInput,
-          userId: userData.id,
-          ageAnonymous: ageChecked,
-          currentCountry: country,  
-          universityAnonymous: schoolChecked,
-          travelArea: [city, city2],
-          totalRecruitNumber: personValue,
-          schedulePeriodDay: daysDifference,
-          startDate: startDate,
-          endDate: endDate,
-          imageFiles: [selectedFile],
-        }));
-      }
-    }, [userData, ageChecked, country, schoolChecked, city, city2, personValue, daysDifference, startDate, endDate, selectedFile]);
-
-    const postData = async () => {
-      const formData = new FormData();
-    
-      const jsonData = {
-        userId: input.userId,
+  useEffect(() => {
+    if (userData) {
+      setInput((prevInput) => ({
+        ...prevInput,
+        userId: userData.id,
         ageAnonymous: ageChecked,
-        currentCountry: country,  
+        currentCountry: userData.country,
         universityAnonymous: schoolChecked,
-        title: input.title,
-        content: input.content,
         travelArea: [city, city2],
         totalRecruitNumber: personValue,
         schedulePeriodDay: daysDifference,
         startDate: startDate,
         endDate: endDate,
-      };
-    
-      console.log(jsonData); 
-    
-      const jsonBlob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
-      formData.append('requestDTO', jsonBlob);
-    
-      if (selectedFile) {
-        formData.append('imageFiles', selectedFile);
-      }
-    
-      try {
-        const response = await multiFilePostData(
-          WRITE_ACCOMPANY, 
-          formData, 
-          {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          }
-        );
-    
-        if (response) {
-          console.log(response.data.result);
-        }
-      } catch (error) {
-        console.error('Error posting data:', error);
-      }
-    };
-
-    const onSubmit = () => {
-      console.log(input);
-      if (personValue == 0)
-      {
-          alert('모집 인원을 입력해주세요.');
-      }
-      else if (city == null)
-      {
-          alert('여행 지역을 입력해주세요.');
-      }
-      else if (startDate == null)
-      {
-        alert('예상 일정을 입력해주세요.');
-      }
-      else if (input.title =='')
-      {
-        alert('제목을 입력해주세요.');
-      }
-      else if (input.content == '')
-      {
-        alert('요청사항을 입력해주세요.');
-      }
-      else
-      {
-        postData().then(() => {
-          navigate('/accompany', { state: { refresh: true } });
-        });
-      }
-      alert(input);
-    };
-
-    if (isLoading) {
-      return <Loading/>;
+        imageFiles: [selectedFile],
+      }));
     }
-    
-    return (
-      <>
-        <RightContainer>
-            <GreyButton onClick={onClickBackButton}>취소</GreyButton>
-            <BlueButton onClick={onSubmit}>등록</BlueButton>
-        </RightContainer>
+  }, [
+    userData,
+    ageChecked,
+    country,
+    schoolChecked,
+    city,
+    city2,
+    personValue,
+    daysDifference,
+    startDate,
+    endDate,
+    selectedFile,
+  ]);
 
-        <SpaceBetween/>
+  const onChangeInput = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
 
-        <LeftContainer>
-            <Title>
-                여행 동행 구하기
-            </Title>
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
+
+  const handlePerson = (event) => {
+    const newValue = event.target.value;
+    if (!isNaN(newValue) && newValue.trim() !== '') {
+      setPersonValue(parseInt(newValue, 10));
+    } else {
+      setPersonValue(0);
+    }
+  };
+
+  const handleChange = (event) => {
+    const newValue = event.target.value;
+    if (!isNaN(newValue) && newValue.trim() !== '') {
+      if (newValue <= limitDays) {
+        setDaysDifference(parseInt(newValue, 10));
+      } else {
+        setDaysDifference(limitDays);
+      }
+    } else {
+      setDaysDifference(0);
+    }
+  };
+
+  const increaseDays = () => {
+    if (daysDifference < limitDays) {
+      setDaysDifference(daysDifference + 1);
+      console.log('Limit', limitDays);
+      console.log('Days', daysDifference);
+    }
+  };
+
+  const decreaseDays = () => {
+    if (daysDifference > 0) {
+      setDaysDifference(daysDifference - 1);
+      console.log('Limit', limitDays);
+      console.log('Days', daysDifference);
+    }
+  };
+
+  const handleApplyClick = (start, end) => {
+    setStartDate(moment(start).format('YYYY-MM-DD'));
+    setEndDate(moment(end).format('YYYY-MM-DD'));
+
+    const startMoment = moment(start);
+    const endMoment = moment(end);
+    const difference = endMoment.diff(startMoment, 'days');
+    setDaysDifference(difference + 1);
+    setLimitDays(difference + 1);
+    setIsDateClicked(true);
+    setShowCalendar(false);
+  };
+
+  const handleGetCountry = (country) => {
+    setCountry(country);
+    setIsCountryClicked(true);
+    setShowCountry(false);
+  };
+
+  const handleGetCity = (city) => {
+    setCity(city);
+    setIsCityClicked(true);
+    setShowCity(false);
+  };
+
+  const handleGetCity2 = (city) => {
+    setCity2(city);
+    setIsCityClicked2(true);
+    setShowCity2(false);
+  };
+
+  const checkAge = (e) => {
+    setAgeChecked(e.target.checked);
+  };
+
+  const checkSchool = (e) => {
+    setSchoolChecked(e.target.checked);
+  };
+
+  const navigate = useNavigate();
+
+  const onClickBackButton = () => {
+    navigate(-1);
+  };
+
+  // function goToAccompany() {
+  //   navigate("/accompany");
+  // }
+
+  const handleCalendarClick = () => {
+    setShowCalendar(!showCalendar);
+  };
+
+  const handleCountryClick = () => {
+    setShowCountry(!showCountry);
+  };
+
+  const handleCityClick = () => {
+    setShowCity(!showCity);
+  };
+
+  const handleCityClick2 = () => {
+    setShowCity2(!showCity2);
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleDeleteImage = () => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+  };
+
+  const handleDeleteCity = () => {
+    if (city2 != null) {
+      setCity(city2);
+      setCity2(null);
+      setIsCityClicked2(false);
+    } else {
+      setIsCityClicked(false);
+      setCity(null);
+    }
+  };
+
+  const handleDeleteCity2 = () => {
+    setIsCityClicked2(false);
+    setCity2(null);
+  };
+
+  const handleModalOpen = (content) => {
+    setModalContent(content);
+    setIsAlertModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsAlertModalOpen(false);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    setFileSize((file.size / 1024).toFixed(2));
+    // send to server
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // const formData = new FormData();
+  // const json = JSON.stringify(input);
+  // const blob = new Blob([json], {type: 'application/json'});
+  // formData.append('dispatchCertifyApplyRequestDto', blob);
+
+  useEffect(() => {
+    if (userData) {
+      setInput((prevInput) => ({
+        ...prevInput,
+        userId: userData.id,
+        ageAnonymous: ageChecked,
+        currentCountry: country,
+        universityAnonymous: schoolChecked,
+        travelArea: [city, city2],
+        totalRecruitNumber: personValue,
+        schedulePeriodDay: daysDifference,
+        startDate: startDate,
+        endDate: endDate,
+        imageFiles: [selectedFile],
+      }));
+    }
+  }, [
+    userData,
+    ageChecked,
+    country,
+    schoolChecked,
+    city,
+    city2,
+    personValue,
+    daysDifference,
+    startDate,
+    endDate,
+    selectedFile,
+    previewUrl,
+  ]);
+
+  const postData = async () => {
+    const formData = new FormData();
+
+    const jsonData = {
+      userId: input.userId,
+      ageAnonymous: ageChecked,
+      currentCountry: country,
+      universityAnonymous: schoolChecked,
+      title: input.title,
+      content: input.content,
+      travelArea: [city, city2],
+      totalRecruitNumber: personValue,
+      schedulePeriodDay: daysDifference,
+      startDate: startDate,
+      endDate: endDate,
+    };
+
+    console.log(jsonData);
+
+    const jsonBlob = new Blob([JSON.stringify(jsonData)], {
+      type: 'application/json',
+    });
+    formData.append('requestDTO', jsonBlob);
+
+    if (selectedFile) {
+      formData.append('imageFiles', selectedFile);
+    }
+
+    try {
+      const response = await multiFilePostData(WRITE_ACCOMPANY, formData, {
+        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+      });
+
+      if (response) {
+        console.log(response.data.result);
+      }
+    } catch (error) {
+      console.error('Error posting data:', error);
+    }
+  };
+
+  const onSubmit = () => {
+    console.log(input);
+    if (personValue == 0) {
+      handleModalOpen('모집 인원을');
+    } else if (city == null) {
+      handleModalOpen('여행 지역을');
+    } else if (startDate == null) {
+      handleModalOpen('예상 일정을');
+    } else if (input.title == '') {
+      handleModalOpen('제목을');
+    } else if (input.content == '') {
+      handleModalOpen('요청사항을');
+    } else {
+      postData().then(() => {
+        navigate('/accompany', { state: { refresh: true } });
+      });
+    }
+    // alert(input);
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <>
+      <RightContainer>
+        <GreyButton onClick={onClickBackButton}>취소</GreyButton>
+        <BlueButton onClick={onSubmit}>등록</BlueButton>
+      </RightContainer>
+
+      <SpaceBetween />
+
+      <LeftContainer>
+        <Title>여행 동행 구하기</Title>
+        <Left>
+          <GreyText>정보를 수정하려면</GreyText>
+        </Left>
+        <Left>
+          <GreyText>편집 버튼(</GreyText>
+          <SmallIcon
+            src={postIcon}
+            $top="10px"
+          />
+          <GreyText>)을 눌러 입력해 주세요.</GreyText>
+        </Left>
+      </LeftContainer>
+
+      <BigContainer>
+        <BlueContainer>
+          <Left $bottom="5px">
+            <BlackText>나이 :</BlackText>
+            <BlackText $isChecked={ageChecked}>{age}세</BlackText>
+            <CustomCheckbox
+              checked={ageChecked}
+              onChange={checkAge}
+            />
+            <GreyText
+              $size="0.7rem"
+              $left="5px"
+              $top="10px"
+            >
+              나이 비공개
+            </GreyText>
+          </Left>
+          <Left $bottom="5px">
+            <BlackText>현재 국가 : </BlackText>
+            {!isCountryClicked && (
+              <CircleContainer onClick={handleCountryClick}>
+                {country}
+                <SmallIcon
+                  src={postIcon}
+                  $left="5px"
+                />
+              </CircleContainer>
+            )}
+            {isCountryClicked && (
+              <CircleContainer onClick={handleCountryClick}>
+                {`${country}`}
+                <SmallIcon
+                  src={postIcon}
+                  $left="5px"
+                />
+              </CircleContainer>
+            )}
+          </Left>
+          <Left $bottom="5px">
+            <BlackText>파견교 : </BlackText>
+            <BlackText
+              $isChecked={schoolChecked}
+              $size="0.8rem"
+            >
+              {school}
+            </BlackText>
+            <CustomCheckbox
+              checked={schoolChecked}
+              onChange={checkSchool}
+            />
+            <GreyText
+              $size="0.7rem"
+              $left="5px"
+              $top="10px"
+            >
+              파견교 비공개
+            </GreyText>
+          </Left>
+          <Left $bottom="5px">
+            <BlackText>모집 인원 : </BlackText>
+            <Input
+              $width="12px"
+              onChange={handlePerson}
+              value={personValue}
+            />
+            <GreyText $left="3px">명</GreyText>
+          </Left>
+          <Left $bottom="5px">
+            <BlackText>여행 지역 : </BlackText>
+            {!isCityClicked && (
+              <PlusButton
+                src={plusButton}
+                onClick={handleCityClick}
+              />
+            )}
+            {isCityClicked && (
+              <>
+                <CircleContainer>
+                  <CircleText onClick={handleCityClick}>{`${city}`}</CircleText>
+                  <SmallIcon
+                    src={whiteCloseIcon}
+                    $left="5px"
+                    onClick={handleDeleteCity}
+                  />
+                </CircleContainer>
+              </>
+            )}
+          </Left>
+          <Left $bottom="5px">
+            <MarginLeft2 />
+            {!isCityClicked2 && isCityClicked && (
+              <PlusButton
+                src={plusButton}
+                onClick={handleCityClick2}
+              />
+            )}
+            {isCityClicked2 && (
+              <CircleContainer>
+                <CircleText onClick={handleCityClick2}>{`${city2}`}</CircleText>
+                <SmallIcon
+                  src={whiteCloseIcon}
+                  $left="5px"
+                  onClick={handleDeleteCity2}
+                />
+              </CircleContainer>
+            )}
+          </Left>
+          <Left $bottom="5px">
+            <BlackText>예상 일정 : </BlackText>
+            {!isDateClicked && (
+              <PlusButton
+                onClick={handleCalendarClick}
+                src={plusButton}
+              />
+            )}
+            {isDateClicked && (
+              <>
+                <CircleContainer
+                  onClick={handleCalendarClick}
+                >{`${formatDate(startDate)}`}</CircleContainer>
+                <GreyText $left="6px">~</GreyText>
+                <CircleContainer
+                  onClick={handleCalendarClick}
+                >{`${formatDate(endDate)}`}</CircleContainer>
+                <GreyText $left="6px">사이</GreyText>
+              </>
+            )}
+          </Left>
+          {isDateClicked && (
             <Left>
-                <GreyText>
-                정보를 수정하려면
-                </GreyText>
+              <MarginLeft />
+              <CircleButton
+                src={minusSrc}
+                onClick={decreaseDays}
+              />
+              <Input
+                $width="20px"
+                $left="8px"
+                value={daysDifference.toString()}
+                onChange={handleChange}
+              />
+              <CircleButton
+                src={plusSrc}
+                onClick={increaseDays}
+              />
+              <GreyText $left="6px">일</GreyText>
             </Left>
-            <Left>
-                <GreyText>
-                    편집 버튼(
-                </GreyText>
-                <SmallIcon src={postIcon} $top="10px"/>
-                <GreyText>
-                    )을 눌러 입력해 주세요. 
-                </GreyText>
-            </Left>
-        </LeftContainer>
+          )}
+        </BlueContainer>
+      </BigContainer>
 
+      {showCalendar && (
+        <>
+          <Overlay onClick={handleCalendarClick} />
+          <BottomTabLayout>
+            <Close
+              src={closeIcon}
+              onClick={handleCalendarClick}
+            />
+            <TopHeader>날짜</TopHeader>
+            <LabelText>여행 가고 싶은 기간을 설정해 주세요!</LabelText>
+            <LabelText2>
+              일정이 확정되지 않았다면 범위를 넓게 설정할 수 있어요.
+            </LabelText2>
+            <DateRangePicker onApply={handleApplyClick} />
+          </BottomTabLayout>
+        </>
+      )}
 
+      {showCountry && (
+        <>
+          <SelectCountry
+            closeModal={handleCountryClick}
+            getCountry={handleGetCountry}
+          />
+        </>
+      )}
 
-        <BigContainer>
-            <BlueContainer>
-                <Left $bottom="5px">
-                    <BlackText>나이 :</BlackText>
-                    <BlackText $isChecked={ageChecked}>{age}세</BlackText>
-                    <CustomCheckbox checked={ageChecked} onChange={checkAge} />
-                    <GreyText $size="0.7rem" $left="5px" $top="10px">나이 비공개</GreyText>
-                </Left>
-                <Left $bottom="5px">
-                    <BlackText>현재 국가 : </BlackText>
-                    {!isCountryClicked && (
-                      <CircleContainer onClick={handleCountryClick}>{country}
-                      <SmallIcon src={postIcon} $left="5px"/>
-                      </CircleContainer>
-                    )}
-                    {isCountryClicked && (
-                      <CircleContainer onClick={handleCountryClick}>{`${country}`}
-                      <SmallIcon src={postIcon} $left="5px"/>
-                      </CircleContainer>
-                    )}
-                </Left>
-                <Left $bottom="5px">
-                    <BlackText>파견교 : </BlackText>
-                    <BlackText $isChecked={schoolChecked} $size="0.8rem">{school}</BlackText>
-                    <CustomCheckbox checked={schoolChecked} onChange={checkSchool} />
-                    <GreyText $size="0.7rem" $left="5px" $top="10px">파견교 비공개</GreyText>
-                </Left>
-                <Left $bottom="5px">
-                    <BlackText>모집 인원 : </BlackText>
-                    <Input $width="12px" onChange={handlePerson} value={personValue}/>
-                    <GreyText $left="3px">명</GreyText>
-                </Left>
-                <Left $bottom="5px">
-                    <BlackText>여행 지역 : </BlackText>
-                    {!isCityClicked && (
-                      <PlusButton src={plusButton} onClick={handleCityClick}/>
-                    )}
-                    {isCityClicked && (
-                      <>
-                      <CircleContainer onClick={handleCityClick}>{`${city}`}
-                      <SmallIcon src={postIcon} $left="5px"/>
-                      </CircleContainer>
-                      </>
-                    )}
-                </Left>
-                <Left $bottom="5px">
-                  <MarginLeft2/>
-                  {!isCityClicked2 && isCityClicked && (
-                          <PlusButton src={plusButton} onClick={handleCityClick2}/>
-                        )}
-                        {isCityClicked2 && (
-                          <CircleContainer onClick={handleCityClick2}>{`${city2}`}
-                          <SmallIcon src={postIcon} $left="5px"/>
-                          </CircleContainer>
-                        )}
-                </Left>
-                <Left $bottom="5px">
-                    <BlackText>예상 일정 : </BlackText>
-                    {!isDateClicked && (
-                      <PlusButton onClick={handleCalendarClick} src={plusButton}/>
-                    )}
-                    {isDateClicked && (
-                      <>
-                        <CircleContainer onClick={handleCalendarClick}>{`${formatDate(startDate)}`}</CircleContainer>
-                        <GreyText $left="6px">~</GreyText>
-                        <CircleContainer onClick={handleCalendarClick}>{`${formatDate(endDate)}`}</CircleContainer>
-                        <GreyText $left="6px">사이</GreyText>
-                      </>
-                    )}
-                </Left>
-                    {isDateClicked && (
-                      <Left>
-                        <MarginLeft/>
-                        <CircleButton src={minusSrc} onClick={decreaseDays}/>
-                        <Input $width="20px" $left="8px" value={daysDifference.toString()} onChange={handleChange}/>
-                        <CircleButton src={plusSrc} onClick={increaseDays}/>
-                        <GreyText $left="6px">일</GreyText>
-                      </Left>
-                    )}
-            </BlueContainer>
-        </BigContainer>
+      {showCity && (
+        <>
+          <SelectCity
+            closeModal={handleCityClick}
+            getCity={handleGetCity}
+          />
+        </>
+      )}
 
-        {showCalendar && 
-          <>
-            <Overlay onClick={handleCalendarClick} />
-            <BottomTabLayout>
-              <Close src={closeIcon} onClick={handleCalendarClick} />
-              <TopHeader>
-                날짜
-              </TopHeader>
-              <LabelText>여행 가고 싶은 기간을 설정해 주세요!</LabelText>
-              <LabelText2>일정이 확정되지 않았다면 범위를 넓게 설정할 수 있어요.</LabelText2>
-              <DateRangePicker onApply={handleApplyClick}/>
-            </BottomTabLayout>
-          </>
-        }
+      {showCity2 && (
+        <>
+          <SelectCity
+            closeModal={handleCityClick2}
+            getCity={handleGetCity2}
+          />
+        </>
+      )}
 
-        { showCountry &&
-          <>
-            <SelectCountry closeModal={handleCountryClick} getCountry={handleGetCountry}/>
-          </>
-        }
+      <BigContainer>
+        <Left>
+          <Title $size="1.4rem">제목</Title>
+        </Left>
+      </BigContainer>
+      <GreyInput
+        placeholder="제목을 입력해 주세요."
+        $height="2.5vh"
+        onChange={onChangeInput}
+        name="title"
+      />
 
-        { showCity &&
-          <>
-            <SelectCity closeModal={handleCityClick} getCity={handleGetCity}/>
-          </>
-        }
+      <BigContainer>
+        <Left>
+          <Title $size="1.4rem">요청사항</Title>
+        </Left>
+      </BigContainer>
 
-        { showCity2 &&
-          <>
-            <SelectCity closeModal={handleCityClick2} getCity={handleGetCity2}/>
-          </>
-        }
+      <GreyInput
+        placeholder="요청사항과 동행인에게 하고 싶은 말을 적어주세요. "
+        $height="30vh"
+        onChange={onChangeInput}
+        name="content"
+      />
 
-        <BigContainer>
-            <Left>
-                <Title $size="1.4rem">
-                    제목
-                </Title>
-            </Left>
-        </BigContainer>
-        <GreyInput placeholder='제목을 입력해 주세요.' $height="2.5vh" onChange={onChangeInput} name="title"/>
+      <HiddenFileInput
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept="image/*"
+      />
+      {previewUrl && (
+        <>
+          <Container>
+            <ImagePreview src={previewUrl} />
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 15 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                position: 'absolute',
+                right: '1.7rem',
+                top: '0.3rem',
+                zIndex: '2',
+              }}
+              onClick={handleDeleteImage}
+            >
+              <path
+                d="M14.4433 0.0955087C14.5707 -0.0318362 14.7771 -0.0318362 14.9045 0.0955087C15.0318 0.222854 15.0318 0.42932 14.9045 0.556665L7.96116 7.5L14.9045 14.4433C15.0318 14.5707 15.0318 14.7771 14.9045 14.9045C14.7771 15.0318 14.5707 15.0318 14.4433 14.9045L7.5 7.96116L0.556665 14.9045C0.42932 15.0318 0.222853 15.0318 0.0955081 14.9045C-0.031836 14.7771 -0.031836 14.5707 0.0955081 14.4433L7.03884 7.5L0.095509 0.556665C-0.0318359 0.42932 -0.0318359 0.222854 0.095509 0.0955087C0.222854 -0.0318362 0.429321 -0.0318362 0.556666 0.0955087L7.5 7.03884L14.4433 0.0955087Z"
+                fill="#000000"
+              />
+            </svg>
+          </Container>
 
-        <BigContainer>
-            <Left>
-                <Title $size="1.4rem">
-                    요청사항
-                </Title>
-            </Left>
-        </BigContainer>
-
-        <GreyInput placeholder='요청사항과 동행인에게 하고 싶은 말을 적어주세요. ' $height="30vh" onChange={onChangeInput} name="content"/>
-
-
-        <HiddenFileInput
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          accept="image/*"
-        />
-        {previewUrl && 
-          <>
-            <ImagePreview src={previewUrl}/>
-
-            <Right>
+          <Right>
             <SmallGreyText>({fileSize} KB)</SmallGreyText>
-            </Right>
-          </>
-        }
+          </Right>
+        </>
+      )}
 
-        <Space/>
-        
+      <Space />
 
+      <BottomTabLayout2>
+        <LeftButton
+          src={cameraIcon}
+          onClick={handleButtonClick}
+        />
+      </BottomTabLayout2>
 
-        <BottomTabLayout2>
-            <LeftButton src={cameraIcon} onClick={handleButtonClick}/>
-        </BottomTabLayout2>
-      </>
-    );
+      {isAlertModalOpen && (
+        <AlertModal
+          closeModal={handleModalClose}
+          line1={modalContent}
+        />
+      )}
+    </>
+  );
 }
 
 export default AccompanyPostPage;
 
+const Container = styled.div`
+  position: relative;
+  width: '100%';
+`;
+
 const TopHeader = styled.div`
   font-size: 12px;
-  color: #CCCCCC;
+  color: #cccccc;
   position: absolute;
   top: 20px;
   left: 20px;
@@ -587,20 +735,25 @@ const Space = styled.section`
 `;
 
 const CircleContainer = styled.section`
-  background: #868EE8;
+  background: #868ee8;
   border-radius: 20px;
   font-size: 0.8rem;
   color: white;
   padding: 5px;
-  justify-content: center;
+  display: flex;
   align-items: center;
   margin-left: 10px;
   margin-top: 5px;
   padding-left: 6px;
 `;
 
+const CircleText = styled.section`
+  font-size: 0.8rem;
+  color: white;
+`;
+
 const CircleContainer2 = styled.section`
-  background: linear-gradient(to right bottom, #C2C7FF, #AD99FF);
+  background: linear-gradient(to right bottom, #c2c7ff, #ad99ff);
   border-radius: 20px;
   font-size: 0.8rem;
   color: white;
@@ -613,47 +766,46 @@ const CircleContainer2 = styled.section`
 `;
 
 const Input = styled.input`
-    margin-left: ${props => props.$left || '10px'};
-    border-radius: 5px;
-    border: 1px solid #CABCCB;
-    width: ${props => props.$width || '25px'};
-    margin-top: 4px;
-    height: 18px;
-    color: #838383;
-    font-size: 0.8rem;
-    padding-left: 5px;
-    font-family: Inter;
-    background-color: white;
+  margin-left: ${(props) => props.$left || '10px'};
+  border-radius: 5px;
+  border: 1px solid #cabccb;
+  width: ${(props) => props.$width || '25px'};
+  margin-top: 4px;
+  height: 18px;
+  color: #838383;
+  font-size: 0.8rem;
+  padding-left: 5px;
+  font-family: Inter;
+  background-color: white;
 `;
 
 const GreyInput = styled.textarea`
-    border-radius: 10px;
-    border: 1px solid #CABCCB;
-    color: black;
-    font-size: 1rem;
-    padding: 10px;
-    font-family: Inter;
-    width: 83%;
-    margin-top: 1vh;
-    margin-bottom: 3vh;
-    height: ${props => props.$height || 'auto'};
-    background-color: white;
+  border-radius: 10px;
+  border: 1px solid #cabccb;
+  color: black;
+  font-size: 1rem;
+  padding: 10px;
+  font-family: Inter;
+  width: 83%;
+  margin-top: 1vh;
+  margin-bottom: 3vh;
+  height: ${(props) => props.$height || 'auto'};
+  background-color: white;
 
-    &:hover {
-    border: none; 
+  &:hover {
+    border: none;
   }
 
   &:focus {
-    border: 1px solid #CABCCB;
-    outline: none; 
+    border: 1px solid #cabccb;
+    outline: none;
   }
 
   &:active {
-    border: 1px solid #CABCCB;
-    outline: none; 
+    border: 1px solid #cabccb;
+    outline: none;
   }
 `;
-
 
 const BigContainer = styled.section`
   padding-left: 1.5rem;
@@ -661,14 +813,14 @@ const BigContainer = styled.section`
 `;
 
 const SmallIcon = styled.img`
-  padding-top: ${props => props.$top || '0'};
-  padding-left: ${props => props.$left || '0'};
+  padding-top: ${(props) => props.$top || '0'};
+  padding-left: ${(props) => props.$left || '0'};
 `;
 
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
-  margin-bottom: ${props => props.$bottom || '0'};
+  margin-bottom: ${(props) => props.$bottom || '0'};
 `;
 
 const LeftContainer = styled.section`
@@ -692,11 +844,9 @@ const SpaceBetween = styled.div`
   margin-top: 5vh;
 `;
 
-
-
 const GreyButton = styled.button`
   border-radius: 20px;
-  background-color: #E4E4E4;
+  background-color: #e4e4e4;
   color: white;
   text-align: center;
   font-family: Inter;
@@ -708,24 +858,23 @@ const GreyButton = styled.button`
   padding: 5px 15px;
 
   &:hover {
-    border: none; 
+    border: none;
   }
 
   &:focus {
-    border: none; 
-    outline: none; 
+    border: none;
+    outline: none;
   }
 
   &:active {
-    border: none; 
-    outline: none; 
+    border: none;
+    outline: none;
   }
 `;
 
-
 const BlueButton = styled.button`
   border-radius: 20px;
-  background: linear-gradient(135deg, #C2C7FF, #AD99FF);
+  background: linear-gradient(135deg, #c2c7ff, #ad99ff);
   color: white;
   font-family: Inter;
   font-size: 1em;
@@ -736,23 +885,27 @@ const BlueButton = styled.button`
   padding: 5px 15px;
 
   &:hover {
-    border: none; 
+    border: none;
   }
 
   &:focus {
-    border: none; 
-    outline: none; 
+    border: none;
+    outline: none;
   }
 
   &:active {
-    border: none; 
-    outline: none; 
+    border: none;
+    outline: none;
   }
 `;
 
 const BlueContainer = styled.div`
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(214,235,255,0.2), rgba(194,199,255,0.2));
+  background: linear-gradient(
+    135deg,
+    rgba(214, 235, 255, 0.2),
+    rgba(194, 199, 255, 0.2)
+  );
   width: 100%;
   padding-top: 3vh;
   padding-bottom: 4vh;
@@ -762,31 +915,32 @@ const BlueContainer = styled.div`
 const Title = styled.div`
   color: black;
   font-family: Inter;
-  font-size: ${props => props.$size || '1.563rem'};
+  font-size: ${(props) => props.$size || '1.563rem'};
   font-weight: bold;
 `;
 
 const GreyText = styled.div`
-  color: ${props => props.$color || '#838383'};
+  color: ${(props) => props.$color || '#838383'};
   font-family: Inter;
-  font-size: ${props => props.$size || '0.875rem'};
-  margin-top: ${props => props.$top || '1vh'};
-  margin-left: ${props => props.$left || '0'};
+  font-size: ${(props) => props.$size || '0.875rem'};
+  margin-top: ${(props) => props.$top || '1vh'};
+  margin-left: ${(props) => props.$left || '0'};
 `;
 
 const BlackText = styled.div`
   color: black;
   font-family: Inter;
-  font-size: ${props => props.$size || '1rem'};
+  font-size: ${(props) => props.$size || '1rem'};
   padding-left: 1rem;
   margin-top: 0.5rem;
-  text-decoration: ${({ $isChecked }) => ($isChecked ? 'line-through' : 'none')};
+  text-decoration: ${({ $isChecked }) =>
+    $isChecked ? 'line-through' : 'none'};
 `;
 
 const LabelText = styled.div`
   font-family: Inter;
   font-weight: bold;
-  color: #3E73B2;
+  color: #3e73b2;
   position: absolute;
   top: 50px;
   left: 20px;
@@ -795,7 +949,7 @@ const LabelText = styled.div`
 
 const LabelText2 = styled.div`
   font-family: Inter;
-  color: #7A7A7A;
+  color: #7a7a7a;
   position: absolute;
   top: 67px;
   left: 20px;
@@ -806,7 +960,6 @@ const PlusButton = styled.img`
   margin-top: 7px;
   margin-left: 7px;
 `;
-
 
 const Overlay = styled.div`
   position: fixed;
@@ -842,11 +995,9 @@ const BottomTabLayout = styled.div`
   box-shadow: 0px -1px 4px 0px #e2e2e2;
 `;
 
-
 const CircleButton = styled.img`
   margin-left: 8px;
 `;
-
 
 const MarginLeft = styled.div`
   margin-left: 90px;
@@ -858,12 +1009,10 @@ const MarginLeft2 = styled.div`
   margin-top: 30px;
 `;
 
-
 export const LeftButton = styled.img`
   position: absolute;
   left: 25px;
 `;
-
 
 const BottomTabLayout2 = styled.div`
   width: 100%;
@@ -892,19 +1041,20 @@ const ImagePreview = styled.img`
   width: 89%;
   height: auto;
   border-radius: 10px;
+  display: 'block';
 `;
 
 const Right = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-bottom: ${props => props.$bottom || '0'};
+  margin-bottom: ${(props) => props.$bottom || '0'};
 `;
 
 const SmallGreyText = styled.div`
-  color: ${props => props.$color || '#838383'};
+  color: ${(props) => props.$color || '#838383'};
   font-family: Inter;
-  font-size: ${props => props.$size || '0.875rem'};
-  margin-top: ${props => props.$top || '1vh'};
-  margin-left: ${props => props.$left || '0'};
+  font-size: ${(props) => props.$size || '0.875rem'};
+  margin-top: ${(props) => props.$top || '1vh'};
+  margin-left: ${(props) => props.$left || '0'};
   margin-right: 1.5rem;
 `;

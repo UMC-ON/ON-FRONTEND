@@ -13,7 +13,6 @@ import SecondModal from '../components/SecondModal';
 
 import compas from "../assets/images/compasIcon.svg";
 import icon from "../assets/images/profileIcon.svg";
-import noImage from "../assets/images/noImage.jpg";
 import defaultImg from '../assets/images/bannerDefault.svg';
 
 import {GET_SPECIFIC_ITEM, GET_NEARBY_ITEM, GET_MARKET_ROOMID, GET_ROOM_ID} from '../api/urls'

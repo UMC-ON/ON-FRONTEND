@@ -182,6 +182,12 @@ export const SchoolComboBox = styled.select`
   }
 `;
 
+export const Div = styled.div`
+  font-size: 1.05rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+`;
+
 export const TransparentInput = styled.input`
   width: 100%;
   color: black;
@@ -191,13 +197,14 @@ export const TransparentInput = styled.input`
   border: none;
   outline: none;
   padding: 0 0.06rem;
+  font-size: 1rem;
 
   &:invalid {
     background-color: #ffc0cb91;
   }
 
   &::placeholder {
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {

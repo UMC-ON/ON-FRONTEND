@@ -34,6 +34,7 @@ export const NoTradePicture = styled.div`
 `;
 export const Location = styled.div`
   grid-area: location;
+  gap: 0.2rem;
   img {
     width: 17px;
     height: 17px;
@@ -47,6 +48,7 @@ export const Location = styled.div`
   font-weight: 400;
   line-height: normal;
   white-space: nowrap;
+  align-items: center;
 `;
 
 export const TradePicture = styled.img`

@@ -36,7 +36,11 @@ const SignUpPage = () => {
       setUserInfo({ ...userInfo, [name]: value });
       if (name === 'nickname' || name === 'loginId') {
         //이메일이나 닉네임이 바뀔 경우 중복체크 역사 초기화
+        //0: 중복 검사 진행 전
+        //-1: 중복된 값 존재
+        //1: 사용가능한 값
         setDupCheck({ ...dupCheck, [name]: 0 });
+        setVerifyCode({ isSent: false, verified: false });
       }
       console.log(userInfo);
     }
@@ -131,7 +135,7 @@ const SignUpPage = () => {
               {currentStep}
             </s.ContentSection>
           </s.SectionWrapper>
-          <div style={{ width: '100%' }}>
+          <div style={{ width: '100%', padding: '1rem' }}>
             {currentDotStep.current > 0 && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"

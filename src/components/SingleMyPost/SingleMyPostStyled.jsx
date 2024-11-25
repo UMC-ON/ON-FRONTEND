@@ -22,6 +22,7 @@ export const Delete = styled.span`
   font-weight: 400;
   line-height: 150%; /* 0.75rem */
   text-decoration-line: underline;
+  z-index: 3;
 `;
 export const PostContainer = styled.div`
   width: 100%;
@@ -37,6 +38,7 @@ export const PostContainer = styled.div`
   grid-template-rows: auto 3.55rem 1rem;
 
   row-gap: 0.45rem;
+  column-gap: 0.35rem;
   justify-content: space-between;
   align-content: center;
   align-items: center;
@@ -48,6 +50,7 @@ export const Top = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 `;
 
 export const Title = styled.span`
@@ -104,6 +107,7 @@ export const ContentImg = styled.img`
   width: 5rem;
   height: 5rem;
   align-self: start;
+  object-fit: cover;
 `;
 
 export const Info = styled.div`

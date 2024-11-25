@@ -470,7 +470,7 @@ const CardContent = styled.div`
 const CardDistance = styled.h2`
   font-size: 15px;
   font-weight: bold;
-  padding: 8px 0 5px;
+  padding: 12px 0 5px;
   color: #5C5C5C;
   margin: 0;
 `;
@@ -479,7 +479,7 @@ const CardName = styled.p`
   font-size: 17px;
   padding: 0;
   font-weight: bold;
-  padding-bottom: 0.8em;
+  padding-bottom: 8px;
   color: #1E1E1E;
   margin: 0;
 `;
