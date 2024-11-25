@@ -36,7 +36,7 @@ export const CompanyCalendar = styled.div`
 
   .react-datepicker__day--disabled {
   color: #cccccc; /* 회색 */
-  background-color: #E0E0E0; /* 필요하면 배경 색상 */
+  background-color: #e8e8e8; /* 필요하면 배경 색상 */
   cursor: not-allowed; /* 클릭 불가 */
 }
 

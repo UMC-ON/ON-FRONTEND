@@ -65,7 +65,7 @@ function AccompanyList({ datas }) {
                   <SmallGreyText>{data.gender === 'FEMALE' ? '여' : '남'}</SmallGreyText>
                 </Bottom>
               </TextContainer>
-              <Overlay $isClosed={data.recruitCompletd} />
+              <Overlay $isClosed={data.recruitCompleted} />
             </RoundContainer>
           ))
         ) : (
@@ -219,12 +219,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(
-    to right,
-    rgba(208, 214, 218, 0.5),
-    rgba(231, 235, 237, 0.5),
-    rgba(255, 255, 255, 0.5)
-  );
+  background-color: rgba(1000,1000,1000,0.5);
   display: ${(props) => (props.$isClosed ? 'block' : 'none')};
   border-radius: 20px;
   z-index: 1;

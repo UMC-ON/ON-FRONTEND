@@ -441,30 +441,19 @@ const CardContainer = styled.div`
   min-width: 10rem;
 `;
 
-const Card = styled.div`
-background: white;
-border-radius: 20px;
-filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
-overflow: hidden;
-text-align: center;
-display: flex;
-flex-direction: column;
-width: 11rem;
-height: 17.5rem;
-position: relative;
-backface-visibility: hidden; /* 추가 */
-  transform: translate3d(0, 0, 0); /* 추가: 사파리에서 렌더링 성능 개선 */
-  cursor:pointer;
-`;
+
 
 const CardImage = styled.img`
   width: 100%;        
-  height: 18vh;        
+  height: 9rem;        
   object-fit: cover;  
   z-index: 0;
-  min-height: 18vh; /* 최소 높이 설정 */
+  min-height: 9rem; /* 최소 높이 설정 */
   display: block; /* Safari에서 이미지 렌더링 안정화 */ 
+  backface-visibility: hidden; /* Safari 렌더링 문제 방지 */
+  transform: translateZ(0); /* 3D 렌더링 강제 적용 */
 `;
+
 
 const CardContent = styled.div`
   display: flex;
@@ -473,6 +462,25 @@ const CardContent = styled.div`
   flex: 1; 
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
   -webkit-background-clip: padding-box;
+  min-height: calc(100% - 9rem); /* 이미지 높이를 제외한 영역 */
+  padding: 0.5em;
+  transform: translate3d(0, 0, 0); /* Safari 렌더링 최적화 */
+`;
+
+const Card = styled.div`
+  background: white;
+  border-radius: 20px;
+  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 11rem;
+  height: 18rem; /* 고정 높이 유지 */
+  position: relative;
+  cursor: pointer;
+  padding-bottom: 10px;
+  transform: translate3d(0, 0, 0); /* 추가: Safari 렌더링 문제 해결 */
 `;
 
 const CardDistance = styled.h2`
@@ -487,7 +495,7 @@ const CardName = styled.p`
   font-size: 17px;
   padding: 0;
   font-weight: bold;
-  padding-bottom: 0.8em;
+  padding-bottom: 0.5em;
   color: #1E1E1E;
   margin: 0;
 `;
@@ -499,20 +507,21 @@ const CardDescription = styled.p`
   font-weight: semi-bold;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 2; /* 두 줄 이상 자르기 */
   -webkit-box-orient: vertical;
   white-space: normal;
   text-align: left;
   margin: 0;
   margin-right: 1em;
   line-height: 15px;
+  height: 30px; /* 고정 높이 설정 */
 `;
 
 
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding-left: 0.95em;
+  padding-left: 0.4rem;
 `;
 
 const Bottom = styled.div`
@@ -521,9 +530,9 @@ const Bottom = styled.div`
   width: 65%;
   justify-content: center;
   padding: 9px 5px;
-  margin-top: auto;
+  margin-top: 15px;
   border-radius: 20px;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
   filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 `;
@@ -546,16 +555,4 @@ const GradientOverlay = styled.div`
   z-index: 2;
   border-radius: inherit;
   -webkit-border-radius: inherit;
-`;
-
-const OverlayBox = styled.div`
-  position: fixed;
-  top: 120vh;
-  right: 0;
-  width: 20%;
-  height: 43%;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-  z-index: 1; 
-  pointer-events: none;
-  background-color: red;
 `;
