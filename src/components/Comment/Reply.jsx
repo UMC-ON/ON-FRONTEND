@@ -4,17 +4,25 @@ import { showWriter } from '../Common/InfoExp';
 
 const Reply = ({ reply, postWriter_id }) => {
   return (
-    <ReplyDiv writer={`${reply.writerInfo.id === postWriter_id}`}>
-      <ReplyImg src={replyImg} />
-      <div>
-        <Writer writer={`${reply.writerInfo.id === postWriter_id}`}>
-          {reply.writerInfo.id === postWriter_id
-            ? '글쓴이'
-            : reply.writerInfo.nickname}
-        </Writer>
-        {reply.contents}
-      </div>
-    </ReplyDiv>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 20fr' }}>
+      <ReplyImg
+        src={replyImg}
+        style={{ width: '0.625rem', height: ' 0.83331rem', flexShrink: '0' }}
+      />
+      <ReplyDiv
+        writer={`${reply.writerInfo.id === postWriter_id}`}
+        style={{ margin: '0.44rem 0 ' }}
+      >
+        <div>
+          <Writer writer={`${reply.writerInfo.id === postWriter_id}`}>
+            {reply.writerInfo.id === postWriter_id
+              ? '글쓴이'
+              : reply.writerInfo.nickname}
+          </Writer>
+          {reply.contents}
+        </div>
+      </ReplyDiv>
+    </div>
   );
 };
 
@@ -46,7 +54,7 @@ const ReplyDiv = styled.div`
     props.writer === 'true'
       ? 'linear-gradient(135deg, #d6ebff 0%, #c2c7ff 100%)'
       : 'rgba(217, 217, 217, 0.40)'};
-  border: 2px solid #bfd8e533;
+  border: 2px transparent;
   border-radius: 10px;
 
   color: #3d3d3d;
