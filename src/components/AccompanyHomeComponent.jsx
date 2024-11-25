@@ -19,7 +19,7 @@ import resetIcon from '../assets/images/resetIcon.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 
-import Modal from "../components/Modal/Modal.jsx";
+import Modal from '../components/Modal/Modal.jsx';
 import SecondModal from './SecondModal.jsx';
 
 const images = [bannerImg, bannerImg, bannerImg, bannerImg, bannerImg];
@@ -39,153 +39,186 @@ const images = [bannerImg, bannerImg, bannerImg, bannerImg, bannerImg];
 //   },
 // ];
 
-const AccompanyHomeComponent = 
-({ allData,
-  startDate, endDate, isDateClicked, calendarClick, updateIsDateClicked, 
-    genderClick, gender, isGenderClicked, updateIsGenderClicked,
-    countryClick, country, isCountryClicked, updateIsCountryClicked,
-    updateEverything, isValidated
-    }) => {
-
-    const navigate = useNavigate();
-    const goPost = () => {
-      if (isValidated == null)
-      {
-        // alert('not validated');
-        setModalOpen(true);
-      }
-      else
-      {
+const AccompanyHomeComponent = ({
+  allData,
+  startDate,
+  endDate,
+  isDateClicked,
+  calendarClick,
+  updateIsDateClicked,
+  genderClick,
+  gender,
+  isGenderClicked,
+  updateIsGenderClicked,
+  countryClick,
+  country,
+  isCountryClicked,
+  updateIsCountryClicked,
+  updateEverything,
+  isValidated,
+}) => {
+  const navigate = useNavigate();
+  const goPost = () => {
+    if (isValidated == null) {
+      // alert('not validated');
+      setModalOpen(true);
+    } else {
       navigate('./post');
-      }
-    };
-
-    const resetDate = () => {
-        updateIsDateClicked();
-    };
-
-    const resetGender = () => {
-        updateIsGenderClicked();
-    };
-
-    const resetCountry = () => {
-      updateIsCountryClicked();
+    }
   };
 
-    const resetEverything = () => {
-        updateEverything();
-    };
+  const resetDate = () => {
+    updateIsDateClicked();
+  };
 
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' }); 
-    };
+  const resetGender = () => {
+    updateIsGenderClicked();
+  };
 
-    const [isModalOpen, setModalOpen] = useState(false);
+  const resetCountry = () => {
+    updateIsCountryClicked();
+  };
 
-    const closeModal = () => {
-      setModalOpen(false);
-    };
+  const resetEverything = () => {
+    updateEverything();
+  };
 
-    const openNextModal = () => {
-      setModalOpen(false);
-      navigate('/mypage/schoolAuth');
-    };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+    });
+  };
 
-    return (
-        <>
-          <PageHeader pageName={'동행 구하기'} nav={'/'}/>
-          <Space />
-    
-          <DotInslideSlider images={images} />
-          <SmallSpace />
-    
-          <RoundContainer $isDateClicked={isDateClicked} $isGenderClicked={isGenderClicked} $isCountryClicked={isCountryClicked}>
-            <FlexContainer>
-              <Span>
-              {isDateClicked || isGenderClicked || isCountryClicked ? (
-              <Icon src={resetIcon} size={'25px'} $right={'7px'} onClick={resetEverything}/>
-                ) : null}
+  const [isModalOpen, setModalOpen] = useState(false);
 
-                <GreyPicker $isDateClicked={isDateClicked}>
-                  <span onClick={calendarClick}>
-                  {startDate && endDate ? `${formatDate(startDate)} - ${formatDate(endDate)}` : '날짜'}
-                  {!isDateClicked && (
-                        <Icon src={arrowIcon} />
-                   )}
-                  </span>
-                  {isDateClicked && (
-                        <Icon src={whiteCloseIcon} onClick={resetDate}/>
-                   )}
-                </GreyPicker>
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
-                <GreyPicker $isCountryClicked={isCountryClicked}>
-                  <span onClick={countryClick}>
-                  {country ? `${country}` : '국가'}
-                  {!isCountryClicked && (
-                        <Icon src={arrowIcon} />
-                   )}
-                  </span>
-                  {isCountryClicked && (
-                        <Icon src={whiteCloseIcon} onClick={resetCountry}/>
-                   )}
-                </GreyPicker>
+  const openNextModal = () => {
+    setModalOpen(false);
+    navigate('/mypage/schoolAuth');
+  };
 
-                <GreyPicker $isGenderClicked={isGenderClicked}>
-                  <span onClick={genderClick}>
-                  {gender ? `${gender}` : '성별'}
-                  {!isGenderClicked && (
-                        <Icon src={arrowIcon} />
-                   )}
-                  </span>
-                  {isGenderClicked && (
-                        <Icon src={whiteCloseIcon} onClick={resetGender}/>
-                   )}
-                </GreyPicker>
+  return (
+    <>
+      <PageHeader
+        pageName={'동행 구하기'}
+        nav={'/'}
+      />
+      <Space />
 
-              </Span>
-              {/* {!isDateClicked && !isGenderClicked && !isCountryClicked ? (
+      <DotInslideSlider images={images} />
+      <SmallSpace />
+
+      <RoundContainer
+        $isDateClicked={isDateClicked}
+        $isGenderClicked={isGenderClicked}
+        $isCountryClicked={isCountryClicked}
+      >
+        <FlexContainer>
+          <Span>
+            {isDateClicked || isGenderClicked || isCountryClicked ? (
+              <Icon
+                src={resetIcon}
+                size={'25px'}
+                $right={'7px'}
+                onClick={resetEverything}
+              />
+            ) : null}
+
+            <GreyPicker $isDateClicked={isDateClicked}>
+              <span onClick={calendarClick}>
+                {startDate && endDate
+                  ? `${formatDate(startDate)} - ${formatDate(endDate)}`
+                  : '날짜'}
+                {!isDateClicked && <Icon src={arrowIcon} />}
+              </span>
+              {isDateClicked && (
+                <Icon
+                  src={whiteCloseIcon}
+                  onClick={resetDate}
+                />
+              )}
+            </GreyPicker>
+
+            <GreyPicker $isCountryClicked={isCountryClicked}>
+              <span onClick={countryClick}>
+                {country ? `${country}` : '국가'}
+                {!isCountryClicked && <Icon src={arrowIcon} />}
+              </span>
+              {isCountryClicked && (
+                <Icon
+                  src={whiteCloseIcon}
+                  onClick={resetCountry}
+                />
+              )}
+            </GreyPicker>
+
+            <GreyPicker $isGenderClicked={isGenderClicked}>
+              <span onClick={genderClick}>
+                {gender ? `${gender}` : '성별'}
+                {!isGenderClicked && <Icon src={arrowIcon} />}
+              </span>
+              {isGenderClicked && (
+                <Icon
+                  src={whiteCloseIcon}
+                  onClick={resetGender}
+                />
+              )}
+            </GreyPicker>
+          </Span>
+          {/* {!isDateClicked && !isGenderClicked && !isCountryClicked ? (
               <Icon src={searchIcon} size={'25px'} />
               ) : null } */}
-            </FlexContainer>
-          </RoundContainer>
-    
-          <SmallSpace />
-          <AccompanyList datas={allData} />
-          <BigSpace />
-    
-          <PageContainer>
-            <WriteButton onClick={goPost}>
-              <img src={pencilImg} alt="Write" />
-              <LeftPadding />
-              글 쓰기
-            </WriteButton>
-          </PageContainer>
+        </FlexContainer>
+      </RoundContainer>
 
-          {isModalOpen && <SecondModal closeModal={closeModal} openNextModal={openNextModal} />}
+      <SmallSpace />
+      <AccompanyList datas={allData} />
+      <BigSpace />
 
-          <BottomTabNav/>
-        </>
-      );
-    };
-    
+      <PageContainer>
+        <WriteButton onClick={goPost}>
+          <img
+            src={pencilImg}
+            alt="Write"
+          />
+          <LeftPadding />글 쓰기
+        </WriteButton>
+      </PageContainer>
+
+      {isModalOpen && (
+        <SecondModal
+          closeModal={closeModal}
+          openNextModal={openNextModal}
+        />
+      )}
+
+      <BottomTabNav />
+    </>
+  );
+};
+
 export default AccompanyHomeComponent;
 
 const Span = styled.span`
-    display: flex;
-    align-items: center; 
+  display: flex;
+  align-items: center;
 `;
 
 const LeftPadding = styled.div`
-    padding-left: 10px;
+  padding-left: 10px;
 `;
 
 const FlexContainer = styled.div`
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    padding-left: 5px;
-    padding-right: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
 `;
 
 const Icon = styled.img`
@@ -197,15 +230,18 @@ const Icon = styled.img`
 `;
 
 const RoundContainer = styled.div`
-    margin: 0 auto;
-    width: 90%;
-    box-shadow: ${props => props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked ? 'none' : '0 4px 8px rgba(0, 0, 0, 0.1)'};
-    padding: 8px;
-    border-radius: 18px;
+  margin: 0 auto;
+  width: 90%;
+  box-shadow: ${(props) =>
+    props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked
+      ? 'none'
+      : '0 4px 8px rgba(0, 0, 0, 0.1)'};
+  padding: 8px;
+  border-radius: 18px;
 `;
 
 const GreyPicker = styled.div`
-  background-color: #E8E8E8;
+  background-color: #e8e8e8;
   font-family: 'Inter';
   font-size: 0.8em;
   padding: 5px;
@@ -238,14 +274,13 @@ const WriteButton = styled.button`
   position: fixed;
   bottom: 120px;
 
-
   border-radius: 55px;
   border: 1px solid #cccccc;
   width: 148px;
   height: 50px;
   padding: 15px 26px;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+  background: linear-gradient(135deg, #d6ebff, #c2c7ff);
   color: white;
   text-align: center;
   font-family: Inter;

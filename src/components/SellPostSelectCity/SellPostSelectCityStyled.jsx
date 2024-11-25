@@ -31,10 +31,10 @@ export const PageName = styled.p`
 `;
 
 export const PageLayout = styled.div`
- width: 100%;
+  width: 100%;
   max-height: 100vh;
   box-sizing: border-box;
-  padding: 61px 0 15vh; 
+  padding: 61px 0 15vh;
   align-items: flex-start;
   flex-direction: column;
   background-color: white;
@@ -48,7 +48,7 @@ export const PageLayout = styled.div`
 `;
 export const ContinentWrapper = styled.div`
   width: 100%;
-   background-color: white;
+  background-color: white;
 `;
 
 export const ContinentTitle = styled.p`

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import theme from '../styles/theme';
 
-import ToBookmark from "../assets/images/ToBookmark.svg";
+import ToBookmark from '../assets/images/ToBookmark.svg';
 
 const PageHeader = ({ pageName, color = `${theme.title}` }) => {
   const navigate = useNavigate();
@@ -35,7 +35,10 @@ const PageHeader = ({ pageName, color = `${theme.title}` }) => {
         </svg>
       </BackButton>
       <PageName style={{ color: `${color}` }}>{pageName}</PageName>
-      <Bookmark src = {ToBookmark} onClick={goBookmark} />
+      <Bookmark
+        src={ToBookmark}
+        onClick={goBookmark}
+      />
     </PageHeaderLayout>
   );
 };
@@ -72,6 +75,6 @@ const PageName = styled.p`
 `;
 
 const Bookmark = styled.img`
-    position: relative;
-    left: 120px;
-`
+  position: relative;
+  left: 120px;
+`;

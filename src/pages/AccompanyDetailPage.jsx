@@ -582,7 +582,7 @@ const RowText = styled.div`
 `;
 
 const LittleButton = styled.button`
-  font-size: 0.7em;
+  font-size: 0.75em;
   color: #7a7a7a;
   margin-left: 25px;
   background: rgb(110, 186, 255, 0);

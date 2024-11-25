@@ -31,14 +31,13 @@ const SelectCity = ({ closeModal, getCity }) => {
   const handleCityClick = (city) => {
     // 도시와 국가 정보를 함께 전달
     const locationInfo = {
-        country: country,
-        city: city.city
+      country: country,
+      city: city.city,
     };
-    console.log('Country:', country);  // country를 출력
-    console.log('City:', city.city);    // city를 출력
-    getCity(locationInfo);  // 객체로 국가와 도시 정보 전달
+    console.log('Country:', country); // country를 출력
+    console.log('City:', city.city); // city를 출력
+    getCity(locationInfo); // 객체로 국가와 도시 정보 전달
   };
-
 
   // // Set 객체를 사용하여 중복된 나라를 제거
   // const uniqueCountries = Array.from(new Set(cities.map((e) => e.country))).map(
@@ -68,25 +67,25 @@ const SelectCity = ({ closeModal, getCity }) => {
   return (
     <s.PageLayout>
       <s.PageHeaderLayout>
-          <s.BackButton onClick={closeModal}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="10"
-              height="16"
-              viewBox="0 0 10 16"
-              fill="none"
-              positions="fixed"
-            >
-              <path
-                d="M8 2L1.8858 7.24074C1.42019 7.63984 1.42019 8.36016 1.8858 8.75926L8 14"
-                stroke="#7A7A7A"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-            </svg>
-          </s.BackButton>
-          <s.PageName style={{ color: '#3E73B2' }}>지역 선택</s.PageName>
-        </s.PageHeaderLayout>
+        <s.BackButton onClick={closeModal}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="10"
+            height="16"
+            viewBox="0 0 10 16"
+            fill="none"
+            positions="fixed"
+          >
+            <path
+              d="M8 2L1.8858 7.24074C1.42019 7.63984 1.42019 8.36016 1.8858 8.75926L8 14"
+              stroke="#7A7A7A"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </svg>
+        </s.BackButton>
+        <s.PageName style={{ color: '#3E73B2' }}>지역 선택</s.PageName>
+      </s.PageHeaderLayout>
       {Object.entries(continents).map(([continent, countries]) => (
         <s.ContinentWrapper key={continent}>
           <s.ContinentTitle>{continent}</s.ContinentTitle>

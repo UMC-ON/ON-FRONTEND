@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-import compas from "../assets/images/compasIcon.svg";
-import profile from "../assets/images/profileIcon.svg";
-import empty_star from "../assets/images/empty_star.svg";
-import filled_star from "../assets/images/filled_star.svg";
+import compas from '../assets/images/compasIcon.svg';
+import profile from '../assets/images/profileIcon.svg';
+import empty_star from '../assets/images/empty_star.svg';
+import filled_star from '../assets/images/filled_star.svg';
 import defaultImg from '../assets/images/bannerDefault.svg';
 
-import {showDate} from "../components/Common/InfoExp";
+import { showDate } from '../components/Common/InfoExp';
 import { GET_CURRENT_INFO } from '../api/urls';
 import { getData, postData, putData } from '../api/Functions';
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
@@ -21,23 +21,24 @@ const ItemList = ({ items }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-  const fetchScrappedPosts = async () => {
-    try {
-      // Check if userInfo is available
-      if (!userInfo || !userInfo.id) {
-        console.error('User info is not available');
-        return;
-      }
-
-      const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-        },
-        params: {
-          page: 0, size: 20, sort: 'DESC'
+    const fetchScrappedPosts = async () => {
+      try {
+        // Check if userInfo is available
+        if (!userInfo || !userInfo.id) {
+          console.error('User info is not available');
+          return;
         }
-        
-      });
+
+        const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          params: {
+            page: 0,
+            size: 20,
+            sort: 'DESC',
+          },
+        });
 
       // Extract marketPostId from each marketPost object
       if (Array.isArray(response.data.content)) {
@@ -52,9 +53,8 @@ const ItemList = ({ items }) => {
     }
   };
 
-  fetchScrappedPosts();
-}, [userInfo]); // Ensure userInfo is available before making the request
-
+    fetchScrappedPosts();
+  }, [userInfo]); // Ensure userInfo is available before making the request
 
   return (
     <>
@@ -106,12 +106,14 @@ const StarContainer = ({ marketPostId, isFilled, setScrappedMarketPostIds }) => 
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
           params: {
-            marketPostId: marketPostId
-          }
+            marketPostId: marketPostId,
+          },
         });
 
         // Remove marketPostId from scrappedMarketPostIds array
-        setScrappedMarketPostIds(prevIds => prevIds.filter(id => id !== marketPostId));
+        setScrappedMarketPostIds((prevIds) =>
+          prevIds.filter((id) => id !== marketPostId),
+        );
       } else {
         // 스크랩 등록 요청
         await axios.post(
@@ -123,13 +125,12 @@ const StarContainer = ({ marketPostId, isFilled, setScrappedMarketPostIds }) => 
             headers: {
               Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             },
-          }
+          },
         );
 
-        setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
+        setScrappedMarketPostIds((prevIds) => [...prevIds, marketPostId]);
       }
       setIsStarFilled(!isStarFilled);
-
     } catch (error) {
       console.error('스크랩 처리 중 오류 발생:', error);
     }
@@ -143,24 +144,21 @@ const StarContainer = ({ marketPostId, isFilled, setScrappedMarketPostIds }) => 
   );
 };
 
-
 export default ItemList;
-
-
-
 
 const ItemDiv = styled.div`
   margin: 0 auto;
   width: 90%;
   border-radius: 20px;
-  background: linear-gradient(90deg, #E7EBED, #FFFFFF);
+  background: linear-gradient(90deg, #e7ebed, #ffffff);
   border: 1px solid #d9d9d9;
   display: flex;
   align-items: center;
   margin-bottom: 1vh;
   position: relative;
   text-align: left;
-  opacity: ${({ isCompleted }) => isCompleted ? 0.5 : 1}; /* 거래완료 시 불투명도 조절 */
+  opacity: ${({ isCompleted }) =>
+    isCompleted ? 0.5 : 1}; /* 거래완료 시 불투명도 조절 */
 `;
 
 const Star = styled.img`
@@ -206,8 +204,8 @@ const Title = styled.p`
 `;
 
 const Time = styled.span`
-  color: #7A7A7A;
-  font-size: 0.6em;
+  color: #7a7a7a;
+  font-size: 0.7em;
   margin-left: 8px;
   margin-top: 5px;
 `;
@@ -219,13 +217,14 @@ const TitleTimeContainer = styled.div`
 `;
 
 const StateWrapper = styled.p`
-  color: #7A7A7A;
+  color: #7a7a7a;
   font-size: 0.7em;
   margin-bottom: 5px;
 `;
 
 const StyledNow = styled.span`
-  color: ${({ theme, isCompleted }) => isCompleted ? theme.lightPurple : '#7A7A7A'};
+  color: ${({ theme, isCompleted }) =>
+    isCompleted ? theme.lightPurple : '#7A7A7A'};
 `;
 
 const State = ({ how, now, isCompleted }) => (
@@ -237,14 +236,13 @@ const State = ({ how, now, isCompleted }) => (
 const Price = styled.p`
   font-size: 19px;
   font-weight: 600;
-  color: #3E73B2;
+  color: #3e73b2;
 `;
-
 
 const Profile = styled.img`
   width: 1.2em;
   height: 1.2em;
-  margin-right: 2px;
+  margin-right: 4px;
 `;
 
 const LocationAndUser = styled.div`
@@ -260,8 +258,8 @@ const Place = styled.p`
   display: inline-block;
   align-item: center;
   height: 20px;
-  width: 100%; 
-  font-size: 0.7em;
+  width: 100%;
+  font-size: 0.75em;
   align-items: center;
   margin-right: 10px;
   margin-top: 5px;
@@ -269,10 +267,18 @@ const Place = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis !important;
+  text-overflow: ellipsis;
+`;
+
+const Compas = styled.img`
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 2px;
+  transform: translateY(3px);
 `;
 
 const User = styled.p`
-  font-size: 0.7em;
+  font-size: 0.75em;
   display: flex;
   align-items: center;
   color: #838383;
