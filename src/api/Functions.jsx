@@ -1,12 +1,79 @@
 import axios from 'axios';
+import base64 from 'base-64';
+import { NEW_TOKEN } from './urls';
+import { useSelector, useDispatch } from 'react-redux';
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
-
+let isRefreshing = false;
 const apiClient = axios.create({
   baseURL: serverAddress + '/',
   headers: {
     'Content-Type': 'application/json',
   },
 });
+// apiClient.interceptors.request.use((config) => {
+//   if (config.headers['Authorization']) {
+//     config.headers['Authorization'] = `Bearer ${token}`;
+//   }
+// });
+
+apiClient.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    if (error.config.headers['Authorization']) {
+      const prevRequest = error.config;
+      console.log(error.response.status);
+      console.log('여기까진 되나');
+      if (
+        error.response.status == Number(403) ||
+        error.response.status == Number(401)
+      ) {
+        console.log('아아');
+        const aToken = localStorage.getItem('AToken');
+        let payload = aToken.substring(
+          aToken.indexOf('.') + 1,
+          aToken.lastIndexOf('.'),
+        );
+        let dec = JSON.parse(base64.decode(payload));
+        const exp = dec.exp;
+        let timestamp = new Date().getTime();
+        let now = Number(
+          timestamp.toString().slice(0, String(timestamp).length - 3),
+        );
+        console.log('만료아ㅏ님');
+        console.log(exp);
+        console.log(now);
+        if (exp < now && !isRefreshing) {
+          console.log('만료 토큰');
+
+          try {
+            const rToken = localStorage.getItem('RToken');
+            const res = await postData(NEW_TOKEN, rToken, {
+              'Content-Type': 'text/plain',
+            });
+            console.log('하는중');
+            console.log(res);
+            if (res.status == 200) {
+              console.log('토큰 재발급 성공');
+              const { grantType, accessToken, refreshToken } = res.data;
+              localStorage.setItem('grantType', grantType);
+              localStorage.setItem('AToken', accessToken); // accessToken을 localStorage에 저장
+              localStorage.setItem('RToken', refreshToken); // refreshToken을 localStorage에 저장
+              prevRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+              console.log(error.config);
+              return apiClient(prevRequest);
+            } else {
+              console.log(res);
+            }
+          } catch (err) {
+            console.log(err);
+            console.log('실패');
+          }
+        }
+      }
+    }
+    return error;
+  },
+);
 
 const multipartApiClient = axios.create({
   baseURL: serverAddress + '/',

@@ -10,7 +10,6 @@ import {
 } from 'react-router-dom';
 import theme from './styles/theme.js';
 // 페이지, 컴포넌트 import
-import Forms from './pages/SignUp/Forms.jsx';
 import NavBar from './components/NavBar/NavBar.jsx';
 import MyPage from './pages/MyPage/MyPage.jsx';
 import MyPost from './pages/MyPage/MyPost.jsx';
@@ -58,6 +57,7 @@ import Loading from './components/Loading/Loading.jsx';
 import FindId from './pages/FindPage/FindId.jsx';
 import FindPassword from './pages/FindPage/FindPassword.jsx';
 import { requestNotificationPermissionOnce } from './service/notificationPermission.jsx';
+import Test from './pages/SignUp/Test.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -72,6 +72,7 @@ function App() {
     '/landing',
     '/signUp/complete',
     '/accompany/detail',
+    '/test',
   ];
   const [isLoading, setIsLoading] = useState(true);
 
@@ -113,7 +114,7 @@ function App() {
         <Routes>
           <Route
             path="/test"
-            element={<Forms />}
+            element={<Test />}
           />
           <Route
             path="/landing"
