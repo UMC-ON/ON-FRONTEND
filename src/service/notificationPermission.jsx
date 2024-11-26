@@ -52,7 +52,7 @@ export async function handleAllowNotification() {
 }
 
 export function requestNotificationPermissionOnce() {
-  // const notificationAsked = localStorage.getItem('notificationAsked');
+  const notificationAsked = localStorage.getItem('notificationAsked');
 
   // // 알림 권한을 요청한 적이 없으면
   // if (!notificationAsked) {
@@ -61,4 +61,5 @@ export function requestNotificationPermissionOnce() {
   //   localStorage.setItem('notificationAsked', 'true');
   // }
   handleAllowNotification();
+  console.log(notificationAsked);
 }
