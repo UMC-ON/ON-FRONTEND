@@ -50,12 +50,13 @@ export async function handleAllowNotification() {
 }
 
 export function requestNotificationPermissionOnce() {
-  const notificationAsked = localStorage.getItem('notificationAsked');
+  // const notificationAsked = localStorage.getItem('notificationAsked');
 
-  // 알림 권한을 요청한 적이 없으면
-  if (!notificationAsked) {
-    handleAllowNotification();
-    // 알림 권한 요청을 한 번 했음을 저장
-    localStorage.setItem('notificationAsked', 'true');
-  }
+  // // 알림 권한을 요청한 적이 없으면
+  // if (!notificationAsked) {
+  //   handleAllowNotification();
+  //   // 알림 권한 요청을 한 번 했음을 저장
+  //   localStorage.setItem('notificationAsked', 'true');
+  // }
+  handleAllowNotification();
 }
