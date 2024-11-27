@@ -43,7 +43,10 @@ const SignInPage = () => {
         });
         console.log(user.data);
         //현 사용자와 로그인 상태 redux에 저장
-        dispatch(loginSuccess(user.data, grantType, accessToken, refreshToken));
+        dispatch(loginSuccess(user.data));
+        localStorage.setItem('grantType', grantType);
+        localStorage.setItem('AToken', accessToken); // accessToken을 localStorage에 저장
+        localStorage.setItem('RToken', refreshToken); // refreshToken을 localStorage에 저장
 
         //유저 상태에 따른 조건부 네비게이팅
         if (user.data.userStatus === 'TEMPORARY') {

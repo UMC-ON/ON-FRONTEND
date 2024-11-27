@@ -5,14 +5,11 @@ import { getData } from '../api/Functions';
 import { useNavigate } from 'react-router-dom';
 
 // 로그인 성공 액션
-export const loginSuccess = (user, grantType, accessToken, refreshToken) => {
-  localStorage.setItem('grantType', grantType);
-  localStorage.setItem('AToken', accessToken); // accessToken을 localStorage에 저장
-  localStorage.setItem('RToken', refreshToken); // refreshToken을 localStorage에 저장
+export const loginSuccess = (user) => {
   console.log(user);
   return {
     type: LOGIN_SUCCESS,
-    payload: { user, accessToken, refreshToken },
+    payload: { user },
   };
 };
 

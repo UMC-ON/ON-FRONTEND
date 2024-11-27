@@ -14,6 +14,8 @@ export const PUT_UNIV = '/api/v1/user/current/update/univ_url';
 export const PUT_NICKNAME = '/api/v1/user/current/update/nickname';
 export const LOGOUT = '/api/v1/user/sign-out';
 export const DELETE_ACCOUNT = '/api/v1/user/delete';
+//토큰 갱신
+export const NEW_TOKEN = '/api/v1/user/update-token';
 
 //교환교 인증
 export const DISPATCH_CERTIFY_REQUEST = 'api/v1/dispatch-certify/apply';
