@@ -12,9 +12,10 @@ const userInfoBE = {
   password: '',
   nickname: '',
   name: '',
-  age: '',
+  birth: '',
   gender: '',
   phone: '',
+  signUpAuthNum: '',
 };
 
 const SignUpPage = () => {
@@ -48,6 +49,9 @@ const SignUpPage = () => {
             verified: false,
             verifyCodeContent: '',
           });
+        }
+        if (name === 'signUpAuthNum') {
+          console.log('Updated signUpAuthNum:', value);
         }
       }
       console.log(userInfo);
@@ -220,7 +224,7 @@ const SignUpPage = () => {
                   </s.PurpleButton>
                 ) : null}
                 <s.PurpleButton disabled={!isActive}>
-                  {isLastStep ? '회원 가입하기' : '다음 단계'}
+                  {isLastStep ? '회원 가입' : '다음 단계'}
                 </s.PurpleButton>
               </s.TwoColumnWrapper>
             </s.ButtonSection>
