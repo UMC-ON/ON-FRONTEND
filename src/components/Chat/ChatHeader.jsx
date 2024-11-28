@@ -55,7 +55,7 @@ const ChatHeader = ({
       </s.PageName>
 
       {!messageInitiator && (
-        <s.CompleteBtn onClick={handleComplete}>
+        <s.CompleteBtn onClick={() => handleComplete()}>
           {isAccompany ? '모집 완료' : '거래 완료'}
         </s.CompleteBtn>
       )}

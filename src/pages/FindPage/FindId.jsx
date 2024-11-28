@@ -1,8 +1,17 @@
 import * as s from '../SignUp/SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 const FindId = () => {
+  const {
+    register,
+    formState: { errors, isValid },
+    watch,
+  } = useForm({ mode: 'onChange' });
+  const { userInfo, setUserInfo } = useState('');
+
   return (
     <>
       <form
@@ -19,9 +28,31 @@ const FindId = () => {
               <s.StyledH2>아이디 찾기</s.StyledH2>
 
               <s.InputWrapper>
-                휴대폰 번호
-                <s.TransparentInput placeholder="가입하신 휴대폰 번호를 입력해주세요" />
+                <s.Div>전화번호</s.Div>
+                <s.TransparentInput
+                  type="tel"
+                  placeholder="'-' 없이 숫자만 입력해주세요"
+                  inputMode="numeric"
+                  pattern="\d*"
+                  name="phone"
+                  aria-invalid={errors.phone ? 'true' : 'false'}
+                  {...register('phone', {
+                    required: '전화번호는 필수입니다.',
+                    pattern: {
+                      value: /^[0-9]*$/,
+                      message: '숫자로만 적어주세요.',
+                    },
+                    onChange: (e) => {
+                      setUserInfo(e.target.value);
+                    },
+                  })}
+                />
               </s.InputWrapper>
+              <s.Explanation>
+                {errors.phone && (
+                  <small role="alert">{errors.phone.message}</small>
+                )}
+              </s.Explanation>
               <s.InputWrapper>
                 <s.TransparentInput />
               </s.InputWrapper>

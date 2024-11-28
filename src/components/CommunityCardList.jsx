@@ -28,10 +28,7 @@ const CommunityCardList = ({ free, cards }) => {
           <PaddingTop />
           <Stripe $free={free}>
             <TextTopLeft>{card.title}</TextTopLeft>
-            {free ?
             <TextTopRight>{showDate(card.postTime)}</TextTopRight>
-            :null
-            }
           </Stripe>
           <BetweenContainer>
             <TextContainer>

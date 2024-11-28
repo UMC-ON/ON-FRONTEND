@@ -4,8 +4,6 @@ import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT, LOAD_USER } from './actionTypes';
 const initialState = {
   isAuthenticated: false,
   user: null,
-  accessToken: null,
-  refreshToken: null,
   error: null,
 };
 
@@ -16,8 +14,6 @@ const authReducer = (state = initialState, action) => {
         ...state,
         isAuthenticated: true,
         user: action.payload.user,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken,
         error: null,
       };
     case LOAD_USER: // 로그인 성공과 유저 로드 시 동일한 로직을 사용

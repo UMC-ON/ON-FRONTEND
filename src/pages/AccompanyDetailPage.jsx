@@ -120,11 +120,11 @@ function AccompanyDetailPage() {
 
   const applyData = async () => {
     try {
-      // console.log("userId: ");
-      // console.log(typeof infoData[0].userId);
+      console.log("userId: ");
+      console.log(infoData[0].userId);
       // console.log(typeof infoData[0].userId);
       // console.log("postId: ");
-      // console.log(typeof postId);
+      // console.log(postId);
 
       const response = await postData(
         GET_ROOM_ID,
@@ -149,6 +149,8 @@ function AccompanyDetailPage() {
         // console.log(response2.data);
 
         const roomId = response.data.roomId;
+        console.log("roomId: ");
+        console.log(response.data);
         const senderName = infoData[0].nickname;
         console.log('Application successful:', roomId);
         navigate(`/chat/accompany/${roomId}`, {

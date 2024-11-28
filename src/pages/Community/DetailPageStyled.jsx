@@ -148,7 +148,7 @@ export const CommentWritingDiv = styled.div`
   justify-content: start;
   align-items: center;
   flex-wrap: wrap; */
-  grid-template-columns: 5rem auto;
+  grid-template-columns: 4rem auto;
   grid-template-rows: 1.5rem auto;
   grid-template-areas:
     '. replyTo'
@@ -174,6 +174,7 @@ export const ReplyToDiv = styled.div`
   color: black;
   box-sizing: border-box;
   display: grid;
+  color: #5c5c5c;
   /* flex-direction: column;
   align-content: start;
   flex: auto;
@@ -183,7 +184,7 @@ export const ReplyToDiv = styled.div`
   justify-content: start;
   align-items: center;
   padding: 0 0.94rem 0.5rem 0.94rem;
-  font-size: 12px;
+  font-size: 11px;
   flex-shrink: 1;
 `;
 export const EditorDiv = styled.div`

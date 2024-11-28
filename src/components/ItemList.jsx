@@ -172,8 +172,8 @@ const Star = styled.img`
 `;
 
 const Photo = styled.img`
-  width: 16vh;
-  height: 18vh;
+  width: 20vh;
+  height: 20vh;
   object-fit: cover;
   object-position: center;
   border-radius: 20px;

@@ -24,6 +24,7 @@ const SignUpPage = () => {
   const [verifyCode, setVerifyCode] = useState({
     isSent: false,
     verified: false,
+    verifyCodeContent: '',
   });
   //0==유효성검사도, 중복검사도 진행X
   //1== 유효성,중복검사 OK
@@ -40,7 +41,14 @@ const SignUpPage = () => {
         //-1: 중복된 값 존재
         //1: 사용가능한 값
         setDupCheck({ ...dupCheck, [name]: 0 });
-        setVerifyCode({ isSent: false, verified: false });
+        //아이디 바꿀 경우 인증 번호 관련 모두 초기화
+        if (name === 'loginId') {
+          setVerifyCode({
+            isSent: false,
+            verified: false,
+            verifyCodeContent: '',
+          });
+        }
       }
       console.log(userInfo);
     }

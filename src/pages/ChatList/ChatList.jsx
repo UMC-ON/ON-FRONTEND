@@ -8,6 +8,8 @@ import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
 import { useInfiniteQuery } from 'react-query';
 import { getData } from '../../api/Functions';
+import useFetchChatList from '../../hooks/useFetchChatList';
+import { showDate } from '../../components/Common/InfoExp';
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
 
 const ChatList = () => {
@@ -105,7 +107,11 @@ const ChatList = () => {
               {currentMode === 'accompany' ? (
                 <SingleAccompanyChat
                   roomId={data.roomId}
-                  time={data.lastChatTime !== null ? data.lastChatTime : ''}
+                  time={
+                    data.lastChatTime !== null
+                      ? showDate(data.lastChatTime)
+                      : ''
+                  }
                   message={
                     data.lastMessage !== null
                       ? data.lastMessage
@@ -119,7 +125,11 @@ const ChatList = () => {
                   nickName={data.senderName}
                   roomId={data.roomId}
                   img={data.profileImg}
-                  time={data.lastChatTime !== null ? data.lastChatTime : ''}
+                  time={
+                    data.lastChatTime !== null
+                      ? showDate(data.lastChatTime)
+                      : ''
+                  }
                   message={
                     data.lastMessage !== null
                       ? data.lastMessage

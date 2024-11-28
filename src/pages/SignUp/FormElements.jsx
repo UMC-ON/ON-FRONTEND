@@ -223,15 +223,17 @@ export const UserInfoForm1 = ({
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
-    //if(verifyCode.verified)
-    //인증코드 put 제대로 작동하면 추가
-    setActive(isValid);
-  }, [isValid]);
+    if (verifyCode.verified) {
+      setActive(isValid);
+    } else {
+      setActive(false);
+    }
+  }, [isValid, verifyCode.verified]);
 
   return (
     <>
       <s.InputWrapper>
-        <s.Div>아이디</s.Div>
+        <s.Div>이메일</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"
@@ -276,11 +278,11 @@ export const UserInfoForm1 = ({
             onClick={async (e) => {
               e.preventDefault();
               const res = await postData(SEND_VERIFICATION_CODE, id.current, {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain',
               });
               if (res.status == 200) {
                 alert('메일로 인증번호가 발송되었습니다.');
-                setVerifyCode({ ...verifyCode, isSent: true });
+                setVerifyCode({ ...verifyCode, isSent: true, verified: false });
               }
             }}
           >
@@ -298,41 +300,58 @@ export const UserInfoForm1 = ({
         <s.Explanation>이미 존재하는 아이디입니다.</s.Explanation>
       )}
       <s.InputWrapper>
-        <div>인증 코드</div>
+        <s.Div>인증 코드</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"
             name="code"
+            defaultValue={verifyCode.verifyCodeContent}
             aria-invalid={errors.code ? 'true' : 'false'}
             {...register('code', {
               //disabled: !verifyCode.isSent,
               required: '인증코드를 입력해주세요.',
               onChange: (e) => {
                 code.current = e.target.value;
+                setVerifyCode({
+                  ...verifyCode,
+                  verified: false,
+                  verifyCodeContent: e.target.value,
+                });
               },
             })}
           />
-          {/* {!errors.code && <img src={validImg} />} */}
-          <s.GrayButton
-            disabled={!verifyCode.isSent}
-            onClick={async (e) => {
-              e.preventDefault();
-              const data = {
-                loginId: id.current,
-                authNum: parseInt(code.current),
-              };
-              const formData = JSON.stringify(data);
-              console.log(formData);
-              const res = await putData(VERIFY_CODE, formData);
-              console.log(res);
-            }}
-          >
-            인증하기
-          </s.GrayButton>
+
+          {verifyCode.verified ? (
+            <img src={validImg} />
+          ) : (
+            <s.GrayButton
+              disabled={!verifyCode.isSent}
+              onClick={async (e) => {
+                e.preventDefault();
+                const data = {
+                  loginId: id.current,
+                  authNum: parseInt(code.current),
+                };
+                const formData = JSON.stringify(data);
+                console.log(formData);
+                const res = await putData(VERIFY_CODE, formData);
+                if (res) {
+                  if (code.current && res.data) {
+                    setVerifyCode({ ...verifyCode, verified: true });
+                  } else if (res.data == false) {
+                    alert('인증번호가 일치하지 않습니다.');
+                  }
+                }
+                console.log(res);
+              }}
+            >
+              인증하기
+            </s.GrayButton>
+          )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
       <s.InputWrapper>
-        <div>비밀번호</div>
+        <s.Div>비밀번호</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="password"
@@ -418,6 +437,16 @@ export const UserInfoForm2 = ({
     formState: { errors, isValid },
     watch,
   } = useForm({ mode: 'onChange' });
+
+  useEffect(() => {
+    //if(verifyCode.verified)
+    //인증코드 put 제대로 작동하면 추가
+    if (dupCheck.nickname == 1) {
+      setActive(isValid);
+    } else {
+      setActive(false);
+    }
+  }, [isValid, dupCheck.nickname]);
 
   return (
     <>
@@ -543,7 +572,7 @@ export const UserInfoForm2 = ({
           {...register('phone', {
             required: '전화번호는 필수입니다.',
             pattern: {
-              value: /[\D{11}]$/,
+              value: /^[0-9]*$/,
               message: '숫자로만 적어주세요.',
             },
             onChange: (e) => {
