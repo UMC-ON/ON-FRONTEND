@@ -2,7 +2,6 @@ import * as s from './SignUpStyled';
 import styled from 'styled-components';
 import validImg from '../../assets/images/validNickName.svg';
 import { useRef, useState, useEffect } from 'react';
-import { SignUpValidCheck } from './SignUpValidCheck';
 export const TermForm = ({ setActive }) => {
   return (
     <>
