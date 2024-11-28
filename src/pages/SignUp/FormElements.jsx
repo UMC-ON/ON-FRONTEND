@@ -211,7 +211,7 @@ export const UserInfoForm1 = ({
   verifyCode,
   setVerifyCode,
 }) => {
-  const pw = useRef(state.password);
+  const passwordSet = useRef({ pw: state.password, pw_check: '' });
   const id = useRef(state.loginId);
   const code = useRef();
 
@@ -219,6 +219,8 @@ export const UserInfoForm1 = ({
     register,
     formState: { errors, isValid },
     watch,
+    setError,
+    clearErrors,
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
@@ -307,7 +309,6 @@ export const UserInfoForm1 = ({
             defaultValue={verifyCode.verifyCodeContent}
             aria-invalid={errors.code ? 'true' : 'false'}
             {...register('signUpAuthNum', {
-              //disabled: !verifyCode.isSent,
               required: '인증코드를 입력해주세요.',
               onChange: (e) => {
                 code.current = e.target.value;
@@ -317,10 +318,10 @@ export const UserInfoForm1 = ({
                   verifyCodeContent: e.target.value,
                 });
 
-                updateUserInfo(value);
+                updateUserInfo(e);
                 console.log(e.target.value);
-                console.log(value);
-                console.log(UserInfo); // 얘네가 잘 작동하고 있는 것 같지 않아요...ㅜㅜ
+                //console.log(value);
+                //console.log(UserInfo); // 얘네가 잘 작동하고 있는 것 같지 않아요...ㅜㅜ
               },
             })}
           />
@@ -365,7 +366,14 @@ export const UserInfoForm1 = ({
             {...register('password', {
               onChange: (e) => {
                 updateUserInfo(e);
-                pw.current = e.target.value;
+                passwordSet.current.pw = e.target.value;
+                if (passwordSet.current.pw != passwordSet.current.pw_check) {
+                  setError('password_check', {
+                    message: '비밀번호가 일치하지 않습니다.',
+                  });
+                } else {
+                  clearErrors('password_check');
+                }
               },
               required: '비밀번호를 입력해주세요.',
               pattern: {
@@ -383,7 +391,7 @@ export const UserInfoForm1 = ({
               },
             })}
           />
-          {pw.current && !errors.password && <img src={validImg} />}
+          {passwordSet.current.pw && !errors.password && <img src={validImg} />}
         </SpaceBetweenContainer>
       </s.InputWrapper>
       <s.Explanation>
@@ -401,10 +409,18 @@ export const UserInfoForm1 = ({
             {...register('password_check', {
               required: '비밀번호를 확인해주세요.',
               validate: (value) => {
-                console.log(value == pw.current);
-                return value == pw.current
+                console.log(value == passwordSet.current.pw);
+                return value == passwordSet.current.pw
                   ? true
                   : '비밀번호가 일치하지 않습니다';
+              },
+              onChange: (e) => {
+                passwordSet.current.pw_check = e.target.value;
+                if (passwordSet.current.pw_check !== passwordSet.current.pw) {
+                  setError('password_check', {
+                    message: '비밀번호가 일치하지 않습니다.',
+                  });
+                }
               },
             })}
           />
