@@ -41,6 +41,7 @@ apiClient.interceptors.response.use(
           console.log(exp);
           console.log(now);
           if (exp < now && !isRefreshing) {
+            isRefreshing = true;
             console.log('그리고 토큰이 만료된 경우');
             const rToken = localStorage.getItem('RToken');
             console.log('토큰 갱신을 시도한다.');
@@ -65,6 +66,11 @@ apiClient.interceptors.response.use(
                 return Promise.reject(err);
                 //return err;
               });
+            isRefreshing = false;
+            return response;
+          } else if (exp < now && isRefreshing) {
+            console.log('만료된 토큰 재발급 중');
+            return null;
           } else {
             console.log('토큰이 만료되지 않은 경우');
             console.log('이상한 토큰일 가능성...');
