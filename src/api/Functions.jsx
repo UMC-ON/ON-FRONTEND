@@ -88,6 +88,7 @@ export const postData = async (url, formData, headers = {}, params = {}) => {
   const response = await apiClient
     .post(url, formData, { headers: { ...headers }, params: { ...params } })
     .then((response) => {
+      console.log('formData', formData);
       console.log(response);
       return response;
     })

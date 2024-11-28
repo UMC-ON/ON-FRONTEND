@@ -303,10 +303,10 @@ export const UserInfoForm1 = ({
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"
-            name="code"
+            name="signUpAuthNum"
             defaultValue={verifyCode.verifyCodeContent}
             aria-invalid={errors.code ? 'true' : 'false'}
-            {...register('code', {
+            {...register('signUpAuthNum', {
               //disabled: !verifyCode.isSent,
               required: '인증코드를 입력해주세요.',
               onChange: (e) => {
@@ -316,6 +316,11 @@ export const UserInfoForm1 = ({
                   verified: false,
                   verifyCodeContent: e.target.value,
                 });
+
+                updateUserInfo(value);
+                console.log(e.target.value);
+                console.log(value);
+                console.log(UserInfo); // 얘네가 잘 작동하고 있는 것 같지 않아요...ㅜㅜ
               },
             })}
           />
@@ -473,7 +478,7 @@ export const UserInfoForm2 = ({
       </s.Explanation>
 
       <s.TwoColumnWrapper>
-        <div>
+        {/* <div>
           <s.InputWrapper>
             <s.Div
               style={{
@@ -514,6 +519,29 @@ export const UserInfoForm2 = ({
           <s.Explanation>
             {errors.age && <small role="alert">{errors.age.message}</small>}
           </s.Explanation>
+        </div> */}
+        <div>
+          <s.InputWrapper>
+            <s.Div>생년월일</s.Div>
+            <s.TransparentInput
+              type="date"
+              name="birth"
+              placeholder="생년월일을 입력하세요."
+              defaultValue={state.birth} // 기존 데이터가 있다면 불러오기
+              aria-invalid={errors.birth ? 'true' : 'false'}
+              {...register('birth', {
+                required: '생년월일은 필수입니다.',
+                onChange: (e) => {
+                  updateUserInfo(e); // 상태 업데이트
+                },
+                validate: (value) => {
+                  // 선택된 날짜가 유효한 날짜인지 추가 검증
+                  const isValidDate = !isNaN(new Date(value).getTime());
+                  return isValidDate || '유효한 날짜를 입력해주세요.';
+                },
+              })}
+            />
+          </s.InputWrapper>
         </div>
 
         <EmptyDiv></EmptyDiv>
