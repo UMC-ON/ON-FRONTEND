@@ -106,7 +106,7 @@ export const postData = async (url, formData, headers = {}, params = {}) => {
     })
     .catch((error) => {
       console.log(error);
-      return error;
+      return Promise.reject(error);
     });
 
   return response;
@@ -121,7 +121,7 @@ export const getData = async (url, headers = {}, params = {}) => {
     })
     .catch((error) => {
       console.log(error);
-      return null;
+      return Promise.reject(error);
     });
 
   return response;
@@ -135,7 +135,7 @@ export const putData = async (url, formData, headers = {}, params = {}) => {
     })
     .catch((error) => {
       console.log(error);
-      return null;
+      return Promise.reject(error);
     });
 
   return response;

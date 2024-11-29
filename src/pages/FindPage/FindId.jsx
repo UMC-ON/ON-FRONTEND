@@ -10,7 +10,10 @@ const FindId = () => {
     formState: { errors, isValid },
     watch,
   } = useForm({ mode: 'onChange' });
-  const { userInfo, setUserInfo } = useState('');
+
+  const [userInfo, setUserInfo] = useState('');
+
+  const updateUserInfo = (e) => {};
 
   return (
     <>
@@ -27,6 +30,29 @@ const FindId = () => {
             <s.ContentSection>
               <s.StyledH2>아이디 찾기</s.StyledH2>
 
+              <s.InputWrapper>
+                <s.Div>이름</s.Div>
+                <s.TransparentInput
+                  placeholder="본명으로 작성해 주세요"
+                  name="name"
+                  aria-invalid={errors.name ? 'true' : 'false'}
+                  {...register('name', {
+                    required: '이름은 필수입니다.',
+                    onChange: (e) => {
+                      updateUserInfo(e);
+                    },
+                    pattern: {
+                      value: /^[가-힣]+$/,
+                      message: '올바른 형식으로 입력해주세요.',
+                    },
+                  })}
+                />
+              </s.InputWrapper>
+              <s.Explanation>
+                {errors.name && (
+                  <small role="alert">{errors.name.message}</small>
+                )}
+              </s.Explanation>
               <s.InputWrapper>
                 <s.Div>전화번호</s.Div>
                 <s.TransparentInput
@@ -53,8 +79,45 @@ const FindId = () => {
                   <small role="alert">{errors.phone.message}</small>
                 )}
               </s.Explanation>
-              <s.InputWrapper>
-                <s.TransparentInput />
+              <s.InputWrapper style={{ border: 'none' }}>
+                <s.Div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  성별
+                </s.Div>
+                <s.StyledComboBox
+                  style={{ width: '50%' }}
+                  name="gender"
+                  pattern="[0-9]"
+                  aria-invalid={errors.gender ? 'true' : 'false'}
+                  {...register('gender', {
+                    required: '성별은 필수입니다.',
+                    onChange: (e) => {
+                      updateUserInfo(e);
+                    },
+                  })}
+                >
+                  <option
+                    value=""
+                    hidden
+                  ></option>
+                  <option
+                    value="MALE"
+                    style={{ background: 'white' }}
+                  >
+                    남자
+                  </option>
+                  <option
+                    value="FEMALE"
+                    style={{ background: 'white' }}
+                  >
+                    여자
+                  </option>
+                </s.StyledComboBox>
               </s.InputWrapper>
             </s.ContentSection>
           </s.SectionWrapper>

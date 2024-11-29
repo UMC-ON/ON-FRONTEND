@@ -309,7 +309,7 @@ export const UserInfoForm1 = ({
             defaultValue={verifyCode.verifyCodeContent}
             aria-invalid={errors.code ? 'true' : 'false'}
             {...register('signUpAuthNum', {
-              required: '인증코드를 입력해주세요.',
+              required: '인증번호를 입력해주세요.',
               onChange: (e) => {
                 code.current = e.target.value;
                 setVerifyCode({
