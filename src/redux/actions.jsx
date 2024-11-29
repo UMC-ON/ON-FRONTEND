@@ -3,6 +3,8 @@ import { GET_USER_INFO } from '../api/urls';
 import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT, LOAD_USER } from './actionTypes';
 import { getData } from '../api/Functions';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 // 로그인 성공 액션
 export const loginSuccess = (user) => {
@@ -29,13 +31,17 @@ export const logout = () => {
 };
 
 // 새로고침 시 토큰을 로드하고 유저 정보를 가져오는 액션
-export const loadUser = () => {
+export const loadUser = (abortOption = null) => {
   return async (dispatch) => {
     const accessToken = localStorage.getItem('AToken');
     if (accessToken) {
       try {
-        const res = await getData(GET_USER_INFO, {
-          Authorization: `Bearer ${accessToken}`,
+        console.log('액션 요청');
+        const res = axios.get(GET_USER_INFO, {
+          signal: abortOption,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }); // 토큰을 사용해 유저 정보를 가져옴
         if (res) {
           let user = res.data;

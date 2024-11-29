@@ -78,6 +78,16 @@ function App() {
 
   //console.log(location.pathname);
 
+  // useEffect(() => {
+  //   console.count('마운트');
+  //   const controller = new AbortController();
+
+  //   return () => {
+  //     console.count('마운트 해제 및 axios 요청 취소');
+  //     controller.abort();
+  //   };
+  // }, []);
+
   useEffect(() => {
     const loadUserData = async () => {
       if (!excludepaths.includes(location.pathname)) {

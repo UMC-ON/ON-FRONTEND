@@ -2,8 +2,11 @@ import axios from 'axios';
 import base64 from 'base-64';
 import { NEW_TOKEN } from './urls';
 import { useSelector, useDispatch } from 'react-redux';
+import { useRef } from 'react';
+
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 let isRefreshing = false;
+
 const apiClient = axios.create({
   baseURL: serverAddress + '/',
   headers: {
@@ -41,6 +44,7 @@ apiClient.interceptors.response.use(
           console.log(exp);
           console.log(now);
           if (exp < now && !isRefreshing) {
+            isRefreshing = true;
             console.log('그리고 토큰이 만료된 경우');
             const rToken = localStorage.getItem('RToken');
             console.log('토큰 갱신을 시도한다.');
@@ -65,6 +69,11 @@ apiClient.interceptors.response.use(
                 return Promise.reject(err);
                 //return err;
               });
+            isRefreshing = false;
+            return response;
+          } else if (exp < now && isRefreshing) {
+            console.log('만료된 토큰 재발급 중');
+            return null;
           } else {
             console.log('토큰이 만료되지 않은 경우');
             console.log('이상한 토큰일 가능성...');
@@ -91,17 +100,19 @@ const multipartApiClient = axios.create({
 ///일반, content-type이 application/json인 post,get,put///
 ///url,formData만 필수///
 export const postData = async (url, formData, headers = {}, params = {}) => {
-  try {
-    const response = await apiClient.post(url, formData, {
-      headers: { ...headers },
-      params: { ...params },
+  const response = await apiClient
+    .post(url, formData, { headers: { ...headers }, params: { ...params } })
+    .then((response) => {
+      console.log('formData', formData);
+      console.log(response);
+      return response;
+    })
+    .catch((error) => {
+      console.log(error);
+      return Promise.reject(error);
     });
-    console.log('Response:', response);
-    return response;
-  } catch (error) {
-    console.error('Error occurred during POST request:', error);
-    throw error; // 에러를 상위로 전달하여 handleSubmitBE에서 처리하도록 함
-  }
+
+  return response;
 };
 
 export const getData = async (url, headers = {}, params = {}) => {
@@ -113,7 +124,7 @@ export const getData = async (url, headers = {}, params = {}) => {
     })
     .catch((error) => {
       console.log(error);
-      return null;
+      return Promise.reject(error);
     });
 
   return response;
@@ -127,7 +138,7 @@ export const putData = async (url, formData, headers = {}, params = {}) => {
     })
     .catch((error) => {
       console.log('put error: ', error);
-      return null;
+      return Promise.reject(error);
     });
 
   return response;
@@ -148,6 +159,7 @@ export const multiFilePostData = async (
     })
     .catch((error) => {
       console.log(error);
+      return Promise.reject(error);
     });
 
   return response;
@@ -162,7 +174,7 @@ export const deleteData = async (url, headers = {}, params = {}) => {
     })
     .catch((error) => {
       console.log(error);
-      return null;
+      return Promise.reject(error);
     });
 
   return response;

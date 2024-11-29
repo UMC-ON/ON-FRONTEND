@@ -311,22 +311,13 @@ export const UserInfoForm1 = ({
             {...register('signUpAuthNum', {
               onChange: (e) => {
                 code.current = e.target.value;
-                const value = e.target.value;
                 setVerifyCode({
                   ...verifyCode,
                   verified: false,
-                  verifyCodeContent: value,
+                  verifyCodeContent: code.current,
                 });
 
                 updateUserInfo(e);
-                if (e.target.name === 'signUpAuthNum') {
-                  setVerifyCode({
-                    ...verifyCode,
-                    verified: false,
-                    verifyCodeContent: value,
-                  });
-                  console.log('signUpAuthNum updated to:', value);
-                }
               },
               required: '인증번호를 입력해주세요.',
             })}
@@ -345,15 +336,22 @@ export const UserInfoForm1 = ({
                 };
                 const formData = JSON.stringify(data);
                 console.log('F.formData:', formData);
-                const res = await putData(VERIFY_CODE, formData);
-                if (res) {
-                  if (code.current && res.data) {
-                    setVerifyCode({ ...verifyCode, verified: true });
-                  } else if (res.data == false) {
-                    alert('인증번호가 일치하지 않습니다.');
+                try {
+                  const res = await putData(VERIFY_CODE, formData);
+                  if (res) {
+                    if (code.current && res.data) {
+                      setVerifyCode({ ...verifyCode, verified: true });
+                    } else if (res.data == false) {
+                      alert('인증번호가 일치하지 않습니다.');
+                    }
+                  }
+                } catch (error) {
+                  if (error.response.status == Number(401)) {
+                    alert(
+                      '인증번호가 만료되었습니다. 인증번호를 다시 요청해주세요.',
+                    );
                   }
                 }
-                console.log(res);
               }}
             >
               인증하기
