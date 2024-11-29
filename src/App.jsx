@@ -94,11 +94,13 @@ function App() {
   useEffect(() => {
     if (!isLoading && !excludepaths.includes(location.pathname)) {
       if (!loginInfo.isAuthenticated) {
-        const res = confirm('로그인이 필요합니다.');
-        if (res) {
+        const token = localStorage.getItem('Atoken');
+        if (token) {
           nav('/signIn');
+          alert('로그인이 필요합니다.');
         } else {
           nav('/landing');
+          const res = confirm('시작 화면으로 이동합니다..');
         }
       } else {
         requestNotificationPermissionOnce();

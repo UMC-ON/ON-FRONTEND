@@ -32,8 +32,7 @@ const SignInPage = () => {
 
       //로그인 성공
       if (response.data) {
-        console.log('실행');
-        console.log(response.data);
+        console.log('실행', response.data);
         //응답으로부터 토큰 받아오기
         const { grantType, accessToken, refreshToken } = response.data;
         console.log(`${grantType},${accessToken},${refreshToken}`);
@@ -59,10 +58,18 @@ const SignInPage = () => {
         dispatch(loginFailure('Login failed. Please check your credentials.'));
       }
     } catch (error) {
-      alert('아이디나 비밀번호가 일치하지 않습니다.');
+      console.error('Login error:', error);
+      if (error.response) {
+        if (error.response.status === 401) {
+          alert('아이디나 비밀번호가 일치하지 않습니다.');
+        } else {
+          alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        }
+      } else {
+        alert('네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.');
+      }
       dispatch(loginFailure('Invalid email or password'));
     }
-
     //const request = fetchData();
   };
 

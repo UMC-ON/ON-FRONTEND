@@ -102,21 +102,32 @@ const SignUpPage = () => {
       console.log('제출');
       // TODO: Request form
       //UserList.unshift(userInfo);
-      const formData = JSON.stringify(userInfo);
-      const response = await postData(SIGN_UP_URL, formData);
-      if (response) {
-        alert('Submitted!');
-        nav('/signUp/complete');
-      } else {
-        alert('처리하는 중 오류가 생겼습니다. 처음부터 다시 시도해주세요.');
+      try {
+        const formData = JSON.stringify(userInfo);
+        console.log('formData: ', formData);
+        const response = await postData(SIGN_UP_URL, formData);
+        if (response) {
+          alert('Submitted!');
+          nav('/signUp/complete');
+        } else if (error) {
+          alert('처리하는 중 오류가 생겼습니다. 처음부터 다시 시도해주세요.');
+          Navigate('/landing');
+        }
+      } catch (error) {
+        console.error('Sign-Up failed: ', error);
+        if (error.response && error.response.status === 400) {
+          alert('요청 데이터가 잘못되었습니다. 다시 확인해주세요.');
+        } else {
+          alert('처리하는 중 오류가 생겼습니다. 처음부터 다시 시도해주세요.');
+          Navigate('/landing');
+        }
       }
-
       return false;
     }
-
     next(userInfo);
     currentDotStep.current++;
   };
+
   return (
     <div>
       <form onSubmit={handleSubmitBE}>

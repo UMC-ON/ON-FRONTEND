@@ -39,7 +39,7 @@ apiClient.interceptors.response.use(
         let now = Number(
           timestamp.toString().slice(0, String(timestamp).length - 3),
         );
-        console.log('만료아ㅏ님');
+        console.log('만료아님');
         console.log(exp);
         console.log(now);
         if (exp < now && !isRefreshing) {
@@ -61,17 +61,14 @@ apiClient.interceptors.response.use(
               prevRequest.headers['Authorization'] = `Bearer ${accessToken}`;
               console.log(error.config);
               return apiClient(prevRequest);
-            } else {
-              console.log(res);
             }
           } catch (err) {
-            console.log(err);
-            console.log('실패');
+            console.error('Token 갱신 실패', err);
           }
         }
       }
     }
-    return error;
+    return Promise.reject(error); // 에러를 상위로 전달
   },
 );
 
@@ -85,19 +82,17 @@ const multipartApiClient = axios.create({
 ///일반, content-type이 application/json인 post,get,put///
 ///url,formData만 필수///
 export const postData = async (url, formData, headers = {}, params = {}) => {
-  const response = await apiClient
-    .post(url, formData, { headers: { ...headers }, params: { ...params } })
-    .then((response) => {
-      console.log('formData', formData);
-      console.log(response);
-      return response;
-    })
-    .catch((error) => {
-      console.log(error);
-      return response;
+  try {
+    const response = await apiClient.post(url, formData, {
+      headers: { ...headers },
+      params: { ...params },
     });
-
-  return response;
+    console.log('Response:', response);
+    return response;
+  } catch (error) {
+    console.error('Error occurred during POST request:', error);
+    throw error; // 에러를 상위로 전달하여 handleSubmitBE에서 처리하도록 함
+  }
 };
 
 export const getData = async (url, headers = {}, params = {}) => {
@@ -118,11 +113,11 @@ export const putData = async (url, formData, headers = {}, params = {}) => {
   const response = await apiClient
     .put(url, formData, { headers: { ...headers }, params: { ...params } })
     .then((response) => {
-      console.log(response);
+      console.log('put response:', response);
       return response;
     })
     .catch((error) => {
-      console.log(error);
+      console.log('put error: ', error);
       return null;
     });
 

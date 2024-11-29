@@ -318,10 +318,8 @@ export const UserInfoForm1 = ({
                   verifyCodeContent: e.target.value,
                 });
 
-                updateUserInfo(value);
-                console.log(e.target.value);
-                console.log(value);
-                console.log(UserInfo); // 얘네가 잘 작동하고 있는 것 같지 않아요...ㅜㅜ
+                updateUserInfo(e.target.valuevalue);
+                console.log('e.target.value:', e.target.value);
               },
             })}
           />
@@ -338,7 +336,7 @@ export const UserInfoForm1 = ({
                   authNum: parseInt(code.current),
                 };
                 const formData = JSON.stringify(data);
-                console.log(formData);
+                console.log('formData:', formData);
                 const res = await putData(VERIFY_CODE, formData);
                 if (res) {
                   if (code.current && res.data) {
