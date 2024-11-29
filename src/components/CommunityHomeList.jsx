@@ -61,11 +61,11 @@ export default CommunityHomeList;
 const Container = styled.div`
   background: ${props => props.color || 'rgba(191, 216, 229, 0.6)'};
   width: 90%;
-  height: 7.5vh;
   border-radius: ${props => props.radius || '0 0 0 0'};
   margin: 0 auto;
   border: 1px solid #ffffff;
-  padding-top: 0.5vh;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
 `;
 
 const TextTopLeft = styled.p`
@@ -101,7 +101,8 @@ const SmallGreyText = styled.p`
 const Span = styled.span`
   display: flex;
   align-items: center; 
-  padding-left: 1.2vh;
+  padding-left: 1rem;
+  padding-right: 0.5rem;
 `;
 
 const FlexContainer = styled.div`
