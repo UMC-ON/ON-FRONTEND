@@ -6,6 +6,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import CardList from '../components/CardList';
+import CommunityHomeList from '../components/CommunityHomeList';
 
 // import schoolIcon from '../assets/images/new_school_icon.svg';
 // import migrationIcon from '../assets/images/new_immigration_icon.svg';
@@ -139,7 +140,7 @@ import { getData } from '../api/Functions';
 import {
   GET_USER_INFO,
   GET_TWO_FREEPOST,
-  GET_TWO_INFOPOST,
+  GET_RECENT_POST_OF,
   GET_NEAR_ACCOMPANY,
 } from '../api/urls';
 
@@ -256,14 +257,14 @@ function HomePage() {
           getSiteByCountry(user_data.data.country);
         }
 
-        const info_data = await getData(GET_TWO_INFOPOST, {
+        const info_data = await getData(GET_RECENT_POST_OF('INFO'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setInfoData(info_data.data);
         console.log('infoData');
         console.log(info_data.data);
 
-        const free_data = await getData(GET_TWO_FREEPOST, {
+        const free_data = await getData(GET_RECENT_POST_OF('FREE'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setFreeData(free_data.data);
@@ -479,7 +480,13 @@ function HomePage() {
       </FlexContainer>
       <SmallSpace2 />
 
-      <CommunityCardList cards={infoData} />
+      <Shadow>
+        <CommunityHomeList
+            bgcolor="rgba(191, 216, 229, 0.3)"
+            datas={infoData}
+            type={'info'}
+          />
+      </Shadow>
 
       <Space></Space>
       <Space></Space>
@@ -491,10 +498,13 @@ function HomePage() {
 
       <SmallSpace2 />
 
-      <CommunityCardList
-        free={true}
-        cards={freeData}
-      />
+      <Shadow>
+        <CommunityHomeList
+            bgcolor="rgba(203, 205, 233, 0.3)"
+            datas={freeData}
+            type={'free'}
+          />
+      </Shadow>
 
       <Space></Space>
       <Space></Space>
@@ -530,6 +540,12 @@ function HomePage() {
 }
 
 export default HomePage;
+
+const Shadow = styled.div`
+  filter: drop-shadow(10px 10px 10px rgba(62, 115, 178, 0.15));
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+`;
 
 const FlexContainer = styled.div`
   margin-top: 1.5rem;
