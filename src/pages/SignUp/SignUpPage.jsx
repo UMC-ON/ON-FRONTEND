@@ -104,7 +104,7 @@ const SignUpPage = () => {
       //UserList.unshift(userInfo);
       try {
         const formData = JSON.stringify(userInfo);
-        console.log('formData: ', formData);
+        console.log('S.formData: ', formData);
         const response = await postData(SIGN_UP_URL, formData);
         if (response) {
           alert('Submitted!');

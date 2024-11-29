@@ -309,18 +309,25 @@ export const UserInfoForm1 = ({
             aria-invalid={errors.code ? 'true' : 'false'}
             {...register('signUpAuthNum', {
               //disabled: !verifyCode.isSent,
-              required: '인증코드를 입력해주세요.',
               onChange: (e) => {
-                code.current = e.target.value;
                 setVerifyCode({
                   ...verifyCode,
                   verified: false,
-                  verifyCodeContent: e.target.value,
+                  verifyCodeContent: value,
                 });
 
-                updateUserInfo(e.target.valuevalue);
-                console.log('e.target.value:', e.target.value);
+                updateUserInfo(e); 
+                if (e.target.name === 'signUpAuthNum') {
+                  const { value } = e.target;
+                  setVerifyCode({
+                    ...verifyCode,
+                    verified: false,
+                    verifyCodeContent: value,
+                  });
+                  console.log('signUpAuthNum updated to:', value);
+                }
               },
+              required: '인증번호를 입력해주세요.',
             })}
           />
 
@@ -336,7 +343,7 @@ export const UserInfoForm1 = ({
                   authNum: parseInt(code.current),
                 };
                 const formData = JSON.stringify(data);
-                console.log('formData:', formData);
+                console.log('F.formData:', formData);
                 const res = await putData(VERIFY_CODE, formData);
                 if (res) {
                   if (code.current && res.data) {
