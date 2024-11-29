@@ -12,9 +12,10 @@ const userInfoBE = {
   password: '',
   nickname: '',
   name: '',
-  age: '',
+  birth: '',
   gender: '',
   phone: '',
+  signUpAuthNum: '',
 };
 
 const SignUpPage = () => {
@@ -36,18 +37,21 @@ const SignUpPage = () => {
       let value = e.target.value;
       setUserInfo({ ...userInfo, [name]: value });
       if (name === 'nickname' || name === 'loginId') {
-        //이메일이나 닉네임이 바뀔 경우 중복체크 역사 초기화
+        //이메일이나 닉네임 필드값이 바뀔 경우 중복체크 역사 초기화
         //0: 중복 검사 진행 전
         //-1: 중복된 값 존재
         //1: 사용가능한 값
         setDupCheck({ ...dupCheck, [name]: 0 });
-        //아이디 바꿀 경우 인증 번호 관련 모두 초기화
+        //아이디 필드값 바꿀 경우 인증 번호 관련 모두 초기화
         if (name === 'loginId') {
           setVerifyCode({
             isSent: false,
             verified: false,
             verifyCodeContent: '',
           });
+        }
+        if (name === 'signUpAuthNum') {
+          console.log('Updated signUpAuthNum:', value);
         }
       }
       console.log(userInfo);
@@ -220,7 +224,7 @@ const SignUpPage = () => {
                   </s.PurpleButton>
                 ) : null}
                 <s.PurpleButton disabled={!isActive}>
-                  {isLastStep ? '회원 가입하기' : '다음 단계'}
+                  {isLastStep ? '회원 가입' : '다음 단계'}
                 </s.PurpleButton>
               </s.TwoColumnWrapper>
             </s.ButtonSection>
