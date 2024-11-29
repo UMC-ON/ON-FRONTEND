@@ -72,8 +72,8 @@ apiClient.interceptors.response.use(
             isRefreshing = false;
             return response;
           } else if (exp < now && isRefreshing) {
-            console.log('만료된 토큰 재발급 중');
-            return null;
+            console.log('토큰 재발급 중이라 api 재호출이 안됩니다.');
+            return { status: 'Refreshing Token' };
           } else {
             console.log('토큰이 만료되지 않은 경우');
             console.log('이상한 토큰일 가능성...');

@@ -92,31 +92,37 @@ function App() {
     const loadUserData = async () => {
       if (!excludepaths.includes(location.pathname)) {
         setIsLoading(true); // 로딩 시작
-        await dispatch(loadUser());
-        setIsLoading(false); // 로딩 끝
+        console.log('로딩 트루인데..');
+        dispatch(await loadUser());
       } else {
         setIsLoading(false); // 제외된 경로에서는 로딩 끝
       }
     };
     loadUserData();
+    setIsLoading(false);
+    console.log('로딩 끝');
   }, [dispatch, location.pathname]);
 
-  useEffect(() => {
-    if (!isLoading && !excludepaths.includes(location.pathname)) {
-      if (!loginInfo.isAuthenticated) {
-        const token = localStorage.getItem('Atoken');
-        if (token) {
-          nav('/signIn');
-          alert('로그인이 필요합니다.');
-        } else {
-          nav('/landing');
-          const res = confirm('시작 화면으로 이동합니다..');
-        }
-      } else {
-        requestNotificationPermissionOnce();
-      }
-    }
-  }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
+  // useEffect(() => {
+  //   if (!isLoading && !excludepaths.includes(location.pathname)) {
+  //     console.log('로딩중이 아니래!!!');
+  //     if (!loginInfo.isAuthenticated) {
+  //       console.log(loginInfo);
+  //       const token = localStorage.getItem('Atoken');
+  //       if (token) {
+  //         alert('로그인이 필요합니다.');
+  //         nav('/signIn');
+  //       } else {
+  //         const res = confirm('시작 화면으로 이동합니다..');
+  //         nav('/landing');
+  //       }
+  //     } else {
+  //       requestNotificationPermissionOnce();
+  //     }
+  //   } else {
+  //     console.log('로딩중');
+  //   }
+  // }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
   if (isLoading && excludepaths.includes(location.pathname)) {
     return <Loading />;
   }
