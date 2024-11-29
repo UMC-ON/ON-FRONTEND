@@ -117,7 +117,7 @@ const Diary = () => {
       const response = await postData(
         POST_DIARY,
         { 
-          date: formattedDate, 
+          diaryDate: formattedDate, 
           content: newDiaryContent 
         },
         {

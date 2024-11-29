@@ -10,7 +10,7 @@ const StoredDiary = ({ diaries }) => {
         <DailyDiary key={index}>
           <Content>{item.content}</Content>
           <DDay>{`D ${item.writtenDday < 0 ? `+ ${Math.abs(item.writtenDday)}` : `- ${item.writtenDday}`}`}</DDay>
-          <Date>{item.writtenDate}</Date>
+          <Date>{item.diaryDate}</Date>
         </DailyDiary>
       ))}
     </>
@@ -21,6 +21,7 @@ export default StoredDiary;
 
 
 const DailyDiary = styled.div`
+  color: #838383;
   width: 90%;
   height: 130px;
   margin: 10px auto;
@@ -45,7 +46,7 @@ const DDay = styled.div`
   align-items: center;
   position: absolute;
   bottom: 10px;
-  right: 7em;
+  right: 7.5em;
 `;
 
 const Content = styled.p`
@@ -59,7 +60,7 @@ const Date = styled.p`
   font-size: 11px;
   margin: 10px;
   font-weight: 600;
-  color: #B8B8B8;
+  color: #838383;
   position: absolute;
   bottom: 2px;
   right: 5px; /* Date를 아래로 배치하고 왼쪽에 고정 */
