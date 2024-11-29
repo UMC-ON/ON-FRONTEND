@@ -146,7 +146,9 @@ const Diary = () => {
         <Information>
         <DDay>
           {dday !== null ? (
-            <DDayText>{`D ${dday < 0 ? `+ ${Math.abs(dday)}` : `- ${dday}`}`}</DDayText>
+            <DDayText>
+              {`D${dday === 0 ? "-Day" : dday < 0 ? ` + ${Math.abs(dday)}` : ` - ${dday}`}`}
+            </DDayText>
           ) : (
             <DDayCalendar
               selectedDate={selectedDate1}

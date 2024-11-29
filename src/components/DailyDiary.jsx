@@ -9,7 +9,7 @@ const StoredDiary = ({ diaries }) => {
       {diaries && diaries.map((item, index) => (
         <DailyDiary key={index}>
           <Content>{item.content}</Content>
-          <DDay>{`D ${item.writtenDday < 0 ? `+ ${Math.abs(item.writtenDday)}` : `- ${item.writtenDday}`}`}</DDay>
+          <DDay>{`D${item.writtenDday === 0 ? "-Day" : item.writtenDday < 0 ? ` + ${Math.abs(item.writtenDday)}` : ` - ${item.writtenDday}`}`}</DDay>
           <Date>{item.diaryDate}</Date>
         </DailyDiary>
       ))}
