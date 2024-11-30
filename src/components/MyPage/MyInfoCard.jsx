@@ -94,7 +94,7 @@ const MyInfoCard = ({
         ) : userStatus === 'AWAIT' ? (
           <>
             <University>{university}</University>
-            <PurpleBox>인증 대기중</PurpleBox>
+            <Await>파견교 인증 대기중...</Await>
           </>
         ) : null}
         <Logout onClick={() => handleLogout()}>로그아웃</Logout>
@@ -167,6 +167,20 @@ const University = styled.span`
   grid-column: 1/3;
   grid-row: 2/3;
   color: #5c5c5c;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
+
+const Await = styled.span`
+  grid-column: 1/3;
+  grid-row: 2/3;
+  background: linear-gradient(135deg, #c2c7ff 0%, #ad99ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-family: Inter;
   font-size: 14px;
   font-style: normal;
