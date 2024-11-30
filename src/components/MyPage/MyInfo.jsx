@@ -53,7 +53,7 @@ const MyInfo = ({ loginId, name, phone, universityUrl, userNickname }) => {
   return (
     <MyInfoContainer>
       <Wrapper>
-        <TitleBox>아이디</TitleBox>
+        <TitleBox>이메일</TitleBox>
         <InfoBox>{loginId}</InfoBox>
       </Wrapper>
       <Wrapper>
