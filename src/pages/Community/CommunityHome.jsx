@@ -108,14 +108,13 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
   useEffect(() => {
     console.log('유저인포');
     console.log(userInfo);
-    if (userInfo) {
-      if (country === null) {
-        fetchData();
-        setIsLoading(false);
-      } else {
-        fetchFilteredData();
-        setIsLoading(false);
-      }
+
+    if (country === null) {
+      fetchData();
+      setIsLoading(false);
+    } else {
+      fetchFilteredData();
+      setIsLoading(false);
     }
   }, [country, userInfo]);
 

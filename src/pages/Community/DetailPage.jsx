@@ -28,7 +28,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const titleColor = boardType === 'INFO' ? 'rgb(191, 216, 229)' : '#CBCDE9';
   let logInInfo = useSelector((state) => state.user);
   let userInfo = logInInfo.user;
-  //let userInfo = userInfo.user;
+  console.log(userInfo);
   const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
   const [commentCount, setCommentCount] = useState(0);
 
@@ -43,11 +43,11 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const myCommentId = useRef(null);
 
   const fetchCommentData = async (order = 'DESC') => {
-    if (currentPage.current == 0) {
-      //최초 로딩 시에는 슝 로딩 화면
+    if (currentPage.current === 0) {
+      // 최초 로딩 시 로딩 화면
       setLoading(true);
     } else {
-      //댓글 로딩마다 슝 보여줄 순 없음
+      // 댓글 로딩마다 로딩 화면을 표시하지 않음
       newCommentLoading.current = true;
     }
     const response = await getData(
@@ -60,49 +60,52 @@ const DetailPage = ({ color1, color2, boardType }) => {
     if (response) {
       totalPage.current = response.data.totalPages;
       if (currentPage.current > 0) {
-        //추가 댓글 로딩 시 기존 댓글+새 댓글로 commentList 설정
-        setCommentList((commentList) => [
-          ...commentList,
+        // 추가 댓글 로딩 시 기존 댓글 + 새 댓글
+        setCommentList((prevCommentList) => [
+          ...prevCommentList,
           ...response.data.content,
         ]);
-        setCommentCount(response.data.totalElements); //포스트 정보는 새로고침 이전에 갱신될 일이 없으니 댓글 데이터로부터 총 개수를 초기화해줘야한다.
+        setCommentCount(response.data.totalElements); // 댓글 개수 갱신
         newCommentLoading.current = false;
-        console.log('내용 존재');
       } else {
-        //최초 로딩 시 기본 실행
+        // 최초 로딩 시
         setCommentList(response.data.content);
         setCommentCount(response.data.totalElements);
-        //setLoading(false);는 함수 외부에서 실행시켜줌(useEffect에서)
-        console.log('이거 실행');
+        setLoading(false);
       }
     }
   };
-  useEffect(() => {
-    //최초 로딩 시에만 포스트 정보를 불러오는 게 좋을 듯!
-    if (userInfo) {
-      const fetchPostData = async () => {
-        setLoading(true);
 
-        const response = await getData(
-          GET_POST_DETAIL(boardType, currentPost_id),
-          {
-            //'Content-Type': `application/json`,
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-        );
-        if (response) {
-          setCurrentPost(response.data);
-          return response;
+  useEffect(() => {
+    if (!isLoading && userInfo && currentPost_id) {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const postResponse = await getData(
+            GET_POST_DETAIL(boardType, currentPost_id),
+            { Authorization: `Bearer ${localStorage.getItem('AToken')}` },
+          );
+          setCurrentPost(postResponse.data);
+
+          const commentResponse = await getData(
+            GET_COMMENT_OF(currentPost_id),
+            { Authorization: `Bearer ${localStorage.getItem('AToken')}` },
+            { page: 0, size: 20, sort: 'ASC' },
+          );
+          setCommentList(commentResponse.data.content);
+          setCommentCount(commentResponse.data.totalElements);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        } finally {
+          setLoading(false); // 성공적이든 실패든 최종적으로 로딩을 끝내도록
         }
       };
 
-      fetchPostData(); //포스트 먼저
-      fetchCommentData();
-      setLoading(false);
+      fetchData();
     }
-  }, [userInfo]);
+  }, [userInfo, currentPost_id, boardType]);
+  // userInfo와 currentPost_id, boardType 변경 시에만 실행
 
-  /// 여기서부터 메인 변수들 ///
   const [content, setContent] = useState('');
   const [selectedComment, setSelectedComment] = useState(null);
 
@@ -111,8 +114,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const replyToText = useRef(null);
   const commentEditor = useRef(null);
   const mobileViewRef = useRef(null);
-
-  //기타 이벤트 핸들링 함수
 
   const handleResizeHeight = () => {
     const textarea = document.querySelector('.commentEditor');
@@ -131,17 +132,14 @@ const DetailPage = ({ color1, color2, boardType }) => {
         currentPage.current < totalPage.current - 1
       ) {
         currentPage.current++;
-        console.log(currentPage.current);
-        console.log(totalPage.current);
-        console.log(isLoading);
         await fetchCommentData();
-        console.log(isLoading);
         newCommentLoading.current = false;
       }
     }
   };
 
   useEffect(() => {
+    //setLoading(true)
     let throttleCheck = false;
     if (!throttleCheck) {
       throttleCheck = setTimeout(() => {
@@ -158,35 +156,32 @@ const DetailPage = ({ color1, color2, boardType }) => {
 
   const onCommentSelection = (e) => {
     if (selectedComment === null) {
-      //아무것도 선택하지 않은 상태에서 댓글 선택
+      // 아무것도 선택하지 않은 상태에서 댓글 선택
       setSelectedComment(e.target.comment);
       replyToText.current = `${e.target.writer}에게 답장`;
       commentEditor.current.focus();
     } else if (selectedComment === e.target.comment) {
-      //선택한 댓글 다시 선택 시 댓글 선택 취소
+      // 선택한 댓글 다시 선택 시 댓글 선택 취소
       setSelectedComment(null);
       replyToText.current = null;
       commentEditor.current.focus();
     } else {
-      //댓글 하나 선택한 상태에서 다른 댓글 선택
+      // 댓글 하나 선택한 상태에서 다른 댓글 선택
       setSelectedComment(e.target.comment);
       replyToText.current = `${e.target.writer}에게 답장`;
       commentEditor.current.focus();
     }
   };
+
   const onCommentSubmit = async () => {
-    if (content == '') {
+    if (content === '') {
       commentEditor.current.focus();
       return;
     }
     if (logInInfo.isAuthenticated) {
-      //로그인 여부부터 확인
       if (selectedComment === null) {
-        //댓글일 경우
         addComment(WRITE_COMMENT_ON(currentPost_id));
       } else {
-        //답글일 경우
-        console.log(selectedComment.commentId);
         addComment(WRITE_REPLY_ON(selectedComment.commentId));
       }
     } else {
@@ -198,20 +193,15 @@ const DetailPage = ({ color1, color2, boardType }) => {
     replyToText.current = null;
     const textarea = document.querySelector('.commentEditor');
     textarea.style.height = 'auto';
-    console.log(myCommentId.current);
-
     const element = document.getElementById(`comment${myCommentId.current}`);
-    console.log(element);
     if (myCommentId.current) {
       element.scrollIntoView('smooth');
-      console.log(element);
     }
     window.scrollTo(0, 0);
     myCommentId.current = null;
   };
 
   const addComment = async (url) => {
-    //댓글 형식 제작 함수
     const comment = {
       id: userInfo.id,
       contents: content + ' ',
@@ -222,29 +212,23 @@ const DetailPage = ({ color1, color2, boardType }) => {
     const res = await postData(url, jsonData, {
       Authorization: `Bearer ${localStorage.getItem('AToken')}`,
     });
-    console.log(res); //지금 내가 등록한 댓글 정보
     const commentFE = res.data;
     myCommentId.current = res.data.commentId;
     setCommentList([...commentList, commentFE]);
-    //답글일 경우 선택된 댓글의 replyCount 1증가
+
     if (selectedComment) {
       selectedComment.replyCount++;
       myCommentId.current = res.data.replyId;
     }
 
     setCommentCount((prev) => prev + 1);
-    //등록시 바로 보일 수 있도록
-
-    //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    //자식에게 ref전달 알아보기
-    fetchCommentData(); //등록 후 바로 다시 댓글 정보 로딩한다. . . 그런데 어디서부터 어디까지?..
+    fetchCommentData();
     setLoading(false);
   };
 
   if (isLoading) {
     return <Loading />;
   }
-
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
   if (userInfo && currentPost && commentList) {

@@ -327,23 +327,24 @@ function HomePage() {
       <NavBar></NavBar>
       <Space></Space>
       <BigContainer>
-        {userData.map((card, index) => (
-          <div key={index}>
-            <LeftContainer>
-              <SubText>나의 파견교</SubText>
-            </LeftContainer>
-            {card.country ? (
+        {userData &&
+          userData.map((card, index) => (
+            <div key={index}>
               <LeftContainer>
-                <BigText spacing="1vh">{card.country},</BigText>
-                <BigText color="#3E73B2">{card.dispatchedUniversity}</BigText>
+                <SubText>나의 파견교</SubText>
               </LeftContainer>
-            ) : (
-              <LeftContainer>
-                <BigText spacing="1vh">학교가 인증되지 않았어요.</BigText>
-              </LeftContainer>
-            )}
-          </div>
-        ))}
+              {card.country ? (
+                <LeftContainer>
+                  <BigText spacing="1vh">{card.country},</BigText>
+                  <BigText color="#3E73B2">{card.dispatchedUniversity}</BigText>
+                </LeftContainer>
+              ) : (
+                <LeftContainer>
+                  <BigText spacing="1vh">학교가 인증되지 않았어요.</BigText>
+                </LeftContainer>
+              )}
+            </div>
+          ))}
 
         {userData.map((card, index) => (
           <Container key={index}>
@@ -482,10 +483,10 @@ function HomePage() {
 
       <Shadow>
         <CommunityHomeList
-            bgcolor="rgba(191, 216, 229, 0.3)"
-            datas={infoData}
-            type={'info'}
-          />
+          bgcolor="rgba(191, 216, 229, 0.3)"
+          datas={infoData}
+          type={'info'}
+        />
       </Shadow>
 
       <Space></Space>
@@ -500,17 +501,17 @@ function HomePage() {
 
       <Shadow>
         <CommunityHomeList
-            bgcolor="rgba(203, 205, 233, 0.3)"
-            datas={freeData}
-            type={'free'}
-          />
+          bgcolor="rgba(203, 205, 233, 0.3)"
+          datas={freeData}
+          type={'free'}
+        />
       </Shadow>
 
       <Space></Space>
       <Space></Space>
 
       <FlexContainer onClick={goToAccompany}>
-        <BigText spacing="1vh" >내 주변 동행글</BigText>
+        <BigText spacing="1vh">내 주변 동행글</BigText>
         <RightIcon src={rightIcon} />
       </FlexContainer>
       <SmallSpace />
@@ -556,7 +557,7 @@ const FlexContainer = styled.div`
   align-items: center;
   padding: 10px;
   padding-bottom: 0px;
-  cursor:pointer;
+  cursor: pointer;
 `;
 
 const FixContainer = styled.div`

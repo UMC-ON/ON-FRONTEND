@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import groupLogo from '../../assets/images/NewLogo.svg';
 import { useNavigate } from 'react-router-dom';
 import { loginSuccess, loginFailure } from '../../redux/actions';
-import { useDispatch } from 'react-redux';
-import { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
 
 import { GET_USER_INFO, SIGN_IN_URL } from '../../api/urls';
 import { postData, getData } from '../../api/Functions';
@@ -15,6 +15,20 @@ const SignInPage = () => {
   const inputValue = useRef({ loginId: '', password: '' });
 
   const dispatch = useDispatch();
+  let userInfo = useSelector((state) => {
+    state.user.user;
+  });
+  useEffect(() => {
+    //유저 상태에 따른 조건부 네비게이팅
+    if (userInfo) {
+      console.log(userInfo);
+      if (userInfo.userStatus === 'TEMPORARY') {
+        nav('/signUp/credentials');
+      } else {
+        nav('/');
+      }
+    }
+  }, [userInfo]);
   const onChangeHandler = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -36,6 +50,9 @@ const SignInPage = () => {
         //응답으로부터 토큰 받아오기
         const { grantType, accessToken, refreshToken } = response.data;
         console.log(`${grantType},${accessToken},${refreshToken}`);
+        localStorage.setItem('grantType', grantType);
+        localStorage.setItem('AToken', accessToken); // accessToken을 localStorage에 저장
+        localStorage.setItem('RToken', refreshToken); // refreshToken을 localStorage에 저장
         //현 사용자 정보 api호출
         const user = await getData(GET_USER_INFO, {
           Authorization: `Bearer ${accessToken}`,
@@ -43,12 +60,8 @@ const SignInPage = () => {
         console.log(user.data);
         //현 사용자와 로그인 상태 redux에 저장
         dispatch(loginSuccess(user.data));
-        localStorage.setItem('grantType', grantType);
-        localStorage.setItem('AToken', accessToken); // accessToken을 localStorage에 저장
-        localStorage.setItem('RToken', refreshToken); // refreshToken을 localStorage에 저장
 
-        //유저 상태에 따른 조건부 네비게이팅
-        if (user.data.userStatus === 'TEMPORARY') {
+        if (user.userStatus === 'TEMPORARY') {
           nav('/signUp/credentials');
         } else {
           nav('/');
