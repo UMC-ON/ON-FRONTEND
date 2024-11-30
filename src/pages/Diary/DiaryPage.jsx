@@ -162,7 +162,7 @@ const Diary = () => {
 
         </Information><br/>
         <div style={{ height: "10%", marginTop: "60px" }} />
-        {userInfo.dispatchedUniversity && (
+        {userInfo && userInfo.dispatchedUniversity && (
           <div style={{ height: "100px", marginTop: "60px" }}>
             <SubText>나의 파견교</SubText>
             <SchoolContainer>
