@@ -45,9 +45,9 @@ const Diary = () => {
         setDiaries(response?.data?.diaryList);
         setDday(response?.data?.dday);
         setDateList(response?.data?.dateList);
-        console.log(response.data.diaryList);
+        console.log(response?.data?.diaryList);
         console.log(userInfo);
-        console.log(diaries);
+        console.log(response?.data?.dday);
       } catch (error) {
         console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
       }
@@ -79,7 +79,7 @@ const Diary = () => {
   };
 
   const handleAddDiaryClick = () => {
-    if (dday === null) {
+    if (dday === undefined) {
       // dday가 null일 경우 모달을 띄운다
       setShowAlertModal(true);
     } else {
@@ -131,7 +131,7 @@ const Diary = () => {
       <Content>
         <Information>
           <DDay>
-            {dday !== null ? (
+            {dday !== undefined ? (
               <DDayText>
                 {`D${dday === 0 ? '-Day' : dday < 0 ? ` + ${Math.abs(dday)}` : ` - ${dday}`}`}
               </DDayText>
@@ -148,7 +148,7 @@ const Diary = () => {
         </Information>
         <br />
         <div style={{ height: '10%', marginTop: '60px' }} />
-        {userInfo.dispatchedUniversity && (
+        {userInfo && userInfo.dispatchedUniversity && (
           <div style={{ height: '100px', marginTop: '60px' }}>
             <SubText>나의 파견교</SubText>
             <SchoolContainer>

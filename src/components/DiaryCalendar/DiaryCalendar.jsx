@@ -14,7 +14,7 @@ export default function DiaryCalendar({ diaries, dateList }) {
   const tileContent = ({ date, view }) => {
     if (view === 'month') {
       // 날짜가 dayList에 포함된 경우 하트를 출력, 그렇지 않으면 기본 체크박스를 출력
-      if (dateList.includes(moment(date).format('YYYY-MM-DD'))) {
+      if (dateList?.includes(moment(date).format('YYYY-MM-DD'))) {
         return <s.FullCheckbox><s.DiaryCheck src = {diaryCheck} /></s.FullCheckbox>;
       } else {
         return <s.EmptyCheckbox />;
