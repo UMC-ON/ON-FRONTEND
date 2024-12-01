@@ -309,20 +309,17 @@ export const UserInfoForm1 = ({
             defaultValue={verifyCode.verifyCodeContent}
             aria-invalid={errors.code ? 'true' : 'false'}
             {...register('signUpAuthNum', {
-              required: '인증코드를 입력해주세요.',
               onChange: (e) => {
                 code.current = e.target.value;
                 setVerifyCode({
                   ...verifyCode,
                   verified: false,
-                  verifyCodeContent: e.target.value,
+                  verifyCodeContent: code.current,
                 });
 
                 updateUserInfo(e);
-                console.log(e.target.value);
-                //console.log(value);
-                //console.log(UserInfo); // 얘네가 잘 작동하고 있는 것 같지 않아요...ㅜㅜ
               },
+              required: '인증번호를 입력해주세요.',
             })}
           />
 
@@ -338,16 +335,23 @@ export const UserInfoForm1 = ({
                   authNum: parseInt(code.current),
                 };
                 const formData = JSON.stringify(data);
-                console.log(formData);
-                const res = await putData(VERIFY_CODE, formData);
-                if (res) {
-                  if (code.current && res.data) {
-                    setVerifyCode({ ...verifyCode, verified: true });
-                  } else if (res.data == false) {
-                    alert('인증번호가 일치하지 않습니다.');
+                console.log('F.formData:', formData);
+                try {
+                  const res = await putData(VERIFY_CODE, formData);
+                  if (res) {
+                    if (code.current && res.data) {
+                      setVerifyCode({ ...verifyCode, verified: true });
+                    } else if (res.data == false) {
+                      alert('인증번호가 일치하지 않습니다.');
+                    }
+                  }
+                } catch (error) {
+                  if (error.response.status == Number(401)) {
+                    alert(
+                      '인증번호가 만료되었습니다. 인증번호를 다시 요청해주세요.',
+                    );
                   }
                 }
-                console.log(res);
               }}
             >
               인증하기
@@ -459,8 +463,6 @@ export const UserInfoForm2 = ({
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
-    //if(verifyCode.verified)
-    //인증코드 put 제대로 작동하면 추가
     if (dupCheck.nickname == 1) {
       setActive(isValid);
     } else {
@@ -494,48 +496,6 @@ export const UserInfoForm2 = ({
       </s.Explanation>
 
       <s.TwoColumnWrapper>
-        {/* <div>
-          <s.InputWrapper>
-            <s.Div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              나이
-              <s.Explanation
-                style={{
-                  display: 'inline-block',
-                  fontSize: '0.8rem',
-                  lineHeight: 'normal',
-                  marginLeft: '5px',
-                }}
-              >
-                *만나이 기준
-              </s.Explanation>
-            </s.Div>
-            <s.TransparentInput
-              type="number"
-              placeholder="숫자만 입력"
-              inputMode="numeric"
-              onChange={updateUserInfo}
-              pattern="[0-9]"
-              name="age"
-              defaultValue={state.age}
-              aria-invalid={errors.age ? 'true' : 'false'}
-              {...register('age', {
-                required: '나이는 필수입니다.',
-                onChange: (e) => {
-                  updateUserInfo(e);
-                },
-              })}
-            />
-          </s.InputWrapper>
-          <s.Explanation>
-            {errors.age && <small role="alert">{errors.age.message}</small>}
-          </s.Explanation>
-        </div> */}
         <div>
           <s.InputWrapper>
             <s.Div>생년월일</s.Div>

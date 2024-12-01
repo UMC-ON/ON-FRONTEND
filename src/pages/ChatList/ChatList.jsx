@@ -14,7 +14,7 @@ import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
 
 const ChatList = () => {
   const [currentMode, setCurrentMode] = useState('accompany');
-  const token = localStorage.getItem('AToken');
+  //const token = localStorage.getItem('AToken');
 
   const fetchChatList = async ({ pageParam = 0 }) => {
     const url =
@@ -22,7 +22,7 @@ const ChatList = () => {
 
     const response = await getData(
       url,
-      { Authorization: `Bearer ${token}` },
+      { Authorization: `Bearer ${localStorage.getItem('AToken')}` },
       { page: pageParam, size: 20 },
     );
 
