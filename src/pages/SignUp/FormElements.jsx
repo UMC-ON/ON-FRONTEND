@@ -463,8 +463,6 @@ export const UserInfoForm2 = ({
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
-    //if(verifyCode.verified)
-    //인증코드 put 제대로 작동하면 추가
     if (dupCheck.nickname == 1) {
       setActive(isValid);
     } else {
@@ -498,48 +496,6 @@ export const UserInfoForm2 = ({
       </s.Explanation>
 
       <s.TwoColumnWrapper>
-        {/* <div>
-          <s.InputWrapper>
-            <s.Div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              나이
-              <s.Explanation
-                style={{
-                  display: 'inline-block',
-                  fontSize: '0.8rem',
-                  lineHeight: 'normal',
-                  marginLeft: '5px',
-                }}
-              >
-                *만나이 기준
-              </s.Explanation>
-            </s.Div>
-            <s.TransparentInput
-              type="number"
-              placeholder="숫자만 입력"
-              inputMode="numeric"
-              onChange={updateUserInfo}
-              pattern="[0-9]"
-              name="age"
-              defaultValue={state.age}
-              aria-invalid={errors.age ? 'true' : 'false'}
-              {...register('age', {
-                required: '나이는 필수입니다.',
-                onChange: (e) => {
-                  updateUserInfo(e);
-                },
-              })}
-            />
-          </s.InputWrapper>
-          <s.Explanation>
-            {errors.age && <small role="alert">{errors.age.message}</small>}
-          </s.Explanation>
-        </div> */}
         <div>
           <s.InputWrapper>
             <s.Div>생년월일</s.Div>
