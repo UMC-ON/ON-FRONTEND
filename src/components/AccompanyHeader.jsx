@@ -66,10 +66,12 @@ export const PageHeaderLayout = styled.div`
 export const BackButton = styled.div`
   position: absolute;
   left: 17px;
+  cursor:pointer;
 `;
 
 export const RightButton = styled.img`
   position: absolute;
   right: 17px;
   width: 15px;
+  cursor:pointer;
 `;

@@ -581,6 +581,14 @@ const LittleButton = styled.button`
   background: rgb(110, 186, 255, 0);
   margin-bottom: 0.5rem;
   margin-top: 1.75rem;
+
+  &:hover {
+    outline: none; /* hover 상태에서도 outline 제거 */
+  }
+
+  &:focus {
+    outline: none; /* focus 상태에서 outline 제거 */
+  }
 `;
 
 const Line = styled.div`
