@@ -24,7 +24,7 @@ export const Interceptor = ({ children }) => {
     apiClient.interceptors.response.use(
       (res) => {
         console.log(res);
-        if (isSignedOut && res.config.url == '/api/v1/user/sign-in') {
+        if (isSignedOut && res.config?.url == '/api/v1/user/sign-in') {
           isSignedOut = false;
         }
         return res;

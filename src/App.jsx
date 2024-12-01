@@ -61,6 +61,7 @@ import Test from './pages/SignUp/Test.jsx';
 import { getData, Interceptor } from './api/Functions.jsx';
 import { GET_USER_INFO } from './api/urls.jsx';
 import axios from 'axios';
+import ChangePassword from './pages/FindPage/ChangePassword.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -76,6 +77,7 @@ function App() {
     '/signUp/complete',
     '/accompany/detail',
     '/test',
+    '/changePassword',
   ];
   const [isLoading, setIsLoading] = useState(false);
   let mountCount = 0;
@@ -160,6 +162,10 @@ function App() {
             <Route
               path="/findPassword"
               element={<FindPassword />}
+            />
+            <Route
+              path="/changePassword"
+              element={<ChangePassword />}
             />
             <Route
               path="/signUp/credentials"
