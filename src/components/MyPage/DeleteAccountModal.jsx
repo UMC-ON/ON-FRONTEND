@@ -73,7 +73,7 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
                 <DropDownMainBox onClick={() => setDropDown(!dropDown)}>
                   <img src={dropDownArrow} />
                   <ReasonText>
-                    {selectedReason || '이유를 선택해 주세요'}
+                    {selectedReason || '탈퇴 이유를 선택해 주세요'}
                   </ReasonText>
                 </DropDownMainBox>
                 {dropDown && (
@@ -223,7 +223,7 @@ const DropDownContentBox = styled.div`
   background: #fff;
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.05);
   position: absolute;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.1rem;
   margin-top: 0.37rem;
   box-sizing: border-box;
   gap: 0.75rem;
@@ -235,11 +235,12 @@ const DropDownContentBox = styled.div`
 const DropDownContentText = styled.span`
   color: #5c5c5c;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.015rem;
+  white-space: nowrap;
 `;
 
 const DropDownMainBox = styled.div`
@@ -260,7 +261,7 @@ const ReasonText = styled.span`
   width: auto;
   color: #5c5c5c;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-style: normal;
   font-weight: 400;
   letter-spacing: 0.015rem;

@@ -9,19 +9,19 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import theme from './styles/theme.js';
-// 페이지, 컴포넌트 import
+// 페이지, 컴포넌트 import, 안 쓰는 import 주석 처리
 import NavBar from './components/NavBar/NavBar.jsx';
 import MyPage from './pages/MyPage/MyPage.jsx';
 import MyPost from './pages/MyPage/MyPost.jsx';
 import Notification from './pages/Notification/NotificationPage.jsx';
 import Search from './pages/Search/SearchPage.jsx';
-import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
+//import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
 import AccompanyChat from './pages/Chat/AccompanyChat.jsx';
 import ChatList from './pages/ChatList/ChatList.jsx';
 import TradeChat from './pages/Chat/TradeChat.jsx';
 import HomePage from './pages/HomePage.jsx';
 
-import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
+//import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
 import CompanyCalendar from './components/CompanyCalendar/CompanyCalendar.jsx';
 import SellPage from './pages/SellPage.jsx';
 import ScrapList from './pages/ScrapList.jsx';
@@ -60,7 +60,7 @@ import { requestNotificationPermissionOnce } from './service/notificationPermiss
 import Test from './pages/SignUp/Test.jsx';
 import { getData, Interceptor } from './api/Functions.jsx';
 import { GET_USER_INFO } from './api/urls.jsx';
-import axios from 'axios';
+//import axios from 'axios';
 import ChangePassword from './pages/FindPage/ChangePassword.jsx';
 
 function App() {
