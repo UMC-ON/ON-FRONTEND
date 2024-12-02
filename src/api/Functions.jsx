@@ -30,6 +30,7 @@ export const Interceptor = ({ children }) => {
         return res;
       },
       async (error) => {
+        console.log(error);
         if (!isSignedOut) {
           console.log(error);
           if (error.config.headers['Authorization']) {
