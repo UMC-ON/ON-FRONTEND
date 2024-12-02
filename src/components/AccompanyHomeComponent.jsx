@@ -255,15 +255,15 @@ const GreyPicker = styled.div`
 `;
 
 const SmallSpace = styled.div`
-  margin-top: 3vh;
+  margin-top: 1.5rem;
 `;
 
 const Space = styled.div`
-  margin-top: 5vh;
+  margin-top: 3.8rem;
 `;
 
 const BigSpace = styled.div`
-  margin-top: 15vh;
+  margin-top: 7.5rem;
 `;
 
 const WriteButton = styled.button`
@@ -272,7 +272,7 @@ const WriteButton = styled.button`
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 120px;
+  bottom: 110px;
 
   border-radius: 55px;
   border: 1px solid #cccccc;
