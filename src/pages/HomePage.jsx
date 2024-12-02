@@ -151,7 +151,7 @@ const images = [
   sliderImage,
   sliderImage,
 ];
-import { cities } from '../assets/cityDatabase';
+import { cities, countries } from '../assets/cityDatabase';
 
 function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -231,7 +231,9 @@ function HomePage() {
   }
 
   const getContinentForCountry = (countryName) => {
-    const country = cities.find((c) => c.country === countryName);
+    console.log("country is ");
+    console.log(countryName);
+    const country = countries.find((c) => c.country === countryName);
     return country.continent;
   };
 
@@ -626,7 +628,7 @@ const BigText = styled.div`
   margin-right: ${(props) => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter';
-  font-size: 1.5em;
+  font-size: ${(props) => props.size || '1.3em'};
   margin-bottom: 1vh;
   flex-shrink: 0;
 `;
