@@ -671,12 +671,12 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
   const [isConfirmed, setIsConfirmed] = useState(true);
 
   const onClickDsptchNotConfirmed = (e) => {
-    if (e.target.value) {
-      state.dispatchedUniversity = '';
-      state.universityUrl = '';
-      state.country = '';
-      state.dispatchedType = '';
-    }
+    // if (e.target.value) {
+    //   state.dispatchedUniversity = '';
+    //   state.universityUrl = '';
+    //   state.country = '';
+    //   state.dispatchedType = '';
+    // }
     setIsConfirmed(!e.target.value);
     updateUserInfo({
       target: { name: e.target.name, value: !e.target.value }, //state는 비동기적이라 바로 적용안됨
@@ -690,7 +690,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       setIsConfirmed(false);
       setActive(true);
     } else {
-      if (state.dispatchedUniversity && state.country) {
+      if (state.dispatchedUniversity && state.country && state.dispatchType) {
         setActive(true);
       } else {
         setActive(false);

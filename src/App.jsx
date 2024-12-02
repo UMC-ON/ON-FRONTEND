@@ -52,7 +52,7 @@ import LandingPage from './pages/LandingPage/LandingPage.jsx';
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUser, loginFailure } from './redux/actions.jsx';
+import { loadUser, loginFailure, logout } from './redux/actions.jsx';
 import Loading from './components/Loading/Loading.jsx';
 import FindId from './pages/FindPage/FindId.jsx';
 import FindPassword from './pages/FindPage/FindPassword.jsx';
@@ -79,7 +79,7 @@ function App() {
     '/test',
     '/changePassword',
   ];
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   let mountCount = 0;
 
   useEffect(() => {
@@ -88,29 +88,36 @@ function App() {
     } else {
       //setIsLoading(true);
       console.log('트루로 설정', mountCount);
-    }
-    console.log('유저인포 앱', userInfo);
-    if (!userInfo) {
-      setIsLoading(true);
-      console.log(userInfo);
-      const loadUserData = async () => {
-        const accessToken = localStorage.getItem('AToken');
-        const res = await getData(GET_USER_INFO, {
-          Authorization: `Bearer ${accessToken}`,
-        });
-        if (res) {
-          console.log(res, 'dkdk');
-          dispatch(loadUser(res.data, accessToken));
-          requestNotificationPermissionOnce();
-          console.log('앱 유저인포:', userInfo);
+
+      console.log('유저인포 앱', userInfo);
+      if (!userInfo) {
+        setIsLoading(true);
+        console.log(userInfo);
+        const loadUserData = async () => {
+          const accessToken = localStorage.getItem('AToken');
+          if (accessToken) {
+            const res = await getData(GET_USER_INFO, {
+              Authorization: `Bearer ${accessToken}`,
+            });
+            if (res) {
+              console.log(res, 'dkdk');
+              dispatch(loadUser(res.data, accessToken));
+              requestNotificationPermissionOnce();
+              console.log('앱 유저인포:', userInfo);
+              setIsLoading(false);
+            }
+          } else {
+            dispatch(logout());
+            alert('로그인이 필요합니다.');
+            nav('/signIn');
+          }
+        };
+        try {
+          loadUserData();
+        } catch (error) {
+          console.log(error);
         }
-      };
-      try {
-        loadUserData();
-      } catch (error) {
-        console.log(error);
       }
-      setIsLoading(false);
     }
   }, [location.pathname]);
 
