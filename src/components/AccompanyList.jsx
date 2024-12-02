@@ -118,6 +118,7 @@ const GreyText = styled.p`
   font-size: 0.75em;
   padding-top: 2px;
   color: #7a7a7a;
+  padding-left: 1px;
   padding-right: 17px;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -141,24 +142,23 @@ const SmallGreyText = styled.p`
 `;
 
 const GreyMiddleText = styled.p`
-  font-size: 0.75em;
+  font-size: 0.75rem; /* 상대적 단위 사용 */
   color: #7a7a7a;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* 기본은 두 줄 */
+  -webkit-line-clamp: 2; /* 두 줄로 고정 */
   -webkit-box-orient: vertical;
   overflow: hidden;
-  line-height: 1.5; /* 줄 간격 */
+  text-overflow: ellipsis; /* 잘린 부분에 ... 추가 */
+  line-height: 1rem; /* 두 줄 높이에 맞는 줄 간격 */
   text-align: left;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: 99%;
-  max-height: calc(1.5em * 2); /* 두 줄 이상 넘지 않음 */
-
-  @media (max-width: 480px) { /* 작은 화면에서는 3줄 */
-    -webkit-line-clamp: 2;
-    max-height: calc(1.5em * 3);
-  }
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+  width: 100%;
+  white-space: pre-line;
+  min-height: 2rem; /* 두 줄 높이에 맞는 최소 높이 설정 */
+  max-height: 2rem; /* 두 줄로 고정된 최대 높이 */
 `;
+
 
 const RoundContainer = styled.div`
   position: relative;
@@ -170,14 +170,14 @@ const RoundContainer = styled.div`
   flex-direction: row; /* 내부 요소 가로 배치 */
   flex-wrap: nowrap; /* 줄 바꿈 방지 */
   align-items: center;
-  margin: 0 auto 2vh auto;
+  margin: 0 auto 0.9rem auto;
   cursor: pointer;
   box-sizing: border-box;
 `;
 
 const ImageWrapper = styled.div`
-  width: 8rem;
-  height: 8rem;
+  width: 8.5rem;
+  height: 8.5rem;
   flex-shrink: 0;
   overflow: hidden;
   border-radius: 20px;
@@ -197,6 +197,7 @@ const TextContainer = styled.div`
   margin: 0 15px; /* 좌우 간격 */
   box-sizing: border-box;
   overflow: hidden; /* 내부 요소가 넘치지 않도록 설정 */
+  min-height: 5rem;
 `;
 
 const CardName = styled.p`
