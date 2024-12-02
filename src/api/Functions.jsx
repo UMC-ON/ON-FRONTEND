@@ -86,7 +86,8 @@ export const Interceptor = ({ children }) => {
                       console.log(err);
                       console.log('토큰 갱신 실패');
                       dispatch(loginFailure('Failed to fetch user info'));
-
+                      alert('로그인이 필요합니다.');
+                      nav('/signIn');
                       return Promise.reject(err);
                       //return err;
                     });
@@ -110,9 +111,7 @@ export const Interceptor = ({ children }) => {
           } else {
             isSignedOut = true;
             console.log('인증 토큰이 필요하진 않지만 에러가 났다');
-            dispatch(loginFailure('Failed to fetch user info'));
-            alert('로그인이 필요합니다.');
-            nav('/signIn');
+            alert('정보가 일치하지 않습니다.');
           }
           isRefreshing = false;
           return Promise.reject(error);
