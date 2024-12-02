@@ -537,6 +537,7 @@ const BodyText = styled.p`
   text-align: left;
   font-size: 0.9em;
   margin-bottom: 2rem;
+  white-space: pre-line;
 `;
 
 const PurpleContainer = styled.div`
