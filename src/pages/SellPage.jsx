@@ -41,6 +41,7 @@ function SellPage() {
       }, 
       { page: page, size: 5, sort: 'DESC' },);
       
+      
       if (page === 0) {
         console.log("모든 물품 불러오기 성공");
         console.log(response.data.content);
@@ -97,10 +98,12 @@ function SellPage() {
         },
         { keyword: searchKeyword, page: page, size: 5, sort: 'DESC' },
       );
+      console.log("response", response);
   
       // response가 유효한지 확인
       if (response && response.data) {
         console.log("검색 성공");
+        console.log(response);
         // 페이지가 0일 때 새로 불러오고, 그 외 페이지에서는 기존 데이터에 추가
         if (page === 0) {
           setItems(response.data.content);
@@ -116,7 +119,7 @@ function SellPage() {
   };
 
   useEffect(() => {
-    if (!selectedTransaction && !country && !showAvailable) {
+    if (!selectedTransaction && !country && !showAvailable && !searchKeyword) {
       // 필터링 조건이 없으면 모든 물품 불러오기
       fetchAllItems();
     } else {
@@ -126,13 +129,20 @@ function SellPage() {
   }, [page, selectedTransaction, country, showAvailable]);
   const handleScroll = useCallback(() => {
     const scrolledToBottom = 
-        window.innerHeight + document.documentElement.scrollTop 
-        >= document.documentElement.offsetHeight - 10;
-
+      window.innerHeight + document.documentElement.scrollTop 
+      >= document.documentElement.offsetHeight - 10;
+  
     if (scrolledToBottom) {
+      if (searchKeyword) {
+        // 검색 중일 때는 검색 결과를 추가로 불러옴
+        fetchSearchResults();
+      } else {
+        // 일반적인 경우 페이지 증가
         setPage(prevPage => prevPage + 1);
+      }
     }
-}, []);
+  }, [searchKeyword]);
+  
 
 
   useEffect(() => {
@@ -211,12 +221,7 @@ function SellPage() {
           placeholder="국가 / 물품으로 검색해 보세요."
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              fetchSearchResults();
-            }
-          }}
+          
         />
         <SearchIcon
           src={search_icon}
