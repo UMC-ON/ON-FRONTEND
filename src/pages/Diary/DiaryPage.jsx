@@ -79,7 +79,7 @@ const Diary = () => {
   };
 
   const handleAddDiaryClick = () => {
-    if (dday === undefined) {
+    if (dday === null) {
       // dday가 null일 경우 모달을 띄운다
       setShowAlertModal(true);
     } else {
@@ -131,7 +131,7 @@ const Diary = () => {
       <Content>
         <Information>
           <DDay>
-            {dday !== undefined ? (
+            {dday !== null ? (
               <DDayText>
                 {`D${dday === 0 ? '-Day' : dday < 0 ? ` + ${Math.abs(dday)}` : ` - ${dday}`}`}
               </DDayText>
@@ -280,6 +280,7 @@ const SchoolContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   margin-top: 20px;
+  font-family: 'Inter';
 `;
 
 const BigText = styled.div`
