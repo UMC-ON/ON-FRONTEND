@@ -84,7 +84,9 @@ const MyInfoCard = ({
               )}
             </SpecificInfo>
           </>
-        ) : userStatus === 'NON_CERTIFIED' ? (
+        ) : userStatus === 'NON_CERTIFIED' ||
+          userStatus === 'TEMPORARY' ||
+          userStatus === 'DENIED' ? (
           <>
             <University>학교가 인증되지 않았어요.</University>
             <PurpleBox onClick={() => navigate('./schoolAuth')}>

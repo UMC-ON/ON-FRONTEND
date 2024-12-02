@@ -86,6 +86,29 @@ export const MyPosts = styled.article`
   }
 `;
 
+export const DisabledMyPosts = styled.article`
+  margin-top: 1.1rem;
+  border-radius: 12px;
+  background: #eeeeee;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  height: 3.1875rem;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: flex;
+  padding: 0 21px;
+  align-items: center;
+  gap: 6px;
+  span {
+    color: #5c5c5c;
+    font-family: Inter;
+    font-size: 1.0625rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+`;
+
 export const MyInfoTitle = styled.p`
   margin-top: 2.5rem;
   width: 100%;
