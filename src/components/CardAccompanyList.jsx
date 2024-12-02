@@ -140,6 +140,7 @@ const CardContainer = styled.div`
   margin: 0;
   min-width: 10rem;
   margin-right: 8.5rem;
+  cursor:pointer;
 `;
 
 const Card = styled.div`

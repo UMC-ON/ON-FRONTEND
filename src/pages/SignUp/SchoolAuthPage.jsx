@@ -1,7 +1,7 @@
 import * as FormElements from './FormElements';
 import useMultiStepForm from '../../hooks/useMultiStepForm';
 import * as s from './SignUpStyled';
-import groupLogo from '../../assets/images/groupLogo.svg';
+import groupLogo from '../../assets/images/NewLogo.svg';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
