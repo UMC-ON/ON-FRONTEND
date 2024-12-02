@@ -75,7 +75,7 @@ export const StyledH2 = styled.div`
 export const Explanation = styled.div`
   color: rgba(0, 0, 0, 0.49);
   font-family: 'Baloo Bhaina 2';
-  font-size: 13px;
+  font-size: 15px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px; /* 153.846% */
