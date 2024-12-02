@@ -28,14 +28,14 @@ export const PasswordTextInput = styled.input`
   background: none;
   color: #838383;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-style: normal;
   font-weight: 400;
   line-height: 2rem;
   ::placeholder {
     color: #838383;
     font-family: Inter;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;

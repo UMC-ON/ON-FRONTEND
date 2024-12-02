@@ -719,7 +719,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       </s.InputWrapper>
       <DefaultCheckBox
         wrapperStyle={{
-          paddingTop: '12px',
+          paddingTop: '26px',
           color: isConfirmed ? '' : 'black',
         }}
         after="교환/방문교 미정"
@@ -727,7 +727,6 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           border: '0.5px solid #C6C6C6',
           width: '11px',
           height: '11px',
-          borderRadius: '3px',
         }}
         onChange={onClickDsptchNotConfirmed}
         name="isDispatchConfirmed"
@@ -744,7 +743,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           defaultValue={state.universityUrl}
         />
       </s.InputWrapper>
-      <s.Explanation style={{ fontSize: '9px' }}>
+      <s.Explanation style={{ marginTop: '5px', fontSize: '0.83rem' }}>
         사이트 주소는 가입 이후 마이페이지에서 수정하실 수 있습니다.
       </s.Explanation>
 
@@ -765,6 +764,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           <option
             value=""
             hidden
+            style={{fontSize: '0.9rem'}}
           >
             국가
           </option>

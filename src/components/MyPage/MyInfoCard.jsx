@@ -87,7 +87,10 @@ const MyInfoCard = ({
         ) : userStatus === 'NON_CERTIFIED' ? (
           <>
             <University>학교가 인증되지 않았어요.</University>
-            <PurpleBox onClick={() => navigate('./schoolAuth')}>
+            <PurpleBox
+              onClick={() => navigate('./schoolAuth')}
+              style={{ marginTop: '5px' }}
+            >
               파견교 등록 및 인증
             </PurpleBox>
           </>
@@ -168,7 +171,7 @@ const University = styled.span`
   grid-row: 2/3;
   color: #5c5c5c;
   font-family: Inter;
-  font-size: 14px;
+  font-size: 0.9rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -234,7 +237,7 @@ const Logout = styled.div`
 `;
 
 const PurpleBox = styled.div`
-  height: 1.2rem;
+  height: 1.28rem;
   grid-column: 1/3;
   grid-row: 3/4;
   padding: 0 0.625rem;
@@ -246,6 +249,6 @@ const PurpleBox = styled.div`
   background: ${theme.purpleGra};
   color: #fff;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 500;
 `;

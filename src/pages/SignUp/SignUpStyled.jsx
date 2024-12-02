@@ -171,7 +171,7 @@ export const SchoolComboBox = styled.select`
   background: url(${lightBlueArrow}) no-repeat right 0.8rem center #f3f3f3;
   padding: 0.25rem 0.625rem;
   margin: 0.625rem 0;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #979797;
   &::-webkit-scrollbar {
     width: 0.5rem;
@@ -252,6 +252,11 @@ export const Explanation = styled.div`
   line-height: 20px; /* 153.846% */
   text-align: justify;
 `;
+
+export const AuthExplanation = styled(Explanation)`
+  font-size: 15px;
+`;
+
 export const TwoColumnWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;

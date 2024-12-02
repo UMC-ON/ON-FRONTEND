@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import EditButton from '../../assets/images/mypage_edit_button.svg';
 import { useState } from 'react';
-import { DELETE_ACCOUNT } from '../../api/urls';
+//import { DELETE_ACCOUNT } from '../../api/urls';
 import { deleteData, postData } from '../../api/Functions';
 import DeleteAccountModal from './DeleteAccountModal';
 import { useEffect } from 'react';
@@ -150,7 +150,7 @@ const MyInfo = ({
               onClick={() => handleEditedLink(linkInput)}
               $dup={true}
             >
-              수정 완료
+              완료
             </PurpleBox>
           )}
         </TitleBox>
@@ -175,15 +175,16 @@ const MyInfo = ({
               src={EditButton}
               onClick={() => setEditNickname(true)}
             />
-          ) : (
+          ) : duplicateCheck ? ( // 중복 확인 완료 후 '완료' 버튼 표시
             <PurpleBox
               onClick={() => handleEditedNickname(nicknameInput)}
               $dup={duplicateCheck}
             >
-              수정 완료
+              완료
             </PurpleBox>
-          )}
+          ) : null}
         </TitleBox>
+
         {!editNickname ? (
           <TextInput
             value={nickname}
@@ -199,16 +200,15 @@ const MyInfo = ({
               <img src={validImg} />
             ) : (
               <DuplicateBtn
-                onClick={(e) => {
-                  handleNicknameDuplicateCheck(nicknameInput);
-                }}
+                onClick={() => handleNicknameDuplicateCheck(nicknameInput)}
               >
-                중복확인
+                중복체크
               </DuplicateBtn>
             )}
           </InputWrapper>
         )}
       </Wrapper>
+
       <Wrapper style={{ display: 'inline-block', textAlign: 'left' }}>
         <DeleteAccount onClick={() => setModalDisplay(true)}>
           탈퇴
@@ -251,7 +251,7 @@ const TitleBox = styled.div`
   font-family: Inter;
   font-size: 1.0625rem;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 450;
   line-height: normal;
   img,
   div {
@@ -266,7 +266,7 @@ const InfoBox = styled.div`
   border-bottom: 1px solid #b0b0b0;
   color: #5c5c5c;
   font-family: Inter;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -281,7 +281,7 @@ const TextInput = styled.input`
   background: none;
   color: #5c5c5c;
   font-family: Inter;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 2rem;
@@ -306,20 +306,20 @@ const DeleteAccount = styled.span`
   text-decoration-style: solid;
   text-align: left;
   display: inline-block;
+  margin-top: 10px;
 `;
 
 const PurpleBox = styled.div`
-  height: 1.1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  border-radius: 0.5rem;
-  padding: 0 0.5rem;
+  border-radius: 0.8rem;
+  padding: 0.2rem 0.4rem;
   background: ${(props) => (props.$dup ? theme.purpleGra : theme.creamGray)};
   color: #fff;
   font-family: Inter;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 500;
 `;
 
@@ -333,20 +333,10 @@ const InputWrapper = styled.div`
   }
 `;
 
-const DuplicateBtn = styled.div`
+const DuplicateBtn = styled(PurpleBox)`
   position: absolute;
-  height: 1.1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  border-radius: 0.5rem;
-  padding: 0 0.5rem;
   background: ${theme.purpleGra};
-  color: #fff;
-  font-family: Inter;
-  font-size: 10px;
-  font-weight: 500;
   right: 0;
   top: 0;
+  padding: 0.27rem 0.4rem;
 `;
