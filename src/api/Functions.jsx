@@ -21,9 +21,11 @@ export const Interceptor = ({ children }) => {
   const nav = useNavigate();
   let userInfo = useSelector((state) => state.user.user);
   useEffect(() => {
+    console.log('인터셉터 컴포넌트');
     apiClient.interceptors.response.use(
       (res) => {
         console.log(res);
+        console.log('인터셉터 레스 내부');
         if (isSignedOut && res.config?.url == '/api/v1/user/sign-in') {
           isSignedOut = false;
         }
@@ -31,6 +33,7 @@ export const Interceptor = ({ children }) => {
       },
       async (error) => {
         console.log(error);
+        console.log('인터셉터 에러 내부');
         if (!isSignedOut) {
           console.log(error);
           if (error.config.headers['Authorization']) {
