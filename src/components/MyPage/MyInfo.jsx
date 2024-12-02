@@ -37,31 +37,6 @@ const MyInfo = ({
       return phoneNumber;
     }
   }
-  //탈퇴
-  // const handleDeleteAccount = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await deleteData(
-  //       DELETE_ACCOUNT,
-  //       {
-  //         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-  //       },
-  //       {},
-  //     );
-  //     console.log(response);
-  //     if (response.status == 200) {
-  //       localStorage.removeItem('AToken');
-  //       localStorage.removeItem('RToken');
-  //       localStorage.removeItem('grantType');
-  //       dispatch(logout());
-  //       navigate('/landing');
-  //     }
-  //   } catch (error) {
-  //     console.error('delete account error:', error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   useEffect(() => {
     console.log(nicknameInput);

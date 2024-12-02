@@ -27,27 +27,27 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
 
   //계정 삭제 api
   const handleDeleteAccount = async () => {
-    // setIsLoading(true);
-    // try {
-    //   const response = await deleteData(
-    //     DELETE_ACCOUNT,
-    //     {
-    //       Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-    //     },
-    //     {},
-    //   );
-    //   console.log(response);
-    //   if (response.status == 200) {
-    //     localStorage.removeItem('AToken');
-    //     localStorage.removeItem('RToken');
-    //     localStorage.removeItem('grantType');
-    //     dispatch(logout());
-    //   }
-    // } catch (error) {
-    //   console.error('delete account error:', error);
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    setIsLoading(true);
+    try {
+      const response = await deleteData(
+        DELETE_ACCOUNT,
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        {},
+      );
+      console.log(response);
+      if (response.status == 200) {
+        localStorage.removeItem('AToken');
+        localStorage.removeItem('RToken');
+        localStorage.removeItem('grantType');
+        dispatch(logout());
+      }
+    } catch (error) {
+      console.error('delete account error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleWrapperClick = (e) => {
