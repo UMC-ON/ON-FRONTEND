@@ -165,7 +165,7 @@ const FindId = () => {
             <s.PurpleButton
               disabled={!isValid}
               onClick={() => {
-                userEmail.current = findId(userInfo);
+                findId(userInfo);
               }}
             >
               아이디 찾기
