@@ -97,6 +97,7 @@ function App() {
         const loadUserData = async () => {
           const accessToken = localStorage.getItem('AToken');
           if (accessToken) {
+            console.log('엑세스 있음');
             const res = await getData(GET_USER_INFO, {
               Authorization: `Bearer ${accessToken}`,
             });
@@ -136,156 +137,154 @@ function App() {
   }
   if (!isLoading || excludepaths.includes(location.pathname)) {
     return (
-      <Interceptor>
-        <ThemeProvider theme={theme}>
-          <Routes>
-            <Route
-              path="/test"
-              element={<Test />}
-            />
-            <Route
-              path="/landing"
-              element={<LandingPage />}
-            />
-            <Route
-              path="/admin"
-              element={<AdminPage />}
-            />
-            <Route
-              path="/signUp"
-              element={<SignUpPage />}
-            />
-            <Route
-              path="/signUp/complete"
-              element={<SignUpCompletePage />}
-            />
-            <Route
-              path="/signIn"
-              element={<SignInPage />}
-            />
-            <Route
-              path="/findId"
-              element={<FindId />}
-            />
-            <Route
-              path="/findPassword"
-              element={<FindPassword />}
-            />
-            <Route
-              path="/changePassword"
-              element={<ChangePassword />}
-            />
-            <Route
-              path="/signUp/credentials"
-              element={<SchoolAuthPage />}
-            />
-            <Route
-              path="/"
-              element={<HomePage />}
-            />
-            <Route
-              path="/community/general"
-              element={<FreeCommunityHome />}
-            />
-            <Route
-              path="/community/general/detail/:id"
-              element={<FreeDetailPage />}
-            />
-            <Route
-              path="/community/general/post"
-              element={<FreePostPage />}
-            />
-            <Route
-              path="/community/info"
-              element={<InfoCommunityHome />}
-            />
-            <Route
-              path="/community/info/detail/:id"
-              element={<InfoDetailPage />}
-            />
-            <Route
-              path="/community/info/post"
-              element={<InfoPostPage />}
-            />
-            <Route
-              path="/mypage"
-              element={<MyPage />}
-            />
-            <Route
-              path="/mypage/mypost"
-              element={<MyPost />}
-            />
-            <Route
-              path="/mypage/schoolAuth"
-              element={<MySchoolAuthPage />}
-            />
-            <Route
-              path="/notification"
-              element={<Notification />}
-            />
-            <Route
-              path="/search"
-              element={<Search />}
-            />
-            <Route
-              path="/chat/accompany/:roomId"
-              element={<AccompanyChat />}
-            />
-            <Route
-              path="/chat/trade/:roomId"
-              element={<TradeChat />}
-            />
-            <Route
-              path="/chatlist"
-              element={<ChatList />}
-            />
-            <Route
-              path="/accompany"
-              element={<AccompanyPage />}
-            />
-            <Route
-              path="/accompany/post"
-              element={<AccompanyPostPage />}
-            />
-            <Route
-              path="/accompany/detail/:postId"
-              element={<AccompanyDetailPage />}
-            />
-            <Route
-              path="/diary"
-              element={<DiaryPage />}
-            />
-            <Route
-              path="/company"
-              element={<CompanyCalendar />}
-            />
-            <Route
-              path="/sell"
-              element={<SellPage />}
-            />
-            <Route
-              path="/sell/:marketPostId"
-              element={<ItemDetailPage />}
-            />
-            <Route
-              path="/sell/post"
-              element={<SellPost />}
-            />
-            <Route
-              path="/scrap"
-              element={<ScrapList />}
-            />
-            <Route
-              path="/selectCity"
-              element={<SelectCity />}
-            />
-            <Route
-              path="/selectCountry"
-              element={<SelectCountry />}
-            />
-          </Routes>
-        </ThemeProvider>
-      </Interceptor>
+      <ThemeProvider theme={theme}>
+        <Routes>
+          <Route
+            path="/test"
+            element={<Test />}
+          />
+          <Route
+            path="/landing"
+            element={<LandingPage />}
+          />
+          <Route
+            path="/admin"
+            element={<AdminPage />}
+          />
+          <Route
+            path="/signUp"
+            element={<SignUpPage />}
+          />
+          <Route
+            path="/signUp/complete"
+            element={<SignUpCompletePage />}
+          />
+          <Route
+            path="/signIn"
+            element={<SignInPage />}
+          />
+          <Route
+            path="/findId"
+            element={<FindId />}
+          />
+          <Route
+            path="/findPassword"
+            element={<FindPassword />}
+          />
+          <Route
+            path="/changePassword"
+            element={<ChangePassword />}
+          />
+          <Route
+            path="/signUp/credentials"
+            element={<SchoolAuthPage />}
+          />
+          <Route
+            path="/"
+            element={<HomePage />}
+          />
+          <Route
+            path="/community/general"
+            element={<FreeCommunityHome />}
+          />
+          <Route
+            path="/community/general/detail/:id"
+            element={<FreeDetailPage />}
+          />
+          <Route
+            path="/community/general/post"
+            element={<FreePostPage />}
+          />
+          <Route
+            path="/community/info"
+            element={<InfoCommunityHome />}
+          />
+          <Route
+            path="/community/info/detail/:id"
+            element={<InfoDetailPage />}
+          />
+          <Route
+            path="/community/info/post"
+            element={<InfoPostPage />}
+          />
+          <Route
+            path="/mypage"
+            element={<MyPage />}
+          />
+          <Route
+            path="/mypage/mypost"
+            element={<MyPost />}
+          />
+          <Route
+            path="/mypage/schoolAuth"
+            element={<MySchoolAuthPage />}
+          />
+          <Route
+            path="/notification"
+            element={<Notification />}
+          />
+          <Route
+            path="/search"
+            element={<Search />}
+          />
+          <Route
+            path="/chat/accompany/:roomId"
+            element={<AccompanyChat />}
+          />
+          <Route
+            path="/chat/trade/:roomId"
+            element={<TradeChat />}
+          />
+          <Route
+            path="/chatlist"
+            element={<ChatList />}
+          />
+          <Route
+            path="/accompany"
+            element={<AccompanyPage />}
+          />
+          <Route
+            path="/accompany/post"
+            element={<AccompanyPostPage />}
+          />
+          <Route
+            path="/accompany/detail/:postId"
+            element={<AccompanyDetailPage />}
+          />
+          <Route
+            path="/diary"
+            element={<DiaryPage />}
+          />
+          <Route
+            path="/company"
+            element={<CompanyCalendar />}
+          />
+          <Route
+            path="/sell"
+            element={<SellPage />}
+          />
+          <Route
+            path="/sell/:marketPostId"
+            element={<ItemDetailPage />}
+          />
+          <Route
+            path="/sell/post"
+            element={<SellPost />}
+          />
+          <Route
+            path="/scrap"
+            element={<ScrapList />}
+          />
+          <Route
+            path="/selectCity"
+            element={<SelectCity />}
+          />
+          <Route
+            path="/selectCountry"
+            element={<SelectCountry />}
+          />
+        </Routes>
+      </ThemeProvider>
     );
   }
 }
