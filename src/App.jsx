@@ -91,6 +91,7 @@ function App() {
 
       console.log('유저인포 앱', userInfo);
       if (!userInfo) {
+        console.log('유저인포 없음');
         setIsLoading(true);
         console.log(userInfo);
         const loadUserData = async () => {

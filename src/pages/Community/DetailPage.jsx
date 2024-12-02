@@ -58,7 +58,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
       { page: currentPage.current, size: 20, sort: 'ASC' },
     );
     if (response) {
+      console.log('아아아아ㅏ아아아아아');
       totalPage.current = response.data.totalPages;
+      console.log(totalPage.current);
       if (currentPage.current > 0) {
         // 추가 댓글 로딩 시 기존 댓글 + 새 댓글
         setCommentList((prevCommentList) => [
@@ -93,6 +95,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
             { page: 0, size: 20, sort: 'ASC' },
           );
           setCommentList(commentResponse.data.content);
+          totalPage.current = commentResponse.data.totalPages;
           setCommentCount(commentResponse.data.totalElements);
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -126,11 +129,19 @@ const DetailPage = ({ color1, color2, boardType }) => {
       window.scrollY + document.documentElement.clientHeight >
       document.documentElement.scrollHeight - 50
     ) {
+      console.log('api 호출');
+      console.log(
+        isLoading,
+        newCommentLoading.current,
+        currentPage.current,
+        totalPage.current,
+      );
       if (
         !isLoading &&
         !newCommentLoading.current &&
         currentPage.current < totalPage.current - 1
       ) {
+        console.log('찐api호출');
         currentPage.current++;
         await fetchCommentData();
         newCommentLoading.current = false;
@@ -142,8 +153,8 @@ const DetailPage = ({ color1, color2, boardType }) => {
     //setLoading(true)
     let throttleCheck = false;
     if (!throttleCheck) {
-      throttleCheck = setTimeout(() => {
-        onScroll();
+      throttleCheck = setTimeout(async () => {
+        await onScroll();
         throttleCheck = false;
       }, 10000);
     }
