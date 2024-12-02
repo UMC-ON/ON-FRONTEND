@@ -12,44 +12,17 @@ import arrow from '../../assets/images/mypage_arrow.svg';
 import MyInfo from '../../components/MyPage/MyInfo';
 
 const MyPage = () => {
-  // const [userInfo, setUserInfo] = useState(null);
+  const userInfo = useSelector((state) => state.user.user);
   const [error, setError] = useState(null); // 에러를 저장할 상태
   const [isLoading, setIsLoading] = useState(false);
 
-  const [editLink, setEditLink] = useState(false);
-  const [link, setLink] = useState('');
-  const [originalLink, setOriginalLink] = useState('');
-
-  const [editNickname, setEditNickname] = useState(false);
-  const [nickname, setNickname] = useState('');
-  const [nicknameInput, setNicknameInput] = useState('');
+  const [link, setLink] = useState(userInfo.universityUrl);
+  const [nickname, setNickname] = useState(userInfo.nickname);
 
   const [passwordInput, setPasswordInput] = useState('');
   const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(false);
 
   const navigate = useNavigate();
-  const userInfo = useSelector((state) => state.user.user);
-
-  useEffect(() => {
-    setNickname(userInfo.nickname);
-  }, []);
-
-  //닉네임 바꾸기 api
-  const putEditedNickname = async (nicknameInput) => {
-    try {
-      setIsLoading(true);
-      const response = await putData(PUT_NICKNAME, nicknameInput, {
-        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-      });
-      if (response) {
-        console.log(response);
-      }
-    } catch (error) {
-      console.log('Error fetching data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   //비밀번호 입력
   const handelPassword = async (passwordInput) => {
@@ -68,18 +41,6 @@ const MyPage = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // 수정 버튼 클릭 시 동작
-  const clickEditNickname = () => {
-    if (editNickname) {
-      // 수정 완료 시에 새로운 닉네임을 저장 (닉네임 변경 로직 추가 가능)
-      putEditedNickname(nicknameInput);
-    } else {
-      console.log('닉네임 수정 중');
-    }
-    // 수정 모드 토글
-    setEditNickname(!editNickname);
   };
 
   //전화번호 포멧팅
@@ -104,7 +65,7 @@ const MyPage = () => {
           <PageHeader pageName="마이페이지" />
 
           <MyInfoCard
-            nickname={userInfo.nickname ? userInfo?.nickname : ''}
+            nickname={nickname}
             country={userInfo.country ? userInfo.country : ''}
             university={
               userInfo.dispatchedUniversity ? userInfo.dispatchedUniversity : ''
@@ -141,10 +102,11 @@ const MyPage = () => {
               loginId={userInfo.loginId ? userInfo.loginId : ''}
               name={userInfo.name ? userInfo.name : ''}
               phone={userInfo.phone ? userInfo.phone : ''}
-              universityUrl={
-                userInfo.universityUrl ? userInfo.universityUrl : '없음'
-              }
-              userNickname={userInfo.nickname ? userInfo.nickname : ''}
+              link={link}
+              setLink={setLink}
+              nickname={nickname}
+              setIsLoading={setIsLoading}
+              setNickname={setNickname}
             />
           )}
         </s.MyPageLayout>
