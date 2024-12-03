@@ -120,7 +120,7 @@ function AccompanyDetailPage() {
 
   const applyData = async () => {
     try {
-      console.log("userId: ");
+      console.log('userId: ');
       console.log(infoData[0].userId);
       // console.log(typeof infoData[0].userId);
       // console.log("postId: ");
@@ -149,7 +149,7 @@ function AccompanyDetailPage() {
         // console.log(response2.data);
 
         const roomId = response.data.roomId;
-        console.log("roomId: ");
+        console.log('roomId: ');
         console.log(response.data);
         const senderName = infoData[0].nickname;
         console.log('Application successful:', roomId);
@@ -490,7 +490,6 @@ const ProfileTextContainer = styled.div`
   display: flex;
   align-items: center;
 `;
-
 
 const TextContainer = styled.div`
   margin-left: 1em;

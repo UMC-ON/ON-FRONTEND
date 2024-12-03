@@ -124,7 +124,7 @@ const FindId = () => {
                   성별
                 </s.Div>
                 <s.StyledComboBox
-                  style={{ width: '50%' }}
+                  style={{ width: '50%', fontSize: '0.9rem' }}
                   name="gender"
                   pattern="[0-9]"
                   aria-invalid={errors.gender ? 'true' : 'false'}
@@ -138,18 +138,19 @@ const FindId = () => {
                   <option
                     value=""
                     hidden
+                    style={{color: ''}}
                   >
-                    성별을 선택해주세요.
+                    성별을 선택해 주세요.
                   </option>
                   <option
                     value="MALE"
-                    style={{ background: 'white' }}
+                    style={{ background: 'white', fontSize: '1rem' }}
                   >
                     남자
                   </option>
                   <option
                     value="FEMALE"
-                    style={{ background: 'white' }}
+                    style={{ background: 'white', fontSize: '1rem' }}
                   >
                     여자
                   </option>

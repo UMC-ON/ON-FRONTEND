@@ -179,6 +179,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
             color1={color1}
             color2={color2}
             onClick={handleCountryClick}
+            style={{ fontFamily: 'Inter' }}
           >
             {country ? `${country}` : '국가'}
             {!country && <s.Icon src={arrowIcon} />}
