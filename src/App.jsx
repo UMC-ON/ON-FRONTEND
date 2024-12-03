@@ -105,6 +105,8 @@ function App() {
               console.log(res, 'dkdk');
               dispatch(loadUser(res.data, accessToken));
               if (res.data.userStatus == 'TEMPORARY') {
+                //사용자가 임의로 주소 수정해서 들어오면 이쪽으로 안내..
+                //임의로 수정=새로 마운트 되므로 리덕스 유저인포는 없어서 이 로직이 맞음
                 nav('/signUp/credentials');
               }
               requestNotificationPermissionOnce();
