@@ -124,7 +124,7 @@ function App() {
         }
       }
     }
-  }, [location.pathname]);
+  }, [location.pathname, userInfo]);
 
   useEffect(() => {
     if (!userInfo && !excludepaths.includes(location.pathname)) {
