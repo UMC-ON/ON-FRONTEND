@@ -1,48 +1,16 @@
 import { useState, useEffect } from 'react';
 import * as s from './TradeChatInfoStyled';
-import { GET_TRADE_INFO } from '../../api/urls';
-import { getData } from '../../api/Functions';
-import Loading from '../Loading/Loading';
 
-const TradeChatInfo = ({ messageInitiator, roomId }) => {
-  const [infoResult, setInfoResult] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+const TradeChatInfo = ({ messageInitiator, roomId, infoResult }) => {
   const [tradeMethod, setTradeMethod] = useState('');
 
   useEffect(() => {
-    const fetchTradeInfo = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getData(
-          GET_TRADE_INFO(roomId),
-          {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          },
-          { roomId: roomId },
-        );
-
-        if (response) {
-          console.log(response.data);
-          setInfoResult(response.data);
-          if (infoResult.tradeMethod === 'DIRECT') {
-            setTradeMethod('직접 만나서 거래');
-          } else {
-            setTradeMethod('택배 거래');
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTradeInfo();
+    if (infoResult.tradeMethod === 'DIRECT') {
+      setTradeMethod('직접 만나서 거래');
+    } else {
+      setTradeMethod('택배 거래');
+    }
   }, []);
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <s.InfoWrapper>
@@ -67,7 +35,10 @@ const TradeChatInfo = ({ messageInitiator, roomId }) => {
           <s.NoImgProductInfoContainer>
             <s.ProductName>{infoResult.productName}</s.ProductName>
             <s.ProductPrice>&#8361; {infoResult.productPrice}</s.ProductPrice>
-            <s.ProductInfo>{tradeMethod} | 거래완료여부추가필요</s.ProductInfo>
+            <s.ProductInfo>
+              {tradeMethod} |{' '}
+              {infoResult.dealStatus === 'COMPLETE' ? '거래완료' : '거래가능'}
+            </s.ProductInfo>
           </s.NoImgProductInfoContainer>
         )}
 
