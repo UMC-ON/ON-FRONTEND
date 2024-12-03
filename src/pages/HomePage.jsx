@@ -233,8 +233,8 @@ function HomePage() {
   }
 
   const getContinentForCountry = (countryName) => {
-    //console.log('country is ');
-    //console.log(countryName);
+    // console.log('country is ');
+    // console.log(countryName);
     const country = countries.find((c) => c.country === countryName);
     return country.continent;
   };
@@ -559,7 +559,7 @@ const Shadow = styled.div`
 
 const FlexContainer = styled.div`
   margin-top: 1.5rem;
-  margin-left: 1.5rem;
+  margin-left: 1rem;
   margin-right: 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -642,7 +642,7 @@ const BigText = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
-  max-width: 95%;
+  max-width: 90%;
 `;
 
 const MiddleText = styled.div`
