@@ -117,7 +117,6 @@ function App() {
             dispatch(logout());
             alert('로그인이 필요합니다.');
             nav('/signIn');
-            setIsLoading(false);
           }
         };
         try {
@@ -131,9 +130,7 @@ function App() {
 
   useEffect(() => {
     if (!userInfo && !excludepaths.includes(location.pathname)) {
-      localStorage.removeItem('AToken');
-      localStorage.removeItem('RToken');
-      nav('/landing');
+      setIsLoading(true);
     } else if (userInfo && !excludepaths.includes(location.pathname)) {
       console.log('지금 유저인포 등록됨');
       setIsLoading(false);
