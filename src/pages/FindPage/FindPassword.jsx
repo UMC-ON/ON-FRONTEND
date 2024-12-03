@@ -128,11 +128,11 @@ const FindPassword = () => {
                       value=""
                       hidden
                     >
-                      성별을 선택해주세요.
+                      성별을 선택해 주세요.
                     </option>
                     <option
                       value="MALE"
-                      style={{ background: 'white' }}
+                      style={{ background: 'white'}}
                     >
                       남자
                     </option>
