@@ -40,60 +40,95 @@ const ItemList = ({ items }) => {
           },
         });
 
-      // Extract marketPostId from each marketPost object
-      if (Array.isArray(response.data.content)) {
-        const scrappedIds = response.data.content.map(post => post.marketPost.marketPostId);
-        setScrappedMarketPostIds(scrappedIds);
-        console.log(scrappedIds);
-      } else {
-        console.error('Unexpected response structure:', response.data);
+        // Extract marketPostId from each marketPost object
+        if (Array.isArray(response.data.content)) {
+          const scrappedIds = response.data.content.map(
+            (post) => post.marketPost.marketPostId,
+          );
+          setScrappedMarketPostIds(scrappedIds);
+          console.log(scrappedIds);
+        } else {
+          console.error('Unexpected response structure:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching scrapped posts:', error);
       }
-    } catch (error) {
-      console.error('Error fetching scrapped posts:', error);
-    }
-  };
+    };
 
     fetchScrappedPosts();
   }, [userInfo]); // Ensure userInfo is available before making the request
 
   return (
     <>
-      {items && items.map((item, index, lastItemRef) => {
-        const isCompleted = item.dealStatus === "COMPLETE";
-        const isScrapped = scrappedMarketPostIds.includes(item.marketPostId);
+      {items &&
+        items.map((item, index, lastItemRef) => {
+          const isCompleted = item.dealStatus === 'COMPLETE';
+          const isScrapped = scrappedMarketPostIds.includes(item.marketPostId);
 
-        return (
-          <ItemDiv key={index} isCompleted={isCompleted} ref={index === items.length - 1 ? lastItemRef : null}>
-            <Photo src={item.imageUrls.length > 0 ? item.imageUrls : defaultImg} />
-            <Information>
-              <StarContainer
-                marketPostId={item.marketPostId}
-                isFilled={isScrapped} // Pass isScrapped as isFilled prop
-                scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
-                setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
+          return (
+            <ItemDiv
+              key={index}
+              isCompleted={isCompleted}
+              ref={index === items.length - 1 ? lastItemRef : null}
+            >
+              <Photo
+                src={item.imageUrls.length > 0 ? item.imageUrls : defaultImg}
+                onClick={() => navigate(`/sell/${item.marketPostId}`)}
               />
-              <Description onClick={() => navigate(`/sell/${item.marketPostId}`)}>
-                <TitleTimeContainer>
+              <Information>
+                <StarContainer
+                  marketPostId={item.marketPostId}
+                  isFilled={isScrapped} // Pass isScrapped as isFilled prop
+                  scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
+                  setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
+                />
+                <Description
+                  onClick={() => navigate(`/sell/${item.marketPostId}`)}
+                >
                   <Title>{item.title}</Title>
-                  <Time>{showDate(item.createdAt)}</Time>
-                </TitleTimeContainer><br/>
-                <State how={item.dealType === 'DIRECT' ? '직거래' : '택배거래'} now={item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
-                <LocationAndUser>
-                  <Place><img src={compas} />{item.currentCountry} {item.currentLocation}</Place>
-                  <User><Profile src={profile} />{item.nickname}</User>
-                </LocationAndUser>
-                <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
-              </Description>
-            </Information>
-          </ItemDiv>
-        );
-      })}
+                  <br />
+                  <State
+                    how={item.dealType === 'DIRECT' ? '직거래' : '택배거래'}
+                    now={
+                      item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'
+                    }
+                    isCompleted={isCompleted}
+                  />
+                  <LocationAndUser>
+                    <Place>
+                      <img
+                        src={compas}
+                        style={{
+                          width: '14.4px',
+                          height: '14,4px',
+                          marginRight: '3px',
+                        }}
+                      />
+                      {item.currentCountry} {item.currentLocation}
+                    </Place>
+                    <User>
+                      <Profile src={profile} />
+                      {item.nickname}
+                    </User>
+                  </LocationAndUser>
+                  <PriceTimeContainer>
+                    <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
+                    <Time>{showDate(item.createdAt)}</Time>
+                  </PriceTimeContainer>
+                </Description>
+              </Information>
+            </ItemDiv>
+          );
+        })}
     </>
   );
 };
 
-
-const StarContainer = ({ marketPostId, isFilled, setScrappedMarketPostIds }) => {
+const StarContainer = ({
+  marketPostId,
+  isFilled,
+  setScrappedMarketPostIds,
+}) => {
   const [isStarFilled, setIsStarFilled] = useState(isFilled);
   let userInfo = useSelector((state) => state.user.user);
 
@@ -172,17 +207,19 @@ const Star = styled.img`
 `;
 
 const Photo = styled.img`
-  width: 20vh;
-  height: 20vh;
   object-fit: cover;
   object-position: center;
   border-radius: 20px;
   padding: 0;
+  width: 8.5rem;
+  height: 8.5rem;
+  min-width: 8.5rem;
+  max-width: 8.5rem;
 `;
 
 const Information = styled.div`
   padding-top: 5px;
-  padding-left: 10px;
+  padding-left: 8px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -201,17 +238,18 @@ const Title = styled.p`
   white-space: nowrap; /* 줄 바꿈 없이 한 줄로 표시 */
   overflow: hidden; /* 넘치는 텍스트를 숨깁니다 */
   text-overflow: ellipsis; /* 넘치는 텍스트를 '...'으로 표시 */
+  max-width: 160px;
 `;
 
 const Time = styled.span`
   color: #7a7a7a;
-  font-size: 0.7em;
+  font-size: 0.6em;
   margin-left: 8px;
   margin-top: 5px;
 `;
 
-const TitleTimeContainer = styled.div`
-  width: 145px;
+const PriceTimeContainer = styled.div`
+  width: 155px;
   display: flex; /* Flexbox를 사용하여 수평 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
 `;
@@ -255,26 +293,15 @@ const LocationAndUser = styled.div`
 `;
 
 const Place = styled.p`
-  display: inline-block;
-  align-item: center;
-  height: 20px;
-  width: 100%;
   font-size: 0.75em;
+  display: flex;
   align-items: center;
-  margin-right: 10px;
-  margin-top: 5px;
   color: #838383;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis !important;
   text-overflow: ellipsis;
-`;
-
-const Compas = styled.img`
-  width: 1.2em;
-  height: 1.2em;
-  margin-right: 2px;
-  transform: translateY(3px);
+  width: 100%;
+  margin-right: 10px;
 `;
 
 const User = styled.p`

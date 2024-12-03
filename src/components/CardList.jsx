@@ -40,7 +40,7 @@ import img34 from '../assets/images/travelimg/img34.png';
 import img35 from '../assets/images/travelimg/img35.png';
 import img36 from '../assets/images/travelimg/img36.png';
 import img37 from '../assets/images/travelimg/img37.png';
-import { cities } from '../assets/cityDatabase';
+import { cities, countries } from '../assets/cityDatabase';
 
 
 
@@ -351,7 +351,7 @@ const CardList = ({ selectedCountry }) => {
   const [filteredTravels, setFilteredTravels] = useState([]);
 
   const getContinentForCountry = (countryName) => {
-    const country = cities.find(c => c.country === countryName);
+    const country = countries.find(c => c.country === countryName);
     return country ? country.continent : null;
   };
 

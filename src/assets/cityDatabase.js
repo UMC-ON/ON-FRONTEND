@@ -302,7 +302,7 @@ const countries = [
   { id: '010', continent: '아시아', country: '홍콩' },
   { id: '011', continent: '아시아', country: '카자흐스탄' },
   { id: '100', continent: '아프리카', country: '남아프리카공화국' },
-  { id: '201', continent: '북미', country: '캐나다' },
+  { id: '201', continent: '북미', country: '캐나다' }, //city에 없음
   { id: '210', continent: '북미', country: '미국' },
   { id: '300', continent: '남미', country: '브라질' },
   { id: '301', continent: '남미', country: '아르헨티나' },

@@ -108,14 +108,13 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
   useEffect(() => {
     console.log('유저인포');
     console.log(userInfo);
-    if (userInfo) {
-      if (country === null) {
-        fetchData();
-        setIsLoading(false);
-      } else {
-        fetchFilteredData();
-        setIsLoading(false);
-      }
+
+    if (country === null) {
+      fetchData();
+      setIsLoading(false);
+    } else {
+      fetchFilteredData();
+      setIsLoading(false);
     }
   }, [country, userInfo]);
 
@@ -179,11 +178,12 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
             $isCountryClicked={country}
             color1={color1}
             color2={color2}
+            onClick={handleCountryClick}
+            style={{ fontFamily: 'Inter' }}
           >
-            <span onClick={handleCountryClick}>
-              {country ? `${country}` : '국가'}
-              {!country && <s.Icon src={arrowIcon} />}
-            </span>
+            {country ? `${country}` : '국가'}
+            {!country && <s.Icon src={arrowIcon} />}
+
             {country && (
               <s.Icon
                 src={whiteCloseIcon}

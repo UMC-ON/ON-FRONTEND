@@ -9,17 +9,14 @@ const Reply = ({ reply, postWriter_id }) => {
         src={replyImg}
         style={{ width: '0.625rem', height: ' 0.83331rem', flexShrink: '0' }}
       />
-      <ReplyDiv
-        writer={`${reply.writerInfo.id === postWriter_id}`}
-        style={{ margin: '0.44rem 0 ' }}
-      >
+      <ReplyDiv writer={`${reply.writerInfo.id === postWriter_id}`}>
         <div>
           <Writer writer={`${reply.writerInfo.id === postWriter_id}`}>
             {reply.writerInfo.id === postWriter_id
               ? '글쓴이'
               : reply.writerInfo.nickname}
           </Writer>
-          {reply.contents}
+          <Content>{reply.contents}</Content>
         </div>
       </ReplyDiv>
     </div>
@@ -47,15 +44,18 @@ const Writer = styled.div`
 
 const ReplyDiv = styled.div`
   box-sizing: border-box;
-  padding: 10px 19px;
+  padding: 0.75rem 19px;
+  margin: 0.44rem 0 0 0;
   width: 100%;
   height: auto;
-  background: ${(props) =>
-    props.writer === 'true'
-      ? 'linear-gradient(135deg, #d6ebff 0%, #c2c7ff 100%)'
-      : 'rgba(217, 217, 217, 0.40)'};
-  border: 2px transparent;
-  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(214, 235, 255, 0.3) 0%,
+    rgba(194, 199, 255, 0.3) 100%
+  );
+
+  border-radius: 0.625rem;
+  border: 0.5px solid #d9d9d9;
 
   color: #3d3d3d;
   font-family: Inter;
@@ -75,4 +75,18 @@ const ReplyDiv = styled.div`
 const ReplyImg = styled.img`
   opacity: 50%;
   padding: 0.25rem 0.25rem 0 0;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  padding: 0.5rem 0;
+  overflow: hidden;
+  word-break: break-all;
+  color: #5c5c5c;
+  text-overflow: ellipsis;
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;

@@ -15,6 +15,7 @@ export const FormPage = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  font-family: 'Inter';
 `;
 
 export const SectionWrapper = styled.section`
@@ -29,7 +30,7 @@ export const TitleSection = styled.section`
   display: flex;
   flex-direction: column;
   align-items: start;
-
+  font-family: 'Inter';
   & > .on_exp {
     color: black;
     opacity: 64%;
@@ -89,6 +90,7 @@ export const StyledH2 = styled.div`
   font-weight: 600;
   line-height: normal;
   margin: 0.75rem 0;
+  font-family: 'Inter';
 `;
 const grad = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <circle cx="10" cy="10" r="9.5" fill="url(#paint0_linear_424_4500)" stroke="#E7E7E7"/>
@@ -163,6 +165,7 @@ export const InputWrapper = styled.div`
 `;
 
 export const SchoolComboBox = styled.select`
+  font-family: 'Inter';
   appearance: none;
   width: auto;
   border-radius: 0.8rem;
@@ -171,7 +174,7 @@ export const SchoolComboBox = styled.select`
   background: url(${lightBlueArrow}) no-repeat right 0.8rem center #f3f3f3;
   padding: 0.25rem 0.625rem;
   margin: 0.625rem 0;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #979797;
   &::-webkit-scrollbar {
     width: 0.5rem;
@@ -186,18 +189,21 @@ export const Div = styled.div`
   font-size: 1.05rem;
   font-weight: bold;
   margin-bottom: 12px;
+  font-family: 'Inter';
 `;
 
 export const TransparentInput = styled.input`
+  font-family: 'Inter';
   width: 100%;
   color: black;
   height: 2rem;
   margin-top: 0.2rem;
-  background-color: transparent;
+  background-color: rgb(250, 250, 250) !important;
   border: none;
   outline: none;
   padding: 0 0.06rem;
   font-size: 1rem;
+  border-radius: 5px;
 
   &:invalid {
     background-color: #ffc0cb91;
@@ -211,6 +217,13 @@ export const TransparentInput = styled.input`
     -webkit-appearance: none;
     margin: 0;
   }
+  
+  &:-webkit-autofill {
+    appearance: none !important; 
+    background-image: none !important;
+    background-color: rgb(250, 250, 250) !important;
+    color: black !important;
+    font-family: 'Inter' !important;
 `;
 
 export const GrayButton = styled.button`
@@ -236,13 +249,19 @@ export const GrayButton = styled.button`
 
 export const Explanation = styled.div`
   color: #5c5c5c;
-  font-family: 'Baloo Bhaina 2';
-  font-size: 13px;
+  font-size: 13.5px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px; /* 153.846% */
   text-align: justify;
+  font-family: 'Inter';
 `;
+
+export const AuthExplanation = styled(Explanation)`
+  font-size: 15px;
+  font-family: 'Inter';
+`;
+
 export const TwoColumnWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
@@ -268,6 +287,7 @@ export const StyledComboBox = styled.select`
   appearance: none;
   background: url(${grayArrow}) no-repeat right;
   border-bottom: 1px solid #b0b0b0;
+  font-family: 'Inter';
 `;
 
 export const CenterContainer = styled.div`

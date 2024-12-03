@@ -120,7 +120,7 @@ function AccompanyDetailPage() {
 
   const applyData = async () => {
     try {
-      console.log("userId: ");
+      console.log('userId: ');
       console.log(infoData[0].userId);
       // console.log(typeof infoData[0].userId);
       // console.log("postId: ");
@@ -149,7 +149,7 @@ function AccompanyDetailPage() {
         // console.log(response2.data);
 
         const roomId = response.data.roomId;
-        console.log("roomId: ");
+        console.log('roomId: ');
         console.log(response.data);
         const senderName = infoData[0].nickname;
         console.log('Application successful:', roomId);
@@ -357,7 +357,7 @@ function AccompanyDetailPage() {
               <LeftContainer>
                 <MiddleText
                   color="#3E73B2"
-                  spacing="1vh"
+                  spacing="0.5rem"
                 >
                   비슷한
                 </MiddleText>
@@ -421,13 +421,13 @@ const LittleSpace = styled.div`
 
 const BlueContainer = styled.div`
   margin: 0 auto;
-  margin-top: 13vh;
+  margin-top: 6.5rem;
   background: rgb(110, 186, 255, 0.2);
   border-radius: 10px;
   padding: 15px;
   width: 83%;
   border: 1px solid #dfdfdf;
-  margin-bottom: 2vh;
+  margin-bottom: 1rem;
 `;
 
 const Left = styled.div`
@@ -449,11 +449,11 @@ const SmallIcon = styled.img`
 `;
 
 const Space = styled.div`
-  margin-top: 7vh;
+  margin-top: 3.5rem;
 `;
 
 const BigSpace = styled.div`
-  margin-top: 15vh;
+  margin-top: 7.5rem;
 `;
 
 const BannerContainer = styled.div`
@@ -491,16 +491,6 @@ const ProfileTextContainer = styled.div`
   align-items: center;
 `;
 
-const ProfileImg = styled.img`
-  border-radius: 100px;
-  width: 12vh;
-  height: 12vh;
-  object-fit: cover;
-  object-position: center;
-  // border: 1px solid #D9D9D9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
-`;
-
 const TextContainer = styled.div`
   margin-left: 1em;
   margin-top: 1.5em;
@@ -513,7 +503,7 @@ const BigText = styled.p`
   font-size: ${(props) => props.$size || '1.5em'};
   font-weight: bold;
   text-align: left;
-  line-height: 3vh;
+  line-height: 1.5rem;
   max-width: 180px;
 
   word-wrap: break-word;
@@ -528,7 +518,7 @@ const TitleText = styled.p`
   font-size: ${(props) => props.$size || '1.5em'};
   font-weight: bold;
   text-align: left;
-  line-height: 3vh;
+  line-height: 1.5rem;
 `;
 
 const GreyText = styled.p`
@@ -540,12 +530,13 @@ const GreyText = styled.p`
 
 const BodyText = styled.p`
   color: black;
-  line-height: 2.5vh;
+  line-height: 1.3rem;
   margin: 0 auto;
   width: 80%;
   text-align: left;
   font-size: 0.9em;
-  margin-bottom: 5vh;
+  margin-bottom: 2rem;
+  white-space: pre-line;
 `;
 
 const PurpleContainer = styled.div`
@@ -553,7 +544,7 @@ const PurpleContainer = styled.div`
   background-color: #f8fcfc;
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #d9d9d9;
-  margin-bottom: 1vh;
+  margin-bottom: 0.5rem;
   background: rgb(194, 199, 255, 0.2);
 `;
 
@@ -588,15 +579,23 @@ const LittleButton = styled.button`
   color: #7a7a7a;
   margin-left: 25px;
   background: rgb(110, 186, 255, 0);
-  margin-bottom: 1vh;
-  margin-top: 3.5vh;
+  margin-bottom: 0.5rem;
+  margin-top: 1.75rem;
+
+  &:hover {
+    outline: none; /* hover 상태에서도 outline 제거 */
+  }
+
+  &:focus {
+    outline: none; /* focus 상태에서 outline 제거 */
+  }
 `;
 
 const Line = styled.div`
   border-top: 1px solid #d9d9d9;
   width: 25%;
   margin-left: 30px;
-  margin-bottom: 5vh;
+  margin-bottom: 2.5rem;
 `;
 
 const BigContainer = styled.div`

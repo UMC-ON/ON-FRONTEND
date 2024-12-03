@@ -3,23 +3,23 @@ import React, { useState, useEffect } from 'react';
 
 import PageHeader from '../components/PageHeader/PageHeader';
 import DotInslideSlider from '../components/DotInsideSlider';
-import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
+//import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 
 import bannerImg from '../assets/images/adBanner.svg';
-import detailImg from '../assets/images/accompany_img.svg';
+//import detailImg from '../assets/images/accompany_img.svg';
 import arrowIcon from '../assets/images/bottomArrow.svg';
-import searchIcon from '../assets/images/searchIcon.svg';
+//import searchIcon from '../assets/images/searchIcon.svg';
 import AccompanyList from '../components/AccompanyList';
-import marketImg from '../assets/images/borough_market.svg';
+//import marketImg from '../assets/images/borough_market.svg';
 import pencilImg from '../assets/images/pencil.svg';
-import closeIcon from '../assets/images/close_button.svg';
+//import closeIcon from '../assets/images/close_button.svg';
 import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 import resetIcon from '../assets/images/resetIcon.svg';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 
-import Modal from '../components/Modal/Modal.jsx';
+//import Modal from '../components/Modal/Modal.jsx';
 import SecondModal from './SecondModal.jsx';
 
 const images = [bannerImg, bannerImg, bannerImg, bannerImg, bannerImg];
@@ -222,11 +222,11 @@ const FlexContainer = styled.div`
 `;
 
 const Icon = styled.img`
-    width: ${props => props.size || '10px'};
-    height: ${props => props.size || '10px'};
-    padding-left: 3px;
-    padding-right: ${props => props.$right || '0'};
-    cursor:pointer;
+  width: ${(props) => props.size || '10px'};
+  height: ${(props) => props.size || '10px'};
+  padding-left: 3px;
+  padding-right: ${(props) => props.$right || '0'};
+  cursor: pointer;
 `;
 
 const RoundContainer = styled.div`
@@ -249,21 +249,27 @@ const GreyPicker = styled.div`
   padding-left: 8px;
   padding-right: 8px;
   margin-right: 8px;
-  color: ${props => props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked ? '#FFFFFF' : '#363636'};
-  background: ${props => props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked ?  'linear-gradient(135deg, #C2C7FF, #AD99FF);' : ''};
-  cursor:pointer;
+  color: ${(props) =>
+    props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked
+      ? '#FFFFFF'
+      : '#363636'};
+  background: ${(props) =>
+    props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked
+      ? 'linear-gradient(135deg, #C2C7FF, #AD99FF);'
+      : ''};
+  cursor: pointer;
 `;
 
 const SmallSpace = styled.div`
-  margin-top: 3vh;
+  margin-top: 1.5rem;
 `;
 
 const Space = styled.div`
-  margin-top: 5vh;
+  margin-top: 3.8rem;
 `;
 
 const BigSpace = styled.div`
-  margin-top: 15vh;
+  margin-top: 7.5rem;
 `;
 
 const WriteButton = styled.button`
@@ -272,7 +278,7 @@ const WriteButton = styled.button`
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 120px;
+  bottom: 110px;
 
   border-radius: 55px;
   border: 1px solid #cccccc;

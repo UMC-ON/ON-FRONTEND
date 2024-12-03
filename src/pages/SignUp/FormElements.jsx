@@ -2,7 +2,6 @@ import * as s from './SignUpStyled';
 import styled from 'styled-components';
 import validImg from '../../assets/images/validNickName.svg';
 import { useRef, useState, useEffect } from 'react';
-import { SignUpValidCheck } from './SignUpValidCheck';
 export const TermForm = ({ setActive }) => {
   return (
     <>
@@ -212,7 +211,7 @@ export const UserInfoForm1 = ({
   verifyCode,
   setVerifyCode,
 }) => {
-  const pw = useRef(state.password);
+  const passwordSet = useRef({ pw: state.password, pw_check: '' });
   const id = useRef(state.loginId);
   const code = useRef();
 
@@ -220,18 +219,22 @@ export const UserInfoForm1 = ({
     register,
     formState: { errors, isValid },
     watch,
+    setError,
+    clearErrors,
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
-    //if(verifyCode.verified)
-    //인증코드 put 제대로 작동하면 추가
-    setActive(isValid);
+    if (verifyCode.verified) {
+      setActive(isValid);
+    } else {
+      setActive(false);
+    }
   }, [isValid, verifyCode.verified]);
 
   return (
     <>
       <s.InputWrapper>
-        <s.Div>아이디</s.Div>
+        <s.Div>이메일</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"
@@ -276,11 +279,11 @@ export const UserInfoForm1 = ({
             onClick={async (e) => {
               e.preventDefault();
               const res = await postData(SEND_VERIFICATION_CODE, id.current, {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain',
               });
               if (res.status == 200) {
                 alert('메일로 인증번호가 발송되었습니다.');
-                setVerifyCode({ ...verifyCode, isSent: true });
+                setVerifyCode({ ...verifyCode, isSent: true, verified: false });
               }
             }}
           >
@@ -288,8 +291,8 @@ export const UserInfoForm1 = ({
           </s.GrayButton>
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.loginId && <small role="alert">{errors.loginId.message}</small>}
+      <s.Explanation role="alert">
+        {errors.loginId && errors.loginId.message}
       </s.Explanation>
       {dupCheck.loginId === 1 && (
         <s.Explanation>사용할 수 있는 아이디입니다.</s.Explanation>
@@ -298,41 +301,66 @@ export const UserInfoForm1 = ({
         <s.Explanation>이미 존재하는 아이디입니다.</s.Explanation>
       )}
       <s.InputWrapper>
-        <div>인증 코드</div>
+        <s.Div>인증 코드</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"
-            name="code"
+            name="signUpAuthNum"
+            defaultValue={verifyCode.verifyCodeContent}
             aria-invalid={errors.code ? 'true' : 'false'}
-            {...register('code', {
-              //disabled: !verifyCode.isSent,
-              required: '인증코드를 입력해주세요.',
+            {...register('signUpAuthNum', {
               onChange: (e) => {
                 code.current = e.target.value;
+                setVerifyCode({
+                  ...verifyCode,
+                  verified: false,
+                  verifyCodeContent: code.current,
+                });
+
+                updateUserInfo(e);
               },
+              required: '인증번호를 입력해주세요.',
             })}
           />
-          {/* {!errors.code && <img src={validImg} />} */}
-          <s.GrayButton
-            disabled={!verifyCode.isSent}
-            onClick={async (e) => {
-              e.preventDefault();
-              const data = {
-                loginId: id.current,
-                authNum: parseInt(code.current),
-              };
-              const formData = JSON.stringify(data);
-              console.log(formData);
-              const res = await putData(VERIFY_CODE, formData);
-              console.log(res);
-            }}
-          >
-            인증하기
-          </s.GrayButton>
+
+          {verifyCode.verified ? (
+            <img src={validImg} />
+          ) : (
+            <s.GrayButton
+              disabled={!verifyCode.isSent}
+              onClick={async (e) => {
+                e.preventDefault();
+                const data = {
+                  loginId: id.current,
+                  authNum: parseInt(code.current),
+                };
+                const formData = JSON.stringify(data);
+                console.log('F.formData:', formData);
+                try {
+                  const res = await putData(VERIFY_CODE, formData);
+                  if (res) {
+                    if (code.current && res.data) {
+                      setVerifyCode({ ...verifyCode, verified: true });
+                    } else if (res.data == false) {
+                      alert('인증번호가 일치하지 않습니다.');
+                    }
+                  }
+                } catch (error) {
+                  if (error.response.status == Number(401)) {
+                    alert(
+                      '인증번호가 만료되었습니다. 인증번호를 다시 요청해주세요.',
+                    );
+                  }
+                }
+              }}
+            >
+              인증하기
+            </s.GrayButton>
+          )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
       <s.InputWrapper>
-        <div>비밀번호</div>
+        <s.Div>비밀번호</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="password"
@@ -342,7 +370,14 @@ export const UserInfoForm1 = ({
             {...register('password', {
               onChange: (e) => {
                 updateUserInfo(e);
-                pw.current = e.target.value;
+                passwordSet.current.pw = e.target.value;
+                if (passwordSet.current.pw != passwordSet.current.pw_check) {
+                  setError('password_check', {
+                    message: '비밀번호가 일치하지 않습니다.',
+                  });
+                } else {
+                  clearErrors('password_check');
+                }
               },
               required: '비밀번호를 입력해주세요.',
               pattern: {
@@ -360,16 +395,14 @@ export const UserInfoForm1 = ({
               },
             })}
           />
-          {pw.current && !errors.password && <img src={validImg} />}
+          {passwordSet.current.pw && !errors.password && <img src={validImg} />}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.password && (
-          <small role="alert">{errors.password.message}</small>
-        )}
+      <s.Explanation role="alert">
+        {errors.password && errors.password.message}
       </s.Explanation>
       <s.InputWrapper>
-        <div>비밀번호 확인</div>
+        <s.Div>비밀번호 확인</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="password"
@@ -378,10 +411,18 @@ export const UserInfoForm1 = ({
             {...register('password_check', {
               required: '비밀번호를 확인해주세요.',
               validate: (value) => {
-                console.log(value == pw.current);
-                return value == pw.current
+                console.log(value == passwordSet.current.pw);
+                return value == passwordSet.current.pw
                   ? true
                   : '비밀번호가 일치하지 않습니다';
+              },
+              onChange: (e) => {
+                passwordSet.current.pw_check = e.target.value;
+                if (passwordSet.current.pw_check !== passwordSet.current.pw) {
+                  setError('password_check', {
+                    message: '비밀번호가 일치하지 않습니다.',
+                  });
+                }
               },
             })}
           />
@@ -390,10 +431,8 @@ export const UserInfoForm1 = ({
           )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.password_check && (
-          <small role="alert">{errors.password_check.message}</small>
-        )}
+      <s.Explanation role="alert">
+        {errors.password_check && errors.password_check.message}
       </s.Explanation>
     </>
   );
@@ -420,8 +459,6 @@ export const UserInfoForm2 = ({
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
-    //if(verifyCode.verified)
-    //인증코드 put 제대로 작동하면 추가
     if (dupCheck.nickname == 1) {
       setActive(isValid);
     } else {
@@ -450,52 +487,33 @@ export const UserInfoForm2 = ({
           })}
         />
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.name && <small role="alert">{errors.name.message}</small>}
+      <s.Explanation role="alert">
+        {errors.name && errors.name.message}
       </s.Explanation>
 
       <s.TwoColumnWrapper>
         <div>
           <s.InputWrapper>
-            <s.Div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              나이
-              <s.Explanation
-                style={{
-                  display: 'inline-block',
-                  fontSize: '0.8rem',
-                  lineHeight: 'normal',
-                  marginLeft: '5px',
-                }}
-              >
-                *만나이 기준
-              </s.Explanation>
-            </s.Div>
+            <s.Div>생년월일</s.Div>
             <s.TransparentInput
-              type="number"
-              placeholder="숫자만 입력"
-              inputMode="numeric"
-              onChange={updateUserInfo}
-              pattern="[0-9]"
-              name="age"
-              defaultValue={state.age}
-              aria-invalid={errors.age ? 'true' : 'false'}
-              {...register('age', {
-                required: '나이는 필수입니다.',
+              type="date"
+              name="birth"
+              placeholder="생년월일을 입력하세요."
+              defaultValue={state.birth} // 기존 데이터가 있다면 불러오기
+              aria-invalid={errors.birth ? 'true' : 'false'}
+              {...register('birth', {
+                required: '생년월일은 필수입니다.',
                 onChange: (e) => {
-                  updateUserInfo(e);
+                  updateUserInfo(e); // 상태 업데이트
+                },
+                validate: (value) => {
+                  // 선택된 날짜가 유효한 날짜인지 추가 검증
+                  const isValidDate = !isNaN(new Date(value).getTime());
+                  return isValidDate || '유효한 날짜를 입력해주세요.';
                 },
               })}
             />
           </s.InputWrapper>
-          <s.Explanation>
-            {errors.age && <small role="alert">{errors.age.message}</small>}
-          </s.Explanation>
         </div>
 
         <EmptyDiv></EmptyDiv>
@@ -562,8 +580,8 @@ export const UserInfoForm2 = ({
           })}
         />
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.phone && <small role="alert">{errors.phone.message}</small>}
+      <s.Explanation role="alert">
+        {errors.phone && errors.phone.message}
       </s.Explanation>
       <s.InputWrapper>
         <s.Div>닉네임</s.Div>
@@ -649,12 +667,12 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
   const [isConfirmed, setIsConfirmed] = useState(true);
 
   const onClickDsptchNotConfirmed = (e) => {
-    if (e.target.value) {
-      state.dispatchedUniversity = '';
-      state.universityUrl = '';
-      state.country = '';
-      state.dispatchedType = '';
-    }
+    // if (e.target.value) {
+    //   state.dispatchedUniversity = '';
+    //   state.universityUrl = '';
+    //   state.country = '';
+    //   state.dispatchedType = '';
+    // }
     setIsConfirmed(!e.target.value);
     updateUserInfo({
       target: { name: e.target.name, value: !e.target.value }, //state는 비동기적이라 바로 적용안됨
@@ -668,7 +686,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       setIsConfirmed(false);
       setActive(true);
     } else {
-      if (state.dispatchedUniversity && state.country) {
+      if (state.dispatchedUniversity && state.country && state.dispatchType) {
         setActive(true);
       } else {
         setActive(false);
@@ -697,15 +715,14 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       </s.InputWrapper>
       <DefaultCheckBox
         wrapperStyle={{
-          paddingTop: '12px',
+          paddingTop: '30px',
           color: isConfirmed ? '' : 'black',
         }}
         after="교환/방문교 미정"
         checkBoxStyle={{
           border: '0.5px solid #C6C6C6',
-          width: '11px',
-          height: '11px',
-          borderRadius: '3px',
+          width: '13px',
+          height: '13px',
         }}
         onChange={onClickDsptchNotConfirmed}
         name="isDispatchConfirmed"
@@ -722,7 +739,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           defaultValue={state.universityUrl}
         />
       </s.InputWrapper>
-      <s.Explanation style={{ fontSize: '9px' }}>
+      <s.Explanation style={{ marginTop: '5px', fontSize: '0.83rem' }}>
         사이트 주소는 가입 이후 마이페이지에서 수정하실 수 있습니다.
       </s.Explanation>
 
@@ -743,6 +760,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           <option
             value=""
             hidden
+            style={{ fontSize: '0.9rem' }}
           >
             국가
           </option>

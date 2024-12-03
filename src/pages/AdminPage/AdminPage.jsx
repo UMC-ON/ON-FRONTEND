@@ -42,7 +42,7 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
-    if (user.userStatus !== 'ADMIN') {
+    if (user?.userStatus !== 'ADMIN') {
       setIsLoading(true);
       alert('관리자만 열람할 수 있습니다.');
       nav('/');
@@ -66,7 +66,7 @@ const AdminPage = () => {
       fetchData();
       setIsLoading(false);
     }
-  }, [permitStatus]);
+  }, [permitStatus, user]);
   if (isLoading) {
     return <Loading />;
   }

@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { useNavigate } from 'react-router-dom';
-import Slider from 'react-slick';
+//import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import CardList from '../components/CardList';
+import CommunityHomeList from '../components/CommunityHomeList';
 
 // import schoolIcon from '../assets/images/new_school_icon.svg';
 // import migrationIcon from '../assets/images/new_immigration_icon.svg';
@@ -13,10 +14,10 @@ import CardList from '../components/CardList';
 // import informationIcon from '../assets/images/new_info_icon.svg';
 // import writeIcon from '../assets/images/new_free_icon.svg';
 // import diaryIcon from '../assets/images/new_diary_icon.svg';
-import bannerimg from '../assets/images/home_banner.svg';
-import londonImg from '../assets/images/london_gallery.svg';
+//import bannerimg from '../assets/images/home_banner.svg';
+//import londonImg from '../assets/images/london_gallery.svg';
 import rightIcon from '../assets/images/right_arrow.svg';
-import marketImg from '../assets/images/borough_market.svg';
+//import marketImg from '../assets/images/borough_market.svg';
 import sliderImage from '../assets/images/slider_image.svg';
 
 const diaryIconData = `<svg width="91" height="186" viewBox="0 0 91 186" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -129,9 +130,9 @@ const encodedWriteIcon = encodeURIComponent(writeIconData)
 
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 import NavBar from '../components/NavBar/NavBar';
-import screenshotImg from '../assets/images/screenshot.svg';
+//import screenshotImg from '../assets/images/screenshot.svg';
 import CardAccompanyList from '../components/CardAccompanyList';
-import CommunityCardList from '../components/CommunityCardList';
+//import CommunityCardList from '../components/CommunityCardList';
 import { immigration } from '../assets/immigrationDatabase';
 import Loading from '../components/Loading/Loading';
 
@@ -139,7 +140,7 @@ import { getData } from '../api/Functions';
 import {
   GET_USER_INFO,
   GET_TWO_FREEPOST,
-  GET_TWO_INFOPOST,
+  GET_RECENT_POST_OF,
   GET_NEAR_ACCOMPANY,
 } from '../api/urls';
 
@@ -150,7 +151,7 @@ const images = [
   sliderImage,
   sliderImage,
 ];
-import { cities } from '../assets/cityDatabase';
+import { cities, countries } from '../assets/cityDatabase';
 
 function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -208,6 +209,8 @@ function HomePage() {
   function goToCollege() {
     if (univLink != '') {
       window.location.href = univLink;
+    } else {
+      alert('파견교를 인증해주세요.');
     }
   }
 
@@ -230,7 +233,9 @@ function HomePage() {
   }
 
   const getContinentForCountry = (countryName) => {
-    const country = cities.find((c) => c.country === countryName);
+    console.log('country is ');
+    console.log(countryName);
+    const country = countries.find((c) => c.country === countryName);
     return country.continent;
   };
 
@@ -256,14 +261,14 @@ function HomePage() {
           getSiteByCountry(user_data.data.country);
         }
 
-        const info_data = await getData(GET_TWO_INFOPOST, {
+        const info_data = await getData(GET_RECENT_POST_OF('INFO'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setInfoData(info_data.data);
         console.log('infoData');
         console.log(info_data.data);
 
-        const free_data = await getData(GET_TWO_FREEPOST, {
+        const free_data = await getData(GET_RECENT_POST_OF('FREE'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setFreeData(free_data.data);
@@ -326,23 +331,29 @@ function HomePage() {
       <NavBar></NavBar>
       <Space></Space>
       <BigContainer>
-        {userData.map((card, index) => (
-          <div key={index}>
-            <LeftContainer>
-              <SubText>나의 파견교</SubText>
-            </LeftContainer>
-            {card.country ? (
+        {userData &&
+          userData.map((card, index) => (
+            <div key={index}>
               <LeftContainer>
-                <BigText spacing="1vh">{card.country},</BigText>
-                <BigText color="#3E73B2">{card.dispatchedUniversity}</BigText>
+                <SubText>나의 파견교</SubText>
               </LeftContainer>
-            ) : (
-              <LeftContainer>
-                <BigText spacing="1vh">학교가 인증되지 않았어요.</BigText>
-              </LeftContainer>
-            )}
-          </div>
-        ))}
+              {card.country ? (
+                <LeftContainer>
+                  <BigText spacing="1vh">{card.country},</BigText>
+                  <BigText color="#3E73B2">{card.dispatchedUniversity}</BigText>
+                </LeftContainer>
+              ) : (
+                <LeftContainer>
+                  <BigText
+                    spacing="1vh"
+                    color="#3E73B2"
+                  >
+                    학교가 인증되지 않았어요
+                  </BigText>
+                </LeftContainer>
+              )}
+            </div>
+          ))}
 
         {userData.map((card, index) => (
           <Container key={index}>
@@ -479,7 +490,13 @@ function HomePage() {
       </FlexContainer>
       <SmallSpace2 />
 
-      <CommunityCardList cards={infoData} />
+      <Shadow>
+        <CommunityHomeList
+          bgcolor="rgba(191, 216, 229, 0.3)"
+          datas={infoData}
+          type={'info'}
+        />
+      </Shadow>
 
       <Space></Space>
       <Space></Space>
@@ -491,16 +508,19 @@ function HomePage() {
 
       <SmallSpace2 />
 
-      <CommunityCardList
-        free={true}
-        cards={freeData}
-      />
+      <Shadow>
+        <CommunityHomeList
+          bgcolor="rgba(203, 205, 233, 0.3)"
+          datas={freeData}
+          type={'free'}
+        />
+      </Shadow>
 
       <Space></Space>
       <Space></Space>
 
       <FlexContainer onClick={goToAccompany}>
-        <BigText spacing="1vh" >내 주변 동행글</BigText>
+        <BigText spacing="1vh">내 주변 동행글</BigText>
         <RightIcon src={rightIcon} />
       </FlexContainer>
       <SmallSpace />
@@ -531,6 +551,12 @@ function HomePage() {
 
 export default HomePage;
 
+const Shadow = styled.div`
+  filter: drop-shadow(10px 10px 10px rgba(62, 115, 178, 0.15));
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+`;
+
 const FlexContainer = styled.div`
   margin-top: 1.5rem;
   margin-left: 1.5rem;
@@ -540,7 +566,7 @@ const FlexContainer = styled.div`
   align-items: center;
   padding: 10px;
   padding-bottom: 0px;
-  cursor:pointer;
+  cursor: pointer;
 `;
 
 const FixContainer = styled.div`
@@ -609,9 +635,14 @@ const BigText = styled.div`
   margin-right: ${(props) => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter';
-  font-size: 1.5em;
-  margin-bottom: 1vh;
+  font-size: ${(props) => props.size || '1.35em'};
+  margin-bottom: 0.9vh;
   flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 95%;
 `;
 
 const MiddleText = styled.div`

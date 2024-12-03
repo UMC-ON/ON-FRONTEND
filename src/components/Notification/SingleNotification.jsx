@@ -42,7 +42,15 @@ const SingleNotification = ({
       navigate(`/community/general/detail/${alertConnectId}`, {
         state: { value: alertConnectId },
       });
-    } //추가 필요
+    } else if (alertType === 'COMPANY_CHAT') {
+      navigate(`/chat/accompany/${alertConnectId}`, {
+        state: { roomId: alertConnectId, senderName: title },
+      });
+    } else if (alertType === 'MARKET_CHAT') {
+      navigate(`/chat/trade/${alertConnectId}`, {
+        state: { roomId: alertConnectId, senderName: title },
+      });
+    }
   };
   if (read == true) {
     return (

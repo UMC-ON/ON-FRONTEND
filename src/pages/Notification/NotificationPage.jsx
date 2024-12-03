@@ -55,7 +55,7 @@ const Notification = () => {
       <PageHeader pageName="알림" />
       <s.NotificationWrapper>
         {isEmpty ? (
-          <NoContent content="알림 내역이 없습니다." />
+          <NoContent content="알림 내역" />
         ) : (
           data?.pages.map((page, i) =>
             page.map((data) => (
@@ -72,7 +72,9 @@ const Notification = () => {
           )
         )}
         {isFetchingNextPage && <Loading />}
-        <s.NotificationEnd>알람 내역의 마지막입니다.</s.NotificationEnd>
+        {!isEmpty ? (
+          <s.NotificationEnd>알람 내역의 마지막이에요</s.NotificationEnd>
+        ) : null}
       </s.NotificationWrapper>
     </s.NotificationLayout>
   );
