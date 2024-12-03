@@ -7,13 +7,12 @@ import DailyDiary from '../../components/DailyDiary';
 import DDayCalendar from '../../components/DDayCalendar.jsx';
 import DailyDiaryCalendar from '../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx';
 import DiaryAlertModal from '../../components/DiaryAlertModal.jsx';
-
 import styled from 'styled-components';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
+//import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DiaryPage.css';
-import ko from 'date-fns/locale/ko';
+//import ko from 'date-fns/locale/ko';
 import closeIcon from '../../assets/images/close_button.svg';
 import plus_button from '../../assets/images/addButton.svg';
 import { getData, postData } from '../../api/Functions';

@@ -56,7 +56,7 @@ function ItemDetailPage() {
 
   const openChatModal = () => {
     if (userInfo.country != null) {
-      console.log('First modal opened');
+      //console.log('First modal opened');
       setIsChatModalOpen(true);
     } else {
       setIsSecondModalOpen(true);
@@ -64,17 +64,17 @@ function ItemDetailPage() {
   };
 
   const closeChatModal = () => {
-    console.log('First modal closed');
+    //console.log('First modal closed');
     setIsChatModalOpen(false);
   };
 
   const openSecondModal = () => {
-    console.log('Second modal opened');
+    //console.log('Second modal opened');
     setIsSecondModalOpen(true);
   };
 
   const closeSecondModal = () => {
-    console.log('Second modal closed');
+    //console.log('Second modal closed');
     setIsSecondModalOpen(false);
   };
 
@@ -109,16 +109,16 @@ function ItemDetailPage() {
       );
 
       if (response) {
-        console.log(response.data);
+        //console.log(response.data);
         const roomId = response.data.roomId;
         const senderName = userInfo.nickname;
-        console.log('Application successful:', roomId);
+        //console.log('Application successful:', roomId);
         navigate(`/chat/trade/${roomId}`, { state: { roomId, senderName } });
       } else {
-        console.error('Application failed');
+        //console.error('Application failed');
       }
     } catch (error) {
-      console.error('Error applying for market chat:', error);
+      //console.error('Error applying for market chat:', error);
     }
   };
 
@@ -131,10 +131,10 @@ function ItemDetailPage() {
         if (response) {
           setItems([response.data]);
           setReceiverId(response.data.userId);
-          console.log(response.data);
+          //console.log(response.data);
         }
       } catch (error) {
-        console.error('물품 상세 페이지 정보를 불러오는 중 오류 발생:', error);
+        //console.error('물품 상세 페이지 정보를 불러오는 중 오류 발생:', error);
       }
     };
 
@@ -149,10 +149,10 @@ function ItemDetailPage() {
         });
         if (response) {
           setNearitems(response.data);
-          console.log(response.data);
+          //console.log(response.data);
         }
       } catch (error) {
-        console.error('근처 물품 정보를 불러오는 중 오류 발생:', error);
+        //console.error('근처 물품 정보를 불러오는 중 오류 발생:', error);
       }
     };
 
@@ -168,7 +168,7 @@ function ItemDetailPage() {
   // const handleChatButtonClick = async () => {
   //   closeChatModal();
   //   if (!receiverId || !marketPostId) {
-  //     console.error('Receiver ID or Market Post ID is missing.');
+  //     //console.error('Receiver ID or Market Post ID is missing.');
   //     return;
   //   }
 
@@ -191,10 +191,10 @@ function ItemDetailPage() {
   //       setRoomId(roomId);
   //       navigate(`/chat/trade/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
   //     } else {
-  //       console.error('Failed to create chat room:', response?.data?.message);
+  //       //console.error('Failed to create chat room:', response?.data?.message);
   //     }
   //   } catch (error) {
-  //     console.error('Error sending chat request:', error);
+  //     //console.error('Error sending chat request:', error);
   //   }
   // };
 

@@ -15,74 +15,80 @@ import { getData } from '../api/Functions';
 import { GET_SCRAP } from '../api/urls';
 
 function ScrapList() {
-    const [items, setItems] = useState([]);
-    const [page, setPage] = useState(0);
+  const [items, setItems] = useState([]);
+  const [page, setPage] = useState(0);
 
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          params: {
+            page: page,
+            size: 5,
+            sort: 'DESC',
+          },
+        });
 
-    useEffect(() => {
-      const fetchItems = async () => {
-        try {
-          const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-            },
-            params: {
-              page: page, size: 5, sort: 'DESC'
-            }
-            
-          });
-    
-          // 응답 데이터 확인
-          console.log("API response:", response.data);
-    
-          if (page === 0) {
-            setItems(response.data.content);
-          } else {
-            setItems(prevItems => [...prevItems, ...response.data.content]);
-          }
-        } catch (error) {
-          console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
+        // 응답 데이터 확인
+        //console.log("API response:", response.data);
+
+        if (page === 0) {
+          setItems(response.data.content);
+        } else {
+          setItems((prevItems) => [...prevItems, ...response.data.content]);
         }
-      };
-    
-      fetchItems();
-    }, [page]);
-
-    const handleScroll = useCallback(() => {
-      const scrolledToBottom = 
-          window.innerHeight + document.documentElement.scrollTop 
-          >= document.documentElement.offsetHeight - 10;
-
-      if (scrolledToBottom) {
-          setPage(prevPage => prevPage + 1);
+      } catch (error) {
+        //console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
       }
+    };
+
+    fetchItems();
+  }, [page]);
+
+  const handleScroll = useCallback(() => {
+    const scrolledToBottom =
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 10;
+
+    if (scrolledToBottom) {
+      setPage((prevPage) => prevPage + 1);
+    }
   }, []);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-}, [handleScroll]);
-    
-    return (
-        <>
-          <PageHeader pageName={'스크랩한 물품'} />
-            <Space /><br /><br />
-            {items.length === 0 ? (
-                <NoContentWrapper>
-                    <NoContentContainer>
-                        <NoContentImage src={nothing} alt="No content" />
-                    </NoContentContainer><br /><br />
-                    <NoContentMessage>앗, 스크랩한 내역이 없어요!</NoContentMessage>
-                </NoContentWrapper>
-            ) : (
-                <>
-                    <ScrapListComponent items={items} />
-                    <LastItemMessage>마지막 물품입니다.</LastItemMessage>
-                </>
-            )}
+  }, [handleScroll]);
 
+  return (
+    <>
+      <PageHeader pageName={'스크랩한 물품'} />
+      <Space />
+      <br />
+      <br />
+      {items.length === 0 ? (
+        <NoContentWrapper>
+          <NoContentContainer>
+            <NoContentImage
+              src={nothing}
+              alt="No content"
+            />
+          </NoContentContainer>
+          <br />
+          <br />
+          <NoContentMessage>앗, 스크랩한 내역이 없어요!</NoContentMessage>
+        </NoContentWrapper>
+      ) : (
+        <>
+          <ScrapListComponent items={items} />
+          <LastItemMessage>마지막 물품입니다.</LastItemMessage>
         </>
-    );
+      )}
+    </>
+  );
 }
 
 export default ScrapList;

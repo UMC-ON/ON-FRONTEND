@@ -22,7 +22,7 @@ const TradeChatInfo = ({ messageInitiator, roomId }) => {
         );
 
         if (response) {
-          console.log(response.data);
+          //console.log(response.data);
           setInfoResult(response.data);
           if (infoResult.tradeMethod === 'DIRECT') {
             setTradeMethod('직접 만나서 거래');
@@ -31,7 +31,7 @@ const TradeChatInfo = ({ messageInitiator, roomId }) => {
           }
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }

@@ -4,16 +4,16 @@ import { useState } from 'react';
 
 const RequestItem = ({ userInfo, photoURL, requestDate }) => {
   const changePermitStatus = async (status) => {
-    console.log(status);
+    //console.log(status);
     const url = `/api/v1/dispatch-certify/change-status/${userInfo.id}`;
     const response = await putData(url, status, {
       Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
     });
     if (response) {
-      console.log(response);
+      //console.log(response);
     }
   };
-  console.log(requestDate);
+  //console.log(requestDate);
   const [imgURL, setImgUrl] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const showImgModal = (url) => {

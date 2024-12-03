@@ -49,13 +49,13 @@ const SingleMyAccompany = ({
         },
         {},
       );
-      console.log(response);
+      //console.log(response);
       if (response.status === 200) {
-        console.log('성공');
+        //console.log('성공');
         setIsDeleted(true); // 삭제 상태 업데이트
       }
     } catch (error) {
-      console.error('delete error:', error);
+      //console.error('delete error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -100,7 +100,7 @@ const SingleMyAccompany = ({
             </span>
           </s.Location>
         </s.TripInfo>
-        {console.log(locationNum)}
+        {//console.log(locationNum)}
         <s.ContentText>{content}</s.ContentText>
         <s.Info>
           <s.ProfileSvg />

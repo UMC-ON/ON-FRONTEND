@@ -41,7 +41,7 @@ function SellPage() {
 
       setIsValidated(user_data.data.country);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      //console.error('Error fetching data:', error);
     } finally {
       setIsLoading(false);
     }
@@ -59,15 +59,15 @@ function SellPage() {
       );
 
       if (page === 0) {
-        console.log('모든 물품 불러오기 성공');
-        console.log(response.data.content);
+        //console.log('모든 물품 불러오기 성공');
+        //console.log(response.data.content);
         setItems(response.data.content);
       } else {
-        console.log('extra data');
+        //console.log('extra data');
         setItems((prevItems) => [...prevItems, ...response.data.content]);
       }
     } catch (error) {
-      console.error('모든 물품 불러오기 중 오류 발생:', error);
+      //console.error('모든 물품 불러오기 중 오류 발생:', error);
     }
   };
 
@@ -97,19 +97,19 @@ function SellPage() {
 
       // response가 유효한지 확인
       if (response && response.data) {
-        console.log(params);
+        //console.log(params);
         // 페이지가 0일 때 새로 불러오고, 그 외 페이지에서는 기존 데이터에 추가
         if (page === 0) {
           setItems(response.data.content);
         } else {
           setItems((prevItems) => [...prevItems, ...response.data.content]);
         }
-        console.log(response.data);
+        //console.log(response.data);
       } else {
-        console.error('응답이 유효하지 않습니다:', response);
+        //console.error('응답이 유효하지 않습니다:', response);
       }
     } catch (error) {
-      console.error('필터링 중 오류 발생:', error);
+      //console.error('필터링 중 오류 발생:', error);
     }
   };
 
@@ -122,12 +122,12 @@ function SellPage() {
         },
         { keyword: searchKeyword, page: page, size: 5, sort: 'DESC' },
       );
-      console.log('response', response);
+      //console.log('response', response);
 
       // response가 유효한지 확인
       if (response && response.data) {
-        console.log('검색 성공');
-        console.log(response);
+        //console.log('검색 성공');
+        //console.log(response);
         // 페이지가 0일 때 새로 불러오고, 그 외 페이지에서는 기존 데이터에 추가
         if (page === 0) {
           setItems(response.data.content);
@@ -135,10 +135,10 @@ function SellPage() {
           setItems((prevItems) => [...prevItems, ...response.data.content]);
         }
       } else {
-        console.error('검색 응답이 유효하지 않습니다:', response);
+        //console.error('검색 응답이 유효하지 않습니다:', response);
       }
     } catch (error) {
-      console.error('검색 중 오류 발생:', error);
+      //console.error('검색 중 오류 발생:', error);
     }
   };
 
@@ -173,7 +173,7 @@ function SellPage() {
   }, [handleScroll]);
 
   const handleFilterClick = useCallback(() => {
-    console.log('handleFilterClick');
+    //console.log('handleFilterClick');
     setPage(0);
     setItems([]);
   }, []);
@@ -196,7 +196,7 @@ function SellPage() {
 
   const handleGetCountry = useCallback(
     (country) => {
-      console.log('handleGetCountry');
+      //console.log('handleGetCountry');
       setCountry(country);
       setIsCountryClicked(true);
       setShowCountry(false);

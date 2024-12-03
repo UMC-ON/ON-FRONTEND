@@ -25,10 +25,10 @@ const NavBar = () => {
         );
 
         // 응답 데이터의 구조를 확인하고 유효성을 검사
-        console.log('Received data:', response.data); // 전체 응답 데이터 확인
+        //console.log('Received data:', response.data); // 전체 응답 데이터 확인
         setNotificationNumber(response.data.isNotReadAlert); // 상태 업데이트
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }

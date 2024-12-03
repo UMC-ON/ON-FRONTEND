@@ -225,22 +225,22 @@ function HomePage() {
       (item) => item.country === countryName,
     );
     if (countryData) {
-      // console.log(countryData.site);
+      // //console.log(countryData.site);
       setImmigrationLink(countryData.site);
     } else {
-      console.log('not found');
+      //console.log('not found');
     }
   }
 
   const getContinentForCountry = (countryName) => {
-    console.log('country is ');
-    console.log(countryName);
+    //console.log('country is ');
+    //console.log(countryName);
     const country = countries.find((c) => c.country === countryName);
     return country.continent;
   };
 
   useEffect(() => {
-    // console.log(immigrationLink);
+    // //console.log(immigrationLink);
   }, [immigrationLink]);
 
   useEffect(() => {
@@ -252,8 +252,8 @@ function HomePage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setUserData([user_data.data]);
-        console.log('userData');
-        console.log(user_data.data);
+        //console.log('userData');
+        //console.log(user_data.data);
         if (user_data.data.universityUrl) {
           setUnivLink(user_data.data.universityUrl);
         }
@@ -265,8 +265,8 @@ function HomePage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setInfoData(info_data.data);
-        console.log('infoData');
-        console.log(info_data.data);
+        //console.log('infoData');
+        //console.log(info_data.data);
 
         const free_data = await getData(GET_RECENT_POST_OF('FREE'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
@@ -278,12 +278,12 @@ function HomePage() {
         });
         if (accom_data) {
           setAccompanyData(accom_data.data);
-          // console.log(accom_data.data.result);
+          // //console.log(accom_data.data.result);
         } else {
           setAccompanyData([]);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false); // Data fetched, stop showing main loading
       }
@@ -294,7 +294,7 @@ function HomePage() {
 
   useEffect(() => {
     const token = localStorage.getItem('AToken');
-    console.log('AToken:', token);
+    //console.log('AToken:', token);
 
     const fetchAccomData = async () => {
       try {
@@ -309,7 +309,7 @@ function HomePage() {
           setAccompanyData([]);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
         setAccompanyData([]);
       } finally {
         setIsLoadingAccom(false); // Accom data fetched, stop showing accom loading
@@ -317,7 +317,7 @@ function HomePage() {
     };
 
     if (userData.country) {
-      // console.log(userData);
+      // //console.log(userData);
       fetchAccomData();
     }
   }, [userData.country]);

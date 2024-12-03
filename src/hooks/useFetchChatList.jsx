@@ -15,27 +15,27 @@ const useFetchChatList = (url, token, params, currentMode, type) => {
           params,
         );
         if (response) {
-          console.log(type, response.data.content[0]);
+          //console.log(type, response.data.content[0]);
           if (response.data.content[0].roomCount == 0) {
             setChatList([]);
           } else if (type === 'accompany') {
             // setChatList(response.data.content[0].roomList);
             const defaultChatList = response.data.content[0].roomList;
             for (let i = 0; i < defaultChatList.length; i++) {
-              // console.log(chatList[i].location);
+              // //console.log(chatList[i].location);
               defaultChatList[i].country =
                 defaultChatList[i].location.split(' ')[0];
-              // console.log(chatList[i].location);
-              console.log(defaultChatList[i]);
+              // //console.log(chatList[i].location);
+              //console.log(defaultChatList[i]);
             }
-            console.log(defaultChatList);
+            //console.log(defaultChatList);
             setChatList(defaultChatList);
           } else if (type === 'trade') {
             setChatList(response.data.content[0].roomList);
           }
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }

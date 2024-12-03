@@ -81,7 +81,7 @@ function SellPost() {
       currentLocation: city.city,
       share: share,
     };
-    console.log(jsonData);
+    //console.log(jsonData);
 
     const jsonBlob = new Blob([JSON.stringify(jsonData)], {
       type: 'application/json',
@@ -98,11 +98,11 @@ function SellPost() {
       });
 
       if (response) {
-        console.log(response.data.result);
+        //console.log(response.data.result);
         navigate('/sell');
       }
     } catch (error) {
-      console.error('ITEM POST Error:', error.message);
+      //console.error('ITEM POST Error:', error.message);
     }
   };
 

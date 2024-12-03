@@ -18,7 +18,7 @@ const SingleAccompanyChat = ({
 
   // const cities = ['대한민국 부산', '일본 도쿄'];
   // const cityNames = extractCityNames(cities);
-  // console.log(cityNames);
+  // //console.log(cityNames);
 
   return (
     <s.SingleChatContainer

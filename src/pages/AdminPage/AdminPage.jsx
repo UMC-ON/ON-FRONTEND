@@ -58,7 +58,7 @@ const AdminPage = () => {
           { page: 0, size: 20, sort: 'DESC' },
         );
         if (response) {
-          console.log(response.data.content);
+          //console.log(response.data.content);
           setRequestList(response.data.content);
           return response.data.content;
         }
@@ -114,7 +114,7 @@ const AdminPage = () => {
 
       {requestList && requestList.length > 0 ? (
         requestList.map((request, index) => {
-          console.log('출력');
+          //console.log('출력');
           return (
             <RequestItem
               key={index}

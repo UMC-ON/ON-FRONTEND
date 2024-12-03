@@ -35,11 +35,11 @@ const DDayCalendarComponent = ({
           'Content-Type': 'application/json',
         },
       );
-      console.log('디데이 저장 완료');
-      console.log(localStorage.getItem('AToken'));
+      //console.log('디데이 저장 완료');
+      //console.log(localStorage.getItem('AToken'));
     } catch (error) {
-      console.error('서버로 dday 전달 중 오류 발생:', error);
-      console.log(dday);
+      //console.error('서버로 dday 전달 중 오류 발생:', error);
+      //console.log(dday);
     }
   };
 
@@ -89,7 +89,7 @@ const DatePickerWrapper = styled.div`
   z-index: 2;
 
   .inputDate::placeholder {
-    position: relative;  
+    position: relative;
     font-size: 25px;
     left: 50%;
     transform: translateX(-50%);

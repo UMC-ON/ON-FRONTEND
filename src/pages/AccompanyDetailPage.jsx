@@ -60,7 +60,7 @@ function AccompanyDetailPage() {
 
   const openFirstModal = () => {
     if (userInfo.country != null) {
-      console.log('First modal opened');
+      //console.log('First modal opened');
       setIsFirstModalOpen(true);
     } else {
       setIsSecondModalOpen(true);
@@ -68,37 +68,37 @@ function AccompanyDetailPage() {
   };
 
   const closeFirstModal = () => {
-    console.log('First modal closed');
+    //console.log('First modal closed');
     setIsFirstModalOpen(false);
   };
 
   const openSecondModal = () => {
-    console.log('Second modal opened');
+    //console.log('Second modal opened');
     setIsSecondModalOpen(true);
   };
 
   const closeSecondModal = () => {
-    console.log('Second modal closed');
+    //console.log('Second modal closed');
     setIsSecondModalOpen(false);
   };
 
   const openReportModal = () => {
-    console.log('Report modal opened');
+    //console.log('Report modal opened');
     setIsReportModalOpen(true);
   };
 
   const closeReportModal = () => {
-    console.log('Report modal closed');
+    //console.log('Report modal closed');
     setIsReportModalOpen(false);
   };
 
   const openShareModal = () => {
-    console.log('Share modal opened');
+    //console.log('Share modal opened');
     setIsShareModalOpen(true);
   };
 
   const closeShareModal = () => {
-    console.log('Share modal closed');
+    //console.log('Share modal closed');
     setIsShareModalOpen(false);
   };
 
@@ -120,11 +120,11 @@ function AccompanyDetailPage() {
 
   const applyData = async () => {
     try {
-      console.log('userId: ');
-      console.log(infoData[0].userId);
-      // console.log(typeof infoData[0].userId);
-      // console.log("postId: ");
-      // console.log(postId);
+      //console.log('userId: ');
+      //console.log(infoData[0].userId);
+      // //console.log(typeof infoData[0].userId);
+      // //console.log("postId: ");
+      // //console.log(postId);
 
       const response = await postData(
         GET_ROOM_ID,
@@ -143,24 +143,24 @@ function AccompanyDetailPage() {
       );
 
       if (response && response2) {
-        // console.log("response: ");
-        // console.log(response.data);
-        // console.log("response2: ");
-        // console.log(response2.data);
+        // //console.log("response: ");
+        // //console.log(response.data);
+        // //console.log("response2: ");
+        // //console.log(response2.data);
 
         const roomId = response.data.roomId;
-        console.log('roomId: ');
-        console.log(response.data);
+        //console.log('roomId: ');
+        //console.log(response.data);
         const senderName = infoData[0].nickname;
-        console.log('Application successful:', roomId);
+        //console.log('Application successful:', roomId);
         navigate(`/chat/accompany/${roomId}`, {
           state: { roomId, senderName },
         });
       } else {
-        console.error('Application failed');
+        //console.error('Application failed');
       }
     } catch (error) {
-      console.error('Error applying for accompany:', error);
+      //console.error('Error applying for accompany:', error);
     }
   };
 
@@ -174,27 +174,27 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setInfoData(info_data.data);
-        console.log('info data here');
-        console.log(info_data.data);
+        //console.log('info data here');
+        //console.log(info_data.data);
         //
 
         const user_data = await getData(GET_USER_INFO, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
-        // console.log(user_data.data.result.id);
-        console.log('user id');
+        // //console.log(user_data.data.result.id);
+        //console.log('user id');
         setUserId(user_data.data.id);
 
-        // console.log(info_data.data[0].nickname);
+        // //console.log(info_data.data[0].nickname);
         setNickName(info_data.data[0].nickname);
 
         const accompany_data = await getData(GET_SIMILAR_ACCOMPANY(postId), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setAccompanyData(accompany_data.data);
-        console.log(accompanyData);
+        //console.log(accompanyData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         // insert code here
         setTimeout(() => {

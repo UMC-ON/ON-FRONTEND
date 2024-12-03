@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-import compas from "../assets/images/compasIcon.svg";
-import profile from "../assets/images/profileIcon.svg";
-import empty_star from "../assets/images/empty_star.svg";
-import filled_star from "../assets/images/filled_star.svg";
-import noImage from "../assets/images/noImage.jpg";
+import compas from '../assets/images/compasIcon.svg';
+import profile from '../assets/images/profileIcon.svg';
+import empty_star from '../assets/images/empty_star.svg';
+import filled_star from '../assets/images/filled_star.svg';
+import noImage from '../assets/images/noImage.jpg';
 
-import { showDate } from "../components/Common/InfoExp";
+import { showDate } from '../components/Common/InfoExp';
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 import { GET_SCRAP } from '../api/urls';
 import { getData, postData, putData } from '../api/Functions';
@@ -20,37 +20,57 @@ const NearItemList = ({ nearitems }) => {
 
   return (
     <>
-      {nearitems && nearitems.length > 0 && nearitems.map((item, index) => {
-        const isCompleted = item.dealStatus === "COMPLETE";
-        const imageUrl = item.imageUrls && item.imageUrls[0] ? item.imageUrls[0] : noImage;
-        const isScrapped = item.isScrapped || false;
-        const dealType = item.dealType === 'DIRECT' ? '직거래' : '택배거래';
-        const dealStatus = item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능';
+      {nearitems &&
+        nearitems.length > 0 &&
+        nearitems.map((item, index) => {
+          const isCompleted = item.dealStatus === 'COMPLETE';
+          const imageUrl =
+            item.imageUrls && item.imageUrls[0] ? item.imageUrls[0] : noImage;
+          const isScrapped = item.isScrapped || false;
+          const dealType = item.dealType === 'DIRECT' ? '직거래' : '택배거래';
+          const dealStatus =
+            item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능';
 
-        return (
-          <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={imageUrl} />
-            <Information>
-              <StarContainer
-                marketPostId={item.marketPostId}
-                isFilled={isScrapped}
-              />
-              <Description onClick={() => navigate(`../sell/${item.marketPostId}`)}>
-                <TitleTimeContainer>
-                  <Title>{item.title}</Title>
-                  <Time>{showDate(item.createdAt)}</Time>
-                </TitleTimeContainer><br />
-                <State how={dealType} now={dealStatus} isCompleted={isCompleted} />
-                <LocationAndUser>
-                  <Place><Compas src={compas} />{item.currentCountry} {item.currentLocation}</Place>
-                  <User><Profile src={profile} />{item.nickname}</User>
-                </LocationAndUser>
-                <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
-              </Description>
-            </Information>
-          </ItemDiv>
-        );
-      })}
+          return (
+            <ItemDiv
+              key={index}
+              isCompleted={isCompleted}
+            >
+              <Photo src={imageUrl} />
+              <Information>
+                <StarContainer
+                  marketPostId={item.marketPostId}
+                  isFilled={isScrapped}
+                />
+                <Description
+                  onClick={() => navigate(`../sell/${item.marketPostId}`)}
+                >
+                  <TitleTimeContainer>
+                    <Title>{item.title}</Title>
+                    <Time>{showDate(item.createdAt)}</Time>
+                  </TitleTimeContainer>
+                  <br />
+                  <State
+                    how={dealType}
+                    now={dealStatus}
+                    isCompleted={isCompleted}
+                  />
+                  <LocationAndUser>
+                    <Place>
+                      <Compas src={compas} />
+                      {item.currentCountry} {item.currentLocation}
+                    </Place>
+                    <User>
+                      <Profile src={profile} />
+                      {item.nickname}
+                    </User>
+                  </LocationAndUser>
+                  <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
+                </Description>
+              </Information>
+            </ItemDiv>
+          );
+        })}
     </>
   );
 };
@@ -71,11 +91,14 @@ const StarContainer = ({ marketPostId, isFilled }) => {
     try {
       if (isStarFilled) {
         // 스크랩 취소 요청
-        await axios.delete(`${serverAddress}/api/v1/scrap/${userInfo?.id}/${marketPostId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+        await axios.delete(
+          `${serverAddress}/api/v1/scrap/${userInfo?.id}/${marketPostId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+            },
           },
-        });
+        );
       } else {
         // 스크랩 등록 요청
         await axios.post(
@@ -88,17 +111,20 @@ const StarContainer = ({ marketPostId, isFilled }) => {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             },
-          }
+          },
         );
       }
       setIsStarFilled(!isStarFilled);
 
       // 로컬스토리지에 스크랩 상태 저장
-      localStorage.setItem(`starState_${marketPostId}`, JSON.stringify(!isStarFilled));
+      localStorage.setItem(
+        `starState_${marketPostId}`,
+        JSON.stringify(!isStarFilled),
+      );
 
-      console.log({ marketPostId });
+      //console.log({ marketPostId });
     } catch (error) {
-      console.error('스크랩 처리 중 오류 발생:', error);
+      //console.error('스크랩 처리 중 오류 발생:', error);
     }
   };
 
@@ -112,20 +138,19 @@ const StarContainer = ({ marketPostId, isFilled }) => {
 
 export default NearItemList;
 
-
-
 const ItemDiv = styled.div`
   margin: 0 auto;
   width: 90%;
   border-radius: 20px;
-  background: linear-gradient(90deg, #E7EBED, #FFFFFF);
+  background: linear-gradient(90deg, #e7ebed, #ffffff);
   border: 1px solid #d9d9d9;
   display: flex;
   align-items: center;
   margin-bottom: 1vh;
   position: relative;
   text-align: left;
-  opacity: ${({ isCompleted }) => isCompleted ? 0.5 : 1}; /* 거래완료 시 불투명도 조절 */
+  opacity: ${({ isCompleted }) =>
+    isCompleted ? 0.5 : 1}; /* 거래완료 시 불투명도 조절 */
 `;
 
 const Star = styled.img`
@@ -171,7 +196,7 @@ const Title = styled.p`
 `;
 
 const Time = styled.span`
-  color: #7A7A7A;
+  color: #7a7a7a;
   font-size: 0.6em;
   margin-left: 8px;
 `;
@@ -183,13 +208,14 @@ const TitleTimeContainer = styled.div`
 `;
 
 const StateWrapper = styled.p`
-  color: #7A7A7A;
+  color: #7a7a7a;
   font-size: 0.7em;
   margin-bottom: 5px;
 `;
 
 const StyledNow = styled.span`
-  color: ${({ theme, isCompleted }) => isCompleted ? theme.lightPurple : '#7A7A7A'};
+  color: ${({ theme, isCompleted }) =>
+    isCompleted ? theme.lightPurple : '#7A7A7A'};
 `;
 
 const State = ({ how, now, isCompleted }) => (
@@ -201,9 +227,8 @@ const State = ({ how, now, isCompleted }) => (
 const Price = styled.p`
   font-size: 19px;
   font-weight: 600;
-  color: #3E73B2;
+  color: #3e73b2;
 `;
-
 
 const Profile = styled.img`
   width: 1.2em;
@@ -242,7 +267,6 @@ const LocationAndUser = styled.div`
   width: 11em;
   margin-bottom: 1vh;
 `;
-
 
 const Space = styled.div`
   height: 3em;

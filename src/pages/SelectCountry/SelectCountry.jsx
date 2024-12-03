@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
  const location = useLocation();
   const selectedCountry = location.state?.selectedCountry;
-  console.log('Selected Country:', selectedCountry);
+  //console.log('Selected Country:', selectedCountry);
   하면 선택한 나라의 배열 넘어옴. 
   콘솔 보고 배열 생긴거 체크하며 값 넚으면 됨. 
   selectedCountry는 필요에 따라서 useState로 구현하는것도 추천
@@ -24,7 +24,7 @@ const SelectCountry = ({ closeModal, getCountry }) => {
 
   // useEffect(() => {
   //   const { url } = location.state || {};
-  //   console.log('이전 페이지:' + url);
+  //   //console.log('이전 페이지:' + url);
   //   setPrevURL(url);
   // }, []);
 
@@ -48,10 +48,10 @@ const SelectCountry = ({ closeModal, getCountry }) => {
     setSelectedCountry(
       selectedCountry === country.country ? null : country.country,
     );
-    console.log(country.country);
+    //console.log(country.country);
     getCountry(country.country);
     // navigate(prevURL, { state: { selectedCountry: country.country } });
-    // console.log('Navigating with country:', country.country);
+    // //console.log('Navigating with country:', country.country);
     closeModal;
   };
 
@@ -85,7 +85,7 @@ const SelectCountry = ({ closeModal, getCountry }) => {
                 key={country.id}
                 onClick={() => handleCountryClick(country)}
               >
-                {console.log(country.country)}
+                {//console.log(country.country)}
                 <s.Flag>{countryFlags[country.country]}</s.Flag>
                 <s.Country>{country.country}</s.Country>
               </s.SingleCountryContainer>
