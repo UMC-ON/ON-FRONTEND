@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import { useSelector } from 'react-redux';
 
 import arrowIcon from '../assets/images/bottomArrow.svg';
 import search_icon from '../assets/images/search_icon.svg';
@@ -13,7 +12,6 @@ import ItemList from '../components/ItemList';
 import TransactionPicker from '../components/TransactionPicker';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
-//import Loading from '../components/Loading/Loading';
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 import { getData } from '../api/Functions';
 import { GET_FILTER_ITEM, GET_ITEM_SEARCH, GET_ITEM_LIST } from '../api/urls';
@@ -33,19 +31,7 @@ function SellPage() {
 
   const navigate = useNavigate();
 
-  const fetchUserInfo = async () => {
-    try {
-      const user_data = await getData(GET_USER_INFO, {
-        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-      });
 
-      setIsValidated(user_data.data.country);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   // 모든 물품 불러오기
   const fetchAllItems = async () => {
@@ -143,6 +129,7 @@ function SellPage() {
   };
 
   useEffect(() => {
+    
     if (!selectedTransaction && !country && !showAvailable && !searchKeyword) {
       // 필터링 조건이 없으면 모든 물품 불러오기
       fetchAllItems();
@@ -411,7 +398,7 @@ const Span = styled.span`
 const GreyPicker = styled.button`
   background: ${({ selected }) =>
     selected ? 'linear-gradient(135deg, #C2C7FF, #AD99FF)' : '#E8E8E8'};
-  font-family: 'Inter-Regular';
+  font-family: 'Inter';
   font-size: 0.8em;
   padding: 3px;
   border-radius: 18px;
