@@ -109,7 +109,7 @@ function App() {
                 //임의로 수정=새로 마운트 되므로 리덕스 유저인포는 없어서 이 로직이 맞음
                 nav('/signUp/credentials');
               }
-              requestNotificationPermissionOnce();
+
               console.log('앱 유저인포:', userInfo);
               setIsLoading(false);
             }
@@ -117,6 +117,7 @@ function App() {
             dispatch(logout());
             alert('로그인이 필요합니다.');
             nav('/signIn');
+            requestNotificationPermissionOnce();
           }
         };
         try {
