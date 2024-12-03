@@ -129,6 +129,7 @@ function SellPage() {
   };
 
   useEffect(() => {
+    
     if (!selectedTransaction && !country && !showAvailable && !searchKeyword) {
       // 필터링 조건이 없으면 모든 물품 불러오기
       fetchAllItems();
