@@ -8,6 +8,7 @@ import theme from '../../styles/theme';
 import { DELETE_ACCOUNT } from '../../api/urls';
 import { deleteData } from '../../api/Functions';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 const DeleteAccountModal = ({ modalDisplay, onClose }) => {
   const [dropDown, setDropDown] = useState(false);
@@ -15,6 +16,8 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
   const [step, setStep] = useState(1);
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const reasons = [
     '유용한 정보가 많이 없어요',
@@ -38,10 +41,16 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
       );
       //console.log(response);
       if (response.status == 200) {
+        // LocalStorage에서 토큰 제거
         localStorage.removeItem('AToken');
         localStorage.removeItem('RToken');
         localStorage.removeItem('grantType');
+
+        // React 상태를 사용하여 로그아웃 처리
         dispatch(logout());
+
+        // 탈퇴 완료 스텝으로 이동
+        nextStep();
       }
     } catch (error) {
       //console.error('delete account error:', error);
@@ -124,7 +133,7 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
               <ButtonSection>
                 <GrayButton onClick={onClose}>취소</GrayButton>
                 <PurpleButton
-                  onClick={() => nextStep() && handleDeleteAccount()}
+                  onClick={() => handleDeleteAccount() && nextStep()}
                 >
                   탈퇴
                 </PurpleButton>

@@ -123,7 +123,7 @@ const AccompanyChat = () => {
   //         );
 
   //         if (response) {
-  //           const newMessages = response.data.result.chatList;
+  //           const newMessages = response.data.content[0].chatList;
   //           if (newMessages.length !== chatListRef.current.length) {
   //             setChatList(newMessages);
   //             scrollToBottom();
@@ -136,7 +136,7 @@ const AccompanyChat = () => {
   //       }
 
   //       // 3초 간격으로 폴링
-  //       await new Promise((resolve) => setTimeout(resolve, 3000));
+  //       await new Promise((resolve) => setTimeout(resolve, 10000));
   //     }
   //   };
 
@@ -148,9 +148,9 @@ const AccompanyChat = () => {
   //   };
   // }, [roomId]);
 
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [chatList]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatList]);
 
   const handleBackNavigation = () => {
     // pollingRef.current = false; // polling 상태를 false로 설정
@@ -164,11 +164,12 @@ const AccompanyChat = () => {
     <s.ChatLayout>
       <ChatHeader
         receiver={senderName}
-        pointColor={pointColor}
+        defaultColor={defaultColor}
         messageInitiator={messageInitiator}
         isAccompany={true}
         onBackClick={handleBackNavigation}
-        roomId={roomId}
+        id={roomId}
+        isComplete={true}
       />
       <AccompanyChatInfo
         messageInitiator={messageInitiator}

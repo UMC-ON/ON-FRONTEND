@@ -10,7 +10,7 @@ import Loading from '../../components/Loading/Loading';
 import { useSelector } from 'react-redux';
 import { showDate } from '../../components/Common/InfoExp';
 
-import { GET_TRADE_CHAT } from '../../api/urls';
+import { GET_TRADE_CHAT, GET_TRADE_INFO } from '../../api/urls';
 import { getData } from '../../api/Functions';
 
 const TradeChat = () => {
@@ -20,6 +20,8 @@ const TradeChat = () => {
   const [chatList, setChatList] = useState([]); // 채팅 메시지 리스트 저장
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 관리
   const [receiver, setReceiver] = useState('');
+  const [postId, setPostId] = useState();
+  const [infoResult, setInfoResult] = useState([]);
 
   const location = useLocation();
   const { roomId, senderName } = location.state || {}; // URL에서 전달된 roomId와 senderName 가져오기
@@ -35,6 +37,32 @@ const TradeChat = () => {
   useEffect(() => {
     chatListRef.current = chatList;
   }, [chatList]);
+
+  useEffect(() => {
+    const fetchTradeInfo = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_TRADE_INFO(roomId),
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          { roomId: roomId },
+        );
+
+        if (response) {
+          console.log(response.data);
+          setInfoResult(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTradeInfo();
+  }, []);
 
   useEffect(() => {
     const fetchTradeChat = async () => {
@@ -152,14 +180,18 @@ const TradeChat = () => {
     <s.ChatLayout>
       <ChatHeader
         receiver={senderName}
-        pointColor="#fff"
+        defaultColor="#fff"
         messageInitiator={messageInitiator}
         isAccompany={false}
         onBackClick={handleBackNavigation}
+        id={infoResult.marketPostId}
+        isComplete={infoResult.dealStatus === 'COMPLETE' ? true : false}
       />
       <TradeChatInfo
         messageInitiator={messageInitiator}
         roomId={roomId}
+        setPostId={setPostId}
+        infoResult={infoResult}
       />
       <s.ChatWrapper ref={chatWrapperRef}>
         {chatList && chatList.length > 0 ? (

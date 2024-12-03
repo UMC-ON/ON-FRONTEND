@@ -1,24 +1,21 @@
 import React from 'react';
 import * as s from './ChatHeaderStyled.jsx';
-import { POST_RECRUIT_COMPLETE } from '../../api/urls.jsx';
-import { postData } from '../../api/Functions.jsx';
+import { POST_RECRUIT_COMPLETE, POST_TRADE_COMPLETE } from '../../api/urls.jsx';
+import { postData, putData } from '../../api/Functions.jsx';
 
 const ChatHeader = ({
   messageInitiator,
   receiver,
-  pointColor,
+  defaultColor,
   isAccompany,
   onBackClick,
-  roomId,
+  id,
+  isComplete,
 }) => {
-  const pointColorOpacity = (e) => {
-    return `${pointColor.replace('1)', ` ${e})`)}`;
-  };
-
-  const handleComplete = () => {
+  const handleAccComplete = () => {
     try {
       postData(
-        POST_RECRUIT_COMPLETE(roomId),
+        POST_RECRUIT_COMPLETE(id),
         {},
         {
           Authorization: `Bearer ${localStorage.getItem('AToken')}`,
@@ -30,8 +27,23 @@ const ChatHeader = ({
     }
   };
 
+  const handleTradeComplete = () => {
+    try {
+      putData(
+        POST_TRADE_COMPLETE(id),
+        {},
+        {
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+        },
+        { marketPostId: id },
+      );
+    } catch (error) {
+      console.error('Error posting data', error);
+    }
+  };
+
   return (
-    <s.ChatHeaderLayout color={'#DED6FF'}>
+    <s.ChatHeaderLayout style={{ backgroundColor: `${defaultColor}` }}>
       <s.BackButton onClick={onBackClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -49,15 +61,20 @@ const ChatHeader = ({
           />
         </svg>
       </s.BackButton>
-
       <s.PageName style={{ color: isAccompany ? '#ffffff' : '#ABB4FF' }}>
         {receiver}
       </s.PageName>
-
-      {!messageInitiator && (
-        <s.CompleteBtn onClick={() => handleComplete()}>
+      {!messageInitiator && !isComplete && (
+        <s.CompleteBtn
+          onClick={isAccompany ? handleAccComplete : handleTradeComplete}
+        >
           {isAccompany ? '모집 완료' : '거래 완료'}
         </s.CompleteBtn>
+      )}
+      {isComplete && (
+        <s.CompletedBtn>
+          {isAccompany ? '모집 완료' : '거래 완료'}
+        </s.CompletedBtn>
       )}
     </s.ChatHeaderLayout>
   );

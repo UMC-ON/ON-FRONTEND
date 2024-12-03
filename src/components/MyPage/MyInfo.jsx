@@ -19,6 +19,7 @@ const MyInfo = ({
   setNickname,
   setIsLoading,
   setLink,
+  userStatus,
 }) => {
   const [editLink, setEditLink] = useState(false);
   const [linkInput, setLinkInput] = useState(link);
@@ -107,7 +108,7 @@ const MyInfo = ({
         // 단순 문자열로 요청
         const response = await putData(PUT_UNIV, data, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          'Content-Type': 'text/plains', // 헤더 명시
+          'Content-Type': 'text/plain', // 헤더 명시
         });
         if (response.status === 200) {
           //console.log(response);
@@ -115,8 +116,13 @@ const MyInfo = ({
         }
       }
     } catch (error) {
+<<<<<<< HEAD
       //console.log('Error:', error);
       alert('링크 수정 오류.');
+=======
+      console.log('Error:', error);
+      alert('링크 수정 오류. 올바른 주소 형식인가요?');
+>>>>>>> a81a02e17f7899620843501e3992b23341bf3c02
     } finally {
       setIsLoading(false);
       setEditLink(false);
@@ -140,19 +146,20 @@ const MyInfo = ({
       <Wrapper>
         <TitleBox>
           파견교 홈페이지 링크
-          {!editLink ? (
-            <img
-              src={EditButton}
-              onClick={() => setEditLink(true)}
-            />
-          ) : (
-            <PurpleBox
-              onClick={() => handleEditedLink(linkInput)}
-              $dup={true}
-            >
-              완료
-            </PurpleBox>
-          )}
+          {userStatus !== 'TEMPORARY' &&
+            (!editLink ? (
+              <img
+                src={EditButton}
+                onClick={() => setEditLink(true)}
+              />
+            ) : (
+              <PurpleBox
+                onClick={() => handleEditedLink(linkInput)}
+                $dup={true}
+              >
+                수정 완료
+              </PurpleBox>
+            ))}
         </TitleBox>
         {!editLink ? (
           <TextInput
@@ -170,19 +177,20 @@ const MyInfo = ({
       <Wrapper>
         <TitleBox>
           닉네임
-          {!editNickname ? (
-            <img
-              src={EditButton}
-              onClick={() => setEditNickname(true)}
-            />
-          ) : duplicateCheck ? ( // 중복 확인 완료 후 '완료' 버튼 표시
-            <PurpleBox
-              onClick={() => handleEditedNickname(nicknameInput)}
-              $dup={duplicateCheck}
-            >
-              완료
-            </PurpleBox>
-          ) : null}
+          {userStatus !== 'TEMPORARY' &&
+            (!editNickname ? (
+              <img
+                src={EditButton}
+                onClick={() => setEditNickname(true)}
+              />
+            ) : (
+              <PurpleBox
+                onClick={() => handleEditedNickname(nicknameInput)}
+                $dup={duplicateCheck}
+              >
+                수정 완료
+              </PurpleBox>
+            ))}
         </TitleBox>
 
         {!editNickname ? (

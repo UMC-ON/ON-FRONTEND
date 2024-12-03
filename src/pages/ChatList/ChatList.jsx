@@ -122,7 +122,7 @@ const ChatList = () => {
                 />
               ) : (
                 <SingleTradeChat
-                  nickName={data.senderName}
+                  senderName={data.senderName}
                   roomId={data.roomId}
                   img={data.profileImg}
                   time={

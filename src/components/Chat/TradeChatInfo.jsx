@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react';
 import * as s from './TradeChatInfoStyled';
-import { GET_TRADE_INFO } from '../../api/urls';
-import { getData } from '../../api/Functions';
-import Loading from '../Loading/Loading';
 
-const TradeChatInfo = ({ messageInitiator, roomId }) => {
-  const [infoResult, setInfoResult] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+const TradeChatInfo = ({ messageInitiator, roomId, infoResult }) => {
   const [tradeMethod, setTradeMethod] = useState('');
 
   useEffect(() => {
+<<<<<<< HEAD
     const fetchTradeInfo = async () => {
       setIsLoading(true);
       try {
@@ -38,11 +34,14 @@ const TradeChatInfo = ({ messageInitiator, roomId }) => {
     };
 
     fetchTradeInfo();
+=======
+    if (infoResult.tradeMethod === 'DIRECT') {
+      setTradeMethod('직접 만나서 거래');
+    } else {
+      setTradeMethod('택배 거래');
+    }
+>>>>>>> a81a02e17f7899620843501e3992b23341bf3c02
   }, []);
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <s.InfoWrapper>
@@ -67,7 +66,10 @@ const TradeChatInfo = ({ messageInitiator, roomId }) => {
           <s.NoImgProductInfoContainer>
             <s.ProductName>{infoResult.productName}</s.ProductName>
             <s.ProductPrice>&#8361; {infoResult.productPrice}</s.ProductPrice>
-            <s.ProductInfo>{tradeMethod} | 거래완료여부추가필요</s.ProductInfo>
+            <s.ProductInfo>
+              {tradeMethod} |{' '}
+              {infoResult.dealStatus === 'COMPLETE' ? '거래완료' : '거래가능'}
+            </s.ProductInfo>
           </s.NoImgProductInfoContainer>
         )}
 

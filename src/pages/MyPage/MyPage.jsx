@@ -75,15 +75,22 @@ const MyPage = () => {
             isPassword={isPasswordConfirmed}
             setIsLoading={setIsLoading}
           />
-          <NavLink
-            to="/mypage/mypost"
-            style={{ width: '100%' }}
-          >
-            <s.MyPosts>
+          {userInfo.userStatus !== 'TEMPORARY' ? (
+            <NavLink
+              to="/mypage/mypost"
+              style={{ width: '100%' }}
+            >
+              <s.MyPosts>
+                <span>내 글 보기</span>
+                <img src={arrow} />
+              </s.MyPosts>
+            </NavLink>
+          ) : (
+            <s.DisabledMyPosts>
               <span>내 글 보기</span>
               <img src={arrow} />
-            </s.MyPosts>
-          </NavLink>
+            </s.DisabledMyPosts>
+          )}
 
           <s.MyInfoTitle>내 정보 확인</s.MyInfoTitle>
           {!isPasswordConfirmed ? (
@@ -107,6 +114,7 @@ const MyPage = () => {
               nickname={nickname}
               setIsLoading={setIsLoading}
               setNickname={setNickname}
+              userStatus={userInfo.userStatus}
             />
           )}
         </s.MyPageLayout>
