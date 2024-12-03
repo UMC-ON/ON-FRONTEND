@@ -178,6 +178,16 @@ function SellPage() {
     setItems([]);
   }, []);
 
+  useEffect(() => {
+    const hasRefreshed = sessionStorage.getItem('hasRefreshed');
+
+    if (!hasRefreshed) {
+      // 새로고침이 실행된 적이 없는 경우
+      sessionStorage.setItem('hasRefreshed', 'true'); // 새로고침 실행 기록
+      window.location.reload(); // 새로고침 실행
+    }
+  }, []);
+
   const resetCountryClick = useCallback(() => {
     setIsCountryClicked(false);
     setCountry(null);
