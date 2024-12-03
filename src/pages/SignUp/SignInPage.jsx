@@ -74,7 +74,7 @@ const SignInPage = () => {
         }
       } else {
         dispatch(loginFailure('Login failed. Please check your credentials.'));
-        alert('로그인에 실패했습니다. 로그인 정보를 확인해주세요.');
+        alert('로그인에 실패했습니다. 아이디 혹은 비밀번호를 확인해주세요.');
       }
     } catch (error) {
       console.error('Login error:', error);
