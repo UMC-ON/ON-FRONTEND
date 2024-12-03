@@ -86,10 +86,8 @@ const FindId = () => {
                   })}
                 />
               </s.InputWrapper>
-              <s.Explanation>
-                {errors.name && (
-                  <small role="alert">{errors.name.message}</small>
-                )}
+              <s.Explanation role="alert">
+                {errors.name && errors.name.message}
               </s.Explanation>
               <s.InputWrapper>
                 <s.Div>전화번호</s.Div>
@@ -112,10 +110,8 @@ const FindId = () => {
                   })}
                 />
               </s.InputWrapper>
-              <s.Explanation>
-                {errors.phone && (
-                  <small role="alert">{errors.phone.message}</small>
-                )}
+              <s.Explanation role="alert">
+                {errors.phone && errors.phone.message}
               </s.Explanation>
               <s.InputWrapper style={{ border: 'none' }}>
                 <s.Div
