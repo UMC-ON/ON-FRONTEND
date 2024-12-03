@@ -28,7 +28,7 @@ const SingleTradeChat = ({
       ) : (
         <s.NoTradePicture />
       )}
-      <s.Nickname>{nickName}</s.Nickname>
+      <s.Nickname>{senderName}</s.Nickname>
       <s.Time>{time}</s.Time>
       <s.Message>{message}</s.Message>
     </s.SingleChatContainer>

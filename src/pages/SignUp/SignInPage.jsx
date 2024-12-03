@@ -45,7 +45,7 @@ const SignInPage = () => {
       console.log(response);
 
       //로그인 성공
-      if (response.data) {
+      if (response && response.data) {
         console.log('실행', response.data);
         //응답으로부터 토큰 받아오기
         const { grantType, accessToken, refreshToken } = response.data;
@@ -57,23 +57,29 @@ const SignInPage = () => {
         const user = await getData(GET_USER_INFO, {
           Authorization: `Bearer ${accessToken}`,
         });
-        console.log(user.data);
-        //현 사용자와 로그인 상태 redux에 저장
-        dispatch(loginSuccess(user.data));
-        console.log(user);
-        if (user.data.userStatus === 'TEMPORARY') {
-          nav('/signUp/credentials');
+
+        if (user && user.data) {
+          console.log(user.data);
+          //현 사용자와 로그인 상태 redux에 저장
+          dispatch(loginSuccess(user.data));
+          console.log(user);
+          if (user.data.userStatus === 'TEMPORARY') {
+            nav('/signUp/credentials');
+          } else {
+            nav('/');
+          }
         } else {
-          nav('/');
+          //로그인 실패
+          throw new Error('사용자 정보를 가져오는 데 실패했습니다.');
         }
       } else {
-        //로그인 실패
         dispatch(loginFailure('Login failed. Please check your credentials.'));
+        alert('로그인에 실패했습니다. 아이디 혹은 비밀번호를 확인해주세요.');
       }
     } catch (error) {
       console.error('Login error:', error);
       if (error.response) {
-        if (error.response.status === 401) {
+        if (error.response.status === 401 || error.response.status === 400) {
           alert('아이디나 비밀번호가 일치하지 않습니다.');
         } else {
           alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');

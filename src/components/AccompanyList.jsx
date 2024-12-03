@@ -24,59 +24,79 @@ function AccompanyList({ datas }) {
     return `${month}/${day}`;
   }
 
-    return (
-      <>
-        {(datas && datas.length > 0) ? (
-          datas.map((data, index) => (
-            <RoundContainer key={index} onClick={() => goDetail(data.companyPostId)}>
-              <ImageWrapper>
-                {data.imageUrls[0] ? 
-                  <Image src={data.imageUrls[0]} /> : 
-                  <Image src={defaultImg} />
-                }
-              </ImageWrapper>
-              
-              <TextContainer>
-                <CardName>{data.title}</CardName>
-    
-                <Left>
-                  <CardIcon src={calendarIcon} $top="1px"/>
-                  <GreyText>{formatDateToMD(data.startDate)}</GreyText>
-                  <CardIcon src={plusIcon} $top="1px"/>
-                  <GreyText>{data.currentRecruitNumber}/{data.totalRecruitNumber}</GreyText>
-                  <CardIcon src={placeIcon} $top="1px"/>
-                  <GreyText>{data.travelArea[0]}</GreyText>
-                </Left>
-    
-                <Left>
-                  <GreyMiddleText>{data.content}</GreyMiddleText>
-                </Left>
-    
-                <Bottom>
-                  <CardIcon src={personIcon} $top="2px"/>
-                  <SmallGreyText>{data.nickname}</SmallGreyText>
-                  {!data.ageAnonymous && (
-                    <>
-                      <SmallGreyText>·</SmallGreyText>
-                      <SmallGreyText>{data.age}세</SmallGreyText>
-                    </>
-                  )}
-                  <SmallGreyText>·</SmallGreyText>
-                  <SmallGreyText>{data.gender === 'FEMALE' ? '여' : '남'}</SmallGreyText>
-                </Bottom>
-              </TextContainer>
-              <Overlay $isClosed={data.recruitCompleted} />
-            </RoundContainer>
-          ))
-        ) : (
-          <LeftContainer>
-            <LeftSpace/>
-            <SubText>아무것도 없습니다.</SubText>
-          </LeftContainer>
-        )}
-      </>
-    );
-  }
+  return (
+    <>
+      {datas && datas.length > 0 ? (
+        datas.map((data, index) => (
+          <RoundContainer
+            key={index}
+            onClick={() => goDetail(data.companyPostId)}
+          >
+            <ImageWrapper>
+              {data.imageUrls[0] ? (
+                <Image src={data.imageUrls[0]} />
+              ) : (
+                <Image src={defaultImg} />
+              )}
+            </ImageWrapper>
+
+            <TextContainer>
+              <CardName>{data.title}</CardName>
+
+              <Left>
+                <CardIcon
+                  src={calendarIcon}
+                  $top="1px"
+                />
+                <GreyText>{formatDateToMD(data.startDate)}</GreyText>
+                <CardIcon
+                  src={plusIcon}
+                  $top="1px"
+                />
+                <GreyText>
+                  {data.currentRecruitNumber}/{data.totalRecruitNumber}
+                </GreyText>
+                <CardIcon
+                  src={placeIcon}
+                  $top="1px"
+                />
+                <GreyText>{data.travelArea[0]}</GreyText>
+              </Left>
+
+              <Left>
+                <GreyMiddleText>{data.content}</GreyMiddleText>
+              </Left>
+
+              <Bottom>
+                <CardIcon
+                  src={personIcon}
+                  $top="2px"
+                />
+                <SmallGreyText>{data.nickname}</SmallGreyText>
+                {!data.ageAnonymous && (
+                  <>
+                    <SmallGreyText>·</SmallGreyText>
+                    <SmallGreyText>{data.age}세</SmallGreyText>
+                  </>
+                )}
+                <SmallGreyText>·</SmallGreyText>
+                <SmallGreyText>
+                  {data.gender === 'FEMALE' ? '여' : '남'}
+                </SmallGreyText>
+              </Bottom>
+            </TextContainer>
+            <Overlay $isClosed={data.recruitCompleted} />
+          </RoundContainer>
+        ))
+      ) : (
+        <LeftContainer>
+          <LeftSpace />
+          <SubText>아무것도 없습니다.</SubText>
+        </LeftContainer>
+      )}
+    </>
+  );
+}
 
 export default AccompanyList;
 
@@ -159,7 +179,6 @@ const GreyMiddleText = styled.p`
   max-height: 2rem; /* 두 줄로 고정된 최대 높이 */
 `;
 
-
 const RoundContainer = styled.div`
   position: relative;
   width: 90%;
@@ -201,7 +220,7 @@ const TextContainer = styled.div`
 `;
 
 const CardName = styled.p`
- font-size: 1rem;
+  font-size: 1rem;
   font-weight: bold;
   color: #363636;
   line-height: 1.2; /* 줄 높이 */
@@ -220,7 +239,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(1000,1000,1000,0.5);
+  background-color: rgba(1000, 1000, 1000, 0.5);
   display: ${(props) => (props.$isClosed ? 'block' : 'none')};
   border-radius: 20px;
   z-index: 1;

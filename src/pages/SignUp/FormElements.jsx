@@ -715,14 +715,14 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       </s.InputWrapper>
       <DefaultCheckBox
         wrapperStyle={{
-          paddingTop: '26px',
+          paddingTop: '30px',
           color: isConfirmed ? '' : 'black',
         }}
         after="교환/방문교 미정"
         checkBoxStyle={{
           border: '0.5px solid #C6C6C6',
-          width: '11px',
-          height: '11px',
+          width: '13px',
+          height: '13px',
         }}
         onChange={onClickDsptchNotConfirmed}
         name="isDispatchConfirmed"
