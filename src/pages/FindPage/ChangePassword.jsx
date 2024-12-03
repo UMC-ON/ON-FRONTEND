@@ -113,10 +113,8 @@ const ChangePassword = () => {
                   )}
                 </SpaceBetweenContainer>
               </s.InputWrapper>
-              <s.Explanation>
-                {errors.password && (
-                  <small role="alert">{errors.password.message}</small>
-                )}
+              <s.Explanation role="alert">
+                {errors.password && errors.password.message}
               </s.Explanation>
               <s.InputWrapper>
                 <s.Div>비밀번호 확인</s.Div>
@@ -151,10 +149,8 @@ const ChangePassword = () => {
                   )}
                 </SpaceBetweenContainer>
               </s.InputWrapper>
-              <s.Explanation>
-                {errors.password_check && (
-                  <small role="alert">{errors.password_check.message}</small>
-                )}
+              <s.Explanation role="alert">
+                {errors.password_check && errors.password_check.message}
               </s.Explanation>
             </s.ContentSection>
           </s.SectionWrapper>
