@@ -210,6 +210,10 @@ function HomePage() {
     if (univLink != '') {
       window.location.href = univLink;
     }
+    else
+    {
+      alert("파견교를 인증해주세요.");
+    }
   }
 
   function goToMigration() {
