@@ -60,8 +60,8 @@ const SignInPage = () => {
         console.log(user.data);
         //현 사용자와 로그인 상태 redux에 저장
         dispatch(loginSuccess(user.data));
-
-        if (user.userStatus === 'TEMPORARY') {
+        console.log(user);
+        if (user.data.userStatus === 'TEMPORARY') {
           nav('/signUp/credentials');
         } else {
           nav('/');

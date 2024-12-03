@@ -99,10 +99,8 @@ const FindPassword = () => {
                       })}
                     />
                   </s.InputWrapper>
-                  <s.Explanation>
-                    {errors.name && (
-                      <small role="alert">{errors.name.message}</small>
-                    )}
+                  <s.Explanation role="alert">
+                    {errors.name && errors.name.message}
                   </s.Explanation>
                 </div>
                 <s.InputWrapper style={{ border: 'none' }}>
@@ -168,10 +166,8 @@ const FindPassword = () => {
                   })}
                 />
               </s.InputWrapper>
-              <s.Explanation>
-                {errors.phone && (
-                  <small role="alert">{errors.phone.message}</small>
-                )}
+              <s.Explanation role="alert">
+                {errors.phone && errors.phone.message}
               </s.Explanation>
               <s.InputWrapper>
                 <s.Div>이메일</s.Div>
@@ -204,10 +200,8 @@ const FindPassword = () => {
                 </SpaceBetweenContainer>
               </s.InputWrapper>
 
-              <s.Explanation>
-                {errors.loginId && (
-                  <small role="alert">{errors.loginId.message}</small>
-                )}
+              <s.Explanation role="alert">
+                {errors.loginId && errors.loginId.message}
               </s.Explanation>
               <s.InputWrapper>
                 <s.Div>인증 코드</s.Div>

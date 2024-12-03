@@ -110,7 +110,7 @@ export const PostListSection = styled.section`
 export const SliderWrapper = styled.section`
   width: 100%;
   height: auto;
-  margin: 3.81rem 0 1rem 0;
+  margin: 3.81rem 0 0 0;
 `;
 
 export const WriteButton = styled.button`

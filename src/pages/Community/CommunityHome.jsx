@@ -178,14 +178,11 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
             $isCountryClicked={country}
             color1={color1}
             color2={color2}
+            onClick={handleCountryClick}
           >
-            <span
-              onClick={handleCountryClick}
-              style={{ fontFamily: 'Inter-Regular' }}
-            >
-              {country ? `${country}` : '국가'}
-              {!country && <s.Icon src={arrowIcon} />}
-            </span>
+            {country ? `${country}` : '국가'}
+            {!country && <s.Icon src={arrowIcon} />}
+
             {country && (
               <s.Icon
                 src={whiteCloseIcon}
