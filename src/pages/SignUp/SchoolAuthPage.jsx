@@ -1,7 +1,7 @@
 import * as FormElements from './FormElements';
 import useMultiStepForm from '../../hooks/useMultiStepForm';
 import * as s from './SignUpStyled';
-import groupLogo from '../../assets/images/groupLogo.svg';
+import groupLogo from '../../assets/images/NewLogo.svg';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -51,12 +51,19 @@ const SchoolAuthPage = () => {
         // const request = postData()
         const formData = new FormData();
         formData.append('fileList', file);
-        const request = {
-          dispatchedUniversity: userInfo.dispatchedUniversity,
-          country: userInfo.country,
-          universityUrl: userInfo.universityUrl,
-          dispatchType: userInfo.dispatchType,
-        };
+        const request = userInfo.isDispatchConfirmed
+          ? {
+              dispatchedUniversity: userInfo.dispatchedUniversity,
+              country: userInfo.country,
+              universityUrl: userInfo.universityUrl,
+              dispatchType: userInfo.dispatchType,
+            }
+          : {
+              dispatchedUniversity: '',
+              country: '',
+              universityUrl: '',
+              dispatchType: '',
+            };
         const json = JSON.stringify(request);
         const blob = new Blob([json], { type: 'application/json' });
         formData.append('dispatchCertifyApplyRequestDto', blob);

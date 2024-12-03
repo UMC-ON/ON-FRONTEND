@@ -171,7 +171,7 @@ export const SchoolComboBox = styled.select`
   background: url(${lightBlueArrow}) no-repeat right 0.8rem center #f3f3f3;
   padding: 0.25rem 0.625rem;
   margin: 0.625rem 0;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #979797;
   &::-webkit-scrollbar {
     width: 0.5rem;
@@ -189,15 +189,17 @@ export const Div = styled.div`
 `;
 
 export const TransparentInput = styled.input`
+  font-family: 'Inter';
   width: 100%;
   color: black;
   height: 2rem;
   margin-top: 0.2rem;
-  background-color: transparent;
+  background-color: rgb(250, 250, 250) !important;
   border: none;
   outline: none;
   padding: 0 0.06rem;
   font-size: 1rem;
+  border-radius: 5px;
 
   &:invalid {
     background-color: #ffc0cb91;
@@ -211,6 +213,13 @@ export const TransparentInput = styled.input`
     -webkit-appearance: none;
     margin: 0;
   }
+  
+  &:-webkit-autofill {
+    appearance: none !important; 
+    background-image: none !important;
+    background-color: rgb(250, 250, 250) !important;
+    color: black !important;
+    font-family: 'Inter' !important;
 `;
 
 export const GrayButton = styled.button`
@@ -243,6 +252,11 @@ export const Explanation = styled.div`
   line-height: 20px; /* 153.846% */
   text-align: justify;
 `;
+
+export const AuthExplanation = styled(Explanation)`
+  font-size: 15px;
+`;
+
 export const TwoColumnWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;

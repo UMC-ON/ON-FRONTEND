@@ -654,7 +654,7 @@ function AccompanyPostPage() {
 
       <GreyInput
         placeholder="요청사항과 동행인에게 하고 싶은 말을 적어주세요. "
-        $height="30vh"
+        $height="15rem"
         onChange={onChangeInput}
         name="content"
       />
@@ -728,7 +728,7 @@ const BottomTabLayout = styled.div`
   width: 100%;
   height: auto; /* 높이를 내용에 맞게 조정 */
   min-height: 300px;
-  max-height: calc(100vh - 50px);
+  max-height: calc(50rem - 50px);
   max-width: 480px;
   position: fixed;
   bottom: 0;
@@ -774,7 +774,7 @@ const TopBar = styled.div`
 `;
 
 const Space = styled.section`
-  margin-bottom: 15vh;
+  margin-bottom: 7.5rem;
 `;
 
 const CircleContainer = styled.section`

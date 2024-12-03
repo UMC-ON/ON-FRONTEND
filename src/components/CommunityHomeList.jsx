@@ -16,10 +16,10 @@ function CommunityHomeList({ bgcolor, datas, type }) {
   const navigate = useNavigate();
   const goDetail = (postId, companyId) => {
     if (type === 'info') {
-      navigate(`./info/detail/${postId}`, {state: { value: postId },});  
+      navigate(`./community/info/detail/${postId}`, {state: { value: postId },});  
     } 
     else if (type === 'free') {
-      navigate(`./general/detail/${postId}`, {state: { value: postId },});  
+      navigate(`./community/general/detail/${postId}`, {state: { value: postId },});  
     } 
     else if (type === 'accom') {
       navigate(`/accompany/detail/${companyId}`);
@@ -66,6 +66,7 @@ const Container = styled.div`
   border: 1px solid #ffffff;
   padding-top: 0.5rem;
   padding-bottom: 1rem;
+  cursor:pointer;
 `;
 
 const TextTopLeft = styled.p`

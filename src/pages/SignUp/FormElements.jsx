@@ -291,8 +291,8 @@ export const UserInfoForm1 = ({
           </s.GrayButton>
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.loginId && <small role="alert">{errors.loginId.message}</small>}
+      <s.Explanation role="alert">
+        {errors.loginId && errors.loginId.message}
       </s.Explanation>
       {dupCheck.loginId === 1 && (
         <s.Explanation>사용할 수 있는 아이디입니다.</s.Explanation>
@@ -309,20 +309,17 @@ export const UserInfoForm1 = ({
             defaultValue={verifyCode.verifyCodeContent}
             aria-invalid={errors.code ? 'true' : 'false'}
             {...register('signUpAuthNum', {
-              required: '인증코드를 입력해주세요.',
               onChange: (e) => {
                 code.current = e.target.value;
                 setVerifyCode({
                   ...verifyCode,
                   verified: false,
-                  verifyCodeContent: e.target.value,
+                  verifyCodeContent: code.current,
                 });
 
                 updateUserInfo(e);
-                console.log(e.target.value);
-                //console.log(value);
-                //console.log(UserInfo); // 얘네가 잘 작동하고 있는 것 같지 않아요...ㅜㅜ
               },
+              required: '인증번호를 입력해주세요.',
             })}
           />
 
@@ -338,16 +335,23 @@ export const UserInfoForm1 = ({
                   authNum: parseInt(code.current),
                 };
                 const formData = JSON.stringify(data);
-                console.log(formData);
-                const res = await putData(VERIFY_CODE, formData);
-                if (res) {
-                  if (code.current && res.data) {
-                    setVerifyCode({ ...verifyCode, verified: true });
-                  } else if (res.data == false) {
-                    alert('인증번호가 일치하지 않습니다.');
+                console.log('F.formData:', formData);
+                try {
+                  const res = await putData(VERIFY_CODE, formData);
+                  if (res) {
+                    if (code.current && res.data) {
+                      setVerifyCode({ ...verifyCode, verified: true });
+                    } else if (res.data == false) {
+                      alert('인증번호가 일치하지 않습니다.');
+                    }
+                  }
+                } catch (error) {
+                  if (error.response.status == Number(401)) {
+                    alert(
+                      '인증번호가 만료되었습니다. 인증번호를 다시 요청해주세요.',
+                    );
                   }
                 }
-                console.log(res);
               }}
             >
               인증하기
@@ -394,10 +398,8 @@ export const UserInfoForm1 = ({
           {passwordSet.current.pw && !errors.password && <img src={validImg} />}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.password && (
-          <small role="alert">{errors.password.message}</small>
-        )}
+      <s.Explanation role="alert">
+        {errors.password && errors.password.message}
       </s.Explanation>
       <s.InputWrapper>
         <s.Div>비밀번호 확인</s.Div>
@@ -429,10 +431,8 @@ export const UserInfoForm1 = ({
           )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.password_check && (
-          <small role="alert">{errors.password_check.message}</small>
-        )}
+      <s.Explanation role="alert">
+        {errors.password_check && errors.password_check.message}
       </s.Explanation>
     </>
   );
@@ -459,8 +459,6 @@ export const UserInfoForm2 = ({
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
-    //if(verifyCode.verified)
-    //인증코드 put 제대로 작동하면 추가
     if (dupCheck.nickname == 1) {
       setActive(isValid);
     } else {
@@ -489,53 +487,11 @@ export const UserInfoForm2 = ({
           })}
         />
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.name && <small role="alert">{errors.name.message}</small>}
+      <s.Explanation role="alert">
+        {errors.name && errors.name.message}
       </s.Explanation>
 
       <s.TwoColumnWrapper>
-        {/* <div>
-          <s.InputWrapper>
-            <s.Div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              나이
-              <s.Explanation
-                style={{
-                  display: 'inline-block',
-                  fontSize: '0.8rem',
-                  lineHeight: 'normal',
-                  marginLeft: '5px',
-                }}
-              >
-                *만나이 기준
-              </s.Explanation>
-            </s.Div>
-            <s.TransparentInput
-              type="number"
-              placeholder="숫자만 입력"
-              inputMode="numeric"
-              onChange={updateUserInfo}
-              pattern="[0-9]"
-              name="age"
-              defaultValue={state.age}
-              aria-invalid={errors.age ? 'true' : 'false'}
-              {...register('age', {
-                required: '나이는 필수입니다.',
-                onChange: (e) => {
-                  updateUserInfo(e);
-                },
-              })}
-            />
-          </s.InputWrapper>
-          <s.Explanation>
-            {errors.age && <small role="alert">{errors.age.message}</small>}
-          </s.Explanation>
-        </div> */}
         <div>
           <s.InputWrapper>
             <s.Div>생년월일</s.Div>
@@ -624,8 +580,8 @@ export const UserInfoForm2 = ({
           })}
         />
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.phone && <small role="alert">{errors.phone.message}</small>}
+      <s.Explanation role="alert">
+        {errors.phone && errors.phone.message}
       </s.Explanation>
       <s.InputWrapper>
         <s.Div>닉네임</s.Div>
@@ -711,12 +667,12 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
   const [isConfirmed, setIsConfirmed] = useState(true);
 
   const onClickDsptchNotConfirmed = (e) => {
-    if (e.target.value) {
-      state.dispatchedUniversity = '';
-      state.universityUrl = '';
-      state.country = '';
-      state.dispatchedType = '';
-    }
+    // if (e.target.value) {
+    //   state.dispatchedUniversity = '';
+    //   state.universityUrl = '';
+    //   state.country = '';
+    //   state.dispatchedType = '';
+    // }
     setIsConfirmed(!e.target.value);
     updateUserInfo({
       target: { name: e.target.name, value: !e.target.value }, //state는 비동기적이라 바로 적용안됨
@@ -730,7 +686,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       setIsConfirmed(false);
       setActive(true);
     } else {
-      if (state.dispatchedUniversity && state.country) {
+      if (state.dispatchedUniversity && state.country && state.dispatchType) {
         setActive(true);
       } else {
         setActive(false);
@@ -759,7 +715,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       </s.InputWrapper>
       <DefaultCheckBox
         wrapperStyle={{
-          paddingTop: '12px',
+          paddingTop: '26px',
           color: isConfirmed ? '' : 'black',
         }}
         after="교환/방문교 미정"
@@ -767,7 +723,6 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           border: '0.5px solid #C6C6C6',
           width: '11px',
           height: '11px',
-          borderRadius: '3px',
         }}
         onChange={onClickDsptchNotConfirmed}
         name="isDispatchConfirmed"
@@ -784,7 +739,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           defaultValue={state.universityUrl}
         />
       </s.InputWrapper>
-      <s.Explanation style={{ fontSize: '9px' }}>
+      <s.Explanation style={{ marginTop: '5px', fontSize: '0.83rem' }}>
         사이트 주소는 가입 이후 마이페이지에서 수정하실 수 있습니다.
       </s.Explanation>
 
@@ -805,6 +760,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           <option
             value=""
             hidden
+            style={{ fontSize: '0.9rem' }}
           >
             국가
           </option>

@@ -22,7 +22,6 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: true,
         user: action.payload.user,
         accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken,
         error: null,
       };
     case LOGIN_FAILURE:

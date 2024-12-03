@@ -50,7 +50,6 @@ const SliderContainer = styled.div`
   margin: 0 auto;
   overflow: hidden;
   height: 172px;
-  top: 15px;
 `;
 
 const SliderWrapper = styled.div.withConfig({

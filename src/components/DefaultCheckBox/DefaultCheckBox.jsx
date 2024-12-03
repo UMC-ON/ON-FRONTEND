@@ -48,12 +48,11 @@ const CheckBoxWrapper = styled.label`
   flex-wrap: nowrap;
   color: #5c5c5c;
   font-family: Inter;
-  font-size: 12px;
+  font-size: 0.83rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.22px;
-
   height: 18px;
   width: auto;
 `;
@@ -99,7 +98,7 @@ const StyledCheckBox = styled.input`
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  border-radius: 6px;
+  border-radius: 10px;
   border: 2px solid ${(props) => props.style.color || '#bfd8e5'};
   padding: 0 4px;
   background-color: white;

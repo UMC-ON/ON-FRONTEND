@@ -14,12 +14,12 @@ function SellPageCountrySelect({ countryClick, country, isCountryClicked, update
   return (
     <>
       <GreyPicker $isCountryClicked={isCountryClicked}>
-        <span onClick={countryClick}>
+        <Span onClick={countryClick}>
         {country ? `${country}` : '국가'}
         {!isCountryClicked && (
             <Icon src={arrowIcon} />
         )}
-        </span>
+        </Span>
         {isCountryClicked && (
             <Icon src={whiteCloseIcon} onClick={resetCountry}/>
         )}
@@ -48,3 +48,7 @@ const GreyPicker = styled.div`
 const Icon = styled.img`
   padding-left: 3px;
 `;
+
+const Span = styled.span`
+  font-family: 'Inter';
+`
