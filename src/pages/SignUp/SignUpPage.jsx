@@ -107,7 +107,7 @@ const SignUpPage = () => {
         console.log('S.formData: ', formData);
         const response = await postData(SIGN_UP_URL, formData);
         if (response) {
-          alert('Submitted!');
+          alert('회원가입이 완료되었습니다.');
           nav('/signUp/complete');
         } else if (error) {
           alert('처리하는 중 오류가 생겼습니다. 처음부터 다시 시도해주세요.');

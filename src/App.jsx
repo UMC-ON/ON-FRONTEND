@@ -104,6 +104,9 @@ function App() {
             if (res) {
               console.log(res, 'dkdk');
               dispatch(loadUser(res.data, accessToken));
+              if (res.data.userStatus == 'TEMPORARY') {
+                nav('/signUp/credentials');
+              }
               requestNotificationPermissionOnce();
               console.log('앱 유저인포:', userInfo);
               setIsLoading(false);
