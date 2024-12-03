@@ -8,7 +8,7 @@ const PageHeader = ({ pageName, color = `${theme.title}`, nav }) => {
 
   const onClickBackButton = () => {
     if (nav) {
-      console.log(nav);
+      //console.log(nav);
       navigate(nav);
     } else {
       navigate(-1);

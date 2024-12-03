@@ -32,7 +32,7 @@ const ChatList = () => {
     if (currentMode === 'accompany') {
       for (let i = 0; i < data.length; i++) {
         data[i].country = data[i].location.split(' ')[0];
-        console.log(data[i]); // 디버깅용 로그
+        //console.log(data[i]); // 디버깅용 로그
       }
     }
 
@@ -103,7 +103,7 @@ const ChatList = () => {
         data?.pages.map((page) =>
           page.content.map((data) => (
             <s.ChatListWrapper key={data.roomId}>
-              {console.log(data)}
+              {//console.log(data)}
               {currentMode === 'accompany' ? (
                 <SingleAccompanyChat
                   roomId={data.roomId}

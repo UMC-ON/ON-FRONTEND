@@ -40,7 +40,7 @@ const SchoolAuthPage = () => {
     let value = e.target.value;
 
     setUserInfo({ ...userInfo, [name]: value });
-    console.log(userInfo);
+    //console.log(userInfo);
   };
 
   const handleSubmitBE = async (e) => {
@@ -69,7 +69,7 @@ const SchoolAuthPage = () => {
           },
         );
         if (response) {
-          console.log(response);
+          //console.log(response);
           setLastModalOpen(true);
         }
       } else {
@@ -82,7 +82,7 @@ const SchoolAuthPage = () => {
           },
         );
         if (response) {
-          console.log(response);
+          //console.log(response);
           nav('/');
         }
       }
@@ -133,7 +133,8 @@ const SchoolAuthPage = () => {
               <s.StyledH2>{currentTitle}</s.StyledH2>
               <s.AuthExplanation style={{ marginBottom: '40px' }}>
                 신뢰할 수 있는 커뮤니티를 위해 교환/방문교의 파견 사실여부를
-                확인하고 있습니다. 교환/방문교 인증을 하지 않아도 서비스를 이용할 수 있지만 일부 기능 사용이 제한됩니다.
+                확인하고 있습니다. 교환/방문교 인증을 하지 않아도 서비스를
+                이용할 수 있지만 일부 기능 사용이 제한됩니다.
               </s.AuthExplanation>
               {currentStep}
             </s.ContentSection>

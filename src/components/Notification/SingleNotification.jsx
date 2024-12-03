@@ -27,7 +27,7 @@ const SingleNotification = ({
           {},
         );
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       }
     }
     if (alertType === 'COMPANY') {

@@ -39,7 +39,7 @@ const FindPassword = () => {
       let name = e.target.name;
       let value = e.target.value;
       setUserInfo({ ...userInfo, [name]: value });
-      console.log(userInfo);
+      //console.log(userInfo);
     }
   };
 
@@ -47,7 +47,7 @@ const FindPassword = () => {
     const formData = JSON.stringify(userInfo);
 
     const res = await postData(SEND_PW_AUTHNUM, formData).then((res) => {
-      console.log(res);
+      //console.log(res);
 
       alert('인증번호가 메일로 발송되었습니다.');
       //setModal(true);
@@ -132,7 +132,7 @@ const FindPassword = () => {
                     </option>
                     <option
                       value="MALE"
-                      style={{ background: 'white'}}
+                      style={{ background: 'white' }}
                     >
                       남자
                     </option>
@@ -221,7 +221,7 @@ const FindPassword = () => {
                     onClick={async (e) => {
                       e.preventDefault();
                       const formData = JSON.stringify(authForm);
-                      console.log('F.formData:', formData);
+                      //console.log('F.formData:', formData);
                       try {
                         const res = await putData(
                           CHECK_VERIFYCODE_PW,
@@ -242,7 +242,7 @@ const FindPassword = () => {
                           }
                         }
                       } catch (error) {
-                        console.log(error);
+                        //console.log(error);
                         if (error.response?.status == Number(401)) {
                           alert(
                             '인증번호가 만료되었습니다. 인증번호를 다시 요청해주세요.',

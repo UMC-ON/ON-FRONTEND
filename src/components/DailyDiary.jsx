@@ -2,23 +2,23 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StoredDiary = ({ diaries }) => {
-  console.log(diaries);
+  //console.log(diaries);
 
   return (
     <>
-      {diaries && diaries.map((item, index) => (
-        <DailyDiary key={index}>
-          <Content>{item.content}</Content>
-          <DDay>{`D${item.writtenDday === 0 ? "-Day" : item.writtenDday < 0 ? ` + ${Math.abs(item.writtenDday)}` : ` - ${item.writtenDday}`}`}</DDay>
-          <Date>{item.diaryDate}</Date>
-        </DailyDiary>
-      ))}
+      {diaries &&
+        diaries.map((item, index) => (
+          <DailyDiary key={index}>
+            <Content>{item.content}</Content>
+            <DDay>{`D${item.writtenDday === 0 ? '-Day' : item.writtenDday < 0 ? ` + ${Math.abs(item.writtenDday)}` : ` - ${item.writtenDday}`}`}</DDay>
+            <Date>{item.diaryDate}</Date>
+          </DailyDiary>
+        ))}
     </>
   );
-}
+};
 
 export default StoredDiary;
-
 
 const DailyDiary = styled.div`
   color: #838383;
@@ -26,7 +26,7 @@ const DailyDiary = styled.div`
   height: 130px;
   margin: 10px auto;
   border-radius: 15px;
-  border: 0.5px solid ${props => props.theme.lightPurple};
+  border: 0.5px solid ${(props) => props.theme.lightPurple};
   white-space: pre-wrap;
   text-align: left;
   display: flex;
@@ -38,7 +38,7 @@ const DDay = styled.div`
   width: 50px;
   height: 15px;
   border-radius: 9px;
-  background: ${props => props.theme.blueGra};
+  background: ${(props) => props.theme.blueGra};
   color: white;
   font-size: 11px;
   display: flex;

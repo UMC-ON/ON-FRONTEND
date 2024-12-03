@@ -8,7 +8,7 @@ import { countryFlags, countries, cities } from '../../assets/cityDatabase.js';
 import { useLocation } from 'react-router-dom';
  const location = useLocation();
   const selectedCity = location.state?.selectedCity;
-  console.log('Selected City:', selectedCity);
+  //console.log('Selected City:', selectedCity);
   하면 선택한 도시의 배열 넘어옴. 
   콘솔 보고 배열 생긴거 체크하며 값 넚으면 됨. 
   selectedCity는 필요에 따라서 useState로 구현하는것도 추천
@@ -24,14 +24,14 @@ const SelectCity = ({ closeModal, getCity }) => {
 
   // useEffect(() => {
   //   const { url } = location.state || {};
-  //   console.log('이전 페이지:' + url);
+  //   //console.log('이전 페이지:' + url);
   //   setPrevURL(url);
   // }, []);
 
   const handleCityClick = (city) => {
     // navigate(prevURL, { state: { selectedCity: city.city } });
-    console.log(city.city);
-    getCity(country + " " + city.city);
+    //console.log(city.city);
+    getCity(country + ' ' + city.city);
   };
 
   // // Set 객체를 사용하여 중복된 나라를 제거
@@ -62,25 +62,25 @@ const SelectCity = ({ closeModal, getCity }) => {
   return (
     <s.PageLayout>
       <s.PageHeaderLayout>
-          <s.BackButton onClick={closeModal}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="10"
-              height="16"
-              viewBox="0 0 10 16"
-              fill="none"
-              positions="fixed"
-            >
-              <path
-                d="M8 2L1.8858 7.24074C1.42019 7.63984 1.42019 8.36016 1.8858 8.75926L8 14"
-                stroke="#7A7A7A"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-            </svg>
-          </s.BackButton>
-          <s.PageName style={{ color: '#3E73B2' }}>지역 선택</s.PageName>
-        </s.PageHeaderLayout>
+        <s.BackButton onClick={closeModal}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="10"
+            height="16"
+            viewBox="0 0 10 16"
+            fill="none"
+            positions="fixed"
+          >
+            <path
+              d="M8 2L1.8858 7.24074C1.42019 7.63984 1.42019 8.36016 1.8858 8.75926L8 14"
+              stroke="#7A7A7A"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </svg>
+        </s.BackButton>
+        <s.PageName style={{ color: '#3E73B2' }}>지역 선택</s.PageName>
+      </s.PageHeaderLayout>
       {Object.entries(continents).map(([continent, countries]) => (
         <s.ContinentWrapper key={continent}>
           <s.ContinentTitle>{continent}</s.ContinentTitle>

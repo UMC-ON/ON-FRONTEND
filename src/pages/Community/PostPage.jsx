@@ -35,8 +35,8 @@ const PostPage = ({ color, boardType }) => {
 
   useEffect(() => {
     if (userInfo) {
-      console.log(`유저:${userInfo}`);
-      console.log('useEffect 실행');
+      //console.log(`유저:${userInfo}`);
+      //console.log('useEffect 실행');
     }
     if (userInfo && userInfo.id) {
       setInput({ ...userInfo, id: userInfo.id });
@@ -44,7 +44,7 @@ const PostPage = ({ color, boardType }) => {
   }, [userInfo]);
   useEffect(() => {
     //setImageFiles(sendingImages.current);
-    console.log(imageFiles);
+    //console.log(imageFiles);
   }, [imageFiles]);
 
   if (isLoading) {
@@ -68,7 +68,7 @@ const PostPage = ({ color, boardType }) => {
     const fileList = e.target.files;
     if (fileList) {
       const imgList = Array.from(fileList);
-      console.log(imgList);
+      //console.log(imgList);
 
       setImageFiles((prev) => prev.concat(imgList));
       e.target.value = '';
@@ -104,7 +104,7 @@ const PostPage = ({ color, boardType }) => {
         },
       );
       if (response) {
-        console.log(response.data.result);
+        //console.log(response.data.result);
         return response;
       }
     };

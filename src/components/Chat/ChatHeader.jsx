@@ -23,7 +23,7 @@ const ChatHeader = ({
         {},
       );
     } catch (error) {
-      console.error('Error posting data', error);
+      //console.error('Error posting data', error);
     }
   };
 
@@ -38,7 +38,7 @@ const ChatHeader = ({
         { marketPostId: id },
       );
     } catch (error) {
-      console.error('Error posting data', error);
+      //console.error('Error posting data', error);
     }
   };
 

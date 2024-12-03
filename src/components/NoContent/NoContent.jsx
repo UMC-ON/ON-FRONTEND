@@ -2,7 +2,7 @@ import * as s from './NoContentStyled';
 import no_content from '../../assets/images/no_content.svg';
 
 const NoContent = ({ content }) => {
-  console.log(content);
+  //console.log(content);
   return (
     <s.NoContentLayout>
       <>

@@ -60,7 +60,7 @@ const AccompanyChat = () => {
         );
 
         if (response) {
-          console.log('콘솔', response.data);
+          //console.log('콘솔', response.data);
           if (
             response.data.content[0].chatList &&
             response.data.content[0].chatList.length > 0
@@ -83,7 +83,7 @@ const AccompanyChat = () => {
           }
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -131,7 +131,7 @@ const AccompanyChat = () => {
   //         }
   //       } catch (error) {
   //         if (error.name !== 'AbortError') {
-  //           console.error('Error fetching new messages:', error);
+  //           //console.error('Error fetching new messages:', error);
   //         }
   //       }
 

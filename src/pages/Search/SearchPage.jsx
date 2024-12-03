@@ -48,7 +48,7 @@ const Search = () => {
     });
 
   const handleScroll = (e) => {
-    console.log(
+    //console.log(
       'Scrolling...',
       e.target.scrollTop,
       e.target.scrollHeight,

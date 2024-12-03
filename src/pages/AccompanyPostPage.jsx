@@ -72,7 +72,7 @@ function AccompanyPostPage() {
   };
 
   useEffect(() => {
-    console.log(endDate);
+    //console.log(endDate);
   }, [endDate]);
 
   useEffect(() => {
@@ -86,15 +86,15 @@ function AccompanyPostPage() {
 
         const data = user_data.data;
         setUserData(data);
-        console.log('user data');
-        console.log(user_data.data);
+        //console.log('user data');
+        //console.log(user_data.data);
 
         setAge(data.age);
         setCountry(data.country);
-        console.log(data.country);
+        //console.log(data.country);
         setSchool(data.dispatchedUniversity);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -183,16 +183,16 @@ function AccompanyPostPage() {
   const increaseDays = () => {
     if (daysDifference < limitDays) {
       setDaysDifference(daysDifference + 1);
-      console.log('Limit', limitDays);
-      console.log('Days', daysDifference);
+      //console.log('Limit', limitDays);
+      //console.log('Days', daysDifference);
     }
   };
 
   const decreaseDays = () => {
     if (daysDifference > 0) {
       setDaysDifference(daysDifference - 1);
-      console.log('Limit', limitDays);
-      console.log('Days', daysDifference);
+      //console.log('Limit', limitDays);
+      //console.log('Days', daysDifference);
     }
   };
 
@@ -362,7 +362,7 @@ function AccompanyPostPage() {
       endDate: endDate,
     };
 
-    console.log(jsonData);
+    //console.log(jsonData);
 
     const jsonBlob = new Blob([JSON.stringify(jsonData)], {
       type: 'application/json',
@@ -379,15 +379,15 @@ function AccompanyPostPage() {
       });
 
       if (response) {
-        console.log(response.data.result);
+        //console.log(response.data.result);
       }
     } catch (error) {
-      console.error('Error posting data:', error);
+      //console.error('Error posting data:', error);
     }
   };
 
   const onSubmit = () => {
-    console.log(input);
+    //console.log(input);
     if (personValue == 0) {
       handleModalOpen('모집 인원을');
     } else if (city == null) {
@@ -788,7 +788,7 @@ const CircleContainer = styled.section`
   margin-left: 10px;
   margin-top: 5px;
   padding-left: 6px;
-  cursor:pointer;
+  cursor: pointer;
 `;
 
 const CircleText = styled.section`
@@ -836,7 +836,7 @@ const GreyInput = styled.textarea`
   height: ${(props) => props.$height || 'auto'};
   background-color: white;
   box-sizing: border-box; /* padding과 border를 크기에 포함 */
-   resize: none;
+  resize: none;
 
   &:hover {
     border-color: #b5b5b5; /* hover 상태에서 border 색상만 변경 */
@@ -991,7 +991,7 @@ const BlackText = styled.div`
 const PlusButton = styled.img`
   margin-top: 7px;
   margin-left: 7px;
-  cursor:pointer;
+  cursor: pointer;
 `;
 
 const Overlay = styled.div`
@@ -1005,11 +1005,8 @@ const Overlay = styled.div`
 `;
 
 const Close = styled.img`
-
   cursor: pointer;
 `;
-
-
 
 const CircleButton = styled.img`
   margin-left: 8px;
@@ -1029,7 +1026,7 @@ const MarginLeft2 = styled.div`
 export const LeftButton = styled.img`
   position: absolute;
   left: 25px;
-  cursor:pointer;
+  cursor: pointer;
 `;
 
 const BottomTabLayout2 = styled.div`

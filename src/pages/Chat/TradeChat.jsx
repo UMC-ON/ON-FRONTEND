@@ -51,11 +51,11 @@ const TradeChat = () => {
         );
 
         if (response) {
-          console.log(response.data);
+          //console.log(response.data);
           setInfoResult(response.data);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -85,7 +85,7 @@ const TradeChat = () => {
           } else {
             setChatList([]);
           }
-          console.log('콘솔', response.data.content[0]);
+          //console.log('콘솔', response.data.content[0]);
 
           if (response.data.content[0].chatUserOne === userInfo.id) {
             setMessageInitiator(true);
@@ -98,7 +98,7 @@ const TradeChat = () => {
           }
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -149,7 +149,7 @@ const TradeChat = () => {
   //         }
   //       } catch (error) {
   //         if (error.name !== 'AbortError') {
-  //           console.error('Error fetching new messages:', error);
+  //           //console.error('Error fetching new messages:', error);
   //         }
   //       }
 

@@ -38,7 +38,7 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
         setMessage('');
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      //console.error('Error sending message:', error);
     } finally {
       setIsLoading(false);
     }

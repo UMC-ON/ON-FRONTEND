@@ -72,10 +72,10 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
       totalPage.current = response.data.totalPages;
       if (currentPage.current > 0) {
         setPostList((postList) => [...postList, ...response.data.content]);
-        console.log('내용 존재');
+        //console.log('내용 존재');
       } else {
         setPostList(response.data.content);
-        console.log('이거 실행');
+        //console.log('이거 실행');
       }
     }
     return response;
@@ -97,17 +97,17 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
       totalPage.current = response.data.totalPages;
       if (currentPage.current > 0) {
         setPostList((postList) => [...postList, ...response.data.content]);
-        console.log('내용 존재');
+        //console.log('내용 존재');
       } else {
         setPostList(response.data.content);
-        console.log('이거 실행');
+        //console.log('이거 실행');
       }
     }
   };
 
   useEffect(() => {
-    console.log('유저인포');
-    console.log(userInfo);
+    //console.log('유저인포');
+    //console.log(userInfo);
 
     if (country === null) {
       fetchData();
@@ -129,15 +129,15 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         currentPage.current < totalPage.current
       ) {
         currentPage.current++;
-        console.log(currentPage.current);
-        console.log(totalPage.current);
-        console.log(isLoading);
+        //console.log(currentPage.current);
+        //console.log(totalPage.current);
+        //console.log(isLoading);
         if (country === null) {
           await fetchData();
         } else {
           await fetchFilteredData();
         }
-        console.log(isLoading);
+        //console.log(isLoading);
         newDataLoading.current = false;
       }
     }
@@ -195,7 +195,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         <s.PostListSection>
           {postList && postList.length > 0 ? (
             postList.map((post) => {
-              console.log(post);
+              //console.log(post);
               return (
                 <CommunityPost
                   key={post.postId}

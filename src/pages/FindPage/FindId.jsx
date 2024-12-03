@@ -27,7 +27,7 @@ const FindId = () => {
       let name = e.target.name;
       let value = e.target.value;
       setUserInfo({ ...userInfo, [name]: value });
-      console.log(userInfo);
+      //console.log(userInfo);
     }
   };
   const userEmail = useRef('');
@@ -138,7 +138,7 @@ const FindId = () => {
                   <option
                     value=""
                     hidden
-                    style={{color: ''}}
+                    style={{ color: '' }}
                   >
                     성별을 선택해 주세요.
                   </option>

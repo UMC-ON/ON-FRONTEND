@@ -7,13 +7,12 @@ import DailyDiary from '../../components/DailyDiary';
 import DDayCalendar from '../../components/DDayCalendar.jsx';
 import DailyDiaryCalendar from '../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx';
 import DiaryAlertModal from '../../components/DiaryAlertModal.jsx';
-
 import styled from 'styled-components';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
+//import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DiaryPage.css';
-import ko from 'date-fns/locale/ko';
+//import ko from 'date-fns/locale/ko';
 import closeIcon from '../../assets/images/close_button.svg';
 import plus_button from '../../assets/images/addButton.svg';
 import { getData, postData } from '../../api/Functions';
@@ -34,7 +33,7 @@ const Diary = () => {
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
-  console.log(userInfo);
+  ////console.log(userInfo);
 
   useEffect(() => {
     const fetchDiaries = async () => {
@@ -45,11 +44,11 @@ const Diary = () => {
         setDiaries(response?.data?.diaryList);
         setDday(response?.data?.dday);
         setDateList(response?.data?.dateList);
-        console.log(response?.data?.diaryList);
-        console.log(userInfo);
-        console.log(response?.data?.dday);
+        ////console.log(response?.data?.diaryList);
+        ////console.log(userInfo);
+        ////console.log(response?.data?.dday);
       } catch (error) {
-        console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
+        ////console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
       }
     };
     fetchDiaries();
@@ -67,7 +66,7 @@ const Diary = () => {
       });
       return response?.data?.result.date || null; // 서버에서 dday 값을 반환
     } catch (error) {
-      console.error('서버에서 dday 가져오는 중 오류 발생:', error);
+      ////console.error('서버에서 dday 가져오는 중 오류 발생:', error);
       return null;
     }
   };
@@ -115,13 +114,13 @@ const Diary = () => {
       );
 
       if (response) {
-        console.log('Diary saved:', response.data);
+        ////console.log('Diary saved:', response.data);
         window.location.reload();
       } else {
-        console.error('Error saving diary: no response.');
+        ////console.error('Error saving diary: no response.');
       }
     } catch (error) {
-      console.error('Error saving diary:', error);
+      ////console.error('Error saving diary:', error);
     }
   };
 

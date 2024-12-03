@@ -8,7 +8,7 @@ import { countryFlags, countries, cities } from '../../assets/cityDatabase.js';
 import { useLocation } from 'react-router-dom';
  const location = useLocation();
   const selectedCity = location.state?.selectedCity;
-  console.log('Selected City:', selectedCity);
+  //console.log('Selected City:', selectedCity);
   하면 선택한 도시의 배열 넘어옴. 
   콘솔 보고 배열 생긴거 체크하며 값 넚으면 됨. 
   selectedCity는 필요에 따라서 useState로 구현하는것도 추천
@@ -24,7 +24,7 @@ const SelectCity = ({ closeModal, getCity }) => {
 
   // useEffect(() => {
   //   const { url } = location.state || {};
-  //   console.log('이전 페이지:' + url);
+  //   //console.log('이전 페이지:' + url);
   //   setPrevURL(url);
   // }, []);
 
@@ -34,8 +34,8 @@ const SelectCity = ({ closeModal, getCity }) => {
       country: country,
       city: city.city,
     };
-    console.log('Country:', country); // country를 출력
-    console.log('City:', city.city); // city를 출력
+    //console.log('Country:', country); // country를 출력
+    //console.log('City:', city.city); // city를 출력
     getCity(locationInfo); // 객체로 국가와 도시 정보 전달
   };
 

@@ -36,7 +36,7 @@ const MyPage = () => {
         setIsPasswordConfirmed(true);
       }
     } catch (error) {
-      console.error('error:', error);
+      //console.error('error:', error);
       alert('다시 시도해주세요.');
     } finally {
       setIsLoading(false);
