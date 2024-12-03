@@ -291,8 +291,8 @@ export const UserInfoForm1 = ({
           </s.GrayButton>
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.loginId && <small role="alert">{errors.loginId.message}</small>}
+      <s.Explanation role="alert">
+        {errors.loginId && errors.loginId.message}
       </s.Explanation>
       {dupCheck.loginId === 1 && (
         <s.Explanation>사용할 수 있는 아이디입니다.</s.Explanation>
@@ -398,10 +398,8 @@ export const UserInfoForm1 = ({
           {passwordSet.current.pw && !errors.password && <img src={validImg} />}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.password && (
-          <small role="alert">{errors.password.message}</small>
-        )}
+      <s.Explanation role="alert">
+        {errors.password && errors.password.message}
       </s.Explanation>
       <s.InputWrapper>
         <s.Div>비밀번호 확인</s.Div>
@@ -433,10 +431,8 @@ export const UserInfoForm1 = ({
           )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.password_check && (
-          <small role="alert">{errors.password_check.message}</small>
-        )}
+      <s.Explanation role="alert">
+        {errors.password_check && errors.password_check.message}
       </s.Explanation>
     </>
   );
@@ -491,8 +487,8 @@ export const UserInfoForm2 = ({
           })}
         />
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.name && <small role="alert">{errors.name.message}</small>}
+      <s.Explanation role="alert">
+        {errors.name && errors.name.message}
       </s.Explanation>
 
       <s.TwoColumnWrapper>
@@ -584,8 +580,8 @@ export const UserInfoForm2 = ({
           })}
         />
       </s.InputWrapper>
-      <s.Explanation>
-        {errors.phone && <small role="alert">{errors.phone.message}</small>}
+      <s.Explanation role="alert">
+        {errors.phone && errors.phone.message}
       </s.Explanation>
       <s.InputWrapper>
         <s.Div>닉네임</s.Div>
@@ -764,7 +760,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           <option
             value=""
             hidden
-            style={{fontSize: '0.9rem'}}
+            style={{ fontSize: '0.9rem' }}
           >
             국가
           </option>
