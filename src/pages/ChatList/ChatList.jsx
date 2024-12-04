@@ -8,7 +8,6 @@ import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
 import { useInfiniteQuery } from 'react-query';
 import { getData } from '../../api/Functions';
-import useFetchChatList from '../../hooks/useFetchChatList';
 import { showDate } from '../../components/Common/InfoExp';
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
 
@@ -28,11 +27,9 @@ const ChatList = () => {
 
     const data = response.data.content[0].roomList;
 
-    // 추가된 for 루프: country 필드 추가
     if (currentMode === 'accompany') {
       for (let i = 0; i < data.length; i++) {
         data[i].country = data[i].location.split(' ')[0];
-        console.log(data[i]); // 디버깅용 로그
       }
     }
 

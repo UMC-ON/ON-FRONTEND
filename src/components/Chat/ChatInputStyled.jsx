@@ -16,6 +16,10 @@ export const InputField = styled.article`
   z-index: 2;
 `;
 
+export const LoadingIndex = styled.div`
+  z-index: 5;
+`;
+
 export const TextInputContainer = styled.div`
   height: auto;
   width: 90%;

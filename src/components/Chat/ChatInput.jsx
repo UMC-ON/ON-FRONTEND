@@ -54,7 +54,11 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
     textarea.style.height = 'auto'; // 기본 높이로 재설정
   };
   if (isLoading) {
-    return <Loading />;
+    return (
+      <s.LoadingIndex>
+        <Loading />
+      </s.LoadingIndex>
+    );
   }
 
   return (
