@@ -71,7 +71,7 @@ const ChatHeader = ({
           {isAccompany ? '모집 완료' : '거래 완료'}
         </s.CompleteBtn>
       )}
-      {isComplete && (
+      {!messageInitiator && isComplete && (
         <s.CompletedBtn>
           {isAccompany ? '모집 완료' : '거래 완료'}
         </s.CompletedBtn>
