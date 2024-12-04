@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as s from './ChatInputStyled';
 import { POST_CHAT } from '../../api/urls';
-import { postData } from '../../api/Functions';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
 import send from '../../assets/images/send.svg';
@@ -34,6 +33,7 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
           userId: currentUserId,
           message: message,
         };
+        console.log('인풋 완료');
         addNewMessage(newMessage);
         setMessage('');
       }

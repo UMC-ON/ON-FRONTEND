@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as s from './ChatStyled';
 import ChatHeader from '../../components/Chat/ChatHeader';
@@ -121,20 +121,6 @@ const AccompanyChat = () => {
     fetchAccompanyChat();
   }, [roomId]);
 
-  const scrollToBottom = () => {
-    if (chatWrapperRef.current) {
-      chatWrapperRef.current.scrollTop = chatWrapperRef.current.scrollHeight;
-    }
-  };
-
-  const addNewMessage = (newMessage) => {
-    setChatList((prevChatList) => {
-      const updatedChatList = [...prevChatList, newMessage];
-      return updatedChatList;
-    });
-    scrollToBottom();
-  };
-
   useEffect(() => {
     const abortController = new AbortController();
     pollingRef.current = true;
@@ -164,8 +150,7 @@ const AccompanyChat = () => {
           }
         }
 
-        // 3초 간격으로 폴링
-        await new Promise((resolve) => setTimeout(resolve, 10000));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
       }
     };
 
@@ -177,13 +162,48 @@ const AccompanyChat = () => {
     };
   }, [roomId]);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [chatList]);
-
   const handleBackNavigation = () => {
     // pollingRef.current = false; // polling 상태를 false로 설정
     navigate('/chatlist'); // 이전 페이지로 이동
+  };
+
+  const messageEndRef = useRef(null);
+
+  const addNewMessage = (newMessage) => {
+    setChatList((prevChatList) => {
+      const updatedChatList = [...prevChatList, newMessage];
+      return updatedChatList;
+    });
+    scrollToBottom();
+  };
+
+  const scrollToBottom = () => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            console.log('Element is in view!');
+            if (messageEndRef.current) {
+              messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+            }
+          } else {
+            console.log('Element is out of view!');
+          }
+        });
+      },
+      { threshold: 0.5 }, // 요소가 100% 화면에 보여질 때만 감지
+    );
+
+    if (messageEndRef.current) {
+      observer.observe(messageEndRef.current);
+    }
+
+    // 정리(cleanup)
+    return () => {
+      if (messageEndRef.current) {
+        observer.unobserve(messageEndRef.current);
+      }
+    };
   };
 
   if (isLoading) {
@@ -206,7 +226,10 @@ const AccompanyChat = () => {
         pointColor={pointColor}
         infoResult={infoResult}
       />
-      <s.ChatWrapper>
+      <s.ChatWrapper
+        className="chat"
+        ref={chatWrapperRef}
+      >
         {chatList && chatList.length > 0 ? (
           chatList.map((data, index) => (
             <s.ChatContainer key={index}>
@@ -232,6 +255,7 @@ const AccompanyChat = () => {
         ) : (
           <></>
         )}
+        <div ref={messageEndRef}></div>
       </s.ChatWrapper>
       <s.Background
         $backgroundimageurl={

@@ -41,6 +41,8 @@ export const TradeBackground = styled.div`
 export const ChatWrapper = styled.div`
   z-index: 1;
   width: 100%;
+  overflow-y: auto;
+  height: 100%;
   padding: 2.25rem 1.5rem 0 1.5rem;
   box-sizing: border-box;
   display: flex;
