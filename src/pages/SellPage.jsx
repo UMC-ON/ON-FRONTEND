@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import arrowIcon from '../assets/images/bottomArrow.svg';
 import search_icon from '../assets/images/search_icon.svg';
@@ -28,6 +29,7 @@ function SellPage() {
   const [items, setItems] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [page, setPage] = useState(0);
+  const userInfo = useSelector((state) => state.user.user);
 
   const navigate = useNavigate();
 
@@ -242,7 +244,7 @@ function SellPage() {
   };
 
   const goPost = () => {
-    if (isValidated == null) {
+    if (userInfo.dispatchType == null) {
       setModalOpen(true);
     } else {
       navigate('./post');
