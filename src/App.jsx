@@ -87,22 +87,22 @@ function App() {
       setIsLoading(false);
     } else {
       //setIsLoading(true);
-      console.log('트루로 설정', mountCount);
+      //console.log('트루로 설정', mountCount);
 
-      console.log('유저인포 앱', userInfo);
+      //console.log('유저인포 앱', userInfo);
       if (!userInfo) {
-        console.log('유저인포 없음');
+        //console.log('유저인포 없음');
         setIsLoading(true);
-        console.log(userInfo);
+        //console.log(userInfo);
         const loadUserData = async () => {
           const accessToken = localStorage.getItem('AToken');
           if (accessToken) {
-            console.log('엑세스 있음');
+            //console.log('엑세스 있음');
             const res = await getData(GET_USER_INFO, {
               Authorization: `Bearer ${accessToken}`,
             });
             if (res) {
-              console.log(res, 'dkdk');
+              //console.log(res, 'dkdk');
               dispatch(loadUser(res.data, accessToken));
               if (res.data.userStatus == 'TEMPORARY') {
                 //사용자가 임의로 주소 수정해서 들어오면 이쪽으로 안내..
@@ -110,7 +110,7 @@ function App() {
                 nav('/signUp/credentials');
               }
 
-              console.log('앱 유저인포:', userInfo);
+              //console.log('앱 유저인포:', userInfo);
               setIsLoading(false);
             }
           } else {
@@ -123,7 +123,7 @@ function App() {
         try {
           loadUserData();
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
       }
     }
@@ -133,7 +133,7 @@ function App() {
     if (!userInfo && !excludepaths.includes(location.pathname)) {
       setIsLoading(true);
     } else if (userInfo && !excludepaths.includes(location.pathname)) {
-      console.log('지금 유저인포 등록됨');
+      //console.log('지금 유저인포 등록됨');
       setIsLoading(false);
     }
   }, [userInfo]);

@@ -35,13 +35,13 @@ const DDayCalendarComponent = ({
           'Content-Type': 'application/json',
         },
       );
-      console.log('디데이 저장 완료');
-      console.log(localStorage.getItem('AToken'));
+      //console.log('디데이 저장 완료');
+      //console.log(localStorage.getItem('AToken'));
 
       // 서버 전송이 완료되면 새로고침
       window.location.reload();
     } catch (error) {
-      console.error('서버로 dday 전달 중 오류 발생:', error);
+      //console.error('서버로 dday 전달 중 오류 발생:', error);
     }
   };
 

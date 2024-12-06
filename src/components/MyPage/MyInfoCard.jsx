@@ -37,14 +37,14 @@ const MyInfoCard = ({
         {},
       );
 
-      console.log(response);
+      //console.log(response);
       if (response.status == 200) {
         dispatch(logout());
 
         navigate('/landing');
       }
     } catch (error) {
-      console.error('Logout error:', error);
+      //console.error('Logout error:', error);
     } finally {
       setIsLoading(false);
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StoredDiary = ({ diaries }) => {
-  console.log(diaries);
+  //console.log(diaries);
 
   return (
     <>

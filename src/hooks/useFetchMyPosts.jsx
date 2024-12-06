@@ -15,12 +15,12 @@ const useFetchMyPosts = (url, boardType, token, params, currentMode) => {
           params,
         );
         if (response) {
-          console.log(response.data);
-          console.log(response.data.content);
+          //console.log(response.data);
+          //console.log(response.data.content);
           setPosts(response.data.content);
         }
       } catch (error) {
-        console.error('Error fetching data:', boardType, error);
+        //console.error('Error fetching data:', boardType, error);
       } finally {
         setIsLoading(false);
       }

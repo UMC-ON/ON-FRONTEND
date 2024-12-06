@@ -96,9 +96,9 @@ const StarContainer = ({ marketPostId, isFilled }) => {
       // 로컬스토리지에 스크랩 상태 저장
       localStorage.setItem(`starState_${marketPostId}`, JSON.stringify(!isStarFilled));
 
-      console.log({ marketPostId });
+      //console.log({ marketPostId });
     } catch (error) {
-      console.error('스크랩 처리 중 오류 발생:', error);
+      //console.error('스크랩 처리 중 오류 발생:', error);
     }
   };
 

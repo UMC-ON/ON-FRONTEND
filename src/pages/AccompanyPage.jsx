@@ -150,7 +150,7 @@ function AccompanyPage() {
       );
 
       // console.log("param is " + params);
-      console.log('params:', params);
+      //console.log('params:', params);
       // console.log("all data is " + all_data);
 
       if (page === 0) {
@@ -169,7 +169,7 @@ function AccompanyPage() {
 
       setIsValidated(user_data.data.country);
     } catch (error) {
-      return <ErrorScreen/>
+      return <ErrorScreen />;
       // console.error('Error fetching data:', error);
     } finally {
       setIsLoading(false);
@@ -178,13 +178,13 @@ function AccompanyPage() {
 
   // 필터 상태나 페이지가 변경될 때만 데이터를 가져옴
   useEffect(() => {
-    console.log('Fetching data with', {
-      page,
-      startDate,
-      endDate,
-      gender,
-      country,
-    });
+    // console.log('Fetching data with', {
+    //   page,
+    //   startDate,
+    //   endDate,
+    //   gender,
+    //   country,
+    // });
     fetchData();
   }, [
     page,
@@ -284,7 +284,6 @@ export default AccompanyPage;
 const TopHeader = styled.div`
   font-size: 12px;
   color: #cccccc;
-  
 `;
 
 const TopBar = styled.div`
@@ -305,10 +304,8 @@ const Overlay = styled.div`
 `;
 
 const Close = styled.img`
-
   cursor: pointer;
 `;
-
 
 const BottomTabLayout = styled.div`
   width: 100%;

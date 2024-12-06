@@ -39,7 +39,7 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
         },
         {},
       );
-      console.log(response);
+      //console.log(response);
       if (response.status == 200) {
         // LocalStorage에서 토큰 제거
         localStorage.removeItem('AToken');
@@ -53,7 +53,7 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
         nextStep();
       }
     } catch (error) {
-      console.error('delete account error:', error);
+      //console.error('delete account error:', error);
     } finally {
       setIsLoading(false);
     }

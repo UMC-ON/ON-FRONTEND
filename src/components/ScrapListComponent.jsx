@@ -84,7 +84,7 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
       window.location.reload();
   
     } catch (error) {
-      console.error('스크랩 처리 중 오류 발생:', error);
+      //console.error('스크랩 처리 중 오류 발생:', error);
     }
   };
   

@@ -55,7 +55,7 @@ function CommunityHomePage() {
         });
 
         setFreeData(free_data.data);
-        console.log(free_data.data);
+        //console.log(free_data.data);
 
         const accom_data = await getData(GET_RECENT_ACCOMPANY, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
@@ -63,7 +63,7 @@ function CommunityHomePage() {
         setAccompanyData(accom_data.data);
         // console.log(accom_data.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }

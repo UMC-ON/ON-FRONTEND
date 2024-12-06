@@ -40,8 +40,8 @@ const MyInfo = ({
   }
 
   useEffect(() => {
-    console.log(nicknameInput);
-    console.log(nickname);
+    //console.log(nicknameInput);
+    //console.log(nickname);
   }, [nickname]);
 
   //닉네임 중복 체크
@@ -68,7 +68,7 @@ const MyInfo = ({
           }
         })
         .catch((error) => {
-          console.error('Error:', error);
+          //console.error('Error:', error);
           alert('닉네임 중복 확인 오류.');
         });
     }
@@ -91,7 +91,7 @@ const MyInfo = ({
         setEditNickname(false);
       }
     } catch (error) {
-      console.log('Error:', error);
+      //console.log('Error:', error);
       alert('닉네임 수정 오류.');
     } finally {
       setIsLoading(false);
@@ -111,12 +111,12 @@ const MyInfo = ({
           'Content-Type': 'text/plain', // 헤더 명시
         });
         if (response.status === 200) {
-          console.log(response);
+          //console.log(response);
           setLink(data);
         }
       }
     } catch (error) {
-      console.log('Error:', error);
+      //console.log('Error:', error);
       alert('링크 수정 오류. 올바른 주소 형식인가요?');
     } finally {
       setIsLoading(false);

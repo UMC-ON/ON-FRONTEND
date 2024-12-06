@@ -34,8 +34,8 @@ const SelectCity = ({ closeModal, getCity }) => {
       country: country,
       city: city.city,
     };
-    console.log('Country:', country); // country를 출력
-    console.log('City:', city.city); // city를 출력
+    //console.log('Country:', country); // country를 출력
+    //console.log('City:', city.city); // city를 출력
     getCity(locationInfo); // 객체로 국가와 도시 정보 전달
   };
 

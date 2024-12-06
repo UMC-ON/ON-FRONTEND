@@ -25,7 +25,7 @@ const ItemList = ({ items }) => {
       try {
         // Check if userInfo is available
         if (!userInfo || !userInfo.id) {
-          console.error('User info is not available');
+          //.error('User info is not available');
           return;
         }
 
@@ -46,12 +46,12 @@ const ItemList = ({ items }) => {
             (post) => post.marketPost.marketPostId,
           );
           setScrappedMarketPostIds(scrappedIds);
-          console.log(scrappedIds);
+          //console.log(scrappedIds);
         } else {
-          console.error('Unexpected response structure:', response.data);
+          //console.error('Unexpected response structure:', response.data);
         }
       } catch (error) {
-        console.error('Error fetching scrapped posts:', error);
+        //console.error('Error fetching scrapped posts:', error);
       }
     };
 
@@ -167,7 +167,7 @@ const StarContainer = ({
       }
       setIsStarFilled(!isStarFilled);
     } catch (error) {
-      console.error('스크랩 처리 중 오류 발생:', error);
+      //console.error('스크랩 처리 중 오류 발생:', error);
     }
   };
 
