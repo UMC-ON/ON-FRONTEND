@@ -275,7 +275,7 @@ export const UserInfoForm1 = ({
             <img src={validImg} />
           )}
           <s.GrayButton
-            disabled={errors.loginId}
+            disabled={errors.loginId || dupCheck.loginId < 1}
             onClick={async (e) => {
               e.preventDefault();
               const res = await postData(SEND_VERIFICATION_CODE, id.current, {

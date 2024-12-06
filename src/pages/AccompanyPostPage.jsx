@@ -23,6 +23,7 @@ import AlertModal from '../components/AlertModal.jsx';
 
 import { multiFilePostData, getData } from '../api/Functions';
 import { WRITE_ACCOMPANY, GET_USER_INFO } from '../api/urls';
+import ErrorScreen from '../components/ErrorScreen.jsx';
 
 function AccompanyPostPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +73,7 @@ function AccompanyPostPage() {
   };
 
   useEffect(() => {
-    //console.log(endDate);
+    // console.log(endDate);
   }, [endDate]);
 
   useEffect(() => {
@@ -86,15 +87,16 @@ function AccompanyPostPage() {
 
         const data = user_data.data;
         setUserData(data);
-        //console.log('user data');
-        //console.log(user_data.data);
+        // console.log('user data');
+        // console.log(user_data.data);
 
         setAge(data.age);
         setCountry(data.country);
-        //console.log(data.country);
+        // console.log(data.country);
         setSchool(data.dispatchedUniversity);
       } catch (error) {
-        //console.error('Error fetching data:', error);
+        return <ErrorScreen/>
+        // console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -183,16 +185,16 @@ function AccompanyPostPage() {
   const increaseDays = () => {
     if (daysDifference < limitDays) {
       setDaysDifference(daysDifference + 1);
-      //console.log('Limit', limitDays);
-      //console.log('Days', daysDifference);
+      // console.log('Limit', limitDays);
+      // console.log('Days', daysDifference);
     }
   };
 
   const decreaseDays = () => {
     if (daysDifference > 0) {
       setDaysDifference(daysDifference - 1);
-      //console.log('Limit', limitDays);
-      //console.log('Days', daysDifference);
+      // console.log('Limit', limitDays);
+      // console.log('Days', daysDifference);
     }
   };
 
@@ -362,7 +364,7 @@ function AccompanyPostPage() {
       endDate: endDate,
     };
 
-    //console.log(jsonData);
+    // console.log(jsonData);
 
     const jsonBlob = new Blob([JSON.stringify(jsonData)], {
       type: 'application/json',
@@ -379,15 +381,16 @@ function AccompanyPostPage() {
       });
 
       if (response) {
-        //console.log(response.data.result);
+        // console.log(response.data.result);
       }
     } catch (error) {
-      //console.error('Error posting data:', error);
+      return <ErrorScreen/>
+      // console.error('Error posting data:', error);
     }
   };
 
   const onSubmit = () => {
-    //console.log(input);
+    // console.log(input);
     if (personValue == 0) {
       handleModalOpen('모집 인원을');
     } else if (city == null) {

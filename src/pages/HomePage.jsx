@@ -152,6 +152,7 @@ const images = [
   sliderImage,
 ];
 import { cities, countries } from '../assets/cityDatabase';
+import ErrorScreen from '../components/ErrorScreen';
 
 function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -233,8 +234,8 @@ function HomePage() {
   }
 
   const getContinentForCountry = (countryName) => {
-    //console.log('country is ');
-    //console.log(countryName);
+    // console.log('country is ');
+    // console.log(countryName);
     const country = countries.find((c) => c.country === countryName);
     return country.continent;
   };
@@ -252,8 +253,8 @@ function HomePage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setUserData([user_data.data]);
-        //console.log('userData');
-        //console.log(user_data.data);
+        // console.log('userData');
+        // console.log(user_data.data);
         if (user_data.data.universityUrl) {
           setUnivLink(user_data.data.universityUrl);
         }
@@ -265,8 +266,8 @@ function HomePage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setInfoData(info_data.data);
-        //console.log('infoData');
-        //console.log(info_data.data);
+        // console.log('infoData');
+        // console.log(info_data.data);
 
         const free_data = await getData(GET_RECENT_POST_OF('FREE'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
@@ -283,7 +284,8 @@ function HomePage() {
           setAccompanyData([]);
         }
       } catch (error) {
-        //console.error('Error fetching data:', error);
+        return <ErrorScreen/>
+        // console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false); // Data fetched, stop showing main loading
       }
@@ -294,7 +296,7 @@ function HomePage() {
 
   useEffect(() => {
     const token = localStorage.getItem('AToken');
-    //console.log('AToken:', token);
+    // console.log('AToken:', token);
 
     const fetchAccomData = async () => {
       try {
@@ -309,7 +311,8 @@ function HomePage() {
           setAccompanyData([]);
         }
       } catch (error) {
-        //console.error('Error fetching data:', error);
+        return <ErrorScreen/>
+        // console.error('Error fetching data:', error);
         setAccompanyData([]);
       } finally {
         setIsLoadingAccom(false); // Accom data fetched, stop showing accom loading
@@ -559,7 +562,7 @@ const Shadow = styled.div`
 
 const FlexContainer = styled.div`
   margin-top: 1.5rem;
-  margin-left: 1.5rem;
+  margin-left: 1rem;
   margin-right: 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -642,7 +645,7 @@ const BigText = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
-  max-width: 95%;
+  max-width: 90%;
 `;
 
 const MiddleText = styled.div`

@@ -100,7 +100,7 @@ const SingleMyAccompany = ({
             </span>
           </s.Location>
         </s.TripInfo>
-        {//console.log(locationNum)}
+        {/* {//console.log(locationNum)} */}
         <s.ContentText>{content}</s.ContentText>
         <s.Info>
           <s.ProfileSvg />

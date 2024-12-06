@@ -35,8 +35,9 @@ const FindId = () => {
     const formData = JSON.stringify(userInfo);
 
     const res = await postData(FIND_ID, formData).then((res) => {
-      const emailFront = res.data.split('@')[0];
-      const starredEmail = emailFront.substr(0, emailFront.length - 3) + '***';
+      const email = res.data.split('@');
+      const starredEmail =
+        email[0].substr(0, email[0].length - 3) + '***@' + email[1];
 
       userEmail.current = starredEmail;
       setModal(true);

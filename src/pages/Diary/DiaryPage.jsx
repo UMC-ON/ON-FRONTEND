@@ -286,7 +286,7 @@ const BigText = styled.div`
   margin-top: 1vh;
   color: ${(props) => props.color || '#000000'};
   font-weight: bold;
-  font-family: 'Inter-Regular';
+  font-family: 'Inter';
   font-size: 22px;
   margin-bottom: 3.5vh;
   margin-left: ${(props) => props.spacing || '0'};
@@ -387,6 +387,10 @@ const BottomTabLayout = styled.div`
   }
   @media (max-width: 360px) {
     height: 60%;
+  }
+  
+  @media (min-width: 375px) and (max-width: 414px) {
+    height: 53%;
   }
 `;
 
