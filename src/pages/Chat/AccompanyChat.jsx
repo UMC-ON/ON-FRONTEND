@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as s from './ChatStyled';
 import ChatHeader from '../../components/Chat/ChatHeader';
@@ -11,212 +11,162 @@ import PurpleBackground from '../../assets/images/chat_background_purple.svg';
 import Loading from '../../components/Loading/Loading';
 import { useSelector } from 'react-redux';
 import { showDate } from '../../components/Common/InfoExp';
+import { useInfiniteQuery } from 'react-query';
 import { GET_ACCOMPANY_CHAT, GET_ACCOMPANY_INFO } from '../../api/urls';
 import { getData } from '../../api/Functions';
 
-// import { useParams } from 'react-router-dom';
-
 const AccompanyChat = () => {
-  const [messageInitiator, setMessageInitiator] = useState();
-  //인포 백그라운드, 채팅 버블 색상
-  const [defaultColor, setDefaultColor] = useState('');
-  //글씨, 헤더 색상
-  const [pointColor, setPointColor] = useState('');
-  //채팅 상대방
-  const [receiver, setReceiver] = useState('');
-  //현재 유저 아이디
-  //채팅 말, 보낸 유저 아이디 담기
-  const [chatList, setChatList] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFirstLoadComplete, setIsFirstLoadComplete] = useState(false); // 첫 로드 완료 상태
   const [infoResult, setInfoResult] = useState([]);
-
   const [isRecruitComplete, setIsRecruitComplete] = useState();
+  const [defaultColor, setDefaultColor] = useState('');
+  const [pointColor, setPointColor] = useState('');
+  const [receiver, setReceiver] = useState('');
+  const [messageInitiator, setMessageInitiator] = useState();
+  const [isInitialChatSet, setIsInitialChatSet] = useState(false); // 초기 설정 여부 상태
 
   const location = useLocation();
-  const { roomId, senderName } = location.state || {}; // Destructure selectedCountry from location.state
-
-  const navigate = useNavigate(); // useNavigate 사용
-  const chatWrapperRef = useRef(null); // 채팅 메시지 영역에 대한 참조 생성
-  const chatListRef = useRef(chatList); // 최신 chatList를 관리하는 ref
-  const pollingRef = useRef(true); // 롱 폴링 상태를 관리하는 ref
-
+  const { roomId, senderName } = location.state || {};
+  const navigate = useNavigate();
+  const chatWrapperRef = useRef(null); // 채팅 래퍼의 Ref
   const userInfo = useSelector((state) => state.user.user);
+  const topObserverRef = useRef(null); // 상단 감지용 Ref
+  const messageEndRef = useRef(null); // 하단 감지용 Ref
+  const [scroll, setScroll] = useState(false);
+
+  // 초기 채팅 설정 함수
+  const initialChatSetting = (response) => {
+    if (response.data.content[0].chatUserOne === userInfo.id) {
+      setMessageInitiator(true);
+      setReceiver(response.data.content[0].chatUserTwo);
+      setDefaultColor('rgba(194, 199, 255, 1)');
+      setPointColor('rgba(173, 153, 255, 1)');
+    } else {
+      setMessageInitiator(false);
+      setReceiver(response.data.content[0].chatUserOne);
+      setDefaultColor('rgba(217, 236, 255, 1)');
+      setPointColor('rgba(132, 180, 255, 1)');
+    }
+  };
+
+  // 채팅 메시지 불러오기
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery(
+      ['chatMessages', roomId],
+      async ({ pageParam = 0 }) => {
+        const response = await getData(
+          GET_ACCOMPANY_CHAT(roomId),
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          { roomId, page: pageParam, sort: 'createdAt%2Cdesc' },
+        );
+        // 0번 페이지일 때 초기 채팅 설정 호출
+        if (pageParam === 0) {
+          initialChatSetting(response);
+        }
+        return response.data;
+      },
+      {
+        getNextPageParam: (lastPage) => {
+          const currentPage = lastPage.number;
+          const totalPages = lastPage.totalPages;
+          return currentPage + 1 < totalPages ? currentPage + 1 : undefined;
+        },
+        enabled: !!roomId,
+        onSuccess: (data) => {
+          if (!isFirstLoadComplete) {
+            setScroll(true);
+          }
+        },
+      },
+    );
+
+  // 채팅 메시지 리스트 병합
+  const chatList =
+    data?.pages?.flatMap((page) => page.content?.[0]?.chatList || []) || [];
+
+  useLayoutEffect(() => {
+    if (chatWrapperRef.current) {
+      chatWrapperRef.current.scrollTop = chatWrapperRef.current.scrollHeight;
+      console.log('Scroll moved after rendering.');
+      setIsFirstLoadComplete(true);
+    }
+  }, [scroll]);
+
+  // 상단 감지용 IntersectionObserver
+  useLayoutEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (
+          entry.isIntersecting &&
+          hasNextPage &&
+          !isFetchingNextPage &&
+          isFirstLoadComplete
+        ) {
+          console.log('Top reached, fetching next page...');
+          fetchNextPage();
+        }
+      },
+      { root: chatWrapperRef.current, threshold: 0.1 }, // chatWrapper 내부의 관찰 설정
+    );
+
+    const topObserverElement = topObserverRef.current;
+    if (topObserverElement) {
+      observer.observe(topObserverElement);
+    }
+
+    return () => {
+      if (topObserverElement) {
+        observer.unobserve(topObserverElement);
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, chatList]);
 
   useEffect(() => {
+    console.log(chatList);
+  }, [chatList]);
+
+  // 동행 정보 불러오기
+  useEffect(() => {
     const fetchAccompanyInfo = async () => {
-      setIsLoading(true);
       try {
         const response = await getData(
           GET_ACCOMPANY_INFO(roomId),
           {
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           },
-          { roomId: roomId },
+          { roomId },
         );
 
         if (response) {
           setInfoResult(response.data);
-          if (infoResult.participantNumber === infoResult.recruitNumber) {
-            setIsRecruitComplete(true);
-          } else {
-            setIsRecruitComplete(false);
-          }
+          setIsRecruitComplete(
+            response.data.participantNumber === response.data.recruitNumber,
+          );
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
+        console.error('Error fetching accompany info:', error);
       }
     };
     fetchAccompanyInfo();
-  }, []);
-  // chatList 상태가 변경될 때마다 chatListRef도 업데이트
-  useEffect(() => {
-    chatListRef.current = chatList;
-  }, [chatList]);
-
-  //axios 동행 구하기
-  useEffect(() => {
-    const fetchAccompanyChat = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getData(
-          GET_ACCOMPANY_CHAT(roomId),
-          {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          },
-          { roomId: roomId },
-        );
-
-        if (response) {
-          console.log('콘솔', response.data);
-          if (
-            response.data.content[0].chatList &&
-            response.data.content[0].chatList.length > 0
-          ) {
-            setChatList(response.data.content[0].chatList);
-          } else {
-            setChatList([]);
-          }
-          // 첫 번째 채팅 메시지의 userId와 currentUserId 비교
-          if (response.data.content[0].chatUserOne === userInfo.id) {
-            setMessageInitiator(true); // 현재 유저가 첫 번째 메시지를 보낸 경우
-            setReceiver(response.data.content[0].chatUserTwo);
-            setDefaultColor('rgba(194, 199, 255, 1)');
-            setPointColor('rgba(173, 153, 255, 1)');
-          } else {
-            setMessageInitiator(false); // 현재 유저가 첫 번째 메시지를 보내지 않은 경우
-            setReceiver(response.data.content[0].chatUserOne);
-            setDefaultColor('rgba(217, 236, 255, 1)');
-            setPointColor('rgba(132, 180, 255, 1)');
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAccompanyChat();
   }, [roomId]);
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    pollingRef.current = true;
-
-    const startLongPolling = async () => {
-      while (pollingRef.current) {
-        try {
-          const response = await getData(
-            GET_ACCOMPANY_CHAT(roomId),
-            {
-              Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-              signal: abortController.signal, // signal 추가
-            },
-            { roomId: roomId },
-          );
-
-          if (response) {
-            const newMessages = response.data.content[0].chatList;
-            if (newMessages.length !== chatListRef.current.length) {
-              setChatList(newMessages);
-              scrollToBottom();
-            }
-          }
-        } catch (error) {
-          if (error.name !== 'AbortError') {
-            console.error('Error fetching new messages:', error);
-          }
-        }
-
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-      }
-    };
-
-    startLongPolling();
-
-    return () => {
-      pollingRef.current = false; // 컴포넌트 언마운트 시 polling 중지
-      abortController.abort(); // 요청 취소
-    };
-  }, [roomId]);
-
-  const handleBackNavigation = () => {
-    // pollingRef.current = false; // polling 상태를 false로 설정
-    navigate('/chatlist'); // 이전 페이지로 이동
-  };
-
-  const messageEndRef = useRef(null);
-
-  const addNewMessage = (newMessage) => {
-    setChatList((prevChatList) => {
-      const updatedChatList = [...prevChatList, newMessage];
-      return updatedChatList;
-    });
-    scrollToBottom();
-  };
-
-  const scrollToBottom = () => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            console.log('Element is in view!');
-            if (messageEndRef.current) {
-              messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
-            }
-          } else {
-            console.log('Element is out of view!');
-          }
-        });
-      },
-      { threshold: 0.5 }, // 요소가 100% 화면에 보여질 때만 감지
-    );
-
-    if (messageEndRef.current) {
-      observer.observe(messageEndRef.current);
-    }
-
-    // 정리(cleanup)
-    return () => {
-      if (messageEndRef.current) {
-        observer.unobserve(messageEndRef.current);
-      }
-    };
-  };
 
   if (isLoading) {
     return <Loading />;
   }
+
   return (
-    <s.ChatLayout>
+    <s.ChatLayout
+      className="레이아웃"
+      ref={chatWrapperRef}
+    >
       <ChatHeader
         receiver={senderName}
         defaultColor={defaultColor}
         messageInitiator={messageInitiator}
         isAccompany={true}
-        onBackClick={handleBackNavigation}
+        onBackClick={() => navigate('/chatlist')}
         id={roomId}
         isComplete={isRecruitComplete}
       />
@@ -226,36 +176,31 @@ const AccompanyChat = () => {
         pointColor={pointColor}
         infoResult={infoResult}
       />
-      <s.ChatWrapper
-        className="chat"
-        ref={chatWrapperRef}
-      >
-        {chatList && chatList.length > 0 ? (
-          chatList.map((data, index) => (
-            <s.ChatContainer key={index}>
-              {data.userId === userInfo.id ? (
-                <s.SentChatWrapper>
-                  <s.Time>{showDate(data.createdAt)}</s.Time>
-                  <SentChatBubble
-                    color={defaultColor}
-                    text={data.message}
-                  />
-                </s.SentChatWrapper>
-              ) : (
-                <s.ReceivedChatWrapper>
-                  <ReceivedChatBubble
-                    color={defaultColor}
-                    text={data.message}
-                  />
-                  <s.Time>{showDate(data.createdAt)}</s.Time>
-                </s.ReceivedChatWrapper>
-              )}
-            </s.ChatContainer>
-          ))
-        ) : (
-          <></>
-        )}
+      <s.ChatWrapper>
         <div ref={messageEndRef}></div>
+        {chatList.map((data, index) => (
+          <s.ChatContainer key={index}>
+            {data.userId === userInfo.id ? (
+              <s.SentChatWrapper>
+                <s.Time>{showDate(data.createdAt)}</s.Time>
+                <SentChatBubble
+                  color={defaultColor}
+                  text={data.message}
+                />
+              </s.SentChatWrapper>
+            ) : (
+              <s.ReceivedChatWrapper>
+                <ReceivedChatBubble
+                  color={defaultColor}
+                  text={data.message}
+                />
+                <s.Time>{showDate(data.createdAt)}</s.Time>
+              </s.ReceivedChatWrapper>
+            )}
+          </s.ChatContainer>
+        ))}
+        {isFetchingNextPage && <Loading />}
+        <div ref={topObserverRef}></div> {/* 상단 감지용 요소 */}
       </s.ChatWrapper>
       <s.Background
         $backgroundimageurl={
@@ -265,7 +210,9 @@ const AccompanyChat = () => {
       <ChatInput
         roomId={roomId}
         currentUserId={userInfo.id}
-        addNewMessage={addNewMessage}
+        addNewMessage={(newMessage) => {
+          chatList.unshift(newMessage); // 새로운 메시지를 채팅 목록에 추가
+        }}
       />
     </s.ChatLayout>
   );

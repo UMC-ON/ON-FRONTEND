@@ -9,6 +9,9 @@ export const ChatLayout = styled.div`
   /* justify-content: center; */
   align-items: center;
   flex-direction: column;
+  overflow-y: auto;
+  height: 100vh;
+  /* height: 100%; */
 `;
 
 export const Background = styled.div`
@@ -41,12 +44,11 @@ export const TradeBackground = styled.div`
 export const ChatWrapper = styled.div`
   z-index: 1;
   width: 100%;
-  overflow-y: auto;
-  height: 100%;
+  overflow-y: visible;
   padding: 2.25rem 1.5rem 0 1.5rem;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   margin-bottom: 7rem;
 `;
 
