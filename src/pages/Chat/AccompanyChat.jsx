@@ -125,7 +125,7 @@ const AccompanyChat = () => {
 
               // 최신 메시지 리스트를 chatListRef에 업데이트
               chatListRef.current = [
-                ...newMessagesToAdd.reverse(),
+                ...newMessagesToAdd,
                 ...chatListRef.current,
               ];
             }
@@ -137,7 +137,7 @@ const AccompanyChat = () => {
         }
 
         // 1초 대기 후 다음 요청
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 10000));
       }
     };
 
@@ -275,8 +275,6 @@ const AccompanyChat = () => {
             display: isFetchingNextPage ? 'none' : 'block', // 조건부 표시
           }}
         />
-
-        {/* 상단 감지용 요소 */}
       </s.ChatWrapper>
       <AccompanyChatInfo
         messageInitiator={messageInitiator}

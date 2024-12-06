@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import * as s from './TradeChatInfoStyled';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const TradeChatInfo = ({ messageInitiator, roomId, infoResult }) => {
   const [tradeMethod, setTradeMethod] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (infoResult.tradeMethod === 'DIRECT') {
@@ -13,7 +15,7 @@ const TradeChatInfo = ({ messageInitiator, roomId, infoResult }) => {
   }, []);
 
   return (
-    <s.InfoWrapper>
+    <s.InfoWrapper onClick={() => navigate(`/sell/${infoResult.marketPostId}`)}>
       {messageInitiator ? (
         <s.InfoText>
           아래 글에 대해 궁금한 것을 판매자에게 물어보고 거래하세요.
