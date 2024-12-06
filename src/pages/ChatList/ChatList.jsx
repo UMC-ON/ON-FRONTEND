@@ -44,6 +44,7 @@ const ChatList = () => {
       },
     });
 
+    
   const handleModeChange = (mode) => () => {
     if (currentMode !== mode) {
       setCurrentMode(mode);

@@ -8,10 +8,12 @@ export const ChatLayout = styled.div`
   padding: 61px 0px 0px;
   /* justify-content: center; */
   align-items: center;
-  flex-direction: column;
+  flex-direction: column-reverse;
   overflow-y: auto;
   height: 100vh;
   /* height: 100%; */
+  overflow-x: hidden;
+  justify-content: space-between;
 `;
 
 export const Background = styled.div`

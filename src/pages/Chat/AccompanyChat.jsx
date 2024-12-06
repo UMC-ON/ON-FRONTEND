@@ -21,9 +21,7 @@ const AccompanyChat = () => {
   const [isRecruitComplete, setIsRecruitComplete] = useState();
   const [defaultColor, setDefaultColor] = useState('');
   const [pointColor, setPointColor] = useState('');
-  const [receiver, setReceiver] = useState('');
   const [messageInitiator, setMessageInitiator] = useState();
-  const [isInitialChatSet, setIsInitialChatSet] = useState(false); // 초기 설정 여부 상태
 
   const location = useLocation();
   const { roomId, senderName } = location.state || {};
@@ -31,19 +29,17 @@ const AccompanyChat = () => {
   const chatWrapperRef = useRef(null); // 채팅 래퍼의 Ref
   const userInfo = useSelector((state) => state.user.user);
   const topObserverRef = useRef(null); // 상단 감지용 Ref
-  const messageEndRef = useRef(null); // 하단 감지용 Ref
   const [scroll, setScroll] = useState(false);
+  const [isFetchingData, setIsFetchingData] = useState(false);
 
   // 초기 채팅 설정 함수
   const initialChatSetting = (response) => {
     if (response.data.content[0].chatUserOne === userInfo.id) {
       setMessageInitiator(true);
-      setReceiver(response.data.content[0].chatUserTwo);
       setDefaultColor('rgba(194, 199, 255, 1)');
       setPointColor('rgba(173, 153, 255, 1)');
     } else {
       setMessageInitiator(false);
-      setReceiver(response.data.content[0].chatUserOne);
       setDefaultColor('rgba(217, 236, 255, 1)');
       setPointColor('rgba(132, 180, 255, 1)');
     }
@@ -54,6 +50,7 @@ const AccompanyChat = () => {
     useInfiniteQuery(
       ['chatMessages', roomId],
       async ({ pageParam = 0 }) => {
+        setIsFetchingData(true);
         const response = await getData(
           GET_ACCOMPANY_CHAT(roomId),
           {
@@ -74,7 +71,8 @@ const AccompanyChat = () => {
           return currentPage + 1 < totalPages ? currentPage + 1 : undefined;
         },
         enabled: !!roomId,
-        onSuccess: (data) => {
+        onSuccess: () => {
+          setIsFetchingData(false);
           if (!isFirstLoadComplete) {
             setScroll(true);
           }
@@ -86,10 +84,11 @@ const AccompanyChat = () => {
   const chatList =
     data?.pages?.flatMap((page) => page.content?.[0]?.chatList || []) || [];
 
+  //첫 로딩 시 스크롤 아래로
   useLayoutEffect(() => {
     if (chatWrapperRef.current) {
       chatWrapperRef.current.scrollTop = chatWrapperRef.current.scrollHeight;
-      console.log('Scroll moved after rendering.');
+      // console.log('Scroll moved after rendering.');
       setIsFirstLoadComplete(true);
     }
   }, [scroll]);
@@ -99,16 +98,16 @@ const AccompanyChat = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (
+          !isFetchingData &&
           entry.isIntersecting &&
           hasNextPage &&
           !isFetchingNextPage &&
           isFirstLoadComplete
         ) {
-          console.log('Top reached, fetching next page...');
           fetchNextPage();
         }
       },
-      { root: chatWrapperRef.current, threshold: 0.1 }, // chatWrapper 내부의 관찰 설정
+      { root: chatWrapperRef.current, threshold: 0.1 },
     );
 
     const topObserverElement = topObserverRef.current;
@@ -123,11 +122,7 @@ const AccompanyChat = () => {
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, chatList]);
 
-  useEffect(() => {
-    console.log(chatList);
-  }, [chatList]);
-
-  // 동행 정보 불러오기
+  //////// 동행 정보 불러오기
   useEffect(() => {
     const fetchAccompanyInfo = async () => {
       try {
@@ -151,6 +146,9 @@ const AccompanyChat = () => {
     };
     fetchAccompanyInfo();
   }, [roomId]);
+  useEffect(() => {
+    console.log(isFetchingData);
+  }, [isFetchingData]);
 
   if (isLoading) {
     return <Loading />;
@@ -170,14 +168,8 @@ const AccompanyChat = () => {
         id={roomId}
         isComplete={isRecruitComplete}
       />
-      <AccompanyChatInfo
-        messageInitiator={messageInitiator}
-        userName={senderName}
-        pointColor={pointColor}
-        infoResult={infoResult}
-      />
+
       <s.ChatWrapper>
-        <div ref={messageEndRef}></div>
         {chatList.map((data, index) => (
           <s.ChatContainer key={index}>
             {data.userId === userInfo.id ? (
@@ -200,8 +192,21 @@ const AccompanyChat = () => {
           </s.ChatContainer>
         ))}
         {isFetchingNextPage && <Loading />}
-        <div ref={topObserverRef}></div> {/* 상단 감지용 요소 */}
+        <div
+          ref={topObserverRef}
+          style={{
+            display: isFetchingNextPage ? 'none' : 'block', // 조건부 표시
+          }}
+        />
+
+        {/* 상단 감지용 요소 */}
       </s.ChatWrapper>
+      <AccompanyChatInfo
+        messageInitiator={messageInitiator}
+        userName={senderName}
+        pointColor={pointColor}
+        infoResult={infoResult}
+      />
       <s.Background
         $backgroundimageurl={
           messageInitiator ? PurpleBackground : BlueBackground
