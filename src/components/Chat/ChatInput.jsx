@@ -12,6 +12,11 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
   const messageInputChange = (e) => {
     setMessage(e.target.value);
   };
+
+  const formatDateWithoutZ = (time) => {
+    return time.replace('Z', '') + '999';
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
@@ -27,13 +32,16 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
       });
 
       const response = await apiClient.post(POST_CHAT(roomId), message);
+      const time = formatDateWithoutZ(new Date().toISOString());
+      console.log(time);
 
       if (response) {
         const newMessage = {
           userId: currentUserId,
           message: message,
+          createdAt: time,
         };
-        console.log('인풋 완료');
+        console.log('인풋', response);
         addNewMessage(newMessage);
         setMessage('');
       }

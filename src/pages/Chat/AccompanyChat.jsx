@@ -31,6 +31,7 @@ const AccompanyChat = () => {
   const topObserverRef = useRef(null); // 상단 감지용 Ref
   const [scroll, setScroll] = useState(false);
   const [isFetchingData, setIsFetchingData] = useState(false);
+  const pollingRef = useRef(true); // 롱 폴링 상태를 관리하는 ref
 
   // 초기 채팅 설정 함수
   const initialChatSetting = (response) => {
@@ -45,7 +46,7 @@ const AccompanyChat = () => {
     }
   };
 
-  // 채팅 메시지 불러오기
+  // infinite scroll 채팅 메시지 불러오기
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery(
       ['chatMessages', roomId],
@@ -81,19 +82,91 @@ const AccompanyChat = () => {
     );
 
   // 채팅 메시지 리스트 병합
-  const chatList =
-    data?.pages?.flatMap((page) => page.content?.[0]?.chatList || []) || [];
+  const [chatList, setChatList] = useState(
+    data?.pages?.flatMap((page) => page.content?.[0]?.chatList || []) || [],
+  );
+  const chatListRef = useRef(chatList);
+  // chatList 상태와 chatListRef 동기화
+  useEffect(() => {
+    chatListRef.current = chatList; // chatList 상태를 chatListRef에 동기화
+  }, [chatList]);
+
+  //POLLING
+  useEffect(() => {
+    const abortController = new AbortController();
+    pollingRef.current = true;
+
+    const startLongPolling = async () => {
+      while (pollingRef.current) {
+        try {
+          const response = await getData(
+            GET_ACCOMPANY_CHAT(roomId),
+            {
+              Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+              signal: abortController.signal, // 요청 취소를 위한 signal 추가
+            },
+            { roomId, sort: 'createdAt%2Cdesc' },
+          );
+
+          if (response) {
+            const newMessages = response.data.content[0].chatList;
+
+            // 최신 메시지와 현재 메시지 비교
+            const lastMessageTime = new Date(chatListRef.current[0]?.createdAt); // 최신 메시지 ID
+            const newMessagesToAdd = newMessages.filter(
+              (message) => new Date(message.createdAt) > lastMessageTime,
+            );
+
+            if (newMessagesToAdd.length > 0) {
+              setChatList((prevChatList) => [
+                ...newMessagesToAdd,
+                ...prevChatList,
+              ]);
+
+              // 최신 메시지 리스트를 chatListRef에 업데이트
+              chatListRef.current = [
+                ...newMessagesToAdd.reverse(),
+                ...chatListRef.current,
+              ];
+            }
+          }
+        } catch (error) {
+          if (error.name !== 'AbortError') {
+            console.error('Error fetching new messages:', error);
+          }
+        }
+
+        // 1초 대기 후 다음 요청
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      }
+    };
+
+    startLongPolling();
+
+    return () => {
+      pollingRef.current = false; // 컴포넌트 언마운트 시 polling 중지
+      abortController.abort(); // 요청 취소
+    };
+  }, [roomId]);
+
+  //INFINITE SCROLL
+  useEffect(() => {
+    if (data) {
+      const initialChatList =
+        data.pages?.flatMap((page) => page.content?.[0]?.chatList || []) || [];
+      setChatList(initialChatList); // 상태 초기화
+    }
+  }, [data]);
 
   //첫 로딩 시 스크롤 아래로
   useLayoutEffect(() => {
     if (chatWrapperRef.current) {
       chatWrapperRef.current.scrollTop = chatWrapperRef.current.scrollHeight;
-      // console.log('Scroll moved after rendering.');
       setIsFirstLoadComplete(true);
     }
   }, [scroll]);
 
-  // 상단 감지용 IntersectionObserver
+  // infinite scroll 상단 감지용 IntersectionObserver
   useLayoutEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -122,6 +195,13 @@ const AccompanyChat = () => {
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, chatList]);
 
+  //새 메세지 입력, 추가
+  const addNewMessage = (newMessage) => {
+    setChatList((prevChatList) => [newMessage, ...prevChatList]); // 상태 업데이트
+    chatListRef.current = [newMessage, ...chatListRef.current];
+    chatWrapperRef.current.scrollTop = chatWrapperRef.current.scrollHeight;
+  };
+
   //////// 동행 정보 불러오기
   useEffect(() => {
     const fetchAccompanyInfo = async () => {
@@ -146,9 +226,6 @@ const AccompanyChat = () => {
     };
     fetchAccompanyInfo();
   }, [roomId]);
-  useEffect(() => {
-    console.log(isFetchingData);
-  }, [isFetchingData]);
 
   if (isLoading) {
     return <Loading />;
@@ -215,9 +292,8 @@ const AccompanyChat = () => {
       <ChatInput
         roomId={roomId}
         currentUserId={userInfo.id}
-        addNewMessage={(newMessage) => {
-          chatList.unshift(newMessage); // 새로운 메시지를 채팅 목록에 추가
-        }}
+        addNewMessage={addNewMessage}
+        chatListRef={chatListRef}
       />
     </s.ChatLayout>
   );
