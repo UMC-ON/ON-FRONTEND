@@ -14,7 +14,7 @@ export const NotificationContainer = styled.div`
   justify-content: space-between;
   background: ${theme.blueGra};
   margin-top: 0.63rem;
-  z-index: 1;
+  z-index: 0;
 `;
 export const NotificationTitle = styled.span`
   display: inline-block;
