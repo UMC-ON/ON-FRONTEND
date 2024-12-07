@@ -16,6 +16,7 @@ import {
   GET_FILTER_ACCOMPANY,
   GET_USER_INFO,
 } from '../api/urls';
+import ErrorScreen from '../components/ErrorScreen.jsx';
 function AccompanyPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isUserLoading, setIsUserLoading] = useState(true);
@@ -37,13 +38,13 @@ function AccompanyPage() {
   const [page, setPage] = useState(0);
 
   const handleFilterClick = useCallback(() => {
-    console.log('handleFilterClick');
+    // console.log('handleFilterClick');
     setPage(0);
     setAllData([]);
   }, []);
 
   const handleIsDateClickedChange = useCallback(() => {
-    console.log('handleIsDateClickedChange');
+    // console.log('handleIsDateClickedChange');
     setIsDateClicked(false);
     setStartDate(null);
     setEndDate(null);
@@ -51,21 +52,21 @@ function AccompanyPage() {
   }, [handleFilterClick]);
 
   const resetGenderClick = useCallback(() => {
-    console.log('resetGenderClick');
+    // console.log('resetGenderClick');
     setIsGenderClicked(false);
     setGender(null);
     handleFilterClick();
   }, [handleFilterClick]);
 
   const resetCountryClick = useCallback(() => {
-    console.log('resetCountryClick');
+    // console.log('resetCountryClick');
     setIsCountryClicked(false);
     setCountry(null);
     handleFilterClick();
   }, [handleFilterClick]);
 
   const handleResetAll = useCallback(() => {
-    console.log('handleResetAll');
+    // console.log('handleResetAll');
     setIsDateClicked(false);
     setIsGenderClicked(false);
     setIsCountryClicked(false);
@@ -79,7 +80,7 @@ function AccompanyPage() {
 
   const handleApplyClick = useCallback(
     (start, end) => {
-      console.log('handleApplyClick');
+      // console.log('handleApplyClick');
       setStartDate(moment(start).format('YYYY-MM-DD'));
       setEndDate(moment(end).format('YYYY-MM-DD'));
       setIsDateClicked(true);
@@ -91,7 +92,7 @@ function AccompanyPage() {
 
   const handleGetGender = useCallback(
     (gender) => {
-      console.log('handleGetGender');
+      // console.log('handleGetGender');
       setGender(gender);
       setIsGenderClicked(true);
       setShowGender(false);
@@ -102,7 +103,7 @@ function AccompanyPage() {
 
   const handleGetCountry = useCallback(
     (country) => {
-      console.log('handleGetCountry');
+      // console.log('handleGetCountry');
       setCountry(country);
       setIsCountryClicked(true);
       setShowCountry(false);
@@ -134,7 +135,7 @@ function AccompanyPage() {
       if (gender) params.gender = gender === '여자' ? 'FEMALE' : 'MALE';
       if (country) params.country = country;
 
-      console.log('Current params:', params); // 디버깅용
+      // console.log('Current params:', params); // 디버깅용
 
       const all_data = await getData(
         GET_FILTER_ACCOMPANY,
@@ -153,12 +154,12 @@ function AccompanyPage() {
       // console.log("all data is " + all_data);
 
       if (page === 0) {
-        console.log('all data');
-        console.log(all_data.data.content);
+        // console.log('all data');
+        // console.log(all_data.data.content);
         setAllData(all_data.data.content);
       } else {
-        console.log('extra data');
-        console.log(all_data.data.content);
+        // console.log('extra data');
+        // console.log(all_data.data.content);
         setAllData((prevData) => [...prevData, ...all_data.data.content]);
       }
 
@@ -168,7 +169,8 @@ function AccompanyPage() {
 
       setIsValidated(user_data.data.country);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      return <ErrorScreen/>
+      // console.error('Error fetching data:', error);
     } finally {
       setIsLoading(false);
     }

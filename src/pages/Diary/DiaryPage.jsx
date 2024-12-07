@@ -389,6 +389,10 @@ const BottomTabLayout = styled.div`
   @media (max-width: 360px) {
     height: 60%;
   }
+  
+  @media (min-width: 375px) and (max-width: 414px) {
+    height: 53%;
+  }
 `;
 
 const TopHeader = styled.div`
