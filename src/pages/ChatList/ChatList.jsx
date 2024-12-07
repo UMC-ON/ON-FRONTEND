@@ -44,7 +44,6 @@ const ChatList = () => {
       },
     });
 
-    
   const handleModeChange = (mode) => () => {
     if (currentMode !== mode) {
       setCurrentMode(mode);
@@ -97,12 +96,11 @@ const ChatList = () => {
           content="채팅 내역"
           style={{ paddingBottom: '10rem' }}
         />
-      ) : (
-        data?.pages.map((page) =>
-          page.content.map((data) => (
-            <s.ChatListWrapper key={data.roomId}>
-              {console.log(data)}
-              {currentMode === 'accompany' ? (
+      ) : currentMode === 'accompany' ? (
+        <s.ChatListWrapper>
+          {data?.pages.map((page) =>
+            page.content.map((data) => (
+              <>
                 <SingleAccompanyChat
                   roomId={data.roomId}
                   time={
@@ -118,11 +116,18 @@ const ChatList = () => {
                   senderName={data.senderName}
                   location={data.country} // country 필드 사용
                 />
-              ) : (
+                <s.Line />
+              </>
+            )),
+          )}
+        </s.ChatListWrapper>
+      ) : (
+        <s.ChatListWrapper>
+          {data?.pages.map((page) =>
+            page.content.map((data) => (
+              <>
                 <SingleTradeChat
-                  senderName={data.senderName}
                   roomId={data.roomId}
-                  img={data.profileImg}
                   time={
                     data.lastChatTime !== null
                       ? showDate(data.lastChatTime)
@@ -131,14 +136,16 @@ const ChatList = () => {
                   message={
                     data.lastMessage !== null
                       ? data.lastMessage
-                      : '새로운 채팅을 시작해보새요!'
+                      : '채팅을 시작해보새요!'
                   }
+                  senderName={data.senderName}
+                  location={data.country} // country 필드 사용
                 />
-              )}
-              <s.Line />
-            </s.ChatListWrapper>
-          )),
-        )
+                <s.Line />
+              </>
+            )),
+          )}
+        </s.ChatListWrapper>
       )}
       {isFetchingNextPage && <Loading />}
 
