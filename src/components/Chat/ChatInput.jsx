@@ -4,7 +4,7 @@ import { POST_CHAT } from '../../api/urls';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
 import send from '../../assets/images/send.svg';
-const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
+const ChatInput = ({ roomId, addNewMessage, currentUserId, setError }) => {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
@@ -31,9 +31,8 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
         },
       });
 
-      const response = await apiClient.post(POST_CHAT(roomId), message);
+      const response = await apiClient.post(POST_CHAT(4546), message);
       const time = formatDateWithoutZ(new Date().toISOString());
-      console.log(time);
 
       if (response) {
         const newMessage = {
@@ -41,12 +40,11 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
           message: message,
           createdAt: time,
         };
-        console.log('인풋', response);
         addNewMessage(newMessage);
         setMessage('');
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      setError(true);
     } finally {
       setIsLoading(false);
     }

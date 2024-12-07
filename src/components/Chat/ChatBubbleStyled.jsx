@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import theme from '../../styles/theme';
 
 export const SentChatBubble = styled.div`
   margin: 0.6rem 0;

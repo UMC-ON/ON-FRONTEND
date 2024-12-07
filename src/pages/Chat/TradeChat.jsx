@@ -12,15 +12,16 @@ import { showDate } from '../../components/Common/InfoExp';
 import { useInfiniteQuery } from 'react-query';
 import { GET_TRADE_CHAT, GET_TRADE_INFO } from '../../api/urls';
 import { getData } from '../../api/Functions';
+import ErrorScreen from '../../components/ErrorScreen';
 
 const TradeChat = () => {
   const [isFirstLoadComplete, setIsFirstLoadComplete] = useState(false); // 첫 로드 완료 상태
   const [infoResult, setInfoResult] = useState([]);
   const [messageInitiator, setMessageInitiator] = useState();
   const [defaultColor, setDefaultColor] = useState(''); // 채팅 버블의 기본 색상 설정
-  const [postId, setPostId] = useState();
   const [scroll, setScroll] = useState(false);
   const [isFetchingData, setIsFetchingData] = useState(false);
+  const [error, setError] = useState(false);
 
   const userInfo = useSelector((state) => state.user.user);
   const location = useLocation();
@@ -41,39 +42,45 @@ const TradeChat = () => {
     }
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(
-      ['chatMessages', roomId],
-      async ({ pageParam = 0 }) => {
-        setIsFetchingData(true);
-        const response = await getData(
-          GET_TRADE_CHAT(roomId),
-          {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          },
-          { roomId, page: pageParam, sort: 'createdAt%2Cdesc' },
-        );
-        // 0번 페이지일 때 초기 채팅 설정 호출
-        if (pageParam === 0) {
-          initialChatSetting(response);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery(
+    ['chatMessages', roomId],
+    async ({ pageParam = 0 }) => {
+      setIsFetchingData(true);
+      const response = await getData(
+        GET_TRADE_CHAT(roomId),
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        { roomId, page: pageParam, sort: 'createdAt%2Cdesc' },
+      );
+      // 0번 페이지일 때 초기 채팅 설정 호출
+      if (pageParam === 0) {
+        initialChatSetting(response);
+      }
+      return response.data;
+    },
+    {
+      getNextPageParam: (lastPage) => {
+        const currentPage = lastPage.number;
+        const totalPages = lastPage.totalPages;
+        return currentPage + 1 < totalPages ? currentPage + 1 : undefined;
+      },
+      enabled: !!roomId,
+      onSuccess: () => {
+        setIsFetchingData(false);
+        if (!isFirstLoadComplete) {
+          setScroll(true);
         }
-        return response.data;
       },
-      {
-        getNextPageParam: (lastPage) => {
-          const currentPage = lastPage.number;
-          const totalPages = lastPage.totalPages;
-          return currentPage + 1 < totalPages ? currentPage + 1 : undefined;
-        },
-        enabled: !!roomId,
-        onSuccess: () => {
-          setIsFetchingData(false);
-          if (!isFirstLoadComplete) {
-            setScroll(true);
-          }
-        },
-      },
-    );
+    },
+  );
 
   // 채팅 메시지 리스트 병합
   const [chatList, setChatList] = useState(
@@ -87,6 +94,7 @@ const TradeChat = () => {
 
   //POLLING
   useEffect(() => {
+    if (error) return;
     const abortController = new AbortController();
     pollingRef.current = true;
 
@@ -107,11 +115,9 @@ const TradeChat = () => {
 
             // 최신 메시지와 현재 메시지 비교
             const lastMessageTime = new Date(chatListRef.current[0]?.createdAt); // 최신 메시지 ID
-            console.log('메', lastMessageTime);
             const newMessagesToAdd = newMessages.filter(
               (message) => new Date(message.createdAt) > lastMessageTime,
             );
-            console.log('메2', newMessagesToAdd);
             if (newMessagesToAdd.length > 0) {
               setChatList((prevChatList) => [
                 ...newMessagesToAdd,
@@ -126,7 +132,7 @@ const TradeChat = () => {
           }
         } catch (error) {
           if (error.name !== 'AbortError') {
-            console.error('Error fetching new messages:', error);
+            setError(true);
           }
         }
 
@@ -152,9 +158,6 @@ const TradeChat = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log(chatList);
-  }, [chatList]);
   //첫 로딩 시 스크롤 아래로
   useLayoutEffect(() => {
     if (chatWrapperRef.current) {
@@ -210,14 +213,12 @@ const TradeChat = () => {
           },
           { roomId: roomId },
         );
-        console.log('인포', response);
 
         if (response) {
-          console.log('인포', response.data);
           setInfoResult(response.data);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        setError(true);
       } finally {
       }
     };
@@ -234,7 +235,9 @@ const TradeChat = () => {
   if (isLoading) {
     return <Loading />;
   }
-
+  if (error || isError) {
+    return <ErrorScreen />;
+  }
   return (
     <s.ChatLayout
       className="레이아웃"
@@ -248,6 +251,7 @@ const TradeChat = () => {
         onBackClick={handleBackNavigation}
         id={infoResult.marketPostId}
         isComplete={infoResult.dealStatus === 'COMPLETE' ? true : false}
+        setError={setError}
       />
 
       <s.ChatWrapper>
@@ -287,7 +291,6 @@ const TradeChat = () => {
       <TradeChatInfo
         messageInitiator={messageInitiator}
         roomId={roomId}
-        setPostId={setPostId}
         infoResult={infoResult}
       />
       <s.TradeBackground />
@@ -296,6 +299,7 @@ const TradeChat = () => {
         currentUserId={userInfo.id}
         addNewMessage={addNewMessage}
         chatListRef={chatListRef}
+        setError={setError}
       />
     </s.ChatLayout>
   );

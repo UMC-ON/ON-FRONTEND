@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as s from './TradeChatInfoStyled';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const TradeChatInfo = ({ messageInitiator, roomId, infoResult }) => {
   const [tradeMethod, setTradeMethod] = useState('');

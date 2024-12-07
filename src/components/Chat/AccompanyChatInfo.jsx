@@ -1,8 +1,4 @@
-import { useState, useEffect } from 'react';
 import * as s from './AccompanyChatInfoStyled';
-import { GET_ACCOMPANY_INFO } from '../../api/urls';
-import { getData } from '../../api/Functions';
-import Loading from '../Loading/Loading';
 
 const AccompanyChatInfo = ({
   messageInitiator,

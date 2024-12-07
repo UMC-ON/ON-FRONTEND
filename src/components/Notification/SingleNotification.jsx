@@ -12,6 +12,7 @@ const SingleNotification = ({
   alertType,
   alertConnectId,
   read,
+  setError,
 }) => {
   const navigate = useNavigate();
 
@@ -27,7 +28,7 @@ const SingleNotification = ({
           {},
         );
       } catch (error) {
-        console.error('Error fetching data:', error);
+        setError(true);
       }
     }
     if (alertType === 'COMPANY') {

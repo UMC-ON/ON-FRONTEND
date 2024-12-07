@@ -14,6 +14,7 @@ import { showDate } from '../../components/Common/InfoExp';
 import { useInfiniteQuery } from 'react-query';
 import { GET_ACCOMPANY_CHAT, GET_ACCOMPANY_INFO } from '../../api/urls';
 import { getData } from '../../api/Functions';
+import ErrorScreen from '../../components/ErrorScreen';
 
 const AccompanyChat = () => {
   const [isFirstLoadComplete, setIsFirstLoadComplete] = useState(false); // 첫 로드 완료 상태
@@ -32,6 +33,7 @@ const AccompanyChat = () => {
   const [scroll, setScroll] = useState(false);
   const [isFetchingData, setIsFetchingData] = useState(false);
   const pollingRef = useRef(true); // 롱 폴링 상태를 관리하는 ref
+  const [error, setError] = useState(false);
 
   // 초기 채팅 설정 함수
   const initialChatSetting = (response) => {
@@ -47,39 +49,45 @@ const AccompanyChat = () => {
   };
 
   // infinite scroll 채팅 메시지 불러오기
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(
-      ['chatMessages', roomId],
-      async ({ pageParam = 0 }) => {
-        setIsFetchingData(true);
-        const response = await getData(
-          GET_ACCOMPANY_CHAT(roomId),
-          {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          },
-          { roomId, page: pageParam, sort: 'createdAt%2Cdesc' },
-        );
-        // 0번 페이지일 때 초기 채팅 설정 호출
-        if (pageParam === 0) {
-          initialChatSetting(response);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery(
+    ['chatMessages', roomId],
+    async ({ pageParam = 0 }) => {
+      setIsFetchingData(true);
+      const response = await getData(
+        GET_ACCOMPANY_CHAT(roomId),
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        { roomId, page: pageParam, sort: 'createdAt%2Cdesc' },
+      );
+      // 0번 페이지일 때 초기 채팅 설정 호출
+      if (pageParam === 0) {
+        initialChatSetting(response);
+      }
+      return response.data;
+    },
+    {
+      getNextPageParam: (lastPage) => {
+        const currentPage = lastPage.number;
+        const totalPages = lastPage.totalPages;
+        return currentPage + 1 < totalPages ? currentPage + 1 : undefined;
+      },
+      enabled: !!roomId,
+      onSuccess: () => {
+        setIsFetchingData(false);
+        if (!isFirstLoadComplete) {
+          setScroll(true);
         }
-        return response.data;
       },
-      {
-        getNextPageParam: (lastPage) => {
-          const currentPage = lastPage.number;
-          const totalPages = lastPage.totalPages;
-          return currentPage + 1 < totalPages ? currentPage + 1 : undefined;
-        },
-        enabled: !!roomId,
-        onSuccess: () => {
-          setIsFetchingData(false);
-          if (!isFirstLoadComplete) {
-            setScroll(true);
-          }
-        },
-      },
-    );
+    },
+  );
 
   // 채팅 메시지 리스트 병합
   const [chatList, setChatList] = useState(
@@ -98,6 +106,9 @@ const AccompanyChat = () => {
 
     const startLongPolling = async () => {
       while (pollingRef.current) {
+        if (error) {
+          return;
+        }
         try {
           const response = await getData(
             GET_ACCOMPANY_CHAT(roomId),
@@ -132,7 +143,7 @@ const AccompanyChat = () => {
           }
         } catch (error) {
           if (error.name !== 'AbortError') {
-            console.error('Error fetching new messages:', error);
+            setError(true);
           }
         }
 
@@ -221,7 +232,7 @@ const AccompanyChat = () => {
           );
         }
       } catch (error) {
-        console.error('Error fetching accompany info:', error);
+        setError(true);
       }
     };
     fetchAccompanyInfo();
@@ -231,6 +242,9 @@ const AccompanyChat = () => {
     return <Loading />;
   }
 
+  if (error || isError) {
+    return <ErrorScreen />;
+  }
   return (
     <s.ChatLayout
       className="레이아웃"
@@ -244,6 +258,7 @@ const AccompanyChat = () => {
         onBackClick={() => navigate('/chatlist')}
         id={roomId}
         isComplete={isRecruitComplete}
+        setError={setError}
       />
 
       <s.ChatWrapper>
@@ -292,6 +307,7 @@ const AccompanyChat = () => {
         currentUserId={userInfo.id}
         addNewMessage={addNewMessage}
         chatListRef={chatListRef}
+        setError={setError}
       />
     </s.ChatLayout>
   );
