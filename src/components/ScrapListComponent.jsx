@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import compas from "../assets/images/compasIcon.svg";
@@ -12,9 +11,6 @@ import defaultImg from '../assets/images/bannerDefault.svg';
 
 import { showDate } from "../components/Common/InfoExp";
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
-
-import { getData, postData, putData } from '../api/Functions';
-import { GET_SCRAP, POST_SCRAP } from '../api/urls';
 
 const ScrapList = ({ items }) => {
   const [scrappedMarketPostIds, setScrappedMarketPostIds] = useState([]);

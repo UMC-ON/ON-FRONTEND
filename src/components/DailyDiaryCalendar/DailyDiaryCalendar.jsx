@@ -9,19 +9,17 @@ const DateRangePicker = ({ onApply }) => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);  // 선택된 날짜를 상태로 저장
+    setSelectedDate(date);
   };
 
   const handleApply = () => {
     if (selectedDate) {
-      onApply(selectedDate);  // 선택된 날짜를 적용
+      onApply(selectedDate);
     }
   };
 
-  const today = moment().startOf('day').toDate();
-
   const handleReset = () => {
-    setSelectedDate(null);  // 선택된 날짜 초기화
+    setSelectedDate(null);
   };
 
   const renderCustomHeader = ({

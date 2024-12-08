@@ -46,7 +46,6 @@ const ItemList = ({ items }) => {
             (post) => post.marketPost.marketPostId,
           );
           setScrappedMarketPostIds(scrappedIds);
-          console.log(scrappedIds);
         } else {
           console.error('Unexpected response structure:', response.data);
         }
