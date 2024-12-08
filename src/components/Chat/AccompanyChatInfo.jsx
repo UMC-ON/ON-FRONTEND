@@ -1,56 +1,17 @@
-import { useState, useEffect } from 'react';
 import * as s from './AccompanyChatInfoStyled';
-import { GET_ACCOMPANY_INFO } from '../../api/urls';
-import { getData } from '../../api/Functions';
-import Loading from '../Loading/Loading';
 
 const AccompanyChatInfo = ({
   messageInitiator,
-  defaultColor,
   pointColor,
   userName,
-  roomId,
+  infoResult,
 }) => {
-  const [infoResult, setInfoResult] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [infoResult, setInfoResult] = useState([]);
 
   const pointColorOpacity = (e) => {
     return `${pointColor.replace('1)', ` ${e})`)}`;
   };
 
-  const defaultColorOpacity = (e) => {
-    return `${defaultColor.replace('1)', ` ${e})`)}`;
-  };
-
-  useEffect(() => {
-    const fetchAccompanyInfo = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getData(
-          GET_ACCOMPANY_INFO(roomId),
-          {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-          },
-          { roomId: roomId },
-        );
-
-        if (response) {
-          console.log('chat info: ', response.data);
-          setInfoResult(response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAccompanyInfo();
-  }, []);
-
-  if (isLoading) {
-    return <Loading />;
-  }
   return (
     <s.InfoWrapper color={pointColorOpacity(0.2)}>
       {messageInitiator ? (

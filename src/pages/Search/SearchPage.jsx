@@ -8,10 +8,12 @@ import SinglePost from '../../components/SinglePost/SinglePost';
 import { GET_SEARCH_RESULT } from '../../api/urls';
 import { getData } from '../../api/Functions';
 import { useInfiniteQuery } from 'react-query';
+import ErrorScreen from '../../components/ErrorScreen';
 
 const Search = () => {
   const [searchInput, setSearchInput] = useState(''); // 검색창에 입력한 것
   const [searchTarget, setSearchTarget] = useState(''); // 돋보기 누를 때 넘어가는 것
+  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -38,23 +40,22 @@ const Search = () => {
     return response.data;
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(['searchResults', searchTarget], fetchSearchResult, {
-      enabled: !!searchTarget, // 검색어가 있을 때만 실행
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.content.length < 20) return undefined; // 데이터가 더 없으면 undefined
-        return allPages.length; // 다음 페이지 번호 반환
-      },
-    });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery(['searchResults', searchTarget], fetchSearchResult, {
+    enabled: !!searchTarget, // 검색어가 있을 때만 실행
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.content.length < 20) return undefined; // 데이터가 더 없으면 undefined
+      return allPages.length; // 다음 페이지 번호 반환
+    },
+  });
 
   const handleScroll = (e) => {
-    console.log(
-      'Scrolling...',
-      e.target.scrollTop,
-      e.target.scrollHeight,
-      e.target.clientHeight,
-    );
-
     if (
       e.target.scrollHeight - e.target.scrollTop <=
         e.target.clientHeight + 50 &&
@@ -68,9 +69,14 @@ const Search = () => {
   const isEmpty =
     !data || (data.pages.length === 1 && data.pages[0].content.length === 0);
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  if (error || isError) {
+    return <ErrorScreen />;
+  }
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return (
     <s.PageLayout
       style={{ overflowY: 'auto', minHeight: '100vh' }}
       onScroll={handleScroll}
@@ -111,7 +117,7 @@ const Search = () => {
                     data.writerInfo.userStatus === 'ACTIVE' ? 'true' : 'false'
                   }
                   comment={data.commentCount.toString()}
-                  boardType={data.boardType}
+                  boardType={data.boardType === 'FREE' ? 'general' : 'info'}
                 />
               )),
             )

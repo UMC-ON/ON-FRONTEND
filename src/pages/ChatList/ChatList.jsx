@@ -8,9 +8,9 @@ import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
 import { useInfiniteQuery } from 'react-query';
 import { getData } from '../../api/Functions';
-import useFetchChatList from '../../hooks/useFetchChatList';
 import { showDate } from '../../components/Common/InfoExp';
 import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
+import ErrorScreen from '../../components/ErrorScreen';
 
 const ChatList = () => {
   const [currentMode, setCurrentMode] = useState('accompany');
@@ -28,24 +28,28 @@ const ChatList = () => {
 
     const data = response.data.content[0].roomList;
 
-    // 추가된 for 루프: country 필드 추가
     if (currentMode === 'accompany') {
       for (let i = 0; i < data.length; i++) {
         data[i].country = data[i].location.split(' ')[0];
-        console.log(data[i]); // 디버깅용 로그
       }
     }
 
     return { content: data };
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(['chatList', currentMode], fetchChatList, {
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.content.length < 20) return undefined; // 마지막 페이지 도달
-        return allPages.length; // 다음 페이지 번호 반환
-      },
-    });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery(['chatList', currentMode], fetchChatList, {
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.content.length < 20) return undefined; // 마지막 페이지 도달
+      return allPages.length; // 다음 페이지 번호 반환
+    },
+  });
 
   const handleModeChange = (mode) => () => {
     if (currentMode !== mode) {
@@ -67,6 +71,9 @@ const ChatList = () => {
   const isEmpty =
     !data || (data.pages.length === 1 && data.pages[0].content.length === 0);
 
+  if (isError) {
+    return <ErrorScreen />;
+  }
   return (
     <s.ChatListLayout
       style={{ overflowY: 'auto', height: '100vh' }}
@@ -99,12 +106,11 @@ const ChatList = () => {
           content="채팅 내역"
           style={{ paddingBottom: '10rem' }}
         />
-      ) : (
-        data?.pages.map((page) =>
-          page.content.map((data) => (
-            <s.ChatListWrapper key={data.roomId}>
-              {console.log(data)}
-              {currentMode === 'accompany' ? (
+      ) : currentMode === 'accompany' ? (
+        <s.ChatListWrapper>
+          {data?.pages.map((page) =>
+            page.content.map((data) => (
+              <>
                 <SingleAccompanyChat
                   roomId={data.roomId}
                   time={
@@ -120,11 +126,18 @@ const ChatList = () => {
                   senderName={data.senderName}
                   location={data.country} // country 필드 사용
                 />
-              ) : (
+                <s.Line />
+              </>
+            )),
+          )}
+        </s.ChatListWrapper>
+      ) : (
+        <s.ChatListWrapper>
+          {data?.pages.map((page) =>
+            page.content.map((data) => (
+              <>
                 <SingleTradeChat
-                  senderName={data.senderName}
                   roomId={data.roomId}
-                  img={data.profileImg}
                   time={
                     data.lastChatTime !== null
                       ? showDate(data.lastChatTime)
@@ -133,14 +146,16 @@ const ChatList = () => {
                   message={
                     data.lastMessage !== null
                       ? data.lastMessage
-                      : '새로운 채팅을 시작해보새요!'
+                      : '채팅을 시작해보새요!'
                   }
+                  senderName={data.senderName}
+                  location={data.country} // country 필드 사용
                 />
-              )}
-              <s.Line />
-            </s.ChatListWrapper>
-          )),
-        )
+                <s.Line />
+              </>
+            )),
+          )}
+        </s.ChatListWrapper>
       )}
       {isFetchingNextPage && <Loading />}
 

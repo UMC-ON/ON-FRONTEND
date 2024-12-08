@@ -9,7 +9,8 @@ export const InfoWrapper = styled.div`
   box-sizing: border-box;
   border-radius: 0.875rem;
   z-index: 1;
-
+  position: static;
+  top: 61px;
   display: grid;
   grid-template-areas:
     'info info'

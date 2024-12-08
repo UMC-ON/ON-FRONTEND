@@ -7,8 +7,7 @@ export const ChatListLayout = styled.div`
   max-width: 480px;
   display: flex;
   box-sizing: border-box;
-  padding: 61px 0px 0px;
-  /* justify-content: center; */
+  padding: 61px 0px 87px;
   align-items: center;
   flex-direction: column;
 `;
@@ -20,7 +19,7 @@ export const ModeContainer = styled.section`
   padding-left: 1.5rem;
   box-sizing: border-box;
   align-content: flex-start;
-  z-index: 3;
+  z-index: 1;
 `;
 
 export const ModeButton = styled.div`
