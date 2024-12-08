@@ -17,6 +17,7 @@ const MyInfoCard = ({
   userStatus,
   isPassword,
   setIsLoading,
+  setError,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,14 +38,13 @@ const MyInfoCard = ({
         {},
       );
 
-      //console.log(response);
       if (response.status == 200) {
         dispatch(logout());
 
         navigate('/landing');
       }
     } catch (error) {
-      //console.error('Logout error:', error);
+      setError(true);
     } finally {
       setIsLoading(false);
     }

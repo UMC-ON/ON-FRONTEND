@@ -34,7 +34,6 @@ const Diary = () => {
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
-  console.log(userInfo);
 
   useEffect(() => {
     const fetchDiaries = async () => {
@@ -45,9 +44,6 @@ const Diary = () => {
         setDiaries(response?.data?.diaryList);
         setDday(response?.data?.dday);
         setDateList(response?.data?.dateList);
-        console.log(response?.data?.diaryList);
-        console.log(userInfo);
-        console.log(response?.data?.dday);
       } catch (error) {
         console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
       }
@@ -115,7 +111,6 @@ const Diary = () => {
       );
 
       if (response) {
-        console.log('Diary saved:', response.data);
         window.location.reload();
       } else {
         console.error('Error saving diary: no response.');
@@ -161,7 +156,6 @@ const Diary = () => {
         )}
         <CalendarContainer>
           <DiaryCalendar
-            diaries={diaries}
             dateList={dateList}
           />
         </CalendarContainer>
@@ -196,7 +190,7 @@ const Diary = () => {
               value={newDiaryContent}
               onChange={(e) => setNewDiaryContent(e.target.value)} // 사용자가 입력한 내용을 상태에 저장
             />
-            <Save onClick={handleSaveDiary}>저장하기</Save>
+            <Save onClick={handleSaveDiary}>저장</Save>
           </NewDiaryContainer>
         )}
 
@@ -302,7 +296,7 @@ const CalendarContainer = styled.div`
 `;
 
 const AddDiary = styled.div`
-  width: 30%;
+  width: 33%;
   height: 5vh;
   margin-left: 5%;
   margin-top: 1em;
@@ -313,7 +307,7 @@ const AddDiary = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.8em;
+  font-size: 0.9em;
   cursor: pointer; // 클릭 가능하도록 커서 변경
 `;
 
@@ -332,9 +326,9 @@ const NewDiaryContainer = styled.div`
 
 const NewDiary = styled.textarea`
   font-family: 'Inter';
-  color: #838383;
+  color: #5c5c5c;
   background-color: white;
-  font-size: 14px;
+  font-size: 0.95rem;
   width: 89%;
   height: 10vh;
   border-radius: 15px;
@@ -354,12 +348,12 @@ const NewDiary = styled.textarea`
 `;
 
 const Save = styled.div`
-  width: 70px;
-  height: 20px;
-  border-radius: 9px;
+  width: 40px;
+  height: 22px;
+  border-radius: 13px;
   background: ${(props) => props.theme.blueGra};
   color: white;
-  font-size: 12px;
+  font-size: 0.85rem;
   display: flex;
   justify-content: center;
   align-items: center;

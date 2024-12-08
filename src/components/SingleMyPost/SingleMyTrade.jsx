@@ -17,6 +17,7 @@ const SingleMyTrade = ({
   user,
   location,
   price,
+  setError,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false); //삭제 누르는 순간 화면에서 바로 삭제를 위해
@@ -33,13 +34,11 @@ const SingleMyTrade = ({
         },
         {},
       );
-      //console.log(response);
       if (response.status === 200) {
-        //console.log('성공');
         setIsDeleted(true); // 삭제 상태 업데이트
       }
     } catch (error) {
-      //console.error('delete error:', error);
+      setError(true);
     } finally {
       setIsLoading(false);
     }

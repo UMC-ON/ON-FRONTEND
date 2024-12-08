@@ -32,9 +32,6 @@ function ScrapList() {
             
           });
     
-          // 응답 데이터 확인
-          console.log("API response:", response.data);
-    
           if (page === 0) {
             setItems(response.data.content);
           } else {

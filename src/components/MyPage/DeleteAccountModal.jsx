@@ -10,13 +10,12 @@ import { deleteData } from '../../api/Functions';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-const DeleteAccountModal = ({ modalDisplay, onClose }) => {
+const DeleteAccountModal = ({ modalDisplay, onClose, setIsLoading }) => {
   const [dropDown, setDropDown] = useState(false);
   const [selectedReason, setSelectedReason] = useState('');
   const [step, setStep] = useState(1);
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   const reasons = [
@@ -39,7 +38,6 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
         },
         {},
       );
-      //console.log(response);
       if (response.status == 200) {
         // LocalStorage에서 토큰 제거
         localStorage.removeItem('AToken');
@@ -53,7 +51,7 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
         nextStep();
       }
     } catch (error) {
-      //console.error('delete account error:', error);
+      alert('Error');
     } finally {
       setIsLoading(false);
     }

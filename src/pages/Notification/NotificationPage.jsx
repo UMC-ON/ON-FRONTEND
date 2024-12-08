@@ -7,10 +7,10 @@ import { GET_ALERT_LIST } from '../../api/urls';
 import Loading from '../../components/Loading/Loading';
 import SingleNotification from '../../components/Notification/SingleNotification';
 import { useInfiniteQuery } from 'react-query';
+import ErrorScreen from '../../components/ErrorScreen';
 
 const Notification = () => {
-  // const [notification, setNotification] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const fetchNotifications = async ({ pageParam = 0 }) => {
     const response = await getData(
@@ -23,14 +23,20 @@ const Notification = () => {
     return response.data;
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery('notifications', fetchNotifications, {
-      staleTime: 0,
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.length < 20) return undefined; // 데이터가 없으면 멈춤
-        return allPages.length; // 다음 페이지 번호 반환
-      },
-    });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError,
+    isLoading,
+  } = useInfiniteQuery('notifications', fetchNotifications, {
+    staleTime: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < 20) return undefined; // 데이터가 없으면 멈춤
+      return allPages.length; // 다음 페이지 번호 반환
+    },
+  });
 
   const handleScroll = (e) => {
     if (
@@ -41,9 +47,13 @@ const Notification = () => {
       fetchNextPage();
     }
   };
+
   const isEmpty =
     !data || (data.pages.length === 1 && data.pages[0].length === 0);
 
+  if (isError || error) {
+    return <ErrorScreen />;
+  }
   if (isLoading) {
     return <Loading />;
   }
@@ -67,6 +77,7 @@ const Notification = () => {
                 alertType={data.alertType}
                 alertConnectId={data.alertConnectId}
                 read={data.read}
+                setError={setError}
               />
             )),
           )

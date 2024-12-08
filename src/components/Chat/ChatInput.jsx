@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import * as s from './ChatInputStyled';
 import { POST_CHAT } from '../../api/urls';
-import { postData } from '../../api/Functions';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
 import send from '../../assets/images/send.svg';
-const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
+const ChatInput = ({ roomId, addNewMessage, currentUserId, setError }) => {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
@@ -13,6 +12,11 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
   const messageInputChange = (e) => {
     setMessage(e.target.value);
   };
+
+  const formatDateWithoutZ = (time) => {
+    return time.replace('Z', '') + '999';
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
@@ -27,18 +31,20 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
         },
       });
 
-      const response = await apiClient.post(POST_CHAT(roomId), message);
+      const response = await apiClient.post(POST_CHAT(4546), message);
+      const time = formatDateWithoutZ(new Date().toISOString());
 
       if (response) {
         const newMessage = {
           userId: currentUserId,
           message: message,
+          createdAt: time,
         };
         addNewMessage(newMessage);
         setMessage('');
       }
     } catch (error) {
-      //console.error('Error sending message:', error);
+      setError(true);
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +60,11 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
     textarea.style.height = 'auto'; // 기본 높이로 재설정
   };
   if (isLoading) {
-    return <Loading />;
+    return (
+      <s.LoadingIndex>
+        <Loading />
+      </s.LoadingIndex>
+    );
   }
 
   return (

@@ -35,7 +35,7 @@ const SinglePost = ({
         <span style={{ color: '#92A5BC' }}>{comment}</span>
       </s.Info>
 
-      {boardType === 'INFO' ? (
+      {boardType === 'info' ? (
         <s.Categories $fontcolor="#3E73B2">정보 게시판</s.Categories>
       ) : (
         <s.Categories $fontcolor="#6458BF">자유 게시판</s.Categories>

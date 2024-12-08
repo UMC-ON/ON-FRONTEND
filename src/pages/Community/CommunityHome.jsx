@@ -72,10 +72,10 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
       totalPage.current = response.data.totalPages;
       if (currentPage.current > 0) {
         setPostList((postList) => [...postList, ...response.data.content]);
-        console.log('내용 존재');
+        //console.log('내용 존재');
       } else {
         setPostList(response.data.content);
-        console.log('이거 실행');
+        //console.log('이거 실행');
       }
     }
     return response;
@@ -97,17 +97,17 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
       totalPage.current = response.data.totalPages;
       if (currentPage.current > 0) {
         setPostList((postList) => [...postList, ...response.data.content]);
-        console.log('내용 존재');
+        //console.log('내용 존재');
       } else {
         setPostList(response.data.content);
-        console.log('이거 실행');
+        //console.log('이거 실행');
       }
     }
   };
 
   useEffect(() => {
-    console.log('유저인포');
-    console.log(userInfo);
+    //console.log('유저인포');
+    //console.log(userInfo);
 
     if (country === null) {
       fetchData();

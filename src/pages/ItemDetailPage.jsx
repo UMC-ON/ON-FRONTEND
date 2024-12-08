@@ -18,7 +18,6 @@ import defaultImg from '../assets/images/bannerDefault.svg';
 import {
   GET_SPECIFIC_ITEM,
   GET_NEARBY_ITEM,
-  GET_MARKET_ROOMID,
   GET_ROOM_ID,
 } from '../api/urls';
 import { getData, postData } from '../api/Functions';
@@ -44,19 +43,15 @@ function ItemDetailPage() {
   const [items, setItems] = useState([]);
   const [nearitems, setNearitems] = useState([]);
   const [receiverId, setReceiverId] = useState(null);
-  //const [roomId, setRoomId] = useState(null);
 
   const [modalImage, setModalImage] = useState(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-  //const [hasBottomTab, setHasBottomTab] = useState(true)
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
-  //const [infoData, setInfoData] = useState([]);
   const [nickname, setNickname] = useState('');
 
   const openChatModal = () => {
     if (userInfo.country != null) {
-      console.log('First modal opened');
       setIsChatModalOpen(true);
     } else {
       setIsSecondModalOpen(true);
@@ -64,17 +59,10 @@ function ItemDetailPage() {
   };
 
   const closeChatModal = () => {
-    console.log('First modal closed');
     setIsChatModalOpen(false);
   };
 
-  const openSecondModal = () => {
-    console.log('Second modal opened');
-    setIsSecondModalOpen(true);
-  };
-
   const closeSecondModal = () => {
-    console.log('Second modal closed');
     setIsSecondModalOpen(false);
   };
 
@@ -109,10 +97,8 @@ function ItemDetailPage() {
       );
 
       if (response) {
-        console.log(response.data);
         const roomId = response.data.roomId;
         const senderName = userInfo.nickname;
-        console.log('Application successful:', roomId);
         navigate(`/chat/trade/${roomId}`, { state: { roomId, senderName } });
       } else {
         console.error('Application failed');
@@ -131,7 +117,6 @@ function ItemDetailPage() {
         if (response) {
           setItems([response.data]);
           setReceiverId(response.data.userId);
-          console.log(response.data);
         }
       } catch (error) {
         console.error('물품 상세 페이지 정보를 불러오는 중 오류 발생:', error);
@@ -149,7 +134,6 @@ function ItemDetailPage() {
         });
         if (response) {
           setNearitems(response.data);
-          console.log(response.data);
         }
       } catch (error) {
         console.error('근처 물품 정보를 불러오는 중 오류 발생:', error);
@@ -161,42 +145,11 @@ function ItemDetailPage() {
 
   useEffect(() => {
     if (items.length > 0) {
-      setNickname(items[0].nickname); // 첫 번째 아이템의 닉네임 설정
+      setNickname(items[0].nickname);
     }
   }, [items]);
 
-  // const handleChatButtonClick = async () => {
-  //   closeChatModal();
-  //   if (!receiverId || !marketPostId) {
-  //     console.error('Receiver ID or Market Post ID is missing.');
-  //     return;
-  //   }
 
-  //   try {
-  //     const response = await postData(
-  //       GET_MARKET_ROOMID,
-  //       {
-  //         chatType: "MARKET",
-  //         receiverId: receiverId,
-  //         postId: marketPostId,
-  //       },
-  //       {
-  //         Authorization: `Bearer ${localStorage.getItem('AToken')}`
-  //       }
-  //     );
-
-  //     if (response?.data?.inSuccess) {
-  //       const roomId = response.data.result.roomId;
-  //       const nickname = userInfo?.nickname || 'Unknown User';
-  //       setRoomId(roomId);
-  //       navigate(`/chat/trade/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
-  //     } else {
-  //       console.error('Failed to create chat room:', response?.data?.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error sending chat request:', error);
-  //   }
-  // };
 
   return (
     <>

@@ -158,11 +158,11 @@ function AccompanyDetailPage() {
           state: { roomId, senderName },
         });
       } else {
-        return <ErrorScreen/>
+        return <ErrorScreen />;
         // console.error('Application failed');
       }
     } catch (error) {
-      return <ErrorScreen/>
+      return <ErrorScreen />;
       // console.error('Error applying for accompany:', error);
     }
   };
@@ -197,7 +197,7 @@ function AccompanyDetailPage() {
         setAccompanyData(accompany_data.data);
         // console.log(accompanyData);
       } catch (error) {
-        return <ErrorScreen/>
+        return <ErrorScreen />;
         // console.error('Error fetching data:', error);
       } finally {
         // insert code here
@@ -484,7 +484,7 @@ const GradientOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(to top, #363636, transparent);
-  opacity: 0.7;
+  opacity: 0.1;
 `;
 
 const ProfileTextContainer = styled.div`
