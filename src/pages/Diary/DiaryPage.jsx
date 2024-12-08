@@ -34,7 +34,6 @@ const Diary = () => {
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
-  console.log(userInfo);
 
   useEffect(() => {
     const fetchDiaries = async () => {
@@ -45,9 +44,6 @@ const Diary = () => {
         setDiaries(response?.data?.diaryList);
         setDday(response?.data?.dday);
         setDateList(response?.data?.dateList);
-        console.log(response?.data?.diaryList);
-        console.log(userInfo);
-        console.log(response?.data?.dday);
       } catch (error) {
         console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
       }
@@ -115,7 +111,6 @@ const Diary = () => {
       );
 
       if (response) {
-        console.log('Diary saved:', response.data);
         window.location.reload();
       } else {
         console.error('Error saving diary: no response.');
@@ -161,7 +156,6 @@ const Diary = () => {
         )}
         <CalendarContainer>
           <DiaryCalendar
-            diaries={diaries}
             dateList={dateList}
           />
         </CalendarContainer>

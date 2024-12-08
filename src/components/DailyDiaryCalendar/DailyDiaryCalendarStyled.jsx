@@ -9,7 +9,7 @@ export const CompanyCalendar = styled.div`
     width: 90%;
     display: flex;
     margin-bottom: 10px;
-    justify-content: flex-start; /* img를 오른쪽 끝으로 정렬 */
+    justify-content: flex-start;
   }
 
   .date-range-picker {
@@ -166,7 +166,7 @@ export const Controls = styled.div`
 
 export const StyledDatePicker = styled.div`
   .react-datepicker__day--disabled {
-    color: #E0E0E0; /* 비활성화된 날짜 색상 */
-    pointer-events: none; /* 클릭 불가능 */
+    color: #E0E0E0;
+    pointer-events: none;
   }
 `;

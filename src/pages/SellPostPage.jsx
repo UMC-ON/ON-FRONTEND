@@ -11,12 +11,12 @@ import SellPostSelectCity from '../components/SellPostSelectCity/SellPostSelectC
 import SellPostCitySelect from '../components/SellPostShowCitySelect';
 import AlertModal from '../components/SellAlertModal.jsx';
 
-import { postData, multiFilePostData } from '../api/Functions';
+import { multiFilePostData } from '../api/Functions';
 import { POST_ITEM } from '../api/urls';
 
 function SellPost() {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [image, setImage] = useState(null); // 한 장의 이미지로 수정
+  const [image, setImage] = useState(null);
   const [title, setTitle] = useState('');
   const [cost, setCost] = useState('');
   const [content, setContent] = useState('');
@@ -63,7 +63,7 @@ function SellPost() {
   };
 
   const handleDeleteImage = () => {
-    setImage(null); // 이미지 삭제
+    setImage(null);
   };
 
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ function SellPost() {
       currentLocation: city.city,
       share: share,
     };
-    console.log(jsonData);
+    
 
     const jsonBlob = new Blob([JSON.stringify(jsonData)], {
       type: 'application/json',
@@ -98,7 +98,7 @@ function SellPost() {
       });
 
       if (response) {
-        console.log(response.data.result);
+        
         navigate('/sell');
       }
     } catch (error) {

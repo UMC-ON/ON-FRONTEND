@@ -34,8 +34,6 @@ function SellPage() {
   const navigate = useNavigate();
 
 
-
-  // 모든 물품 불러오기
   const fetchAllItems = async () => {
     try {
       const response = await getData(
@@ -47,11 +45,8 @@ function SellPage() {
       );
 
       if (page === 0) {
-        console.log('모든 물품 불러오기 성공');
-        console.log(response.data.content);
         setItems(response.data.content);
       } else {
-        console.log('extra data');
         setItems((prevItems) => [...prevItems, ...response.data.content]);
       }
     } catch (error) {
@@ -70,7 +65,7 @@ function SellPage() {
           ? dealType === '직거래'
             ? 'DIRECT'
             : 'DELIVERY'
-          : '', // 거래방식이 없으면 빈 문자열로 처리
+          : '',
         currentCountry,
         dealStatus: showAvailable ? 'AWAIT' : '',
       };
@@ -83,16 +78,12 @@ function SellPage() {
         params,
       );
 
-      // response가 유효한지 확인
       if (response && response.data) {
-        console.log(params);
-        // 페이지가 0일 때 새로 불러오고, 그 외 페이지에서는 기존 데이터에 추가
         if (page === 0) {
           setItems(response.data.content);
         } else {
           setItems((prevItems) => [...prevItems, ...response.data.content]);
         }
-        console.log(response.data);
       } else {
         console.error('응답이 유효하지 않습니다:', response);
       }
@@ -110,13 +101,8 @@ function SellPage() {
         },
         { keyword: searchKeyword, page: page, size: 5, sort: 'DESC' },
       );
-      console.log('response', response);
 
-      // response가 유효한지 확인
       if (response && response.data) {
-        console.log('검색 성공');
-        console.log(response);
-        // 페이지가 0일 때 새로 불러오고, 그 외 페이지에서는 기존 데이터에 추가
         if (page === 0) {
           setItems(response.data.content);
         } else {
@@ -133,10 +119,8 @@ function SellPage() {
   useEffect(() => {
     
     if (!selectedTransaction && !country && !showAvailable && !searchKeyword) {
-      // 필터링 조건이 없으면 모든 물품 불러오기
       fetchAllItems();
     } else {
-      // 필터링 조건이 있을 때는 필터링된 물품 가져오기
       fetchItems(selectedTransaction, country);
     }
   }, [page, selectedTransaction, country, showAvailable]);
@@ -147,10 +131,8 @@ function SellPage() {
 
     if (scrolledToBottom) {
       if (searchKeyword) {
-        // 검색 중일 때는 검색 결과를 추가로 불러옴
         fetchSearchResults();
       } else {
-        // 일반적인 경우 페이지 증가
         setPage((prevPage) => prevPage + 1);
       }
     }
@@ -161,8 +143,7 @@ function SellPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-  const handleFilterClick = useCallback(() => {
-    console.log('handleFilterClick');
+  const handleFilterClick = useCallback(() => {-
     setPage(0);
     setItems([]);
   }, []);
@@ -185,7 +166,6 @@ function SellPage() {
 
   const handleGetCountry = useCallback(
     (country) => {
-      console.log('handleGetCountry');
       setCountry(country);
       setIsCountryClicked(true);
       setShowCountry(false);
@@ -231,8 +211,13 @@ function SellPage() {
     setItems([]);
   };
 
+  const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+      }
+  };
+
   const [isModalOpen, setModalOpen] = useState(false);
-  const [isValidated, setIsValidated] = useState(null);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -261,12 +246,12 @@ function SellPage() {
           placeholder="국가 / 물품으로 검색해 보세요."
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <SearchIcon
           src={search_icon}
           onClick={fetchSearchResults}
         />{' '}
-        {/* 검색 아이콘 클릭 시 검색 요청 */}
       </SearchContainer>
       <br />
       <br />
