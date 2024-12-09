@@ -17,6 +17,7 @@ import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 import { getData } from '../api/Functions';
 import { GET_FILTER_ITEM, GET_ITEM_SEARCH, GET_ITEM_LIST } from '../api/urls';
 import SecondModal from '../components/SecondModal.jsx';
+import ErrorScreen from '../components/ErrorScreen.jsx';
 
 function SellPage() {
   const [showAvailable, setShowAvailable] = useState(false);
@@ -50,7 +51,7 @@ function SellPage() {
         setItems((prevItems) => [...prevItems, ...response.data.content]);
       }
     } catch (error) {
-      console.error('모든 물품 불러오기 중 오류 발생:', error);
+      return <ErrorScreen />
     }
   };
 
@@ -85,10 +86,10 @@ function SellPage() {
           setItems((prevItems) => [...prevItems, ...response.data.content]);
         }
       } else {
-        console.error('응답이 유효하지 않습니다:', response);
+        return <ErrorScreen />
       }
     } catch (error) {
-      console.error('필터링 중 오류 발생:', error);
+      return <ErrorScreen />
     }
   };
 
@@ -109,10 +110,10 @@ function SellPage() {
           setItems((prevItems) => [...prevItems, ...response.data.content]);
         }
       } else {
-        console.error('검색 응답이 유효하지 않습니다:', response);
+        return <ErrorScreen />
       }
     } catch (error) {
-      console.error('검색 중 오류 발생:', error);
+      return <ErrorScreen />
     }
   };
 
