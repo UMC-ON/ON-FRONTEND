@@ -378,7 +378,11 @@ function AccompanyDetailPage() {
 
             {infoData[0].userId !== userId ? (
               <BottomTabLayout>
-                {card.recruitCompletd ? (
+                {infoData[0].nickname.includes("탈퇴사용자") ? (
+                  <GreyButton $width="500px">
+                    탈퇴한 유저에게는 신청할 수 없어요
+                  </GreyButton>
+                ) : card.recruitCompleted ? (
                   <GreyButton $width="500px">
                     모집이 완료된 동행 글이에요.
                   </GreyButton>
