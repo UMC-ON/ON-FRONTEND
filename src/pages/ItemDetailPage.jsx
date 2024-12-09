@@ -10,6 +10,7 @@ import ItemDetailPageHeader from '../components/ItemDetailPageHeader';
 import ItemList from '../components/ItemList';
 import SellChatModal from '../components/SellChatModal';
 import SecondModal from '../components/SecondModal';
+import ErrorScreen from '../components/ErrorScreen';
 
 import compas from '../assets/images/compasIcon.svg';
 import icon from '../assets/images/profileIcon.svg';
@@ -101,10 +102,10 @@ function ItemDetailPage() {
         const senderName = userInfo.nickname;
         navigate(`/chat/trade/${roomId}`, { state: { roomId, senderName } });
       } else {
-        console.error('Application failed');
+        return <ErrorScreen />
       }
     } catch (error) {
-      console.error('Error applying for market chat:', error);
+      return <ErrorScreen />
     }
   };
 
@@ -119,7 +120,7 @@ function ItemDetailPage() {
           setReceiverId(response.data.userId);
         }
       } catch (error) {
-        console.error('물품 상세 페이지 정보를 불러오는 중 오류 발생:', error);
+        return <ErrorScreen />
       }
     };
 
@@ -136,7 +137,7 @@ function ItemDetailPage() {
           setNearitems(response.data);
         }
       } catch (error) {
-        console.error('근처 물품 정보를 불러오는 중 오류 발생:', error);
+        return <ErrorScreen />
       }
     };
 

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+import ErrorScreen from '../components/ErrorScreen.jsx';
 import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
@@ -80,7 +81,7 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
       window.location.reload();
   
     } catch (error) {
-      //console.error('스크랩 처리 중 오류 발생:', error);
+      return <ErrorScreen />
     }
   };
   

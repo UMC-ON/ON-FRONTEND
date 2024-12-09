@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import PageHeader from '../components/PageHeader/PageHeader';
 import ScrapListComponent from '../components/ScrapListComponent';
-import LoadingScreen from '../components/LoadingScreen';
+import ErrorScreen from '../components/ErrorScreen';
 
 import nothing from '../assets/images/no_content.svg';
 
@@ -38,7 +38,7 @@ function ScrapList() {
             setItems(prevItems => [...prevItems, ...response.data.content]);
           }
         } catch (error) {
-          console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
+          return <ErrorScreen />
         }
       };
     
