@@ -50,6 +50,7 @@ function ItemDetailPage() {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [nickname, setNickname] = useState('');
+  const [dealStatus, setDealStatus] = useState(null);
 
   const openChatModal = () => {
     if (userInfo.country != null) {
@@ -118,7 +119,7 @@ function ItemDetailPage() {
         if (response) {
           setItems([response.data]);
           setReceiverId(response.data.userId);
-          console.log(response);
+          setDealStatus(response.data.dealStatus);
         }
       } catch (error) {
         return <ErrorScreen />
@@ -239,14 +240,12 @@ function ItemDetailPage() {
 
       {userInfo.id !== receiverId && (
         <BottomTabLayout>
-          <ChatButton
-            disabled={nickname.includes('탈퇴사용자')}
-            onClick={nickname.includes('탈퇴사용자') ? null : openChatModal}
-          >
             {nickname.includes('탈퇴사용자')
-              ? '탈퇴한 유저에게는 신청할 수 없어요'
-              : '채팅으로 거래하기'}
-          </ChatButton>
+              ? <GreyButton>탈퇴한 유저에게는 신청할 수 없어요</GreyButton>
+              : (dealStatus === 'COMPLETE') ? <GreyButton>거래가 완료된 판매글이에요.</GreyButton> :
+              <ChatButton onClick={openChatModal}>
+                채팅으로 거래하기
+              </ChatButton>}
         </BottomTabLayout>
       )}
 
@@ -366,15 +365,31 @@ const ChatButton = styled.div`
   width: 22em;
   height: 3em;
   border-radius: 10px;
-  background: ${(props) =>
-    props.disabled ? 'rgba(227, 227, 227, 0.6)' : props.theme.blueGra};
+  background: ${(props) => props.theme.blueGra};
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 600;
   font-size: 16px;
-  color: ${(props) => (props.disabled ? '#A0A0A0' : 'white')};
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  color: white;
+  cursor: pointer;
+`;
+
+const GreyButton = styled.button`
+  cursor: not-allowed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 10px;
+  width: 22em;
+  height: 3em;
+  background-color: #d9d9d9;
+  color: white;
+  text-align: center;
+  font-family: Inter;
+  z-index: 2;
 `;
 
 
