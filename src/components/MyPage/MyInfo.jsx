@@ -149,7 +149,7 @@ const MyInfo = ({
         </TitleBox>
         {!editLink ? (
           <TextInput
-            value={link}
+            value={link ? link : ''}
             disabled={true}
           />
         ) : (
