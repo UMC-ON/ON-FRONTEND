@@ -48,7 +48,7 @@ const SelectCountry = ({ closeModal, getCountry }) => {
     setSelectedCountry(
       selectedCountry === country.country ? null : country.country,
     );
-    console.log(country.country);
+    //console.log(country.country);
     getCountry(country.country);
     // navigate(prevURL, { state: { selectedCountry: country.country } });
     // console.log('Navigating with country:', country.country);

@@ -21,7 +21,7 @@ const SignInPage = () => {
   useEffect(() => {
     //유저 상태에 따른 조건부 네비게이팅
     if (userInfo) {
-      console.log(userInfo);
+      //console.log(userInfo);
       if (userInfo.userStatus === 'TEMPORARY') {
         nav('/signUp/credentials');
       } else {
@@ -42,14 +42,14 @@ const SignInPage = () => {
       const formData = JSON.stringify(inputValue.current);
       //서버에 로그인 요청
       const response = await postData(SIGN_IN_URL, formData);
-      console.log(response);
+      //console.log(response);
 
       //로그인 성공
       if (response && response.data) {
-        console.log('실행', response.data);
+        //console.log('실행', response.data);
         //응답으로부터 토큰 받아오기
         const { grantType, accessToken, refreshToken } = response.data;
-        console.log(`${grantType},${accessToken},${refreshToken}`);
+        //console.log(`${grantType},${accessToken},${refreshToken}`);
         localStorage.setItem('grantType', grantType);
         localStorage.setItem('AToken', accessToken); // accessToken을 localStorage에 저장
         localStorage.setItem('RToken', refreshToken); // refreshToken을 localStorage에 저장
@@ -59,10 +59,10 @@ const SignInPage = () => {
         });
 
         if (user && user.data) {
-          console.log(user.data);
+          //console.log(user.data);
           //현 사용자와 로그인 상태 redux에 저장
           dispatch(loginSuccess(user.data));
-          console.log(user);
+          //console.log(user);
           if (user.data.userStatus === 'TEMPORARY') {
             nav('/signUp/credentials');
           } else {
@@ -77,7 +77,7 @@ const SignInPage = () => {
         alert('로그인에 실패했습니다. 아이디 혹은 비밀번호를 확인해주세요.');
       }
     } catch (error) {
-      console.error('Login error:', error);
+      //console.error('Login error:', error);
       if (error.response) {
         if (error.response.status === 401 || error.response.status === 400) {
           alert('아이디나 비밀번호가 일치하지 않습니다.');

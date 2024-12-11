@@ -30,7 +30,7 @@ const SelectCity = ({ closeModal, getCity }) => {
 
   const handleCityClick = (city) => {
     // navigate(prevURL, { state: { selectedCity: city.city } });
-    console.log(city.city);
+    //console.log(city.city);
     getCity(country + " " + city.city);
   };
 

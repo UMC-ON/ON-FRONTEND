@@ -23,7 +23,7 @@ const Test = () => {
             'Content-Type': 'text/plain',
           });
           if (res) {
-            console.log(res);
+            //console.log(res);
             setCur(res.data.accessToken);
           }
         }}
