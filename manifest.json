@@ -1,9 +1,10 @@
 {
   "name": "ON - \uad50\ud658\ud559\uc0dd \ucee4\ubba4\ub2c8\ud2f0",
   "short_name": "ON:온",
+  "id": "/manifest.json",
   "start_url": "/",
   "display": "standalone",
-  "description": "앱 설명",
+  "description": "나만의 완벽한 교환/방문학생을 위해, On-boarding",
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
   "orientation": "portrait",
@@ -12,7 +13,8 @@
       "src": "/public/icon/android-icon-36x36.png",
       "sizes": "36x36",
       "type": "image/png",
-      "density": "0.75"
+      "density": "0.75",
+      "purpose": "any"
     },
     {
       "src": "/public/icon/android-icon-48x48.png",
@@ -97,5 +99,8 @@
       "url": "/mypage",
       "description": "내 정보를 확인할 수 있는 마이페이지"
     }
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": "navigate-new"
+  }
 }

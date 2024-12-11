@@ -2,15 +2,15 @@ import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
-import detailImg from '../assets/images/accompany_img.svg';
-import profileImg from '../assets/images/englandIcon.svg';
+//import detailImg from '../assets/images/accompany_img.svg';
+//import profileImg from '../assets/images/englandIcon.svg';
 import coordinateIcon from '../assets/images/coordinate_icon.svg';
 import marketImg2 from '../assets/images/bannerDefault.svg';
 
 import calendarIcon from '../assets/images/black_calendar_icon.svg';
 import placeIcon from '../assets/images/black_place_icon.svg';
 import plusIcon from '../assets/images/black_plus_icon.svg';
-import marketImg from '../assets/images/borough_market.svg';
+//import marketImg from '../assets/images/borough_market.svg';
 
 import CardAccompanyList from '../components/CardAccompanyList';
 import AccompanyHeader from '../components/AccompanyHeader';

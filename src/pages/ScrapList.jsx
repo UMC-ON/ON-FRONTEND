@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+//import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import PageHeader from '../components/PageHeader/PageHeader';
@@ -11,8 +11,8 @@ import nothing from '../assets/images/no_content.svg';
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
-import { getData } from '../api/Functions';
-import { GET_SCRAP } from '../api/urls';
+//import { getData } from '../api/Functions';
+//import { GET_SCRAP } from '../api/urls';
 
 function ScrapList() {
     const [items, setItems] = useState([]);

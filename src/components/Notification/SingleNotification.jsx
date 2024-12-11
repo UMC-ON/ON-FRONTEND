@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as s from './SingleNotificationStyled';
-import theme from '../../styles/theme';
+//import theme from '../../styles/theme';
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../../api/Functions';
 import { POST_READ_ALERT } from '../../api/urls';
