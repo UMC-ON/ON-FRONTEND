@@ -10,6 +10,7 @@ import ItemDetailPageHeader from '../components/ItemDetailPageHeader';
 import ItemList from '../components/ItemList';
 import SellChatModal from '../components/SellChatModal';
 import SecondModal from '../components/SecondModal';
+import ErrorScreen from '../components/ErrorScreen';
 
 import compas from '../assets/images/compasIcon.svg';
 import icon from '../assets/images/profileIcon.svg';
@@ -49,6 +50,7 @@ function ItemDetailPage() {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [nickname, setNickname] = useState('');
+  const [dealStatus, setDealStatus] = useState(null);
 
   const openChatModal = () => {
     if (userInfo.country != null) {
@@ -101,10 +103,10 @@ function ItemDetailPage() {
         const senderName = userInfo.nickname;
         navigate(`/chat/trade/${roomId}`, { state: { roomId, senderName } });
       } else {
-        console.error('Application failed');
+        return <ErrorScreen />
       }
     } catch (error) {
-      console.error('Error applying for market chat:', error);
+      return <ErrorScreen />
     }
   };
 
@@ -117,9 +119,10 @@ function ItemDetailPage() {
         if (response) {
           setItems([response.data]);
           setReceiverId(response.data.userId);
+          setDealStatus(response.data.dealStatus);
         }
       } catch (error) {
-        console.error('물품 상세 페이지 정보를 불러오는 중 오류 발생:', error);
+        return <ErrorScreen />
       }
     };
 
@@ -136,7 +139,7 @@ function ItemDetailPage() {
           setNearitems(response.data);
         }
       } catch (error) {
-        console.error('근처 물품 정보를 불러오는 중 오류 발생:', error);
+        return <ErrorScreen />
       }
     };
 
@@ -237,9 +240,15 @@ function ItemDetailPage() {
 
       {userInfo.id !== receiverId && (
         <BottomTabLayout>
-          <ChatButton onClick={openChatModal}>채팅으로 거래하기</ChatButton>
+            {nickname.includes('탈퇴사용자')
+              ? <GreyButton>탈퇴한 유저에게는 신청할 수 없어요</GreyButton>
+              : (dealStatus === 'COMPLETE') ? <GreyButton>거래가 완료된 판매글이에요.</GreyButton> :
+              <ChatButton onClick={openChatModal}>
+                채팅으로 거래하기
+              </ChatButton>}
         </BottomTabLayout>
       )}
+
       {isChatModalOpen && (
         <SellChatModal
           closeModal={closeChatModal}
@@ -363,7 +372,26 @@ const ChatButton = styled.div`
   font-weight: 600;
   font-size: 16px;
   color: white;
+  cursor: pointer;
 `;
+
+const GreyButton = styled.button`
+  cursor: not-allowed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 10px;
+  width: 22em;
+  height: 3em;
+  background-color: #d9d9d9;
+  color: white;
+  text-align: center;
+  font-family: Inter;
+  z-index: 2;
+`;
+
 
 const BottomTabLayout = styled.div`
   width: 100%;

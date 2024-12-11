@@ -101,10 +101,10 @@ const MyPage = () => {
             phone={userInfo.phone ? userInfo.phone : ''}
             link={link}
             setLink={setLink}
-            nickname={nickname}
+            nickname={userInfo.nickname ? userInfo.nickname : ''}
             setIsLoading={setIsLoading}
             setNickname={setNickname}
-            userStatus={userInfo.userStatus}
+            userStatus={userInfo.userStatus ? userInfo.userStatus : ''}
           />
         )}
       </s.MyPageLayout>

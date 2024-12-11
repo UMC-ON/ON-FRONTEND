@@ -31,7 +31,7 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId, setError }) => {
         },
       });
 
-      const response = await apiClient.post(POST_CHAT(4546), message);
+      const response = await apiClient.post(POST_CHAT(roomId), message);
       const time = formatDateWithoutZ(new Date().toISOString());
 
       if (response) {

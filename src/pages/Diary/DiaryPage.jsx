@@ -7,6 +7,7 @@ import DailyDiary from '../../components/DailyDiary';
 import DDayCalendar from '../../components/DDayCalendar.jsx';
 import DailyDiaryCalendar from '../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx';
 import DiaryAlertModal from '../../components/DiaryAlertModal.jsx';
+import ErrorScreen from '../../components/ErrorScreen.jsx';
 
 import styled from 'styled-components';
 import moment from 'moment';
@@ -45,7 +46,7 @@ const Diary = () => {
         setDday(response?.data?.dday);
         setDateList(response?.data?.dateList);
       } catch (error) {
-        console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
+        return <ErrorScreen />
       }
     };
     fetchDiaries();
@@ -56,17 +57,6 @@ const Diary = () => {
     setCalendarOpen(false);
   };
 
-  const getDdayFromServer = async () => {
-    try {
-      const response = await getData(GET_DIARY, {
-        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-      });
-      return response?.data?.result.date || null; // 서버에서 dday 값을 반환
-    } catch (error) {
-      console.error('서버에서 dday 가져오는 중 오류 발생:', error);
-      return null;
-    }
-  };
 
   const handleDateChange2 = (date) => {
     setSelectedDate2(date);
@@ -113,10 +103,10 @@ const Diary = () => {
       if (response) {
         window.location.reload();
       } else {
-        console.error('Error saving diary: no response.');
+        return <ErrorScreen />
       }
     } catch (error) {
-      console.error('Error saving diary:', error);
+      return <ErrorScreen />
     }
   };
 
