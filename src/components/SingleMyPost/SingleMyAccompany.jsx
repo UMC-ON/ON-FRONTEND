@@ -41,22 +41,25 @@ const SingleMyAccompany = ({
 
   const navigate = useNavigate();
   const deletePost = async () => {
-    setIsLoading(true);
-    try {
-      const response = await deleteData(
-        DELETE_MY_ACCOMPANY_POST(postId),
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        {},
-      );
-      if (response.status === 200) {
-        setIsDeleted(true); // 삭제 상태 업데이트
+    const confirmDelete = window.confirm('해당 글을 삭제하시겠습니까?');
+    if (confirmDelete) {
+      setIsLoading(true);
+      try {
+        const response = await deleteData(
+          DELETE_MY_POST(boardType, postId),
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+        if (response.status === 200) {
+          setIsDeleted(true); // 삭제 상태 업데이트
+        }
+      } catch (error) {
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      setError(true);
-    } finally {
-      setIsLoading(false);
     }
   };
 
