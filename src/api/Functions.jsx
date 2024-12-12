@@ -50,10 +50,7 @@ export const Interceptor = ({ children }) => {
           let prevRequest = error.config;
           //console.log(error.response.status);
 
-          if (
-            (!isSignedOut && error.response.status == Number(403)) ||
-            error.response.status == Number(401)
-          ) {
+          if (true) {
             //console.log('그러나 인증 토큰이 없거나 유효하지 않은 경우');
             const aToken = localStorage.getItem('AToken')
               ? localStorage.getItem('AToken')
@@ -130,6 +127,7 @@ export const Interceptor = ({ children }) => {
       }
     },
   );
+
   return children;
 };
 

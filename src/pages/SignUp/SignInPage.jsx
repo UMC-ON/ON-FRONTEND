@@ -2,7 +2,7 @@ import * as s from './SignUpStyled';
 import styled from 'styled-components';
 import groupLogo from '../../assets/images/NewLogo.svg';
 import { useNavigate } from 'react-router-dom';
-import { loginSuccess, loginFailure } from '../../redux/actions';
+import { loginSuccess, loginFailure, logout } from '../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 
@@ -18,6 +18,9 @@ const SignInPage = () => {
   let userInfo = useSelector((state) => {
     state.user.user;
   });
+  useEffect(() => {
+    dispatch(logout());
+  }, []);
   useEffect(() => {
     //유저 상태에 따른 조건부 네비게이팅
     if (userInfo) {

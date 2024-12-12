@@ -21,7 +21,7 @@ import {
   WRITE_REPLY_ON,
 } from '../../api/urls.jsx';
 import Loading from '../../components/Loading/Loading.jsx';
-
+import ErrorScreen from '../../components/ErrorScreen.jsx';
 import Reply from '../../components/Comment/Reply.jsx';
 
 const DetailPage = ({ color1, color2, boardType }) => {
@@ -35,6 +35,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const [currentPost, setCurrentPost] = useState();
   const [commentList, setCommentList] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const openedImg = useRef(null);
   const currentPage = useRef(0);
@@ -98,6 +99,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
           setCommentCount(commentResponse.data.totalElements);
         } catch (error) {
           //console.error('Error fetching data:', error);
+          setIsError(true);
         } finally {
           setLoading(false); // 성공적이든 실패든 최종적으로 로딩을 끝내도록
         }
