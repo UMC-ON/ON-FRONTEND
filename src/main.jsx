@@ -14,11 +14,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <BrowserRouter>
       <Interceptor>
-        <React.StrictMode>
-          <QueryClientProvider client={queryClient}>
-            <App />
-          </QueryClientProvider>
-        </React.StrictMode>
+        {/* <React.StrictMode> */}
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+        {/* </React.StrictMode> */}
       </Interceptor>
     </BrowserRouter>
   </Provider>,

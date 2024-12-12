@@ -9,11 +9,13 @@ import { multiFilePostData } from '../../api/Functions.jsx';
 import { showDispatchedInfo } from '../../components/Common/InfoExp.jsx';
 import { WRITE_POST_IN } from '../../api/urls.jsx';
 import ImageSection from './ImageSection.jsx';
+import ErrorScreen from '../../components/ErrorScreen.jsx';
 
 const PostPage = ({ color, boardType }) => {
   const navigate = useNavigate();
   const [imageFiles, setImageFiles] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   let userInfo = useSelector((state) => state.user.user);
 
@@ -50,6 +52,9 @@ const PostPage = ({ color, boardType }) => {
 
   if (isLoading) {
     return <Loading />;
+  }
+  if (isError) {
+    return <ErrorScreen />;
   }
   if (BETest && !userInfo) {
     return null;
@@ -103,17 +108,18 @@ const PostPage = ({ color, boardType }) => {
         {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         },
-      );
-      if (response) {
-        //console.log(response.data.result);
-        return response;
-      }
+      )
+        .then((res) => res)
+        .catch((error) => {
+          setIsError(true);
+        });
+      return response;
     };
     const sendingComplete = await sendData();
     if (sendingComplete) {
       setLoading(false);
 
-      navigate(`/community/${boardType == 'FREE' ? 'general' : 'info'}`, {
+      navigate(-1, {
         replace: true,
       });
     }
