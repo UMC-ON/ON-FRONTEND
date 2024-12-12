@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSwipeable } from 'react-swipeable';
 const ImageSlide = () => {
-  const { list, clickedImg, clickedIndex } = useLocation().state;
+  const { list, clickedIndex } = useLocation().state;
   const [currentImgIndex, setCurrentImageIndex] = useState(clickedIndex);
   //const [stopScroll, setStopScroll] = useState(false);
+  const nav = useNavigate();
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) => {
@@ -28,6 +29,7 @@ const ImageSlide = () => {
   const handlers = useSwipeable({
     onSwipedLeft: nextImage,
     onSwipedRight: prevImage,
+
     preventScrollOnSwipe: true,
     preventDefaultTouchmoveEvent: true,
     trackMouse: true,

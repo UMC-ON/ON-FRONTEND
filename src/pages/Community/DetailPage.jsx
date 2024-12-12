@@ -300,7 +300,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
                         nav('./images', {
                           state: {
                             list: currentPost.imageUrls,
-                            clickedImg: img,
                             clickedIndex: index,
                           },
                         });
@@ -314,8 +313,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
                       nav('./images', {
                         state: {
                           list: currentPost.imageUrls,
-                          clickedImg: img,
-                          clickedIndex: index,
+                          clickedIndex: 0,
                         },
                       });
                     }}
