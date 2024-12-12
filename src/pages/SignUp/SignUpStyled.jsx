@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from '../../styles/theme';
+//import theme from '../../styles/theme';
 import grayArrow from '../../assets/images/grayArrow.svg';
 import lightBlueArrow from '../../assets/images/lightBlueArrow.svg';
 //import radioButton_checked from '../../assets/images/radioButton_checked.svg';

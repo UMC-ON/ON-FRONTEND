@@ -28,7 +28,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const titleColor = boardType === 'INFO' ? 'rgb(191, 216, 229)' : '#CBCDE9';
   let logInInfo = useSelector((state) => state.user);
   let userInfo = logInInfo.user;
-  console.log(userInfo);
+  //console.log(userInfo);
   const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
   const [commentCount, setCommentCount] = useState(0);
 
@@ -58,9 +58,8 @@ const DetailPage = ({ color1, color2, boardType }) => {
       { page: currentPage.current, size: 20, sort: 'ASC' },
     );
     if (response) {
-      console.log('아아아아ㅏ아아아아아');
       totalPage.current = response.data.totalPages;
-      console.log(totalPage.current);
+      //console.log(totalPage.current);
       if (currentPage.current > 0) {
         // 추가 댓글 로딩 시 기존 댓글 + 새 댓글
         setCommentList((prevCommentList) => [
@@ -98,7 +97,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
           totalPage.current = commentResponse.data.totalPages;
           setCommentCount(commentResponse.data.totalElements);
         } catch (error) {
-          console.error('Error fetching data:', error);
+          //console.error('Error fetching data:', error);
         } finally {
           setLoading(false); // 성공적이든 실패든 최종적으로 로딩을 끝내도록
         }
@@ -129,19 +128,19 @@ const DetailPage = ({ color1, color2, boardType }) => {
       window.scrollY + document.documentElement.clientHeight >
       document.documentElement.scrollHeight - 50
     ) {
-      console.log('api 호출');
-      console.log(
-        isLoading,
-        newCommentLoading.current,
-        currentPage.current,
-        totalPage.current,
-      );
+      //console.log('api 호출');
+      // console.log(
+      //   isLoading,
+      //   newCommentLoading.current,
+      //   currentPage.current,
+      //   totalPage.current,
+      // );
       if (
         !isLoading &&
         !newCommentLoading.current &&
         currentPage.current < totalPage.current - 1
       ) {
-        console.log('찐api호출');
+        //console.log('찐api호출');
         currentPage.current++;
         await fetchCommentData();
         newCommentLoading.current = false;

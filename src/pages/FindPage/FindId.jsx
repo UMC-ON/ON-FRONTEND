@@ -27,7 +27,7 @@ const FindId = () => {
       let name = e.target.name;
       let value = e.target.value;
       setUserInfo({ ...userInfo, [name]: value });
-      console.log(userInfo);
+      //console.log(userInfo);
     }
   };
   const userEmail = useRef('');
