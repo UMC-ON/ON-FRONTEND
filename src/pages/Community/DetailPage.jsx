@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getData, postData } from '../../api/Functions.jsx';
+import { useSwipeable } from 'react-swipeable';
 import {
   GET_COMMENT_OF,
   GET_POST_DETAIL,
@@ -154,6 +155,12 @@ const DetailPage = ({ color1, color2, boardType }) => {
     }
   };
 
+  const handlers = useSwipeable({
+    preventScrollOnSwipe: true,
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true,
+  });
+
   useEffect(() => {
     //setLoading(true)
     let throttleCheck = false;
@@ -241,6 +248,11 @@ const DetailPage = ({ color1, color2, boardType }) => {
     fetchCommentData();
     setLoading(false);
   };
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -284,14 +296,14 @@ const DetailPage = ({ color1, color2, boardType }) => {
           </s.Title>
           <s.Content>
             {currentPost.content}
-            <s.ImgSection>
-              {currentPost.imageUrls
-                ? currentPost.imageUrls.map((img, index) => (
+            {currentPost.imageUrls ? (
+              <s.ImgSection isMobile={isMobile()}>
+                {currentPost.imageUrls.length > 1 ? (
+                  currentPost.imageUrls.map((img, index) => (
                     <s.ContentImg
                       src={img}
                       key={index}
-                      onClick={(e) => {
-                        openedImg.current = e.target.src;
+                      onClick={() => {
                         nav('./images', {
                           state: {
                             list: currentPost.imageUrls,
@@ -302,8 +314,22 @@ const DetailPage = ({ color1, color2, boardType }) => {
                       }}
                     />
                   ))
-                : null}
-            </s.ImgSection>
+                ) : (
+                  <OneBigImg
+                    src={currentPost.imageUrls[0]}
+                    onClick={() => {
+                      nav('./images', {
+                        state: {
+                          list: currentPost.imageUrls,
+                          clickedImg: img,
+                          clickedIndex: index,
+                        },
+                      });
+                    }}
+                  />
+                )}
+              </s.ImgSection>
+            ) : null}
           </s.Content>
           <s.CommentNumSection>
             <img
@@ -358,15 +384,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
               }
             })}
           </s.CommentSection>
-          {/* {isImageModalOpen && (
-            <ImgModal
-              onClick={() => {
-                setImageModalOpen(false);
-              }}
-            >
-              <Img src={openedImg.current} />
-            </ImgModal>
-          )} */}
         </s.DetailPageLayout>
         <s.CommentWritingDiv id="commentDiv">
           <div
@@ -452,9 +469,11 @@ const ImgModal = styled.div`
   background: black;
   z-index: 3;
 `;
-const Img = styled.div`
+const OneBigImg = styled.img`
+  position: relative;
   width: 100%;
-  height: 100%;
-  background: ${(props) => `url(${props.src})`} no-repeat center;
-  background-size: contain;
+  align-self: center;
+  justify-self: center;
+  //background: ${(props) => `url(${props.src})`} no-repeat center;
+  object-fit: cover;
 `;
