@@ -88,6 +88,7 @@ const SignInPage = () => {
           alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         }
       } else {
+        console.log(error);
         alert('네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.');
       }
       dispatch(loginFailure('Invalid email or password'));

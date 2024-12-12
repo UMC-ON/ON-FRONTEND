@@ -19,17 +19,19 @@ const apiClient = axios.create({
 export const Interceptor = ({ children }) => {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  let userInfo = useSelector((state) => state.user.user);
+  //let userInfo = useSelector((state) => state.user.user);
 
-  apiClient.interceptors.request.use((config) => {
-    //console.log('이거');
-    //console.log(config);
-    if (config.headers['Authorization']) {
-      //console.log('인증이 필요한 경우');
-      //console.log(config);
-    }
-    return config;
-  });
+  // apiClient.interceptors.request.use((config) => {
+  //   //console.log('이거');
+  //   console.log(config);
+  //   if (config?.headers['Authorization']) {
+  //     //console.log('인증이 필요한 경우');
+  //     //console.log(config);
+  //     config.headers['Authorization'] =
+  //       `Bearer ${localStorage.getItem('AToken')}`;
+  //   }
+  //   return config;
+  // });
 
   apiClient.interceptors.response.use(
     (res) => {
@@ -44,7 +46,7 @@ export const Interceptor = ({ children }) => {
       //console.log(error);
       //console.log('인터셉터 에러 내부');
       if (!isSignedOut) {
-        //console.log(error);
+        console.log(error);
         if (error.config.headers['Authorization']) {
           //console.log('인증 토큰이 필요한 경우');
           let prevRequest = error.config;
@@ -160,7 +162,7 @@ export const getData = async (url, headers = {}, params = {}) => {
   const response = await apiClient
     .get(url, { headers: { ...headers }, params: { ...params } })
     .then((response) => {
-      //console.log(response);
+      console.log(response);
       return response;
     })
     .catch((error) => {

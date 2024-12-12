@@ -62,6 +62,7 @@ import { getData, Interceptor } from './api/Functions.jsx';
 import { GET_USER_INFO } from './api/urls.jsx';
 //import axios from 'axios';
 import ChangePassword from './pages/FindPage/ChangePassword.jsx';
+import ImageSlide from './pages/Community/ImageSlide.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -199,6 +200,10 @@ function App() {
             element={<FreeDetailPage />}
           />
           <Route
+            path="/community/general/detail/:id/images"
+            element={<ImageSlide />}
+          />
+          <Route
             path="/community/general/post"
             element={<FreePostPage />}
           />
@@ -209,6 +214,10 @@ function App() {
           <Route
             path="/community/info/detail/:id"
             element={<InfoDetailPage />}
+          />
+          <Route
+            path="/community/info/detail/:id/images"
+            element={<ImageSlide />}
           />
           <Route
             path="/community/info/post"

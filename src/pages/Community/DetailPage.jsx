@@ -42,6 +42,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const totalPage = useRef(0);
   const newCommentLoading = useRef(0);
   const myCommentId = useRef(null);
+  const nav = useNavigate();
 
   const fetchCommentData = async (order = 'DESC') => {
     if (currentPage.current === 0) {
@@ -98,8 +99,11 @@ const DetailPage = ({ color1, color2, boardType }) => {
           totalPage.current = commentResponse.data.totalPages;
           setCommentCount(commentResponse.data.totalElements);
         } catch (error) {
-          //console.error('Error fetching data:', error);
-          setIsError(true);
+          console.error('Error fetching data:', error);
+          console.log(currentPost_id);
+          if (!isLoading) {
+            setIsError(true);
+          }
         } finally {
           setLoading(false); // 성공적이든 실패든 최종적으로 로딩을 끝내도록
         }
@@ -241,6 +245,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
   if (isLoading) {
     return <Loading />;
   }
+  if (isError) {
+    return <ErrorScreen />;
+  }
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
   if (userInfo && currentPost && commentList) {
@@ -285,7 +292,13 @@ const DetailPage = ({ color1, color2, boardType }) => {
                       key={index}
                       onClick={(e) => {
                         openedImg.current = e.target.src;
-                        setImageModalOpen(true);
+                        nav('./images', {
+                          state: {
+                            list: currentPost.imageUrls,
+                            clickedImg: img,
+                            clickedIndex: index,
+                          },
+                        });
                       }}
                     />
                   ))
@@ -345,7 +358,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
               }
             })}
           </s.CommentSection>
-          {isImageModalOpen && (
+          {/* {isImageModalOpen && (
             <ImgModal
               onClick={() => {
                 setImageModalOpen(false);
@@ -353,7 +366,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
             >
               <Img src={openedImg.current} />
             </ImgModal>
-          )}
+          )} */}
         </s.DetailPageLayout>
         <s.CommentWritingDiv id="commentDiv">
           <div
