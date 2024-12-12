@@ -135,13 +135,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
       window.scrollY + document.documentElement.clientHeight >
       document.documentElement.scrollHeight - 50
     ) {
-      //console.log('api 호출');
-      // console.log(
-      //   isLoading,
-      //   newCommentLoading.current,
-      //   currentPage.current,
-      //   totalPage.current,
-      // );
       if (
         !isLoading &&
         !newCommentLoading.current &&

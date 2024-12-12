@@ -7,8 +7,6 @@ const ImageSlide = () => {
   const [currentImgIndex, setCurrentImageIndex] = useState(clickedIndex);
   //const [stopScroll, setStopScroll] = useState(false);
 
-  console.log(list.length);
-  console.log(currentImgIndex);
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) => {
       if (prevIndex < list.length - 1) {
