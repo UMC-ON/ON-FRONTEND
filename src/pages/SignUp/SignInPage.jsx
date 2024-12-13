@@ -2,7 +2,7 @@ import * as s from './SignUpStyled';
 import styled from 'styled-components';
 import groupLogo from '../../assets/images/NewLogo.svg';
 import { useNavigate } from 'react-router-dom';
-import { loginSuccess, loginFailure } from '../../redux/actions';
+import { loginSuccess, loginFailure, logout } from '../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 
@@ -18,6 +18,9 @@ const SignInPage = () => {
   let userInfo = useSelector((state) => {
     state.user.user;
   });
+  useEffect(() => {
+    dispatch(logout());
+  }, []);
   useEffect(() => {
     //유저 상태에 따른 조건부 네비게이팅
     if (userInfo) {
@@ -85,6 +88,7 @@ const SignInPage = () => {
           alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         }
       } else {
+        console.log(error);
         alert('네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.');
       }
       dispatch(loginFailure('Invalid email or password'));

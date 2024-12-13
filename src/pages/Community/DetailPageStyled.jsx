@@ -1,3 +1,4 @@
+import { css } from 'styled-components';
 import styled from 'styled-components';
 
 export const PostInfoHeader = styled.div`
@@ -396,21 +397,28 @@ export const ImgSection = styled.section`
   justify-content: start;
   flex-wrap: nowrap;
   gap: 1rem;
-  padding-top: 1rem;
+  padding: 1rem 0;
   overflow-x: scroll;
-  &:hover::-webkit-scrollbar {
-    display: inside;
-    height: 0.5rem;
-  }
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    width: 0.5rem;
-    background: gray; /* 스크롤바 막대 색상 */
-    /* 스크롤바 막대 테두리 설정  */
-    border-radius: 12px;
-  }
+  ${(props) =>
+    props.isMobile
+      ? css`
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        `
+      : css`
+          &::-webkit-scrollbar {
+            display: inside;
+            height: 0.5rem;
+            display: 2px solid;
+          }
+          &::-webkit-scrollbar-thumb {
+            width: 0.5rem;
+            background: gray; /* 스크롤바 막대 색상 */
+            /* 스크롤바 막대 테두리 설정  */
+            border-radius: 12px;
+          }
+        `}
 `;
 
 export const ContentImg = styled.img`
