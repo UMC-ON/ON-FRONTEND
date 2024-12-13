@@ -26,7 +26,7 @@ const ButtonStyleList = ({ setOptionVisible, color1, color2, myList }) => {
               setOptionVisible({
                 target: { country: content.country, value: content.id },
               });
-              console.log(content.country);
+              //console.log(content.country);
             }}
           >
             {content.country}

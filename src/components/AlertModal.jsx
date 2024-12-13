@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import planeIcon from '../assets/images/alert_plane_icon.svg';
 import closeIcon from '../assets/images/close_button.svg';
 
-function AlertModal({ closeModal, line1}) {
+function AlertModal({ closeModal, line1, line2, line3}) {
 
     return (
       <Box>
@@ -17,8 +17,8 @@ function AlertModal({ closeModal, line1}) {
   
           <Space />
   
-          <ModalText>동행글 작성을 위해서는</ModalText>
-          <ModalText>동행인에 대한 정보가 필요해요.</ModalText>
+          <ModalText>{line2}</ModalText>
+          <ModalText>{line3}</ModalText>
   
           <Space />
   
@@ -57,6 +57,7 @@ function AlertModal({ closeModal, line1}) {
     display: flex;
     align-items: center;
     justify-content: center;
+    max-width: 480px;
   `;
   
   const ModalContent = styled.div`

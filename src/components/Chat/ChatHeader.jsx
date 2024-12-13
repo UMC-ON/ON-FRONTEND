@@ -1,24 +1,27 @@
 import React from 'react';
 import * as s from './ChatHeaderStyled.jsx';
-import { POST_RECRUIT_COMPLETE } from '../../api/urls.jsx';
-import { postData } from '../../api/Functions.jsx';
+import { POST_RECRUIT_COMPLETE, POST_TRADE_COMPLETE } from '../../api/urls.jsx';
+import { postData, putData } from '../../api/Functions.jsx';
+import { useState } from 'react';
+import Loading from '../Loading/Loading.jsx';
 
 const ChatHeader = ({
   messageInitiator,
   receiver,
-  pointColor,
+  defaultColor,
   isAccompany,
   onBackClick,
-  roomId,
+  id,
+  isComplete,
+  setError,
 }) => {
-  const pointColorOpacity = (e) => {
-    return `${pointColor.replace('1)', ` ${e})`)}`;
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleComplete = () => {
+  const handleAccComplete = async () => {
     try {
-      postData(
-        POST_RECRUIT_COMPLETE(roomId),
+      setIsLoading(true);
+      const response = await postData(
+        POST_RECRUIT_COMPLETE(id),
         {},
         {
           Authorization: `Bearer ${localStorage.getItem('AToken')}`,
@@ -26,12 +29,35 @@ const ChatHeader = ({
         {},
       );
     } catch (error) {
-      console.error('Error posting data', error);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const handleTradeComplete = () => {
+    try {
+      setIsLoading(true);
+      putData(
+        POST_TRADE_COMPLETE(id),
+        {},
+        {
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+        },
+        { marketPostId: id },
+      );
+    } catch (error) {
+      setError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
-    <s.ChatHeaderLayout color={pointColorOpacity(0.4)}>
+    <s.ChatHeaderLayout style={{ backgroundColor: `${defaultColor}` }}>
       <s.BackButton onClick={onBackClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -49,16 +75,22 @@ const ChatHeader = ({
           />
         </svg>
       </s.BackButton>
-
       <s.PageName style={{ color: isAccompany ? '#ffffff' : '#ABB4FF' }}>
         {receiver}
       </s.PageName>
 
-      {!messageInitiator && (
-        <s.CompleteBtn onClick={handleComplete}>
-          {isAccompany ? '모집 완료' : '거래 완료'}
-        </s.CompleteBtn>
-      )}
+      {!messageInitiator &&
+        (isComplete ? (
+          <s.CompletedBtn>
+            {isAccompany ? '모집 완료' : '거래 완료'}
+          </s.CompletedBtn>
+        ) : (
+          <s.CompleteBtn
+            onClick={isAccompany ? handleAccComplete : handleTradeComplete}
+          >
+            {isAccompany ? '모집 완료' : '거래 완료'}
+          </s.CompleteBtn>
+        ))}
     </s.ChatHeaderLayout>
   );
 };

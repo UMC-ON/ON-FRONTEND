@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as s from './SingleNotificationStyled';
-import theme from '../../styles/theme';
+//import theme from '../../styles/theme';
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../../api/Functions';
 import { POST_READ_ALERT } from '../../api/urls';
@@ -12,6 +12,7 @@ const SingleNotification = ({
   alertType,
   alertConnectId,
   read,
+  setError,
 }) => {
   const navigate = useNavigate();
 
@@ -27,7 +28,7 @@ const SingleNotification = ({
           {},
         );
       } catch (error) {
-        console.error('Error fetching data:', error);
+        setError(true);
       }
     }
     if (alertType === 'COMPANY') {
@@ -42,7 +43,15 @@ const SingleNotification = ({
       navigate(`/community/general/detail/${alertConnectId}`, {
         state: { value: alertConnectId },
       });
-    } //추가 필요
+    } else if (alertType === 'COMPANY_CHAT') {
+      navigate(`/chat/accompany/${alertConnectId}`, {
+        state: { roomId: alertConnectId, senderName: title },
+      });
+    } else if (alertType === 'MARKET_CHAT') {
+      navigate(`/chat/trade/${alertConnectId}`, {
+        state: { roomId: alertConnectId, senderName: title },
+      });
+    }
   };
   if (read == true) {
     return (

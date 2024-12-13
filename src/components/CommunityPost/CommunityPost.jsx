@@ -101,18 +101,18 @@ const Title = styled.h4`
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: Inter;
-  font-size: 14px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   letter-spacing: 0.28px;
+  margin-right: 20px;
 `;
 const Date = styled.div`
   white-space: nowrap;
   color: #7a7a7a;
-
   font-family: Inter;
-  font-size: 10px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 15px */
@@ -122,7 +122,6 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-content: start;
   justify-content: space-between;
-
   height: auto;
   width: 100%;
 `;
@@ -149,7 +148,7 @@ const TextContent = styled.span`
   white-space: normal;
   word-break: break-all;
   font-family: Inter;
-  font-size: 12px;
+  font-size: 0.9rem;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 18px */
@@ -169,18 +168,19 @@ const PostInfoWrapper = styled.div`
   //flex: auto;
 
   & > * {
-    margin: 0 5px 0 0;
+    margin: 0 10px 0 0;
   }
 `;
 const Writer = styled.div`
   color: #7a7a7a;
-  font-size: 8px;
+  font-size: 0.7rem;
   display: flex;
   flex-direction: row;
   align-content: center;
 `;
 const VerifiedImg = styled.img`
-  padding: 0 2px;
+  padding: 0 4px;
+  scale: 1.25;
   display: ${(props) =>
     props.is_verified === 'ACTIVE' ? 'inline-block' : 'none'};
 `;
@@ -191,11 +191,11 @@ const Comment = styled.div`
   align-content: center;
   color: #92a5bc;
   font-family: Inter;
-  font-size: 8px;
+  font-size: 0.7rem;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 12px */
   & > * {
-    padding: 0 1px;
+    padding: 0 2px;
   }
 `;

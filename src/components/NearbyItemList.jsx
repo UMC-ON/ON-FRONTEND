@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
+import ErrorScreen from '../components/ErrorScreen.jsx';
 import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
@@ -12,8 +13,6 @@ import noImage from "../assets/images/noImage.jpg";
 
 import { showDate } from "../components/Common/InfoExp";
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
-import { GET_SCRAP } from '../api/urls';
-import { getData, postData, putData } from '../api/Functions';
 
 const NearItemList = ({ nearitems }) => {
   const navigate = useNavigate();
@@ -93,12 +92,10 @@ const StarContainer = ({ marketPostId, isFilled }) => {
       }
       setIsStarFilled(!isStarFilled);
 
-      // 로컬스토리지에 스크랩 상태 저장
       localStorage.setItem(`starState_${marketPostId}`, JSON.stringify(!isStarFilled));
 
-      console.log({ marketPostId });
     } catch (error) {
-      console.error('스크랩 처리 중 오류 발생:', error);
+      return <ErrorScreen />
     }
   };
 

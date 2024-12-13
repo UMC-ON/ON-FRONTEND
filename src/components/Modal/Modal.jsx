@@ -88,7 +88,7 @@ const ModalContent = styled.div`
 const ModalTitle = styled.pre`
   font-size: 1.3em;
   font-weight: bold;
-
+  word-break: break-word;
   color: ${(props) => props.$color || 'black'};
   margin-bottom: 0.5vh;
   text-align: center;

@@ -8,28 +8,56 @@
     />
     <link
       rel="icon"
+      href="public/icon/android-icon-192x192.png"
       type="image/png"
-      href="/public/icon/icon-192x192.png"
     />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+    />
+
     <!-- 추가 -->
     <link
-      rel="apple-touch-icon"
-      href="icons/icon-152x152.png"
-      sizes="152x152"
+      rel="icon"
+      sizes="36x36"
+      href="public/icon/android-icon-36x36.png"
     />
     <link
-      rel="alternate icon"
-      href="/public/icon/icon-192x192.png"
-      type="ico"
-      sizes="32x32"
+      rel="icon"
+      sizes="48x48"
+      href="public/icon/android-icon-48x48.png"
     />
+    <link
+      rel="icon"
+      sizes="72x72"
+      href="public/icon/android-icon-72x72.png"
+    />
+    <link
+      rel="icon"
+      sizes="96x96"
+      href="public/icon/android-icon-96x96.png"
+    />
+    <link
+      rel="icon"
+      sizes="144x144"
+      href="public/icon/android-icon-144x144.png"
+    />
+    <link
+      rel="icon"
+      sizes="192x192"
+      href="public/icon/android-icon-192x192.png"
+    />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-    </style>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+
     <title>ON-교환학생의 모든 것</title>
   </head>
   <body>
@@ -47,7 +75,7 @@
           .then((registration) => {
             console.log('Service worker registration succeeded:', registration);
           })
-          .catch((err) => {
+          .catch((error) => {
             console.log('Service worker registration failed:', error);
           });
       } else {

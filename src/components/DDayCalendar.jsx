@@ -6,7 +6,14 @@ import ko from 'date-fns/locale/ko';
 import { getData, postData } from '../api/Functions';
 import { GET_DIARY, POST_DDAY, POST_DIARY } from '../api/urls';
 
-const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen, datePickerRef }) => {
+import ErrorScreen from './ErrorScreen';
+
+const DDayCalendarComponent = ({
+  selectedDate,
+  handleDateChange,
+  setCalendarOpen,
+  datePickerRef,
+}) => {
   const [storedDate, setStoredDate] = useState(null);
 
   useEffect(() => {
@@ -24,17 +31,17 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
     try {
       const response = await postData(
         POST_DDAY,
-        { "startDate": formattedDate }, // dday를 서버로 전송
+        { startDate: formattedDate }, // dday를 서버로 전송
         {
           Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           'Content-Type': 'application/json',
-        }
+        },
       );
-      console.log('디데이 저장 완료');
-      console.log(localStorage.getItem('AToken'));
+
+      // 서버 전송이 완료되면 새로고침
+      window.location.reload();
     } catch (error) {
-      console.error('서버로 dday 전달 중 오류 발생:', error);
-      console.log(dday);
+      return <ErrorScreen />
     }
   };
 
@@ -45,16 +52,12 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
           showPopperArrow={false}
           locale={ko}
           className="inputDate"
-          placeholderText={'날짜 설정'}
+          placeholderText={'D-Day 설정'}
           ref={datePickerRef}
           selected={storedDate || selectedDate}
           onChange={handleDateSelect}
           dateFormat="yyyy-MM-dd"
-          renderCustomHeader={({
-            date,
-            decreaseMonth,
-            increaseMonth,
-          }) => (
+          renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
             <HeaderContainer>
               <Arrow onClick={decreaseMonth}>{'<'}</Arrow>
               <HeaderDate>{moment(date).format('YYYY.MM')}</HeaderDate>
@@ -76,7 +79,6 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
 
 export default DDayCalendarComponent;
 
-
 const DDayCalendar = styled.div`
   display: flex;
   justify-content: center;
@@ -86,15 +88,13 @@ const DDayCalendar = styled.div`
 `;
 
 const DatePickerWrapper = styled.div`
-
-  position: absolute;
-  left: 5%;
-  top: 45%;
-
   z-index: 2;
 
   .inputDate::placeholder {
-    font-size: 30px;
+    position: relative;
+    font-size: 25px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .react-datepicker__day--outside-month {
@@ -108,7 +108,6 @@ const DatePickerWrapper = styled.div`
 `;
 
 const HeaderContainer = styled.div`
-
   display: flex;
   justify-content: center;
   align-items: center;

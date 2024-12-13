@@ -2,15 +2,15 @@ import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
-import detailImg from '../assets/images/accompany_img.svg';
-import profileImg from '../assets/images/englandIcon.svg';
+//import detailImg from '../assets/images/accompany_img.svg';
+//import profileImg from '../assets/images/englandIcon.svg';
 import coordinateIcon from '../assets/images/coordinate_icon.svg';
 import marketImg2 from '../assets/images/bannerDefault.svg';
 
 import calendarIcon from '../assets/images/black_calendar_icon.svg';
 import placeIcon from '../assets/images/black_place_icon.svg';
 import plusIcon from '../assets/images/black_plus_icon.svg';
-import marketImg from '../assets/images/borough_market.svg';
+//import marketImg from '../assets/images/borough_market.svg';
 
 import CardAccompanyList from '../components/CardAccompanyList';
 import AccompanyHeader from '../components/AccompanyHeader';
@@ -31,7 +31,9 @@ import {
   GET_SIMILAR_ACCOMPANY,
   GET_USER_INFO,
   GET_ROOM_ID,
+  APPLY_ACCOMPANY,
 } from '../api/urls';
+import ErrorScreen from '../components/ErrorScreen';
 
 function AccompanyDetailPage() {
   const location = useLocation();
@@ -59,7 +61,7 @@ function AccompanyDetailPage() {
 
   const openFirstModal = () => {
     if (userInfo.country != null) {
-      console.log('First modal opened');
+      // console.log('First modal opened');
       setIsFirstModalOpen(true);
     } else {
       setIsSecondModalOpen(true);
@@ -67,37 +69,37 @@ function AccompanyDetailPage() {
   };
 
   const closeFirstModal = () => {
-    console.log('First modal closed');
+    // console.log('First modal closed');
     setIsFirstModalOpen(false);
   };
 
   const openSecondModal = () => {
-    console.log('Second modal opened');
+    // console.log('Second modal opened');
     setIsSecondModalOpen(true);
   };
 
   const closeSecondModal = () => {
-    console.log('Second modal closed');
+    // console.log('Second modal closed');
     setIsSecondModalOpen(false);
   };
 
   const openReportModal = () => {
-    console.log('Report modal opened');
+    // console.log('Report modal opened');
     setIsReportModalOpen(true);
   };
 
   const closeReportModal = () => {
-    console.log('Report modal closed');
+    // console.log('Report modal closed');
     setIsReportModalOpen(false);
   };
 
   const openShareModal = () => {
-    console.log('Share modal opened');
+    // console.log('Share modal opened');
     setIsShareModalOpen(true);
   };
 
   const closeShareModal = () => {
-    console.log('Share modal closed');
+    // console.log('Share modal closed');
     setIsShareModalOpen(false);
   };
 
@@ -119,11 +121,11 @@ function AccompanyDetailPage() {
 
   const applyData = async () => {
     try {
-      // console.log("userId: ");
-      // console.log(typeof infoData[0].userId);
+      // console.log('userId: ');
+      // console.log(infoData[0].userId);
       // console.log(typeof infoData[0].userId);
       // console.log("postId: ");
-      // console.log(typeof postId);
+      // console.log(postId);
 
       const response = await postData(
         GET_ROOM_ID,
@@ -133,19 +135,35 @@ function AccompanyDetailPage() {
         },
       );
 
-      if (response) {
-        console.log(response.data);
+      const response2 = await postData(
+        APPLY_ACCOMPANY,
+        { companyPostId: postId },
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+      );
+
+      if (response && response2) {
+        // console.log("response: ");
+        // console.log(response.data);
+        // console.log("response2: ");
+        // console.log(response2.data);
+
         const roomId = response.data.roomId;
+        // console.log('roomId: ');
+        // console.log(response.data);
         const senderName = infoData[0].nickname;
-        console.log('Application successful:', roomId);
+        // console.log('Application successful:', roomId);
         navigate(`/chat/accompany/${roomId}`, {
           state: { roomId, senderName },
         });
       } else {
-        console.error('Application failed');
+        return <ErrorScreen />;
+        // console.error('Application failed');
       }
     } catch (error) {
-      console.error('Error applying for accompany:', error);
+      return <ErrorScreen />;
+      // console.error('Error applying for accompany:', error);
     }
   };
 
@@ -159,15 +177,15 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setInfoData(info_data.data);
-        console.log('info data here');
-        console.log(info_data.data);
+        // console.log('info data here');
+        // console.log(info_data.data);
         //
 
         const user_data = await getData(GET_USER_INFO, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         // console.log(user_data.data.result.id);
-        console.log('user id');
+        // console.log('user id');
         setUserId(user_data.data.id);
 
         // console.log(info_data.data[0].nickname);
@@ -177,9 +195,10 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setAccompanyData(accompany_data.data);
-        console.log(accompanyData);
+        // console.log(accompanyData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        return <ErrorScreen />;
+        // console.error('Error fetching data:', error);
       } finally {
         // insert code here
         setTimeout(() => {
@@ -330,7 +349,7 @@ function AccompanyDetailPage() {
               </FlexContainer>
             </PurpleContainer>
 
-            <Left>
+            <Left style={{}}>
               <LittleButton onClick={openReportModal}>
                 이 게시물 신고하기
               </LittleButton>
@@ -338,29 +357,32 @@ function AccompanyDetailPage() {
 
             <Line />
 
-            
-                <BigContainer>
-                  <LeftContainer>
-                    <MiddleText
-                      color="#3E73B2"
-                      spacing="1vh"
-                    >
-                      비슷한
-                    </MiddleText>
-                    <MiddleText>동행글 추천</MiddleText>
-                  </LeftContainer>
-                </BigContainer>
+            <BigContainer>
+              <LeftContainer>
+                <MiddleText
+                  color="#3E73B2"
+                  spacing="0.5rem"
+                >
+                  비슷한
+                </MiddleText>
+                <MiddleText>동행글 추천</MiddleText>
+              </LeftContainer>
+            </BigContainer>
 
-                <CardAccompanyList
-                  color="#c5d3e0"
-                  cards={accompanyData}
-                ></CardAccompanyList>
- 
+            <CardAccompanyList
+              color="#c5d3e0"
+              cards={accompanyData}
+            ></CardAccompanyList>
+
             <BigSpace />
 
             {infoData[0].userId !== userId ? (
               <BottomTabLayout>
-                {card.recruitCompletd ? (
+                {infoData[0].nickname.includes("탈퇴사용자") ? (
+                  <GreyButton $width="500px">
+                    탈퇴한 유저에게는 신청할 수 없어요
+                  </GreyButton>
+                ) : card.recruitCompleted ? (
                   <GreyButton $width="500px">
                     모집이 완료된 동행 글이에요.
                   </GreyButton>
@@ -407,13 +429,13 @@ const LittleSpace = styled.div`
 
 const BlueContainer = styled.div`
   margin: 0 auto;
-  margin-top: 13vh;
+  margin-top: 6.5rem;
   background: rgb(110, 186, 255, 0.2);
   border-radius: 10px;
   padding: 15px;
   width: 83%;
   border: 1px solid #dfdfdf;
-  margin-bottom: 2vh;
+  margin-bottom: 1rem;
 `;
 
 const Left = styled.div`
@@ -435,11 +457,11 @@ const SmallIcon = styled.img`
 `;
 
 const Space = styled.div`
-  margin-top: 7vh;
+  margin-top: 3.5rem;
 `;
 
 const BigSpace = styled.div`
-  margin-top: 15vh;
+  margin-top: 7.5rem;
 `;
 
 const BannerContainer = styled.div`
@@ -466,7 +488,7 @@ const GradientOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(to top, #363636, transparent);
-  opacity: 0.7;
+  opacity: 0.1;
 `;
 
 const ProfileTextContainer = styled.div`
@@ -475,16 +497,6 @@ const ProfileTextContainer = styled.div`
   left: 5%;
   display: flex;
   align-items: center;
-`;
-
-const ProfileImg = styled.img`
-  border-radius: 100px;
-  width: 12vh;
-  height: 12vh;
-  object-fit: cover;
-  object-position: center;
-  // border: 1px solid #D9D9D9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 `;
 
 const TextContainer = styled.div`
@@ -499,7 +511,7 @@ const BigText = styled.p`
   font-size: ${(props) => props.$size || '1.5em'};
   font-weight: bold;
   text-align: left;
-  line-height: 3vh;
+  line-height: 1.5rem;
   max-width: 180px;
 
   word-wrap: break-word;
@@ -514,7 +526,7 @@ const TitleText = styled.p`
   font-size: ${(props) => props.$size || '1.5em'};
   font-weight: bold;
   text-align: left;
-  line-height: 3vh;
+  line-height: 1.5rem;
 `;
 
 const GreyText = styled.p`
@@ -526,12 +538,13 @@ const GreyText = styled.p`
 
 const BodyText = styled.p`
   color: black;
-  line-height: 2.5vh;
+  line-height: 1.3rem;
   margin: 0 auto;
   width: 80%;
   text-align: left;
   font-size: 0.9em;
-  margin-bottom: 5vh;
+  margin-bottom: 2rem;
+  white-space: pre-line;
 `;
 
 const PurpleContainer = styled.div`
@@ -539,7 +552,7 @@ const PurpleContainer = styled.div`
   background-color: #f8fcfc;
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #d9d9d9;
-  margin-bottom: 1vh;
+  margin-bottom: 0.5rem;
   background: rgb(194, 199, 255, 0.2);
 `;
 
@@ -570,18 +583,27 @@ const RowText = styled.div`
 `;
 
 const LittleButton = styled.button`
-  font-size: 0.7em;
+  font-size: 0.75em;
   color: #7a7a7a;
   margin-left: 25px;
   background: rgb(110, 186, 255, 0);
-  margin-bottom: 4vh;
+  margin-bottom: 0.5rem;
+  margin-top: 1.75rem;
+
+  &:hover {
+    outline: none; /* hover 상태에서도 outline 제거 */
+  }
+
+  &:focus {
+    outline: none; /* focus 상태에서 outline 제거 */
+  }
 `;
 
 const Line = styled.div`
   border-top: 1px solid #d9d9d9;
   width: 25%;
   margin-left: 30px;
-  margin-bottom: 5vh;
+  margin-bottom: 2.5rem;
 `;
 
 const BigContainer = styled.div`
@@ -598,7 +620,7 @@ const MiddleText = styled.div`
   color: ${(props) => props.color || '#000000'};
   margin-right: ${(props) => props.spacing || '0'};
   font-weight: bold;
-  font-family: 'Inter-Regular';
+  font-family: 'Inter';
   font-size: 1.2em;
 `;
 

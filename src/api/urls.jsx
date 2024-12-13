@@ -4,14 +4,20 @@ export const GET_USER_STATUS = 'api/v1/user/current/status';
 export const SIGN_UP_URL = 'api/v1/user/sign-up';
 export const CHECK_DUPLICATE_NICK = 'api/v1/user/duplicate_check/nickname';
 export const CHECK_DUPLICATE_ID = '/api/v1/user/duplicate_check/email';
-export const FIND_ID = '/api/v1/user/find-id';
-export const FIND_PW = '/api/v1/user/find-password';
-export const SIGN_IN_URL = 'api/v1/user/sign-in';
-export const GET_CURRENT_INFO = 'api/v1/user/current/info';
+export const VERIFY_CODE = '/api/v1/user/sign-up/check-auth-num';
+export const SEND_VERIFICATION_CODE = '/api/v1/user/sign-up/send-auth-num';
+export const FIND_ID = '/api/v1/user/find/id';
+export const CHANGE_PW = '/api/v1/user/find/password/change-password';
+export const SEND_PW_AUTHNUM = '/api/v1/user/find/password/send-auth-num';
+export const CHECK_VERIFYCODE_PW = '/api/v1/user/find/password/check-auth-num';
+export const SIGN_IN_URL = '/api/v1/user/sign-in';
+export const GET_CURRENT_INFO = '/api/v1/user/current/info';
 export const PUT_UNIV = '/api/v1/user/current/update/univ_url';
 export const PUT_NICKNAME = '/api/v1/user/current/update/nickname';
 export const LOGOUT = '/api/v1/user/sign-out';
 export const DELETE_ACCOUNT = '/api/v1/user/delete';
+//토큰 갱신
+export const NEW_TOKEN = '/api/v1/user/update-token';
 
 //교환교 인증
 export const DISPATCH_CERTIFY_REQUEST = 'api/v1/dispatch-certify/apply';
@@ -54,6 +60,7 @@ export const GET_TRADE_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
 export const POST_CHAT = (roomId) => `/api/v1/chat/${roomId}/send`;
 export const POST_RECRUIT_COMPLETE = (roomId) =>
   `/api/v1/chat/${roomId}/recruit`;
+export const POST_TRADE_COMPLETE = (id) => `/api/v1/market-post/${id}/status`;
 
 //물품거래글
 export const GET_ITEM_LIST = `/api/v1/market-post`;
@@ -90,6 +97,7 @@ export const GET_DETAIL_ACCOMPANY = (companyPostId) =>
 export const GET_SIMILAR_ACCOMPANY = (companyPostId) =>
   `/api/v1/company-post/${companyPostId}/nearby`;
 export const GET_ROOM_ID = '/api/v1/chat/request';
+export const APPLY_ACCOMPANY = '/api/v1/company-participant/apply';
 export const GET_MY_ACCOMPANY_POST = '/api/v1/company-post/user';
 export const DELETE_MY_ACCOMPANY_POST = (companyPostId) =>
   `/api/v1/company-post/user/${companyPostId}`;

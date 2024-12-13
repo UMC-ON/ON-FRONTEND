@@ -8,13 +8,15 @@ import theme from '../../styles/theme';
 import { DELETE_ACCOUNT } from '../../api/urls';
 import { deleteData } from '../../api/Functions';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-const DeleteAccountModal = ({ modalDisplay, onClose }) => {
+const DeleteAccountModal = ({ modalDisplay, onClose, setIsLoading }) => {
   const [dropDown, setDropDown] = useState(false);
   const [selectedReason, setSelectedReason] = useState('');
   const [step, setStep] = useState(1);
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const reasons = [
     '유용한 정보가 많이 없어요',
@@ -27,27 +29,32 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
 
   //계정 삭제 api
   const handleDeleteAccount = async () => {
-    // setIsLoading(true);
-    // try {
-    //   const response = await deleteData(
-    //     DELETE_ACCOUNT,
-    //     {
-    //       Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-    //     },
-    //     {},
-    //   );
-    //   console.log(response);
-    //   if (response.status == 200) {
-    //     localStorage.removeItem('AToken');
-    //     localStorage.removeItem('RToken');
-    //     localStorage.removeItem('grantType');
-    //     dispatch(logout());
-    //   }
-    // } catch (error) {
-    //   console.error('delete account error:', error);
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    setIsLoading(true);
+    try {
+      const response = await deleteData(
+        DELETE_ACCOUNT,
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        {},
+      );
+      if (response.status == 200) {
+        // LocalStorage에서 토큰 제거
+        localStorage.removeItem('AToken');
+        localStorage.removeItem('RToken');
+        localStorage.removeItem('grantType');
+
+        // React 상태를 사용하여 로그아웃 처리
+        dispatch(logout());
+
+        // 탈퇴 완료 스텝으로 이동
+        nextStep();
+      }
+    } catch (error) {
+      alert('Error');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleWrapperClick = (e) => {
@@ -73,7 +80,7 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
                 <DropDownMainBox onClick={() => setDropDown(!dropDown)}>
                   <img src={dropDownArrow} />
                   <ReasonText>
-                    {selectedReason || '이유를 선택해 주세요'}
+                    {selectedReason || '탈퇴 이유를 선택해 주세요'}
                   </ReasonText>
                 </DropDownMainBox>
                 {dropDown && (
@@ -124,7 +131,7 @@ const DeleteAccountModal = ({ modalDisplay, onClose }) => {
               <ButtonSection>
                 <GrayButton onClick={onClose}>취소</GrayButton>
                 <PurpleButton
-                  onClick={() => nextStep() && handleDeleteAccount()}
+                  onClick={() => handleDeleteAccount() && nextStep()}
                 >
                   탈퇴
                 </PurpleButton>
@@ -223,7 +230,7 @@ const DropDownContentBox = styled.div`
   background: #fff;
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.05);
   position: absolute;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.1rem;
   margin-top: 0.37rem;
   box-sizing: border-box;
   gap: 0.75rem;
@@ -235,11 +242,12 @@ const DropDownContentBox = styled.div`
 const DropDownContentText = styled.span`
   color: #5c5c5c;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.015rem;
+  white-space: nowrap;
 `;
 
 const DropDownMainBox = styled.div`
@@ -247,7 +255,7 @@ const DropDownMainBox = styled.div`
   height: 1.75rem;
   flex-shrink: 0;
   border: 1px solid #b0b0b0;
-  border-radius: 0.75rem;
+  border-radius: 10px;
   display: flex;
   padding: 0 0.5rem;
   box-sizing: border-box;
@@ -260,7 +268,7 @@ const ReasonText = styled.span`
   width: auto;
   color: #5c5c5c;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-style: normal;
   font-weight: 400;
   letter-spacing: 0.015rem;

@@ -1,15 +1,7 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as s from './SingleChatStyled';
 
-const SingleTradeChat = ({
-  nickName,
-  time,
-  message,
-  img,
-  senderName,
-  roomId,
-}) => {
+const SingleTradeChat = ({ time, message, img, senderName, roomId }) => {
   const navigate = useNavigate();
 
   return (
@@ -28,7 +20,7 @@ const SingleTradeChat = ({
       ) : (
         <s.NoTradePicture />
       )}
-      <s.Nickname>{nickName}</s.Nickname>
+      <s.Nickname>{senderName}</s.Nickname>
       <s.Time>{time}</s.Time>
       <s.Message>{message}</s.Message>
     </s.SingleChatContainer>

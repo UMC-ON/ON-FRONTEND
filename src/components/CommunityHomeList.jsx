@@ -8,7 +8,6 @@ import { showDate } from '../components/Common/InfoExp';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function CommunityHomeList({ bgcolor, datas, type }) {
-
   const defaultRadius = '0 0 0 0';
   const topRadius = '15px 15px 0 0';
   const bottomRadius = '0 0 15px 15px';
@@ -16,12 +15,14 @@ function CommunityHomeList({ bgcolor, datas, type }) {
   const navigate = useNavigate();
   const goDetail = (postId, companyId) => {
     if (type === 'info') {
-      navigate(`./info/detail/${postId}`, {state: { value: postId },});  
-    } 
-    else if (type === 'free') {
-      navigate(`./general/detail/${postId}`, {state: { value: postId },});  
-    } 
-    else if (type === 'accom') {
+      navigate(`./community/info/detail/${postId}`, {
+        state: { value: postId },
+      });
+    } else if (type === 'free') {
+      navigate(`./community/general/detail/${postId}`, {
+        state: { value: postId },
+      });
+    } else if (type === 'accom') {
       navigate(`/accompany/detail/${companyId}`);
     }
   };
@@ -29,23 +30,31 @@ function CommunityHomeList({ bgcolor, datas, type }) {
   return (
     <>
       {datas.map((data, index) => {
-        const radius = index === 0 ? topRadius : index === datas.length - 1 ? bottomRadius : defaultRadius;
+        const radius =
+          index === 0
+            ? topRadius
+            : index === datas.length - 1
+              ? bottomRadius
+              : defaultRadius;
         const color = bgcolor;
 
         return (
-          <Container key={index} radius={radius} color={color} onClick={() => goDetail(data.postId, data.companyPostId)}>
+          <Container
+            key={index}
+            radius={radius}
+            color={color}
+            onClick={() => goDetail(data.postId, data.companyPostId)}
+          >
             <FlexContainer>
               <TextTopLeft>{data.title}</TextTopLeft>
               <Span>
                 <SmallGreyText>{showDate(data.createdAt)}</SmallGreyText>
-                {((type == 'info') || (type == 'free')) ? 
+                {type == 'info' || type == 'free' ? (
                   <>
                     <IconTopLeft src={bubbleIcon} />
                     <SmallGreyText>{data.commentCount}</SmallGreyText>
                   </>
-                  :
-                  null
-                }
+                ) : null}
               </Span>
             </FlexContainer>
             <TextMiddle2>{data.content}</TextMiddle2>
@@ -59,13 +68,15 @@ function CommunityHomeList({ bgcolor, datas, type }) {
 export default CommunityHomeList;
 
 const Container = styled.div`
-  background: ${props => props.color || 'rgba(191, 216, 229, 0.6)'};
+  background: ${(props) => props.color || 'rgba(191, 216, 229, 0.6)'};
   width: 90%;
-  height: 7.5vh;
-  border-radius: ${props => props.radius || '0 0 0 0'};
+  border-radius: ${(props) => props.radius || '0 0 0 0'};
   margin: 0 auto;
   border: 1px solid #ffffff;
-  padding-top: 0.5vh;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  padding-left: 0.3rem;
+  cursor: pointer;
 `;
 
 const TextTopLeft = styled.p`
@@ -93,21 +104,23 @@ const TextMiddle2 = styled.p`
 `;
 
 const SmallGreyText = styled.p`
-  color: #7A7A7A;
+  color: #7a7a7a;
   font-size: 0.5em;
   text-align: right;
+  white-space: nowrap;
 `;
 
 const Span = styled.span`
   display: flex;
-  align-items: center; 
-  padding-left: 1.2vh;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 0.5rem;
 `;
 
 const FlexContainer = styled.div`
   display: flex;
-  justify-content: space-between; 
-  align-items: center;  
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 7px;
 `;
 

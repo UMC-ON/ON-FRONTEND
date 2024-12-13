@@ -40,7 +40,7 @@ import img34 from '../assets/images/travelimg/img34.png';
 import img35 from '../assets/images/travelimg/img35.png';
 import img36 from '../assets/images/travelimg/img36.png';
 import img37 from '../assets/images/travelimg/img37.png';
-import { cities } from '../assets/cityDatabase';
+import { cities, countries } from '../assets/cityDatabase';
 
 
 
@@ -351,7 +351,7 @@ const CardList = ({ selectedCountry }) => {
   const [filteredTravels, setFilteredTravels] = useState([]);
 
   const getContinentForCountry = (countryName) => {
-    const country = cities.find(c => c.country === countryName);
+    const country = countries.find(c => c.country === countryName);
     return country ? country.continent : null;
   };
 
@@ -425,39 +425,35 @@ const CardListContainer = styled.div`
   position: relative;
   display: flex;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
   white-space: nowrap; 
   padding-bottom: 3vh;
+  
 `;
 
 const CardContainer = styled.div`
   position: relative;
   display: inline-block; 
-  margin-right: 8.5vh;
-  min-width: 15vh;
+  margin-right: 2.5rem;
+  min-width: 10rem;
 `;
 
-const Card = styled.div`
-background: white;
-border-radius: 20px;
-filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
-overflow: hidden;
-text-align: center;
-display: flex;
-flex-direction: column;
-width: 21vh;
-height: 35vh;
-`;
+
 
 const CardImage = styled.img`
   width: 100%;        
-  height: 18vh;        
-  object-fit: cover;   
+  height: 9rem;        
+  object-fit: cover;  
+  z-index: 0;
+  min-height: 9rem; /* 최소 높이 설정 */
+  display: block; /* Safari에서 이미지 렌더링 안정화 */ 
+  backface-visibility: hidden; /* Safari 렌더링 문제 방지 */
+  transform: translateZ(0); /* 3D 렌더링 강제 적용 */
 `;
+
 
 const CardContent = styled.div`
   display: flex;
@@ -465,6 +461,26 @@ const CardContent = styled.div`
   justify-content: space-between;
   flex: 1; 
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+  -webkit-background-clip: padding-box;
+  min-height: calc(100% - 9rem); /* 이미지 높이를 제외한 영역 */
+  padding: 0.5em;
+  transform: translate3d(0, 0, 0); /* Safari 렌더링 최적화 */
+`;
+
+const Card = styled.div`
+  background: white;
+  border-radius: 20px;
+  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 11rem;
+  height: 18rem; /* 고정 높이 유지 */
+  position: relative;
+  cursor: pointer;
+  padding-bottom: 10px;
+  transform: translate3d(0, 0, 0); /* 추가: Safari 렌더링 문제 해결 */
 `;
 
 const CardDistance = styled.h2`
@@ -479,7 +495,7 @@ const CardName = styled.p`
   font-size: 17px;
   padding: 0;
   font-weight: bold;
-  padding-bottom: 0.8em;
+  padding-bottom: 0.5em;
   color: #1E1E1E;
   margin: 0;
 `;
@@ -491,20 +507,21 @@ const CardDescription = styled.p`
   font-weight: semi-bold;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 2; /* 두 줄 이상 자르기 */
   -webkit-box-orient: vertical;
   white-space: normal;
   text-align: left;
   margin: 0;
   margin-right: 1em;
   line-height: 15px;
+  height: 30px; /* 고정 높이 설정 */
 `;
 
 
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding-left: 0.95em;
+  padding-left: 0.4rem;
 `;
 
 const Bottom = styled.div`
@@ -513,9 +530,9 @@ const Bottom = styled.div`
   width: 65%;
   justify-content: center;
   padding: 9px 5px;
-  margin-top: auto;
+  margin-top: 15px;
   border-radius: 20px;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
   filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 `;
@@ -535,16 +552,7 @@ const GradientOverlay = styled.div`
   height: 30%;
   background: linear-gradient(to bottom, #D6EBFF, transparent);
   opacity: 1; 
-`;
-
-const OverlayBox = styled.div`
-  position: fixed;
-  top: 120vh;
-  right: 0;
-  width: 20%;
-  height: 43%;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-  z-index: 1; 
-  pointer-events: none;
-  background-color: red;
+  z-index: 2;
+  border-radius: inherit;
+  -webkit-border-radius: inherit;
 `;

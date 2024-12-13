@@ -32,7 +32,7 @@ const CardAccompanyList = ({ color, cards }) => {
           window.location.href = `/accompany/detail/${id}`;
         }
       }}>
-        <Card $width={cards.length === 1 ? "40vh" : undefined} >
+        <Card $width={cards.length === 1 ? "18rem" : undefined} >
           {card.postImg ? (
             <CardImage src={card.postImg} />
           ) : (
@@ -96,7 +96,7 @@ const CardAccompanyList = ({ color, cards }) => {
 export default CardAccompanyList;
 
 const SmallSpace = styled.div`
-  margin-top: 1vh;
+  margin-top: 0.5rem;
 `;
 
 const LeftContainer = styled.div`
@@ -110,16 +110,12 @@ const LeftSpace = styled.div`
 
 const SubText = styled.div`
   color: #5C5C5C;
-  font-family: 'Inter-Bold';
+  font-family: 'Inter';
   font-size: 1em;
 `;
 
-const Space = styled.div`
-  margin-top: 2vh;
-`;
-
 const BigSpace = styled.div`
-  margin-top: 3vh;
+  margin-top: 1.5rem;
 `;
 
 const Padding = styled.div`
@@ -127,8 +123,8 @@ const Padding = styled.div`
 `;
 
 const CardListContainer = styled.div`
-  margin-top: 1vh;
-  margin-left: 3vh;
+  margin-top: 0.5rem;
+  margin-left: 1.5rem;
   display: flex;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -136,14 +132,15 @@ const CardListContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  padding-bottom: 3vh;
+  padding-bottom: 1.3rem;
 `;
 
 const CardContainer = styled.div`
   display: inline-block; 
   margin: 0;
-  min-width: 22vh;
-  margin-right: 18.5vh;
+  min-width: 10rem;
+  margin-right: 8.5rem;
+  cursor:pointer;
 `;
 
 const Card = styled.div`
@@ -155,13 +152,13 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: ${props => props.$width || "38vh"};
-  height: 34vh; 
+  width: ${props => props.$width || "17.1rem"};
+  height: 17rem; 
 `;
 
 const CardImage = styled.img`
   width: 100%;
-  height: 17vh;        
+  height: 50%;        
   object-fit: cover;   
   aspect-ratio: 16/9;
   margin: 0;
@@ -235,12 +232,12 @@ const GreyCard = styled.div`
 const Left = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding-left: 2vh;
+  padding-left: 1rem;
 `;
 
 const Left2 = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding-left: 2vh;
+  padding-left: 1rem;
   margin-bottom: 15px;
 `;

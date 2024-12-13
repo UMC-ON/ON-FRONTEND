@@ -12,14 +12,6 @@ const SingleAccompanyChat = ({
 }) => {
   const navigate = useNavigate();
 
-  // function extractCityNames(arr) {
-  //   return arr.map((item) => item.split(' ')[1]);
-  // }
-
-  // const cities = ['대한민국 부산', '일본 도쿄'];
-  // const cityNames = extractCityNames(cities);
-  // console.log(cityNames);
-
   return (
     <s.SingleChatContainer
       onClick={() =>

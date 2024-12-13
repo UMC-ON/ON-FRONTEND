@@ -50,12 +50,13 @@ const CommentAndReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 1.2rem 0 0 0;
+  margin: 0.44rem 0 0 0;
 `;
 
 const CommentDiv = styled.div`
   box-sizing: border-box;
   padding: 10px 0.56rem 0.56rem 1.19rem;
+  margin: 0.44rem 0 0 0;
   width: 100%;
   height: auto;
   border-radius: 0.625rem;
@@ -92,9 +93,10 @@ const Writer = styled.div`
 
 const Content = styled.div`
   padding: 0.5rem 0;
-  overflow: hidden;
+
   color: #5c5c5c;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
   font-family: Inter;
   font-size: 0.875rem;
   font-style: normal;

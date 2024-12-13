@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import profilePic from '../../assets/images/profilepic.svg';
 import PageHeader from '../../components/PageHeader/PageHeader.jsx';
 import commentImg from '../../assets/images/replyBtnImg.svg';
+import sendCommentBtn from '../../assets/images/commentSendBtn.svg';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
 import { showDispatchedInfo } from '../../components/Common/InfoExp.jsx';
@@ -13,6 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getData, postData } from '../../api/Functions.jsx';
+import { useSwipeable } from 'react-swipeable';
 import {
   GET_COMMENT_OF,
   GET_POST_DETAIL,
@@ -20,33 +22,35 @@ import {
   WRITE_REPLY_ON,
 } from '../../api/urls.jsx';
 import Loading from '../../components/Loading/Loading.jsx';
-
+import ErrorScreen from '../../components/ErrorScreen.jsx';
 import Reply from '../../components/Comment/Reply.jsx';
 
 const DetailPage = ({ color1, color2, boardType }) => {
   const titleColor = boardType === 'INFO' ? 'rgb(191, 216, 229)' : '#CBCDE9';
   let logInInfo = useSelector((state) => state.user);
   let userInfo = logInInfo.user;
-  //let userInfo = userInfo.user;
+  //console.log(userInfo);
   const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
   const [commentCount, setCommentCount] = useState(0);
 
   const [currentPost, setCurrentPost] = useState();
   const [commentList, setCommentList] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const openedImg = useRef(null);
   const currentPage = useRef(0);
   const totalPage = useRef(0);
   const newCommentLoading = useRef(0);
   const myCommentId = useRef(null);
+  const nav = useNavigate();
 
   const fetchCommentData = async (order = 'DESC') => {
-    if (currentPage.current == 0) {
-      //최초 로딩 시에는 슝 로딩 화면
+    if (currentPage.current === 0) {
+      // 최초 로딩 시 로딩 화면
       setLoading(true);
     } else {
-      //댓글 로딩마다 슝 보여줄 순 없음
+      // 댓글 로딩마다 로딩 화면을 표시하지 않음
       newCommentLoading.current = true;
     }
     const response = await getData(
@@ -58,50 +62,59 @@ const DetailPage = ({ color1, color2, boardType }) => {
     );
     if (response) {
       totalPage.current = response.data.totalPages;
+      //console.log(totalPage.current);
       if (currentPage.current > 0) {
-        //추가 댓글 로딩 시 기존 댓글+새 댓글로 commentList 설정
-        setCommentList((commentList) => [
-          ...commentList,
+        // 추가 댓글 로딩 시 기존 댓글 + 새 댓글
+        setCommentList((prevCommentList) => [
+          ...prevCommentList,
           ...response.data.content,
         ]);
-        setCommentCount(response.data.totalElements); //포스트 정보는 새로고침 이전에 갱신될 일이 없으니 댓글 데이터로부터 총 개수를 초기화해줘야한다.
+        setCommentCount(response.data.totalElements); // 댓글 개수 갱신
         newCommentLoading.current = false;
-        console.log('내용 존재');
       } else {
-        //최초 로딩 시 기본 실행
+        // 최초 로딩 시
         setCommentList(response.data.content);
         setCommentCount(response.data.totalElements);
-        //setLoading(false);는 함수 외부에서 실행시켜줌(useEffect에서)
-        console.log('이거 실행');
+        setLoading(false);
       }
     }
   };
-  useEffect(() => {
-    //최초 로딩 시에만 포스트 정보를 불러오는 게 좋을 듯!
-    if (userInfo) {
-      const fetchPostData = async () => {
-        setLoading(true);
 
-        const response = await getData(
-          GET_POST_DETAIL(boardType, currentPost_id),
-          {
-            //'Content-Type': `application/json`,
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-        );
-        if (response) {
-          setCurrentPost(response.data);
-          return response;
+  useEffect(() => {
+    if (!isLoading && userInfo && currentPost_id) {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const postResponse = await getData(
+            GET_POST_DETAIL(boardType, currentPost_id),
+            { Authorization: `Bearer ${localStorage.getItem('AToken')}` },
+          );
+          setCurrentPost(postResponse.data);
+
+          const commentResponse = await getData(
+            GET_COMMENT_OF(currentPost_id),
+            { Authorization: `Bearer ${localStorage.getItem('AToken')}` },
+            { page: 0, size: 20, sort: 'ASC' },
+          );
+          setCommentList(commentResponse.data.content);
+          totalPage.current = commentResponse.data.totalPages;
+          setCommentCount(commentResponse.data.totalElements);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          console.log(currentPost_id);
+          if (!isLoading) {
+            setIsError(true);
+          }
+        } finally {
+          setLoading(false); // 성공적이든 실패든 최종적으로 로딩을 끝내도록
         }
       };
 
-      fetchPostData(); //포스트 먼저
-      fetchCommentData();
-      setLoading(false);
+      fetchData();
     }
-  }, [userInfo]);
+  }, [userInfo, currentPost_id, boardType]);
+  // userInfo와 currentPost_id, boardType 변경 시에만 실행
 
-  /// 여기서부터 메인 변수들 ///
   const [content, setContent] = useState('');
   const [selectedComment, setSelectedComment] = useState(null);
 
@@ -110,8 +123,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const replyToText = useRef(null);
   const commentEditor = useRef(null);
   const mobileViewRef = useRef(null);
-
-  //기타 이벤트 핸들링 함수
 
   const handleResizeHeight = () => {
     const textarea = document.querySelector('.commentEditor');
@@ -129,22 +140,26 @@ const DetailPage = ({ color1, color2, boardType }) => {
         !newCommentLoading.current &&
         currentPage.current < totalPage.current - 1
       ) {
+        //console.log('찐api호출');
         currentPage.current++;
-        console.log(currentPage.current);
-        console.log(totalPage.current);
-        console.log(isLoading);
         await fetchCommentData();
-        console.log(isLoading);
         newCommentLoading.current = false;
       }
     }
   };
 
+  const handlers = useSwipeable({
+    preventScrollOnSwipe: true,
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true,
+  });
+
   useEffect(() => {
+    //setLoading(true)
     let throttleCheck = false;
     if (!throttleCheck) {
-      throttleCheck = setTimeout(() => {
-        onScroll();
+      throttleCheck = setTimeout(async () => {
+        await onScroll();
         throttleCheck = false;
       }, 10000);
     }
@@ -157,35 +172,32 @@ const DetailPage = ({ color1, color2, boardType }) => {
 
   const onCommentSelection = (e) => {
     if (selectedComment === null) {
-      //아무것도 선택하지 않은 상태에서 댓글 선택
+      // 아무것도 선택하지 않은 상태에서 댓글 선택
       setSelectedComment(e.target.comment);
       replyToText.current = `${e.target.writer}에게 답장`;
       commentEditor.current.focus();
     } else if (selectedComment === e.target.comment) {
-      //선택한 댓글 다시 선택 시 댓글 선택 취소
+      // 선택한 댓글 다시 선택 시 댓글 선택 취소
       setSelectedComment(null);
       replyToText.current = null;
       commentEditor.current.focus();
     } else {
-      //댓글 하나 선택한 상태에서 다른 댓글 선택
+      // 댓글 하나 선택한 상태에서 다른 댓글 선택
       setSelectedComment(e.target.comment);
       replyToText.current = `${e.target.writer}에게 답장`;
       commentEditor.current.focus();
     }
   };
+
   const onCommentSubmit = async () => {
-    if (content == '') {
+    if (content === '') {
       commentEditor.current.focus();
       return;
     }
     if (logInInfo.isAuthenticated) {
-      //로그인 여부부터 확인
       if (selectedComment === null) {
-        //댓글일 경우
         addComment(WRITE_COMMENT_ON(currentPost_id));
       } else {
-        //답글일 경우
-        console.log(selectedComment.commentId);
         addComment(WRITE_REPLY_ON(selectedComment.commentId));
       }
     } else {
@@ -197,20 +209,15 @@ const DetailPage = ({ color1, color2, boardType }) => {
     replyToText.current = null;
     const textarea = document.querySelector('.commentEditor');
     textarea.style.height = 'auto';
-    console.log(myCommentId.current);
-
     const element = document.getElementById(`comment${myCommentId.current}`);
-    console.log(element);
     if (myCommentId.current) {
       element.scrollIntoView('smooth');
-      console.log(element);
     }
     window.scrollTo(0, 0);
     myCommentId.current = null;
   };
 
   const addComment = async (url) => {
-    //댓글 형식 제작 함수
     const comment = {
       id: userInfo.id,
       contents: content + ' ',
@@ -221,32 +228,36 @@ const DetailPage = ({ color1, color2, boardType }) => {
     const res = await postData(url, jsonData, {
       Authorization: `Bearer ${localStorage.getItem('AToken')}`,
     });
-    console.log(res); //지금 내가 등록한 댓글 정보
     const commentFE = res.data;
     myCommentId.current = res.data.commentId;
     setCommentList([...commentList, commentFE]);
-    //답글일 경우 선택된 댓글의 replyCount 1증가
+
     if (selectedComment) {
       selectedComment.replyCount++;
       myCommentId.current = res.data.replyId;
     }
 
     setCommentCount((prev) => prev + 1);
-    //등록시 바로 보일 수 있도록
-
-    //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    //자식에게 ref전달 알아보기
-    fetchCommentData(); //등록 후 바로 다시 댓글 정보 로딩한다. . . 그런데 어디서부터 어디까지?..
+    fetchCommentData();
     setLoading(false);
+  };
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
   };
 
   if (isLoading) {
     return <Loading />;
   }
-
+  if (isError) {
+    return <ErrorScreen />;
+  }
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
   if (userInfo && currentPost && commentList) {
+    //return <div>{currentPost.postId}</div>;
+
     return (
       <div ref={mobileViewRef}>
         <PageHeader
@@ -278,25 +289,43 @@ const DetailPage = ({ color1, color2, boardType }) => {
           </s.Title>
           <s.Content>
             {currentPost.content}
-            <s.ImgSection>
-              {currentPost.imageUrls
-                ? currentPost.imageUrls.map((img, index) => (
+            {currentPost.imageUrls ? (
+              <s.ImgSection isMobile={isMobile()}>
+                {currentPost.imageUrls.length > 1 ? (
+                  currentPost.imageUrls.map((img, index) => (
                     <s.ContentImg
                       src={img}
                       key={index}
-                      onClick={(e) => {
-                        openedImg.current = e.target.src;
-                        setImageModalOpen(true);
+                      onClick={() => {
+                        nav('./images', {
+                          state: {
+                            list: currentPost.imageUrls,
+                            clickedIndex: index,
+                          },
+                        });
                       }}
                     />
                   ))
-                : null}
-            </s.ImgSection>
+                ) : (
+                  <OneBigImg
+                    src={currentPost.imageUrls[0]}
+                    onClick={() => {
+                      nav('./images', {
+                        state: {
+                          list: currentPost.imageUrls,
+                          clickedIndex: 0,
+                        },
+                      });
+                    }}
+                  />
+                )}
+              </s.ImgSection>
+            ) : null}
           </s.Content>
           <s.CommentNumSection>
             <img
               src={commentImg}
-              style={{ width: '0.96rem', height: '1.04rem' }}
+              style={{ width: '1rem', height: '1rem', marginRight: '5px' }}
             />
             {commentCount}
           </s.CommentNumSection>
@@ -346,32 +375,43 @@ const DetailPage = ({ color1, color2, boardType }) => {
               }
             })}
           </s.CommentSection>
-          {isImageModalOpen && (
-            <ImgModal
-              onClick={() => {
-                setImageModalOpen(false);
-              }}
-            >
-              <Img src={openedImg.current} />
-            </ImgModal>
-          )}
         </s.DetailPageLayout>
         <s.CommentWritingDiv id="commentDiv">
-          <DefaultCheckBox
-            before="익명"
-            checkBoxStyle={{
-              border: '0.2px solid rgba(0, 0, 0, 0.50)',
-              width: '14px',
-              height: '14px',
-              borderRadius: '5px',
+          <div
+            style={{
+              gridArea: 'isAnonymous',
+              alignSelf: 'start',
+              padding: '35% 0',
             }}
-            onChange={(e) => {
-              isAnonymous.current = e.target.value;
-              commentEditor.current.focus();
-            }}
-          />
-          <s.EditorWrapper>
-            {replyToText.current}
+          >
+            <DefaultCheckBox
+              before="익명"
+              checkBoxStyle={{
+                border: '0.2px solid #D9D9D9',
+                width: '1.25rem',
+                height: '1.25rem',
+                borderRadius: '50%',
+              }}
+              wrapperStyle={{
+                //gridArea: isAnonymous,
+                color: '#5C5C5C',
+                fontFamily: 'Inter',
+                fontSize: '0.9375rem',
+                fontStyle: 'normal',
+                fontWeight: '700',
+                lineHeight: 'normal',
+                letterSpacing: '0.01875rem',
+                alignSelf: 'center',
+              }}
+              onChange={(e) => {
+                isAnonymous.current = e.target.value;
+                commentEditor.current.focus();
+              }}
+            />
+          </div>
+
+          <s.ReplyToDiv>{replyToText.current}</s.ReplyToDiv>
+          <s.EditorDiv>
             <s.CommentEditor
               className="commentEditor"
               placeholder={
@@ -385,49 +425,18 @@ const DetailPage = ({ color1, color2, boardType }) => {
               value={content}
               ref={commentEditor}
               disabled={!logInInfo.isAuthenticated}
+            >
+              <img
+                style={{ position: 'fixed' }}
+                src={sendCommentBtn}
+              />
+            </s.CommentEditor>
+            <img
+              src={sendCommentBtn}
+              style={{ padding: '0.65rem' }}
+              onClick={onCommentSubmit}
             />
-          </s.EditorWrapper>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 22 22"
-            fill="none"
-            onClick={(e) => {
-              onCommentSubmit();
-            }}
-          >
-            <circle
-              cx="11"
-              cy="11"
-              r="11"
-              fill="url(#paint0_linear_2168_7179)"
-            />
-            <path
-              d="M11.0002 6L6.8335 10.1667M11.0002 6L15 10.1667M11.0002 6V16"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <defs>
-              <linearGradient
-                id="paint0_linear_2168_7179"
-                x1="0"
-                y1="0"
-                x2="22"
-                y2="22"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor={color1} />
-                <stop
-                  offset="1"
-                  stopColor={color2}
-                />
-              </linearGradient>
-            </defs>
-          </svg>
+          </s.EditorDiv>
         </s.CommentWritingDiv>
       </div>
     );
@@ -451,9 +460,11 @@ const ImgModal = styled.div`
   background: black;
   z-index: 3;
 `;
-const Img = styled.div`
+const OneBigImg = styled.img`
+  position: relative;
   width: 100%;
-  height: 100%;
-  background: ${(props) => `url(${props.src})`} no-repeat center;
-  background-size: contain;
+  align-self: center;
+  justify-self: center;
+  //background: ${(props) => `url(${props.src})`} no-repeat center;
+  object-fit: cover;
 `;

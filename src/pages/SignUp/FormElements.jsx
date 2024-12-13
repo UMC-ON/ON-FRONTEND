@@ -2,7 +2,6 @@ import * as s from './SignUpStyled';
 import styled from 'styled-components';
 import validImg from '../../assets/images/validNickName.svg';
 import { useRef, useState, useEffect } from 'react';
-import { SignUpValidCheck } from './SignUpValidCheck';
 export const TermForm = ({ setActive }) => {
   return (
     <>
@@ -159,8 +158,8 @@ export const TermForm = ({ setActive }) => {
 const TermContent = styled.div`
   color: black;
   overflow: auto;
-  height: 30.6875rem;
-  flex-shrink: 0;
+  height: 23rem;
+  flex-shrink: 1;
   margin: 0.313rem 0rem;
   padding: 1rem 1.5rem;
   line-height: 1.25rem;
@@ -181,14 +180,19 @@ const Bold = styled.div`
   display: inline;
   font-weight: bold;
 `;
-import { CHECK_DUPLICATE_ID, CHECK_DUPLICATE_NICK } from '../../api/urls';
-
+import {
+  CHECK_DUPLICATE_ID,
+  CHECK_DUPLICATE_NICK,
+  VERIFY_CODE,
+  SEND_VERIFICATION_CODE,
+} from '../../api/urls';
+import { useForm } from 'react-hook-form';
 const apiDupCheck = async (url, target, dupCheckSetter, dupCheck) => {
   const response = await postData(url, target.value, {
     'Content-Type': 'text/plain',
   });
   if (response) {
-    console.log(response);
+    //console.log(response);
     if (response.data) {
       //true면 존재한다는 것
       dupCheckSetter({ ...dupCheck, [target.name]: -1 });
@@ -204,49 +208,61 @@ export const UserInfoForm1 = ({
   setActive,
   setDupCheck,
   dupCheck,
+  verifyCode,
+  setVerifyCode,
 }) => {
-  const [pwCheck, setPwCheck] = useState('');
+  const passwordSet = useRef({ pw: state.password, pw_check: '' });
+  const id = useRef(state.loginId);
+  const code = useRef();
 
-  const isAllValid = useRef({
-    //형식체크 valid
-    password: false,
-    loginId: false,
-  });
+  const {
+    register,
+    formState: { errors, isValid },
+    watch,
+    setError,
+    clearErrors,
+  } = useForm({ mode: 'onChange' });
+
   useEffect(() => {
-    console.log(
-      `아이디: ${dupCheck.loginId}, isAllValid:${isAllValid.current.password}, pwCheck:${pwCheck},닉네임:${dupCheck.nickname}`,
-    );
-    if (
-      dupCheck.loginId === 1 &&
-      isAllValid.current.password &&
-      pwCheck === state.password
-    ) {
-      setActive(true);
+    if (verifyCode.verified) {
+      setActive(isValid);
     } else {
       setActive(false);
     }
-  }, [state, pwCheck, isAllValid.current, dupCheck]); //이럴거면 머하러 ref쓰냐고,.
+  }, [isValid, verifyCode.verified]);
 
   return (
     <>
       <s.InputWrapper>
-        <div>아이디</div>
+        <s.Div>이메일</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="text"
-            onChange={updateUserInfo}
             name="loginId"
             defaultValue={state.loginId}
+            aria-invalid={errors.loginId ? 'true' : 'false'}
+            {...register('loginId', {
+              required: '이메일을 입력해주세요.',
+              onChange: (e) => {
+                updateUserInfo(e);
+                id.current = e.target.value;
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i,
+                message: '이메일 형식에 맞게 입력해주세요.',
+              },
+            })}
           />
           {dupCheck.loginId < 1 ? (
             <s.GrayButton
+              disabled={errors.loginId}
               onClick={(e) => {
                 e.preventDefault();
                 apiDupCheck(
                   CHECK_DUPLICATE_ID,
                   {
                     name: 'loginId',
-                    value: state.loginId,
+                    value: id.current,
                   },
                   setDupCheck,
                   dupCheck,
@@ -258,8 +274,26 @@ export const UserInfoForm1 = ({
           ) : (
             <img src={validImg} />
           )}
+          <s.GrayButton
+            disabled={errors.loginId || dupCheck.loginId < 1}
+            onClick={async (e) => {
+              e.preventDefault();
+              const res = await postData(SEND_VERIFICATION_CODE, id.current, {
+                'Content-Type': 'text/plain',
+              });
+              if (res.status == 200) {
+                alert('메일로 인증번호가 발송되었습니다.');
+                setVerifyCode({ ...verifyCode, isSent: true, verified: false });
+              }
+            }}
+          >
+            인증
+          </s.GrayButton>
         </SpaceBetweenContainer>
       </s.InputWrapper>
+      <s.Explanation role="alert">
+        {errors.loginId && errors.loginId.message}
+      </s.Explanation>
       {dupCheck.loginId === 1 && (
         <s.Explanation>사용할 수 있는 아이디입니다.</s.Explanation>
       )}
@@ -267,49 +301,138 @@ export const UserInfoForm1 = ({
         <s.Explanation>이미 존재하는 아이디입니다.</s.Explanation>
       )}
       <s.InputWrapper>
-        <div>비밀번호</div>
+        <s.Div>인증 코드</s.Div>
+        <SpaceBetweenContainer>
+          <s.TransparentInput
+            type="text"
+            name="signUpAuthNum"
+            defaultValue={verifyCode.verifyCodeContent}
+            aria-invalid={errors.code ? 'true' : 'false'}
+            {...register('signUpAuthNum', {
+              onChange: (e) => {
+                code.current = e.target.value;
+                setVerifyCode({
+                  ...verifyCode,
+                  verified: false,
+                  verifyCodeContent: code.current,
+                });
+
+                updateUserInfo(e);
+              },
+              required: '인증번호를 입력해주세요.',
+            })}
+          />
+
+          {verifyCode.verified ? (
+            <img src={validImg} />
+          ) : (
+            <s.GrayButton
+              disabled={!verifyCode.isSent}
+              onClick={async (e) => {
+                e.preventDefault();
+                const data = {
+                  loginId: id.current,
+                  authNum: parseInt(code.current),
+                };
+                const formData = JSON.stringify(data);
+                //console.log('F.formData:', formData);
+                try {
+                  const res = await putData(VERIFY_CODE, formData);
+                  if (res) {
+                    if (code.current && res.data) {
+                      setVerifyCode({ ...verifyCode, verified: true });
+                    } else if (res.data == false) {
+                      alert('인증번호가 일치하지 않습니다.');
+                    }
+                  }
+                } catch (error) {
+                  if (error.response.status == Number(401)) {
+                    alert(
+                      '인증번호가 만료되었습니다. 인증번호를 다시 요청해주세요.',
+                    );
+                  }
+                }
+              }}
+            >
+              인증하기
+            </s.GrayButton>
+          )}
+        </SpaceBetweenContainer>
+      </s.InputWrapper>
+      <s.InputWrapper>
+        <s.Div>비밀번호</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="password"
-            onChange={updateUserInfo}
             name="password"
             defaultValue={state.password}
+            aria-invalid={errors.password ? 'true' : 'false'}
+            {...register('password', {
+              onChange: (e) => {
+                updateUserInfo(e);
+                passwordSet.current.pw = e.target.value;
+                if (passwordSet.current.pw != passwordSet.current.pw_check) {
+                  setError('password_check', {
+                    message: '비밀번호가 일치하지 않습니다.',
+                  });
+                } else {
+                  clearErrors('password_check');
+                }
+              },
+              required: '비밀번호를 입력해주세요.',
+              pattern: {
+                value:
+                  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!^%*#?&])[A-Za-z\d@$!^%*#?&]{8,}$/,
+                message: '특수문자와 영문, 숫자의 조합으로 입력해주세요.',
+              },
+              minLength: {
+                value: 8,
+                message: '8자리 이상으로 작성해주세요.',
+              },
+              maxLength: {
+                value: 12,
+                message: '12자리 이하로 작성해주세요.',
+              },
+            })}
           />
-          <img
-            src={
-              SignUpValidCheck(
-                { name: 'password', value: state.password },
-                isAllValid,
-              )
-                ? validImg
-                : null
-            }
-          />
+          {passwordSet.current.pw && !errors.password && <img src={validImg} />}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {SignUpValidCheck(
-          { name: 'password', value: state.password },
-          isAllValid,
-        )
-          ? '사용할 수 있는 비밀번호입니다.'
-          : '*영문, 숫자, 특수문자를 모두 사용하여 8자리 이상'}
+      <s.Explanation role="alert">
+        {errors.password && errors.password.message}
       </s.Explanation>
       <s.InputWrapper>
-        <div>비밀번호 확인</div>
+        <s.Div>비밀번호 확인</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
             type="password"
-            onChange={(e) => {
-              setPwCheck(e.target.value);
-            }}
             name="password_check"
+            aria-invalid={errors.password_check ? 'true' : 'false'}
+            {...register('password_check', {
+              required: '비밀번호를 확인해주세요.',
+              validate: (value) => {
+                //console.log(value == passwordSet.current.pw);
+                return value == passwordSet.current.pw
+                  ? true
+                  : '비밀번호가 일치하지 않습니다';
+              },
+              onChange: (e) => {
+                passwordSet.current.pw_check = e.target.value;
+                if (passwordSet.current.pw_check !== passwordSet.current.pw) {
+                  setError('password_check', {
+                    message: '비밀번호가 일치하지 않습니다.',
+                  });
+                }
+              },
+            })}
           />
-          <img src={pwCheck && pwCheck === state.password ? validImg : null} />
+          {watch('password_check') && !errors.password_check && (
+            <img src={validImg} />
+          )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {pwCheck === state.password ? null : '비밀번호가 일치하지 않습니다'}
+      <s.Explanation role="alert">
+        {errors.password_check && errors.password_check.message}
       </s.Explanation>
     </>
   );
@@ -329,138 +452,151 @@ export const UserInfoForm2 = ({
   setDupCheck,
   dupCheck,
 }) => {
-  const isAllValid = useRef({
-    name: false,
-    age: false,
-    gender: false,
-    phone: false,
-  });
+  const {
+    register,
+    formState: { errors, isValid },
+    watch,
+  } = useForm({ mode: 'onChange' });
+
   useEffect(() => {
-    if (
-      isAllValid.current.name &&
-      isAllValid.current.age &&
-      isAllValid.current.gender &&
-      isAllValid.current.phone &&
-      dupCheck.nickname === 1
-    ) {
-      setActive(true);
+    if (dupCheck.nickname == 1) {
+      setActive(isValid);
     } else {
       setActive(false);
     }
-  }, [state, dupCheck]);
-  useEffect(() => {
-    //이전 단계를 눌로 페이지에 다시 돌아왔을 때, 렌더링하며 조건 상태 체크
-    for (let key in state) {
-      SignUpValidCheck({ name: key, value: state[key] }, isAllValid);
-    }
-  }, [state]);
+  }, [isValid, dupCheck.nickname]);
 
   return (
     <>
       <s.InputWrapper>
-        <div>이름</div>
+        <s.Div>이름</s.Div>
         <s.TransparentInput
           placeholder="본명으로 작성해 주세요"
-          onChange={updateUserInfo}
           name="name"
           defaultValue={state.name}
+          aria-invalid={errors.name ? 'true' : 'false'}
+          {...register('name', {
+            required: '이름은 필수입니다.',
+            onChange: (e) => {
+              updateUserInfo(e);
+            },
+            pattern: {
+              value: /^[가-힣]+$/,
+              message: '올바른 형식으로 입력해주세요.',
+            },
+          })}
         />
       </s.InputWrapper>
-      <s.Explanation>
-        {SignUpValidCheck({ name: 'name', value: state.name }, isAllValid)
-          ? null
-          : '올바른 이름을 작성해주세요.'}
+      <s.Explanation role="alert">
+        {errors.name && errors.name.message}
       </s.Explanation>
 
       <s.TwoColumnWrapper>
         <div>
           <s.InputWrapper>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              나이
-              <s.Explanation
-                style={{
-                  display: 'inline-block',
-                  fontSize: '0.5rem',
-                  lineHeight: 'normal',
-                }}
-              >
-                *만나이 기준
-              </s.Explanation>
-            </div>
+            <s.Div>생년월일</s.Div>
             <s.TransparentInput
-              type="number"
-              placeholder="숫자만 입력해주세요"
-              inputMode="numeric"
-              onChange={updateUserInfo}
-              pattern="[0-9]"
-              name="age"
-              defaultValue={state.age}
+              type="date"
+              name="birth"
+              placeholder="생년월일을 입력하세요."
+              defaultValue={state.birth} // 기존 데이터가 있다면 불러오기
+              aria-invalid={errors.birth ? 'true' : 'false'}
+              {...register('birth', {
+                required: '생년월일은 필수입니다.',
+                onChange: (e) => {
+                  updateUserInfo(e); // 상태 업데이트
+                },
+                validate: (value) => {
+                  // 선택된 날짜가 유효한 날짜인지 추가 검증
+                  const isValidDate = !isNaN(new Date(value).getTime());
+                  return isValidDate || '유효한 날짜를 입력해주세요.';
+                },
+              })}
             />
           </s.InputWrapper>
-          <s.Explanation>
-            {!state.age
-              ? null
-              : SignUpValidCheck({ name: 'age', value: state.age }, isAllValid)
-                ? null
-                : '올바른 형식으로 작성해주세요'}
-          </s.Explanation>
         </div>
 
         <EmptyDiv></EmptyDiv>
         <s.InputWrapper style={{ border: 'none' }}>
-          <div>성별</div>
-          <s.StyledComboBox
-            onChange={(e) => {
-              updateUserInfo(e);
-              SignUpValidCheck(
-                { name: 'gender', value: e.target.value },
-                isAllValid,
-              );
+          <s.Div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
             }}
+          >
+            성별
+          </s.Div>
+          <s.StyledComboBox
             name="gender"
             defaultValue={state.gender}
             pattern="[0-9]"
+            aria-invalid={errors.gender ? 'true' : 'false'}
+            {...register('gender', {
+              required: '성별은 필수입니다.',
+              onChange: (e) => {
+                updateUserInfo(e);
+              },
+            })}
           >
             <option
               value=""
               hidden
             ></option>
-            <option value="MALE">남자</option>
-            <option value="FEMALE">여자</option>
+            <option
+              value="MALE"
+              style={{ background: 'white' }}
+            >
+              남자
+            </option>
+            <option
+              value="FEMALE"
+              style={{ background: 'white' }}
+            >
+              여자
+            </option>
           </s.StyledComboBox>
         </s.InputWrapper>
       </s.TwoColumnWrapper>
       <s.InputWrapper>
-        <div>전화번호</div>
+        <s.Div>전화번호</s.Div>
         <s.TransparentInput
           type="tel"
           placeholder="'-' 없이 숫자만 입력해주세요"
-          inputMode="numeric"
-          onChange={updateUserInfo}
+          //inputMode="numeric"
           pattern="\d*"
           name="phone"
           defaultValue={state.phone}
+          aria-invalid={errors.phone ? 'true' : 'false'}
+          {...register('phone', {
+            required: '전화번호는 필수입니다.',
+            pattern: {
+              value: /^[0-9]*$/,
+              message: '숫자로만 적어주세요.',
+            },
+            onChange: (e) => {
+              updateUserInfo(e);
+            },
+          })}
         />
       </s.InputWrapper>
-      <s.Explanation>
-        {SignUpValidCheck({ name: 'phone', value: state.phone }, isAllValid)
-          ? null
-          : '올바른 형식으로 작성해주세요'}
+      <s.Explanation role="alert">
+        {errors.phone && errors.phone.message}
       </s.Explanation>
       <s.InputWrapper>
-        <div>닉네임</div>
+        <s.Div>닉네임</s.Div>
         <SpaceBetweenContainer>
           <s.TransparentInput
-            onChange={updateUserInfo}
             type="text"
             name="nickname"
             defaultValue={state.nickname}
+            aria-invalid={errors.nickname ? 'true' : 'false'}
+            {...register('nickname', {
+              required: '닉네임을 입력해주세요.',
+              onChange: (e) => {
+                updateUserInfo(e);
+              },
+            })}
           />
           {dupCheck.nickname < 1 ? (
             <s.GrayButton
@@ -531,18 +667,18 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
   const [isConfirmed, setIsConfirmed] = useState(true);
 
   const onClickDsptchNotConfirmed = (e) => {
-    if (e.target.value) {
-      state.dispatchedUniversity = '';
-      state.universityUrl = '';
-      state.country = '';
-      state.dispatchedType = '';
-    }
+    // if (e.target.value) {
+    //   state.dispatchedUniversity = '';
+    //   state.universityUrl = '';
+    //   state.country = '';
+    //   state.dispatchedType = '';
+    // }
     setIsConfirmed(!e.target.value);
     updateUserInfo({
       target: { name: e.target.name, value: !e.target.value }, //state는 비동기적이라 바로 적용안됨
     });
   };
-  console.log(state);
+  //console.log(state);
 
   useEffect(() => {
     //이전 단계를 눌로 페이지에 다시 돌아왔을 때, 렌더링하며 이전 입력값 불러오고 조건 체크
@@ -550,7 +686,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       setIsConfirmed(false);
       setActive(true);
     } else {
-      if (state.dispatchedUniversity && state.country) {
+      if (state.dispatchedUniversity && state.country && state.dispatchType) {
         setActive(true);
       } else {
         setActive(false);
@@ -579,15 +715,14 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       </s.InputWrapper>
       <DefaultCheckBox
         wrapperStyle={{
-          paddingTop: '12px',
+          paddingTop: '30px',
           color: isConfirmed ? '' : 'black',
         }}
         after="교환/방문교 미정"
         checkBoxStyle={{
           border: '0.5px solid #C6C6C6',
-          width: '11px',
-          height: '11px',
-          borderRadius: '3px',
+          width: '13px',
+          height: '13px',
         }}
         onChange={onClickDsptchNotConfirmed}
         name="isDispatchConfirmed"
@@ -604,7 +739,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           defaultValue={state.universityUrl}
         />
       </s.InputWrapper>
-      <s.Explanation style={{ fontSize: '9px' }}>
+      <s.Explanation style={{ marginTop: '5px', fontSize: '0.83rem' }}>
         사이트 주소는 가입 이후 마이페이지에서 수정하실 수 있습니다.
       </s.Explanation>
 
@@ -625,6 +760,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           <option
             value=""
             hidden
+            style={{ fontSize: '0.9rem' }}
           >
             국가
           </option>
@@ -694,13 +830,14 @@ const RadioBtnDiv = styled.div`
 `;
 
 import addPhoto from '../../assets/images/addPhoto.svg';
-import { postData } from '../../api/Functions';
+import { postData, putData } from '../../api/Functions';
+import { Background } from '../MyPage/MyPageStyled';
 
 export const SchoolAuthForm = ({ state, setFile }) => {
   const [preview, setPreview] = useState(null);
   const onChangeImgFile = (fileList) => {
     if (fileList[0]) {
-      console.log(fileList[0]);
+      //console.log(fileList[0]);
       const uploadImg = fileList[0];
       setPreview(URL.createObjectURL(uploadImg));
       setFile(uploadImg);

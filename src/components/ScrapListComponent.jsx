@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 
+import ErrorScreen from '../components/ErrorScreen.jsx';
 import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
@@ -12,9 +12,6 @@ import defaultImg from '../assets/images/bannerDefault.svg';
 
 import { showDate } from "../components/Common/InfoExp";
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
-
-import { getData, postData, putData } from '../api/Functions';
-import { GET_SCRAP, POST_SCRAP } from '../api/urls';
 
 const ScrapList = ({ items }) => {
   const [scrappedMarketPostIds, setScrappedMarketPostIds] = useState([]);
@@ -43,7 +40,7 @@ const ScrapList = ({ items }) => {
                 </TitleTimeContainer><br />
                 <State how={item.marketPost.dealType === 'DIRECT' ? '직거래' : '택배거래'} now={item.marketPost.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
                 <LocationAndUser>
-                  <Place><Compas src={compas} />{item.marketPost.currentCountry} {item.marketPost.currentLocation}</Place>
+                  <Place><img src={compas} />{item.marketPost.currentCountry} {item.marketPost.currentLocation}</Place>
                   <User><Profile src={profile} />{item.marketPost.nickname}</User>
                 </LocationAndUser>
                 <Price>{item.marketPost.share ? '나눔' : `₩ ${item.marketPost.cost}`}</Price>
@@ -84,7 +81,7 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
       window.location.reload();
   
     } catch (error) {
-      console.error('스크랩 처리 중 오류 발생:', error);
+      return <ErrorScreen />
     }
   };
   
@@ -142,7 +139,6 @@ const Information = styled.div`
   padding-top: 5px;
   padding-left: 10px;
   display: flex;
-  height: 16vh;
   flex-direction: column;
   box-sizing: border-box;
   padding-right: 15px;
@@ -170,7 +166,7 @@ const Time = styled.span`
 `;
 
 const TitleTimeContainer = styled.div`
-  width: 155px;
+  width: 145px;
   display: flex; /* Flexbox를 사용하여 수평 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
 `;
@@ -204,21 +200,28 @@ const Profile = styled.img`
   margin-right: 2px;
 `;
 
+const LocationAndUser = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 2em;
+  width: 100%;
+  margin-bottom: 1vh;
+`;
+
 const Place = styled.p`
-  width: 100px;
+  display: inline-block;
+  align-item: center;
+  height: 20px;
+  width: 100%; 
   font-size: 0.7em;
   align-items: center;
   margin-right: 10px;
+  margin-top: 5px;
   color: #838383;
-  white-space: nowrap; /* 줄 바꿈 없이 한 줄로 표시 */
-  overflow: hidden; /* 넘치는 텍스트를 숨깁니다 */
-  text-overflow: ellipsis; /* 넘치는 텍스트를 '...'으로 표시 */
-`;
-
-const Compas = styled.img`
-  width: 1.2em;
-  height: 1.2em;
-  margin-right: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
 `;
 
 const User = styled.p`
@@ -226,18 +229,8 @@ const User = styled.p`
   display: flex;
   align-items: center;
   color: #838383;
-  padding-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 `;
-
-const LocationAndUser = styled.div`
-  display: flex;
-  align-items: center;
-  width: 11em;
-  margin-bottom: 1vh;
-`;
-
-
-const Space = styled.div`
-  height: 3em;
-`;
-

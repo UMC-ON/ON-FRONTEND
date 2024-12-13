@@ -1,9 +1,9 @@
 import * as FormElements from './FormElements';
 import useMultiStepForm from '../../hooks/useMultiStepForm';
 import * as s from './SignUpStyled';
-import groupLogo from '../../assets/images/groupLogo.svg';
+import groupLogo from '../../assets/images/NewLogo.svg';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+//import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal/Modal';
 import { multiFilePostData, postData } from '../../api/Functions';
@@ -39,7 +39,7 @@ const SchoolAuthPage = () => {
     let value = e.target.value;
 
     setUserInfo({ ...userInfo, [name]: value });
-    console.log(userInfo);
+    //console.log(userInfo);
   };
 
   const handleSubmitBE = async (e) => {
@@ -51,12 +51,19 @@ const SchoolAuthPage = () => {
         // const request = postData()
         const formData = new FormData();
         formData.append('fileList', file);
-        const request = {
-          dispatchedUniversity: userInfo.dispatchedUniversity,
-          country: userInfo.country,
-          universityUrl: userInfo.universityUrl,
-          dispatchType: userInfo.dispatchType,
-        };
+        const request = userInfo.isDispatchConfirmed
+          ? {
+              dispatchedUniversity: userInfo.dispatchedUniversity,
+              country: userInfo.country,
+              universityUrl: userInfo.universityUrl,
+              dispatchType: userInfo.dispatchType,
+            }
+          : {
+              dispatchedUniversity: '',
+              country: '',
+              universityUrl: '',
+              dispatchType: '',
+            };
         const json = JSON.stringify(request);
         const blob = new Blob([json], { type: 'application/json' });
         formData.append('dispatchCertifyApplyRequestDto', blob);
@@ -68,7 +75,7 @@ const SchoolAuthPage = () => {
           },
         );
         if (response) {
-          console.log(response);
+          //console.log(response);
           setLastModalOpen(true);
         }
       } else {
@@ -81,7 +88,7 @@ const SchoolAuthPage = () => {
           },
         );
         if (response) {
-          console.log(response);
+          //console.log(response);
           nav('/');
         }
       }
@@ -123,12 +130,12 @@ const SchoolAuthPage = () => {
             </s.TitleSection>
 
             <s.ContentSection>
-              <s.BackButton
+              {/* <s.BackButton
                 type="button"
                 onClick={prev}
               >
                 이전 단계
-              </s.BackButton>
+              </s.BackButton> */}
               <s.StyledH2>{currentTitle}</s.StyledH2>
               <s.Explanation style={{ marginBottom: '40px' }}>
                 신뢰할 수 있는 커뮤니티를 위해 교환/방문교의 파견 사실여부를

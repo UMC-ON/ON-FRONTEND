@@ -1,7 +1,7 @@
 import * as s from './SelectCityStyled.jsx';
-import { useNavigate, useLocation } from 'react-router-dom';
+//import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import PageHeader from '../../components/PageHeader/PageHeader.jsx';
+//import PageHeader from '../../components/PageHeader/PageHeader.jsx';
 import { countryFlags, countries, cities } from '../../assets/cityDatabase.js';
 
 /*사용 방법
@@ -30,7 +30,7 @@ const SelectCity = ({ closeModal, getCity }) => {
 
   const handleCityClick = (city) => {
     // navigate(prevURL, { state: { selectedCity: city.city } });
-    console.log(city.city);
+    //console.log(city.city);
     getCity(country + " " + city.city);
   };
 

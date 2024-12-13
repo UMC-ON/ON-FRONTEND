@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import informationIcon from '../assets/images/information_icon.svg';
@@ -19,7 +19,6 @@ import Loading from '../components/Loading/Loading';
 import { getData } from '../api/Functions';
 import { GET_RECENT_POST_OF, GET_RECENT_ACCOMPANY } from '../api/urls';
 
-
 function CommunityHomePage() {
   const navigate = useNavigate();
 
@@ -28,11 +27,11 @@ function CommunityHomePage() {
   }
 
   function goToGeneralPost() {
-    navigate("/community/general/post");
+    navigate('/community/general/post');
   }
 
   function goToInfoPost() {
-    navigate("/community/info/post");
+    navigate('/community/info/post');
   }
 
   const [isLoading, setIsLoading] = useState(true);
@@ -45,37 +44,36 @@ function CommunityHomePage() {
       try {
         setIsLoading(true);
 
-        const info_data = await getData(GET_RECENT_POST_OF('INFO'),{
+        const info_data = await getData(GET_RECENT_POST_OF('INFO'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }); 
+        });
         setInfoData(info_data.data);
         // console.log(data.data);
 
-        const free_data = await getData(GET_RECENT_POST_OF('FREE'),{
+        const free_data = await getData(GET_RECENT_POST_OF('FREE'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }); 
+        });
 
         setFreeData(free_data.data);
-        console.log(free_data.data);
+        //console.log(free_data.data);
 
-        const accom_data = await getData(GET_RECENT_ACCOMPANY,{
+        const accom_data = await getData(GET_RECENT_ACCOMPANY, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }); 
+        });
         setAccompanyData(accom_data.data);
         // console.log(accom_data.data);
-
       } catch (error) {
-        console.error('Error fetching data:', error);
+        //console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchData(); 
-  }, []); 
+    fetchData();
+  }, []);
 
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   return (
@@ -122,7 +120,11 @@ function CommunityHomePage() {
         <RightIcon src={rightIcon} />
       </FlexContainer>
       <Shadow>
-        <CommunityHomeList bgcolor='rgba(191, 216, 229, 0.6)' datas={infoData} type={'info'}/>
+        <CommunityHomeList
+          bgcolor="rgba(191, 216, 229, 0.6)"
+          datas={infoData}
+          type={'info'}
+        />
       </Shadow>
 
       <SmallSpace />
@@ -135,7 +137,11 @@ function CommunityHomePage() {
         <RightIcon src={rightIcon} />
       </FlexContainer>
       <Shadow>
-        <CommunityHomeList bgcolor='rgba(203, 205, 233, 0.6)' datas={freeData} type={'free'}/>
+        <CommunityHomeList
+          bgcolor="rgba(203, 205, 233, 0.6)"
+          datas={freeData}
+          type={'free'}
+        />
       </Shadow>
 
       <SmallSpace />
@@ -148,7 +154,11 @@ function CommunityHomePage() {
         <RightIcon src={rightIcon} />
       </FlexContainer>
       <Shadow>
-        <CommunityHomeList bgcolor='rgba(208, 214, 218, 0.6)' datas={accompanyData} type={'accom'}/>
+        <CommunityHomeList
+          bgcolor="rgba(208, 214, 218, 0.6)"
+          datas={accompanyData}
+          type={'accom'}
+        />
       </Shadow>
 
       <Space />

@@ -1,14 +1,14 @@
 import * as FormElements from '../SignUp/FormElements';
 import useMultiStepForm from '../../hooks/useMultiStepForm';
 import * as s from '../SignUp/SignUpStyled';
-import groupLogo from '../../assets/images/groupLogo.svg';
+import onLogo from '../../assets/images/On_FinalLogo.svg';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal/Modal';
 import { multiFilePostData, postData } from '../../api/Functions';
 import { DISPATCH_CERTIFY_REQUEST, NOT_SURE } from '../../api/urls';
-import styled from 'styled-components';
-import closeIcon from '../../assets/images/close_button.svg';
+//import styled from 'styled-components';
+//import closeIcon from '../../assets/images/close_button.svg';
 
 const SchoolAuthPage = () => {
   //const currentUser = useSelector((state) => state.user);
@@ -40,7 +40,7 @@ const SchoolAuthPage = () => {
     let value = e.target.value;
 
     setUserInfo({ ...userInfo, [name]: value });
-    console.log(userInfo);
+    //console.log(userInfo);
   };
 
   const handleSubmitBE = async (e) => {
@@ -69,7 +69,7 @@ const SchoolAuthPage = () => {
           },
         );
         if (response) {
-          console.log(response);
+          //console.log(response);
           setLastModalOpen(true);
         }
       } else {
@@ -82,7 +82,7 @@ const SchoolAuthPage = () => {
           },
         );
         if (response) {
-          console.log(response);
+          //console.log(response);
           nav('/');
         }
       }
@@ -118,25 +118,23 @@ const SchoolAuthPage = () => {
         <s.FormPage>
           <s.SectionWrapper>
             <s.TitleSection>
-              <s.Logo src={groupLogo} />
+              <s.Logo src={onLogo} />
 
-              <div className="on_exp">교환/방문학생 정보공유 커뮤니티, ON </div>
+              <div className="on_exp">교환/방문학생 정보공유 커뮤니티, On </div>
             </s.TitleSection>
 
             <s.ContentSection>
-              <s.BackButton
+              {/* <s.BackButton
                 type="button"
                 onClick={prev}
               >
                 이전 단계
-              </s.BackButton>
+              </s.BackButton> */}
               <s.StyledH2>{currentTitle}</s.StyledH2>
-              <s.Explanation style={{ marginBottom: '40px' }}>
+              <s.AuthExplanation style={{ marginBottom: '40px' }}>
                 신뢰할 수 있는 커뮤니티를 위해 교환/방문교의 파견 사실여부를
-                확인하고 있습니다. 교환/방문교 인증을 하지 않아도 커뮤니티와
-                일기 서비스를 사용할 수 있지만 On 내 일부 기능(동행 구하기, 물품
-                거래)이 제한됩니다.
-              </s.Explanation>
+                확인하고 있습니다. 교환/방문교 인증을 하지 않아도 서비스를 이용할 수 있지만 일부 기능 사용이 제한됩니다.
+              </s.AuthExplanation>
               {currentStep}
             </s.ContentSection>
           </s.SectionWrapper>
@@ -178,7 +176,7 @@ const SchoolAuthPage = () => {
             setLastModalOpen(false);
           }}
           onExitModal={() => {
-            nav('/admin');
+            nav('/');
           }}
         />
       )}

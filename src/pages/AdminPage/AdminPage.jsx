@@ -42,7 +42,7 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
-    if (user.userStatus !== 'ADMIN') {
+    if (user?.userStatus !== 'ADMIN') {
       setIsLoading(true);
       alert('관리자만 열람할 수 있습니다.');
       nav('/');
@@ -58,15 +58,15 @@ const AdminPage = () => {
           { page: 0, size: 20, sort: 'DESC' },
         );
         if (response) {
-          console.log(response.data.result.content);
-          setRequestList(response.data.result.content);
-          return response.data.result.content;
+          console.log(response.data.content);
+          setRequestList(response.data.content);
+          return response.data.content;
         }
       };
       fetchData();
       setIsLoading(false);
     }
-  }, [permitStatus]);
+  }, [permitStatus, user]);
   if (isLoading) {
     return <Loading />;
   }

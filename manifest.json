@@ -1,32 +1,56 @@
 {
   "name": "ON - \uad50\ud658\ud559\uc0dd \ucee4\ubba4\ub2c8\ud2f0",
-  "short_name": "ON",
+  "short_name": "ON:온",
+  "id": "/manifest.json",
   "start_url": "/",
   "display": "standalone",
-  "description": "앱 설명",
+  "description": "나만의 완벽한 교환/방문학생을 위해, On-boarding",
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icon/icon-192x192.png",
+      "src": "/public/icon/android-icon-36x36.png",
+      "sizes": "36x36",
+      "type": "image/png",
+      "density": "0.75",
+      "purpose": "any"
+    },
+    {
+      "src": "/public/icon/android-icon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "density": "1.0"
+    },
+    {
+      "src": "/public/icon/android-icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "density": "1.5"
+    },
+    {
+      "src": "/public/icon/android-icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "density": "2.0"
+    },
+    {
+      "src": "/public/icon/android-icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "density": "3.0"
+    },
+    {
+      "src": "/public/icon/android-icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "density": "4.0"
     },
     {
-      "src": "/icon/icon-256x256.png",
-      "sizes": "256x256",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon/icon-512x512.png",
+      "src": "/web-app-manifest-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "screenshots": [
@@ -46,9 +70,37 @@
   "prefer_related_applications": false,
   "shortcuts": [
     {
-      "name": "The name you would like to be displayed for your shortcut",
-      "url": "The url you would like to open when the user chooses this shortcut. This must be a URL local to your PWA. For example: If my start_url is /, this URL must be something like /shortcut",
-      "description": "A description of the functionality of this shortcut"
+      "name": "홈",
+      "url": "/",
+      "description": "홈 화면"
+    },
+    {
+      "name": "동행구하기",
+      "url": "/accompany",
+      "description": "여행 동행 구하기 홈"
+    },
+    {
+      "name": "물품거래",
+      "url": "/sell",
+      "description": "교환/방문 생활 중 필요한 중고 물폼 거래하기"
+    },
+    {
+      "name": "채팅",
+      "url": "/chat",
+      "description": "동행 구하기와 물품 거래를 위한 채팅"
+    },
+    {
+      "name": "나의일기",
+      "url": "/diary",
+      "description": "파견 중 일상을 담은 일기 작성하기"
+    },
+    {
+      "name": "마이페이지",
+      "url": "/mypage",
+      "description": "내 정보를 확인할 수 있는 마이페이지"
     }
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": "navigate-new"
+  }
 }

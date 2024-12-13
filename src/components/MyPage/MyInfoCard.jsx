@@ -17,6 +17,7 @@ const MyInfoCard = ({
   userStatus,
   isPassword,
   setIsLoading,
+  setError,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,14 +38,13 @@ const MyInfoCard = ({
         {},
       );
 
-      console.log(response);
       if (response.status == 200) {
         dispatch(logout());
 
         navigate('/landing');
       }
     } catch (error) {
-      console.error('Logout error:', error);
+      setError(true);
     } finally {
       setIsLoading(false);
     }
@@ -84,17 +84,22 @@ const MyInfoCard = ({
               )}
             </SpecificInfo>
           </>
-        ) : userStatus === 'NOT_CERTIFY' ? (
+        ) : userStatus === 'NON_CERTIFIED' ||
+          userStatus === 'TEMPORARY' ||
+          userStatus === 'DENIED' ? (
           <>
             <University>학교가 인증되지 않았어요.</University>
-            <PurpleBox onClick={() => navigate('./schoolAuth')}>
+            <PurpleBox
+              onClick={() => navigate('./schoolAuth')}
+              style={{ marginTop: '5px' }}
+            >
               파견교 등록 및 인증
             </PurpleBox>
           </>
         ) : userStatus === 'AWAIT' ? (
           <>
             <University>{university}</University>
-            <PurpleBox>인증 대기중</PurpleBox>
+            <Await>파견교 인증 대기중...</Await>
           </>
         ) : null}
         <Logout onClick={() => handleLogout()}>로그아웃</Logout>
@@ -142,6 +147,8 @@ const Nickname = styled.div`
   gap: 4px;
   width: 100%;
   overflow: hidden;
+  align-self: flex-start;
+  margin-top: 5px;
   span {
     color: #5c5c5c;
     font-family: Inter;
@@ -165,6 +172,20 @@ const University = styled.span`
   grid-column: 1/3;
   grid-row: 2/3;
   color: #5c5c5c;
+  font-family: Inter;
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
+
+const Await = styled.span`
+  grid-column: 1/3;
+  grid-row: 2/3;
+  background: linear-gradient(135deg, #c2c7ff 0%, #ad99ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-family: Inter;
   font-size: 14px;
   font-style: normal;
@@ -196,6 +217,8 @@ const SpecificInfo = styled.div`
 
 const Logout = styled.div`
   display: flex;
+  grid-column: 2/3;
+  grid-row: 3/4;
   width: 2.8125rem;
   height: 0.9375rem;
   justify-content: center;
@@ -216,7 +239,7 @@ const Logout = styled.div`
 `;
 
 const PurpleBox = styled.div`
-  height: 1.375rem;
+  height: 1.28rem;
   grid-column: 1/3;
   grid-row: 3/4;
   padding: 0 0.625rem;
@@ -224,10 +247,10 @@ const PurpleBox = styled.div`
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  border-radius: 0.625rem;
+  border-radius: 0.55rem;
   background: ${theme.purpleGra};
   color: #fff;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 500;
 `;

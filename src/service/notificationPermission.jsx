@@ -16,7 +16,7 @@ export async function handleAllowNotification() {
       });
       alert(token);
       if (token) {
-        console.log('토큰', token);
+        // console.log('토큰', token);
         try {
           const response = await postData(
             POST_TOKEN,
@@ -30,12 +30,12 @@ export async function handleAllowNotification() {
           );
 
           if (response) {
-            console.log('토큰 보내짐:', response.data);
+            // console.log('토큰 보내짐:', response.data);
           } else {
-            console.error('토큰 보내지 않음');
+            // console.error('토큰 보내지 않음');
           }
         } catch (error) {
-          console.error('토큰 보내는 중 에러 발생', error);
+          // console.error('토큰 보내는 중 에러 발생', error);
         }
       } else {
         alert('토큰 등록이 불가능 합니다. 생성하려면 권한을 허용해주세요');

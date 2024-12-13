@@ -9,7 +9,7 @@ onMessage(messaging, (payload) => {
   const notificationOptions = {
     body: payload.notification.body,
   };
-  console.log('알림', notificationTitle, notificationOptions);
+  // console.log('알림', notificationTitle, notificationOptions);
   if (Notification.permission === 'granted') {
     new Notification(notificationTitle, notificationOptions);
   }

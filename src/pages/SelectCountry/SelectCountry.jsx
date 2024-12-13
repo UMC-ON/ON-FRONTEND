@@ -1,7 +1,7 @@
 import * as s from './SelectCountryStyled.jsx';
-import { useNavigate, useLocation } from 'react-router-dom';
+//import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import PageHeader from '../../components/PageHeader/PageHeader.jsx';
+//import PageHeader from '../../components/PageHeader/PageHeader.jsx';
 import { countryFlags, countries } from '../../assets/cityDatabase.js';
 import styled from 'styled-components';
 
@@ -48,7 +48,7 @@ const SelectCountry = ({ closeModal, getCountry }) => {
     setSelectedCountry(
       selectedCountry === country.country ? null : country.country,
     );
-    console.log(country.country);
+    //console.log(country.country);
     getCountry(country.country);
     // navigate(prevURL, { state: { selectedCountry: country.country } });
     // console.log('Navigating with country:', country.country);

@@ -9,19 +9,19 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import theme from './styles/theme.js';
-// 페이지, 컴포넌트 import
+// 페이지, 컴포넌트 import, 안 쓰는 import 주석 처리
 import NavBar from './components/NavBar/NavBar.jsx';
 import MyPage from './pages/MyPage/MyPage.jsx';
 import MyPost from './pages/MyPage/MyPost.jsx';
 import Notification from './pages/Notification/NotificationPage.jsx';
 import Search from './pages/Search/SearchPage.jsx';
-import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
+//import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
 import AccompanyChat from './pages/Chat/AccompanyChat.jsx';
 import ChatList from './pages/ChatList/ChatList.jsx';
 import TradeChat from './pages/Chat/TradeChat.jsx';
 import HomePage from './pages/HomePage.jsx';
 
-import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
+//import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
 import CompanyCalendar from './components/CompanyCalendar/CompanyCalendar.jsx';
 import SellPage from './pages/SellPage.jsx';
 import ScrapList from './pages/ScrapList.jsx';
@@ -52,15 +52,21 @@ import LandingPage from './pages/LandingPage/LandingPage.jsx';
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUser } from './redux/actions.jsx';
+import { loadUser, loginFailure, logout } from './redux/actions.jsx';
 import Loading from './components/Loading/Loading.jsx';
 import FindId from './pages/FindPage/FindId.jsx';
 import FindPassword from './pages/FindPage/FindPassword.jsx';
 import { requestNotificationPermissionOnce } from './service/notificationPermission.jsx';
+import Test from './pages/SignUp/Test.jsx';
+import { getData, Interceptor } from './api/Functions.jsx';
+import { GET_USER_INFO } from './api/urls.jsx';
+//import axios from 'axios';
+import ChangePassword from './pages/FindPage/ChangePassword.jsx';
+import ImageSlide from './pages/Community/ImageSlide.jsx';
 
 function App() {
   const dispatch = useDispatch();
-  let loginInfo = useSelector((state) => state.user);
+  let userInfo = useSelector((state) => state.user.user);
   const location = useLocation();
   const nav = useNavigate();
   const excludepaths = [
@@ -71,45 +77,80 @@ function App() {
     '/landing',
     '/signUp/complete',
     '/accompany/detail',
+    '/test',
+    '/changePassword',
   ];
   const [isLoading, setIsLoading] = useState(true);
-
-  //console.log(location.pathname);
-
-  useEffect(() => {
-    const loadUserData = async () => {
-      if (!excludepaths.includes(location.pathname)) {
-        setIsLoading(true); // 로딩 시작
-        await dispatch(loadUser());
-        setIsLoading(false); // 로딩 끝
-      } else {
-        setIsLoading(false); // 제외된 경로에서는 로딩 끝
-      }
-    };
-    loadUserData();
-  }, [dispatch, location.pathname]);
+  let mountCount = 0;
 
   useEffect(() => {
-    if (!isLoading && !excludepaths.includes(location.pathname)) {
-      if (!loginInfo.isAuthenticated) {
-        const res = confirm('로그인이 필요합니다.');
-        if (res) {
-          nav('/signIn');
-        } else {
-          nav('/landing');
+    if (excludepaths.includes(location.pathname)) {
+      setIsLoading(false);
+    } else {
+      //setIsLoading(true);
+      //console.log('트루로 설정', mountCount);
+
+      //console.log('유저인포 앱', userInfo);
+      if (!userInfo) {
+        //console.log('유저인포 없음');
+        setIsLoading(true);
+        //console.log(userInfo);
+        const loadUserData = async () => {
+          const accessToken = localStorage.getItem('AToken');
+          if (accessToken) {
+            //console.log('엑세스 있음');
+            const res = await getData(GET_USER_INFO, {
+              Authorization: `Bearer ${accessToken}`,
+            })
+              .then((res) => {
+                //console.log(res, 'dkdk');
+                dispatch(loadUser(res.data, accessToken));
+                if (res.data.userStatus == 'TEMPORARY') {
+                  //사용자가 임의로 주소 수정해서 들어오면 이쪽으로 안내..
+                  //임의로 수정=새로 마운트 되므로 리덕스 유저인포는 없어서 이 로직이 맞음
+                  nav('/signUp/credentials');
+                }
+
+                //console.log('앱 유저인포:', userInfo);
+                setIsLoading(false);
+              })
+              .catch(() => {
+                dispatch(logout());
+                alert('로그인이 필요합니다.');
+                nav('/signIn');
+                requestNotificationPermissionOnce();
+              });
+          }
+        };
+        try {
+          loadUserData();
+        } catch (error) {
+          //console.log(error);
         }
-      } else {
-        requestNotificationPermissionOnce();
       }
     }
-  }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
-  if (isLoading && excludepaths.includes(location.pathname)) {
+  }, [location.pathname, userInfo]);
+
+  useEffect(() => {
+    if (!userInfo && !excludepaths.includes(location.pathname)) {
+      setIsLoading(true);
+    } else if (userInfo && !excludepaths.includes(location.pathname)) {
+      //console.log('지금 유저인포 등록됨');
+      setIsLoading(false);
+    }
+  }, [userInfo]);
+
+  if (isLoading) {
     return <Loading />;
   }
-  if (loginInfo.isAuthenticated || excludepaths.includes(location.pathname)) {
+  if (!isLoading || excludepaths.includes(location.pathname)) {
     return (
       <ThemeProvider theme={theme}>
         <Routes>
+          <Route
+            path="/test"
+            element={<Test />}
+          />
           <Route
             path="/landing"
             element={<LandingPage />}
@@ -139,6 +180,10 @@ function App() {
             element={<FindPassword />}
           />
           <Route
+            path="/changePassword"
+            element={<ChangePassword />}
+          />
+          <Route
             path="/signUp/credentials"
             element={<SchoolAuthPage />}
           />
@@ -155,6 +200,10 @@ function App() {
             element={<FreeDetailPage />}
           />
           <Route
+            path="/community/general/detail/:id/images"
+            element={<ImageSlide />}
+          />
+          <Route
             path="/community/general/post"
             element={<FreePostPage />}
           />
@@ -165,6 +214,10 @@ function App() {
           <Route
             path="/community/info/detail/:id"
             element={<InfoDetailPage />}
+          />
+          <Route
+            path="/community/info/detail/:id/images"
+            element={<ImageSlide />}
           />
           <Route
             path="/community/info/post"

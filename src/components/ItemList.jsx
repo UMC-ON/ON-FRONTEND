@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-import compas from "../assets/images/compasIcon.svg";
-import profile from "../assets/images/profileIcon.svg";
-import empty_star from "../assets/images/empty_star.svg";
-import filled_star from "../assets/images/filled_star.svg";
+import compas from '../assets/images/compasIcon.svg';
+import profile from '../assets/images/profileIcon.svg';
+import empty_star from '../assets/images/empty_star.svg';
+import filled_star from '../assets/images/filled_star.svg';
 import defaultImg from '../assets/images/bannerDefault.svg';
 
-import {showDate} from "../components/Common/InfoExp";
-import { GET_CURRENT_INFO } from '../api/urls';
-import { getData, postData, putData } from '../api/Functions';
+import { showDate } from '../components/Common/InfoExp';
+import ErrorScreen from './ErrorScreen';
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const ItemList = ({ items }) => {
@@ -21,78 +20,111 @@ const ItemList = ({ items }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-  const fetchScrappedPosts = async () => {
-    try {
-      // Check if userInfo is available
-      if (!userInfo || !userInfo.id) {
-        console.error('User info is not available');
-        return;
-      }
-
-      const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-        },
-        params: {
-          page: 0, size: 20, sort: 'DESC'
+    const fetchScrappedPosts = async () => {
+      try {
+        if (!userInfo || !userInfo.id) {
+          return <ErrorScreen />
         }
-        
-      });
 
-      // Extract marketPostId from each marketPost object
-      if (Array.isArray(response.data.content)) {
-        const scrappedIds = response.data.content.map(post => post.marketPost.marketPostId);
-        setScrappedMarketPostIds(scrappedIds);
-      } else {
-        console.error('Unexpected response structure:', response.data);
+        const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          params: {
+            page: 0,
+            size: 20,
+            sort: 'DESC',
+          },
+        });
+
+        // Extract marketPostId from each marketPost object
+        if (Array.isArray(response.data.content)) {
+          const scrappedIds = response.data.content.map(
+            (post) => post.marketPost.marketPostId,
+          );
+          setScrappedMarketPostIds(scrappedIds);
+        } else {
+            return <ErrorScreen />
+        }
+      } catch (error) {
+          return <ErrorScreen />
       }
-    } catch (error) {
-      console.error('Error fetching scrapped posts:', error);
-    }
-  };
+    };
 
-  fetchScrappedPosts();
-}, [userInfo]); // Ensure userInfo is available before making the request
-
+    fetchScrappedPosts();
+  }, [userInfo]); // Ensure userInfo is available before making the request
 
   return (
     <>
-      {items && items.map((item, index) => {
-        const isCompleted = item.dealStatus === "COMPLETE";
-        const isScrapped = scrappedMarketPostIds.includes(item.marketPostId);
+      {items &&
+        items.map((item, index, lastItemRef) => {
+          const isCompleted = item.dealStatus === 'COMPLETE';
+          const isScrapped = scrappedMarketPostIds.includes(item.marketPostId);
 
-        return (
-          <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.imageUrls.length > 0 ? item.imageUrls : defaultImg} />
-            <Information>
-              <StarContainer
-                marketPostId={item.marketPostId}
-                isFilled={isScrapped} // Pass isScrapped as isFilled prop
-                scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
-                setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
+          return (
+            <ItemDiv
+              key={index}
+              isCompleted={isCompleted}
+              ref={index === items.length - 1 ? lastItemRef : null}
+            >
+              <Photo
+                src={item.imageUrls.length > 0 ? item.imageUrls : defaultImg}
+                onClick={() => navigate(`/sell/${item.marketPostId}`)}
               />
-              <Description onClick={() => navigate(`/sell/${item.marketPostId}`)}>
-                <TitleTimeContainer>
+              <Information>
+                <StarContainer
+                  marketPostId={item.marketPostId}
+                  isFilled={isScrapped} // Pass isScrapped as isFilled prop
+                  scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
+                  setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
+                />
+                <Description
+                  onClick={() => navigate(`/sell/${item.marketPostId}`)}
+                >
                   <Title>{item.title}</Title>
-                  <Time>{showDate(item.createdAt)}</Time>
-                </TitleTimeContainer><br/>
-                <State how={item.dealType === 'DIRECT' ? '직거래' : '택배거래'} now={item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
-                <LocationAndUser>
-                  <Place><Compas src={compas} />{item.currentCountry} {item.currentLocation}</Place>
-                  <User><Profile src={profile} />{item.nickname}</User>
-                </LocationAndUser>
-                <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
-              </Description>
-            </Information>
-          </ItemDiv>
-        );
-      })}
+                  <br />
+                  <State
+                    how={item.dealType === 'DIRECT' ? '직거래' : '택배거래'}
+                    now={
+                      item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'
+                    }
+                    isCompleted={isCompleted}
+                  />
+                  <LocationAndUser>
+                    <Place>
+                      <img
+                        src={compas}
+                        style={{
+                          width: '14.4px',
+                          height: '14,4px',
+                          marginRight: '3px',
+                        }}
+                      />
+                      {item.currentCountry} {item.currentLocation}
+                    </Place>
+                    <User>
+                      <Profile src={profile} />
+                      {item.nickname}
+                    </User>
+                  </LocationAndUser>
+                  <PriceTimeContainer>
+                    <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
+                    <Time>{showDate(item.createdAt)}</Time>
+                  </PriceTimeContainer>
+                </Description>
+              </Information>
+            </ItemDiv>
+          );
+        })}
     </>
   );
 };
 
-
-const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrappedMarketPostIds }) => {
+const StarContainer = ({
+  marketPostId,
+  isFilled,
+  setScrappedMarketPostIds,
+}) => {
   const [isStarFilled, setIsStarFilled] = useState(isFilled);
   let userInfo = useSelector((state) => state.user.user);
 
@@ -105,12 +137,14 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
           params: {
-            marketPostId: marketPostId
-          }
+            marketPostId: marketPostId,
+          },
         });
 
         // Remove marketPostId from scrappedMarketPostIds array
-        setScrappedMarketPostIds(prevIds => prevIds.filter(id => id !== marketPostId));
+        setScrappedMarketPostIds((prevIds) =>
+          prevIds.filter((id) => id !== marketPostId),
+        );
       } else {
         // 스크랩 등록 요청
         await axios.post(
@@ -122,15 +156,14 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
             headers: {
               Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             },
-          }
+          },
         );
 
-        setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
+        setScrappedMarketPostIds((prevIds) => [...prevIds, marketPostId]);
       }
       setIsStarFilled(!isStarFilled);
-
     } catch (error) {
-      console.error('스크랩 처리 중 오류 발생:', error);
+        return <ErrorScreen />
     }
   };
 
@@ -142,24 +175,21 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
   );
 };
 
-
 export default ItemList;
-
-
-
 
 const ItemDiv = styled.div`
   margin: 0 auto;
   width: 90%;
   border-radius: 20px;
-  background: linear-gradient(90deg, #E7EBED, #FFFFFF);
+  background: linear-gradient(90deg, #e7ebed, #ffffff);
   border: 1px solid #d9d9d9;
   display: flex;
   align-items: center;
   margin-bottom: 1vh;
   position: relative;
   text-align: left;
-  opacity: ${({ isCompleted }) => isCompleted ? 0.5 : 1}; /* 거래완료 시 불투명도 조절 */
+  opacity: ${({ isCompleted }) =>
+    isCompleted ? 0.5 : 1}; /* 거래완료 시 불투명도 조절 */
 `;
 
 const Star = styled.img`
@@ -173,17 +203,19 @@ const Star = styled.img`
 `;
 
 const Photo = styled.img`
-  width: 16vh;
-  height: 18vh;
   object-fit: cover;
   object-position: center;
   border-radius: 20px;
   padding: 0;
+  width: 8.5rem;
+  height: 8.5rem;
+  min-width: 8.5rem;
+  max-width: 8.5rem;
 `;
 
 const Information = styled.div`
   padding-top: 5px;
-  padding-left: 10px;
+  padding-left: 8px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -202,29 +234,31 @@ const Title = styled.p`
   white-space: nowrap; /* 줄 바꿈 없이 한 줄로 표시 */
   overflow: hidden; /* 넘치는 텍스트를 숨깁니다 */
   text-overflow: ellipsis; /* 넘치는 텍스트를 '...'으로 표시 */
+  max-width: 160px;
 `;
 
 const Time = styled.span`
-  color: #7A7A7A;
+  color: #7a7a7a;
   font-size: 0.6em;
   margin-left: 8px;
   margin-top: 5px;
 `;
 
-const TitleTimeContainer = styled.div`
+const PriceTimeContainer = styled.div`
   width: 155px;
   display: flex; /* Flexbox를 사용하여 수평 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
 `;
 
 const StateWrapper = styled.p`
-  color: #7A7A7A;
+  color: #7a7a7a;
   font-size: 0.7em;
   margin-bottom: 5px;
 `;
 
 const StyledNow = styled.span`
-  color: ${({ theme, isCompleted }) => isCompleted ? theme.lightPurple : '#7A7A7A'};
+  color: ${({ theme, isCompleted }) =>
+    isCompleted ? theme.lightPurple : '#7A7A7A'};
 `;
 
 const State = ({ how, now, isCompleted }) => (
@@ -236,14 +270,13 @@ const State = ({ how, now, isCompleted }) => (
 const Price = styled.p`
   font-size: 19px;
   font-weight: 600;
-  color: #3E73B2;
+  color: #3e73b2;
 `;
-
 
 const Profile = styled.img`
   width: 1.2em;
   height: 1.2em;
-  margin-right: 2px;
+  margin-right: 4px;
 `;
 
 const LocationAndUser = styled.div`
@@ -256,29 +289,19 @@ const LocationAndUser = styled.div`
 `;
 
 const Place = styled.p`
-  display: inline-block;
-  align-item: center;
-  height: 20px;
-  width: 100%; 
-  font-size: 0.7em;
+  font-size: 0.75em;
+  display: flex;
   align-items: center;
-  margin-right: 10px;
-  margin-top: 6px;
   color: #838383;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-
-
-const Compas = styled.img`
-  width: 1.2em;
-  height: 1.2em;
-  margin-right: 2px;
+  width: 100%;
+  margin-right: 10px;
 `;
 
 const User = styled.p`
-  font-size: 0.7em;
+  font-size: 0.75em;
   display: flex;
   align-items: center;
   color: #838383;
