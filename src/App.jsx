@@ -118,12 +118,10 @@ function App() {
                 dispatch(logout());
                 alert('로그인이 필요합니다.');
                 nav('/signIn');
-                requestNotificationPermissionOnce();
               });
           } else {
             alert('로그인이 필요합니다.');
             nav('/signIn');
-            requestNotificationPermissionOnce();
           }
         };
         try {
@@ -141,6 +139,8 @@ function App() {
     } else if (userInfo && !excludepaths.includes(location.pathname)) {
       //console.log('지금 유저인포 등록됨');
       setIsLoading(false);
+      requestNotificationPermissionOnce();
+      alert('불림');
     }
   }, [userInfo]);
 
