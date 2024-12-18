@@ -2,13 +2,13 @@
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAA06_MAwUKfVwtAnih_q0NSnIM0G8Op0Q',
-  authDomain: 'oncommunity-f3dad.firebaseapp.com',
-  projectId: 'oncommunity-f3dad',
-  storageBucket: 'oncommunity-f3dad.appspot.com',
-  messagingSenderId: '127863478997',
-  appId: '1:127863478997:web:f922de330e110844e2605c',
-  measurementId: 'G-CHKYD0GWJ7',
+  apiKey: import.meta.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 export const app = initializeApp(firebaseConfig);

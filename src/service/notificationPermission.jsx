@@ -2,10 +2,23 @@ import { getToken, getMessaging } from 'firebase/messaging';
 import { postData } from '../api/Functions';
 import { registerServiceWorker } from './registerServiceWorker';
 import { POST_TOKEN } from '../api/urls';
-import { app } from './initFirebase';
+import { initializeApp } from 'firebase/app';
 
 export async function handleAllowNotification() {
   registerServiceWorker();
+
+  const firebaseConfig = {
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  };
+
+  const app = initializeApp(firebaseConfig);
+
   const messaging = getMessaging(app);
   try {
     const permission = await Notification.requestPermission();
@@ -16,7 +29,7 @@ export async function handleAllowNotification() {
       });
       alert(token);
       if (token) {
-        // console.log('토큰', token);
+        console.log('토큰', token);
         try {
           const response = await postData(
             POST_TOKEN,
@@ -30,12 +43,12 @@ export async function handleAllowNotification() {
           );
 
           if (response) {
-            // console.log('토큰 보내짐:', response.data);
+            console.log('토큰 보내짐:', response.data);
           } else {
-            // console.error('토큰 보내지 않음');
+            console.error('토큰 보내지 않음');
           }
         } catch (error) {
-          // console.error('토큰 보내는 중 에러 발생', error);
+          console.error('토큰 보내는 중 에러 발생', error);
         }
       } else {
         alert('토큰 등록이 불가능 합니다. 생성하려면 권한을 허용해주세요');
@@ -61,5 +74,5 @@ export function requestNotificationPermissionOnce() {
   //   localStorage.setItem('notificationAsked', 'true');
   // }
   handleAllowNotification();
-  console.log(notificationAsked);
+  console.log('noti', notificationAsked);
 }

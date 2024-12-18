@@ -8,7 +8,7 @@
     />
     <link
       rel="icon"
-      href="public/icon/android-icon-192x192.png"
+      href="/icon/android-icon-192x192.png"
       type="image/png"
     />
     <meta
@@ -20,32 +20,32 @@
     <link
       rel="icon"
       sizes="36x36"
-      href="public/icon/android-icon-36x36.png"
+      href="/icon/android-icon-36x36.png"
     />
     <link
       rel="icon"
       sizes="48x48"
-      href="public/icon/android-icon-48x48.png"
+      href="/icon/android-icon-48x48.png"
     />
     <link
       rel="icon"
       sizes="72x72"
-      href="public/icon/android-icon-72x72.png"
+      href="/icon/android-icon-72x72.png"
     />
     <link
       rel="icon"
       sizes="96x96"
-      href="public/icon/android-icon-96x96.png"
+      href="/icon/android-icon-96x96.png"
     />
     <link
       rel="icon"
       sizes="144x144"
-      href="public/icon/android-icon-144x144.png"
+      href="/icon/android-icon-144x144.png"
     />
     <link
       rel="icon"
       sizes="192x192"
-      href="public/icon/android-icon-192x192.png"
+      href="/icon/android-icon-192x192.png"
     />
 
     <meta
@@ -66,12 +66,27 @@
       type="module"
       src="/src/main.jsx"
     ></script>
-    <script>
+    <!-- <script>
       if ('serviceWorker' in navigator) {
         // Register a service worker hosted at the root of the
         // site using the default scope.
         navigator.serviceWorker
-          .register('/sw.js')
+          .register('/service-worker.js')
+          .then((registration) => {
+            console.log('Service worker registration succeeded:', registration);
+          })
+          .catch((error) => {
+            console.log('Service worker registration failed:', error);
+          });
+      } else {
+        console.log('Service workers are not supported.');
+      }
+    </script> -->
+    <script type="module">
+      if ('serviceWorker' in navigator) {
+        // Register the Service Worker
+        navigator.serviceWorker
+          .register('/firebase-messaging-sw.js') // Service Worker 파일 경로
           .then((registration) => {
             console.log('Service worker registration succeeded:', registration);
           })

@@ -5,15 +5,21 @@ importScripts(
   'https://www.gstatic.com/firebasejs/10.5.0/firebase-messaging-compat.js',
 );
 
-self.addEventListener('install', function (e) {
-  self.skipWaiting();
+self.addEventListener('install', (e) => {
+  console.log('[Service Worker] installed', e);
 });
 
-self.addEventListener('activate', function (e) {
-  console.log('fcm service worker가 실행되었습니다.');
+// activate event
+self.addEventListener('activate', (e) => {
+  console.log('[Service Worker] actived', e);
 });
 
-const firebaseConfig = {
+// fetch event
+self.addEventListener('fetch', (e) => {
+  console.log('[Service Worker] fetched resource ' + e.request.url);
+});
+
+firebase.initializeApp({
   apiKey: 'AIzaSyAA06_MAwUKfVwtAnih_q0NSnIM0G8Op0Q',
   authDomain: 'oncommunity-f3dad.firebaseapp.com',
   projectId: 'oncommunity-f3dad',
@@ -21,20 +27,36 @@ const firebaseConfig = {
   messagingSenderId: '127863478997',
   appId: '1:127863478997:web:f922de330e110844e2605c',
   measurementId: 'G-CHKYD0GWJ7',
-};
+});
 
-firebase.initializeApp(firebaseConfig);
-
+// Firebase Messaging 설정
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
-  const notificationTitle = payload.title;
+// 백그라운드 메시지 처리
+messaging.onBackgroundMessage(function (payload) {
+  console.log('Received background message:', payload);
+
+  const notificationTitle = payload.notification.title;
   const notificationOptions = {
-    body: payload.body,
-    // icon: payload.icon
+    body: payload.notification.body,
+    icon: payload.notification.icon,
   };
+
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+// firebase.initializeApp(firebaseConfig);
+
+// const messaging = firebase.messaging();
+
+// messaging.onBackgroundMessage((payload) => {
+//   const notificationTitle = payload.title;
+//   const notificationOptions = {
+//     body: payload.body,
+//     // icon: payload.icon
+//   };
+//   self.registration.showNotification(notificationTitle, notificationOptions);
+// });
 
 // self.addEventListener('install', function (e) {
 //   console.log('fcm sw install..');

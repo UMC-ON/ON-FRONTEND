@@ -84,6 +84,10 @@ function App() {
   let mountCount = 0;
 
   useEffect(() => {
+    requestNotificationPermissionOnce();
+  }, []);
+
+  useEffect(() => {
     if (excludepaths.includes(location.pathname)) {
       setIsLoading(false);
     } else {
