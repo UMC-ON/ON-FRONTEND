@@ -63,6 +63,7 @@ import { GET_USER_INFO } from './api/urls.jsx';
 //import axios from 'axios';
 import ChangePassword from './pages/FindPage/ChangePassword.jsx';
 import ImageSlide from './pages/Community/ImageSlide.jsx';
+import { foregroundMessage } from './service/foregroundMessage.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -142,6 +143,9 @@ function App() {
       alert('불림');
     }
   }, [userInfo]);
+  useEffect(() => {
+    foregroundMessage();
+  }, []);
 
   if (isLoading) {
     return <Loading />;
