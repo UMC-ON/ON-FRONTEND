@@ -141,11 +141,9 @@ function App() {
       //console.log('지금 유저인포 등록됨');
       setIsLoading(false);
       alert('불림');
+      foregroundMessage();
     }
   }, [userInfo]);
-  useEffect(() => {
-    foregroundMessage();
-  }, []);
 
   if (isLoading) {
     return <Loading />;
