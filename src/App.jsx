@@ -139,7 +139,6 @@ function App() {
     } else if (userInfo && !excludepaths.includes(location.pathname)) {
       //console.log('지금 유저인포 등록됨');
       setIsLoading(false);
-      requestNotificationPermissionOnce();
       alert('불림');
     }
   }, [userInfo]);
