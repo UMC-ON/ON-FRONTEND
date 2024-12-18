@@ -133,7 +133,7 @@ function App() {
 
   useEffect(() => {
     if (!userInfo && !excludepaths.includes(location.pathname)) {
-      setIsLoading(true);
+      // setIsLoading(true);
     } else if (userInfo && !excludepaths.includes(location.pathname)) {
       //console.log('지금 유저인포 등록됨');
       setIsLoading(false);
