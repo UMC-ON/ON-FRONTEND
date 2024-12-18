@@ -9,6 +9,7 @@ import theme from '../../styles/theme';
 import { putData } from '../../api/Functions';
 import { PUT_NICKNAME, PUT_UNIV, CHECK_DUPLICATE_NICK } from '../../api/urls';
 import validImg from '../../assets/images/validNickName.svg';
+import { requestNotificationPermissionOnce } from '../../service/notificationPermission';
 
 const MyInfo = ({
   loginId,
@@ -201,7 +202,12 @@ const MyInfo = ({
           </InputWrapper>
         )}
       </Wrapper>
-
+      <NotiButton
+        id="noti-button"
+        onClick={() => requestNotificationPermissionOnce()}
+      >
+        버튼
+      </NotiButton>
       <Wrapper style={{ display: 'inline-block', textAlign: 'left' }}>
         <DeleteAccount onClick={() => setModalDisplay(true)}>
           탈퇴
@@ -220,6 +226,11 @@ const MyInfo = ({
 };
 
 export default MyInfo;
+
+const NotiButton = styled.button`
+  width: 1rem;
+  height: 1rem;
+`;
 
 const MyInfoContainer = styled.article`
   margin: 1.1rem 0;
