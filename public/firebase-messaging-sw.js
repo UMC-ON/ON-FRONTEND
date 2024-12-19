@@ -6,9 +6,10 @@
 // );
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
-import { getMessaging } from 'firebase/messaging/sw';
-import { onBackgroundMessage } from 'firebase/messaging/sw';
+import { getMessaging } from './node_modules/firebase/messaging/sw';
+import { onBackgroundMessage } from './node_modules/firebase/messaging/sw';
+import { initializeApp } from './node_modules/firebase/app';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 self.addEventListener('install', (e) => {
@@ -87,17 +88,17 @@ onBackgroundMessage(messaging, (payload) => {
 // // Firebase Messaging 설정
 // const messaging = firebase.messaging();
 
-// 백그라운드 메시지 처리
-messaging.onBackgroundMessage(messaging, function (payload) {
-  console.log('Received background message:', payload);
+// // 백그라운드 메시지 처리
+// messaging.onBackgroundMessage(messaging, function (payload) {
+//   console.log('Received background message:', payload);
 
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-  };
+//   const notificationTitle = payload.notification.title;
+//   const notificationOptions = {
+//     body: payload.notification.body,
+//   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
+//   self.registration.showNotification(notificationTitle, notificationOptions);
+// });
 
 // firebase.initializeApp(firebaseConfig);
 

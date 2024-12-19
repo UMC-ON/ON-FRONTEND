@@ -71,7 +71,7 @@
       if ('serviceWorker' in navigator) {
         // Register the Service Worker
         navigator.serviceWorker
-          .register('/firebase-messaging-sw.js') // Service Worker 파일 경로
+          .register('/firebase-messaging-sw.js', { type: 'module' }) // Service Worker 파일 경로
           .then((registration) => {
             console.log('Service worker registration succeeded:', registration);
           })
