@@ -47,7 +47,7 @@
       "density": "4.0"
     },
     {
-      "src": "/web-app-manifest-512x512.png",
+      "src": "/public/icon/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
