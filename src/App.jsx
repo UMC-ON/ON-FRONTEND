@@ -56,7 +56,6 @@ import { loadUser, loginFailure, logout } from './redux/actions.jsx';
 import Loading from './components/Loading/Loading.jsx';
 import FindId from './pages/FindPage/FindId.jsx';
 import FindPassword from './pages/FindPage/FindPassword.jsx';
-import { requestNotificationPermissionOnce } from './service/notificationPermission.jsx';
 import Test from './pages/SignUp/Test.jsx';
 import { getData, Interceptor } from './api/Functions.jsx';
 import { GET_USER_INFO } from './api/urls.jsx';
@@ -118,7 +117,6 @@ function App() {
                 dispatch(logout());
                 alert('로그인이 필요합니다.');
                 nav('/signIn');
-                requestNotificationPermissionOnce();
               });
           } else {
             alert('로그인이 필요합니다.');
