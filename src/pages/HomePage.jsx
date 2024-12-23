@@ -284,7 +284,7 @@ function HomePage() {
           setAccompanyData([]);
         }
       } catch (error) {
-        return <ErrorScreen/>
+        return <ErrorScreen />;
         // console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false); // Data fetched, stop showing main loading
@@ -311,7 +311,7 @@ function HomePage() {
           setAccompanyData([]);
         }
       } catch (error) {
-        return <ErrorScreen/>
+        return <ErrorScreen />;
         // console.error('Error fetching data:', error);
         setAccompanyData([]);
       } finally {
@@ -604,6 +604,7 @@ const BigContainer = styled.div`
 const LeftContainer = styled.div`
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 `;
 
 const SubText = styled.div`
@@ -646,6 +647,7 @@ const BigText = styled.div`
   text-overflow: ellipsis;
   display: block;
   max-width: 90%;
+  line-height: 1.2;
 `;
 
 const MiddleText = styled.div`
