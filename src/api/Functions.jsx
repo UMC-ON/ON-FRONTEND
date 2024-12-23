@@ -48,9 +48,9 @@ export const Interceptor = ({ children }) => {
       if (!isSignedOut) {
         console.log(error);
         if (error.config.headers['Authorization']) {
-          //console.log('인증 토큰이 필요한 경우');
+          console.log('인증 토큰이 필요한 경우');
           let prevRequest = error.config;
-          //console.log(error.response.status);
+          console.log(error.response.status);
 
           if (true) {
             //console.log('그러나 인증 토큰이 없거나 유효하지 않은 경우');
