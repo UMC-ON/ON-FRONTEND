@@ -9,7 +9,7 @@ const StoredDiary = ({ diaries }) => {
         <DailyDiary key={index}>
           <Content>{item.content}</Content>
           <Date>{item.diaryDate}</Date>
-          <DDay>{`D${item.writtenDday === 0 ? "-Day" : item.writtenDday < 0 ? ` + ${Math.abs(item.writtenDday)}` : ` - ${item.writtenDday}`}`}</DDay>
+          <DDay>{`D${item.writtenDday === 0 ? "-Day" : item.writtenDday < 0 ? `+${Math.abs(item.writtenDday)}` : `-${item.writtenDday}`}`}</DDay>
         </DailyDiary>
       ))}
     </>
@@ -34,10 +34,10 @@ const DailyDiary = styled.div`
 `;
 
 const DDay = styled.div`
-  width: 42px;
+  width: 45px;
   height: 18px;
   border-radius: 9px;
-  background: ${props => props.theme.blueGra};
+  background: ${props => props.theme.purpleGra};
   color: white;
   font-size: 0.75rem;
   display: flex;
@@ -56,7 +56,7 @@ const Content = styled.p`
 `;
 
 const Date = styled.p`
-  font-size: 11px;
+  font-size: 12px;
   margin: 10px;
   margin-left: 0px;
   font-weight: 600;
