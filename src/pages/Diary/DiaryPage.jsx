@@ -330,7 +330,7 @@ const NewDiary = styled.textarea`
   padding: 20px;
   &::placeholder {
     color: #838383;
-    font-size: 13px;
+    font-size: 0.95rem;
     font-family: 'Inter';
   }
   outline: none;
@@ -341,7 +341,7 @@ const Save = styled.div`
   width: 40px;
   height: 22px;
   border-radius: 13px;
-  background: ${(props) => props.theme.blueGra};
+  background: ${(props) => props.theme.purpleGra};
   color: white;
   font-size: 0.85rem;
   display: flex;
