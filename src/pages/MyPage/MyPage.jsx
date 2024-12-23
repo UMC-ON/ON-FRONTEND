@@ -17,7 +17,9 @@ const MyPage = () => {
   const [error, setError] = useState(null); // 에러를 저장할 상태
   const [isLoading, setIsLoading] = useState(false);
 
-  const [link, setLink] = useState(userInfo.universityUrl);
+  const [link, setLink] = useState(
+    userInfo.universityUrl ? userInfo.universityUrl : '',
+  );
   const [nickname, setNickname] = useState(userInfo.nickname);
 
   const [passwordInput, setPasswordInput] = useState('');

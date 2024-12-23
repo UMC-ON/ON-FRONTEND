@@ -49,7 +49,7 @@ const MyInfo = ({
   };
 
   useEffect(() => {
-    handlePushCondition;
+    handlePushCondition();
   }, []);
 
   const handleToggleChange = () => {
@@ -242,7 +242,7 @@ const MyInfo = ({
               checked={isPushAllowed}
               onChange={handleToggleChange}
             />
-            <span>{isPushAllowed ? '동의' : '비동의'}</span>
+            <span>{isPushAllowed ? '동의' : '미동의'}</span>
           </ToggleSwitch>
         </TitleBox>
       </Wrapper>
@@ -383,7 +383,7 @@ const DuplicateBtn = styled(PurpleBox)`
 const ToggleSwitch = styled.label`
   position: relative;
   display: inline-block;
-  width: 3.5rem;
+  width: 3.8rem;
   height: 1.5rem;
   margin-left: auto;
 
@@ -403,15 +403,15 @@ const ToggleSwitch = styled.label`
     border-radius: 1.5rem;
     transition: 0.4s;
     color: #5c5c5c;
-    font-size: 13px;
+    font-size: 11px;
     line-height: 1.5rem;
-    padding: 0 0.5rem;
+    padding: 0 0.4rem 0 0.8rem;
   }
 
   span::before {
     position: absolute;
     content: '';
-    font-size: 10px;
+    font-size: 11px;
     height: 1.2rem;
     width: 1.2rem;
     left: 0.2rem; /* 슬라이더 초기 위치 */
@@ -425,10 +425,13 @@ const ToggleSwitch = styled.label`
 
   input:checked + span {
     background: ${theme.blueGra};
-    text-align: right;
+    text-align: left;
   }
 
+  input:not(:checked) + span {
+    text-align: right;
+  }
   input:checked + span::before {
-    transform: translateX(2rem);
+    transform: translateX(2.3rem);
   }
 `;

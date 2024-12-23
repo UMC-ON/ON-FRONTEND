@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginSuccess, loginFailure, logout } from '../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
-
+import { requestNotificationPermissionOnce } from '../../service/notificationPermission';
 import { GET_USER_INFO, SIGN_IN_URL } from '../../api/urls';
 import { postData, getData } from '../../api/Functions';
 
@@ -130,6 +130,7 @@ const SignInPage = () => {
             <s.PurpleButton
               type="submit"
               style={{ margin: '2rem 0' }}
+              onClick={() => requestNotificationPermissionOnce()}
             >
               로그인
             </s.PurpleButton>
