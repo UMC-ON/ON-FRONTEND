@@ -6,6 +6,8 @@ import ko from 'date-fns/locale/ko';
 import { getData, postData } from '../api/Functions';
 import { GET_DIARY, POST_DDAY, POST_DIARY } from '../api/urls';
 
+import ErrorScreen from './ErrorScreen';
+
 const DDayCalendarComponent = ({
   selectedDate,
   handleDateChange,
@@ -35,13 +37,11 @@ const DDayCalendarComponent = ({
           'Content-Type': 'application/json',
         },
       );
-      console.log('디데이 저장 완료');
-      console.log(localStorage.getItem('AToken'));
 
       // 서버 전송이 완료되면 새로고침
       window.location.reload();
     } catch (error) {
-      console.error('서버로 dday 전달 중 오류 발생:', error);
+      return <ErrorScreen />
     }
   };
 

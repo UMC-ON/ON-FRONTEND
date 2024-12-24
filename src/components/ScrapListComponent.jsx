@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 
+import ErrorScreen from '../components/ErrorScreen.jsx';
 import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
@@ -12,9 +12,6 @@ import defaultImg from '../assets/images/bannerDefault.svg';
 
 import { showDate } from "../components/Common/InfoExp";
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
-
-import { getData, postData, putData } from '../api/Functions';
-import { GET_SCRAP, POST_SCRAP } from '../api/urls';
 
 const ScrapList = ({ items }) => {
   const [scrappedMarketPostIds, setScrappedMarketPostIds] = useState([]);
@@ -84,7 +81,7 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
       window.location.reload();
   
     } catch (error) {
-      console.error('스크랩 처리 중 오류 발생:', error);
+      return <ErrorScreen />
     }
   };
   

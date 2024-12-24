@@ -18,7 +18,7 @@ import closeIcon from '../assets/images/close_button.svg';
       })
       .catch(err => {
         setCopySuccess('Failed to copy the link');
-        console.error('Failed to copy: ', err);
+        //console.error('Failed to copy: ', err);
       });
     };
 

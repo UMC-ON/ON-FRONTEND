@@ -13,10 +13,12 @@ import {
   GET_MY_MARKET_POST,
 } from '../../api/urls';
 import { getData } from '../../api/Functions';
+import ErrorScreen from '../../components/ErrorScreen';
 
 const MyPost = () => {
   const [currentMode, setCurrentMode] = useState(0);
   const token = localStorage.getItem('AToken');
+  const [error, setError] = useState(false);
 
   const fetchPosts = async ({ pageParam = 0 }) => {
     const url =
@@ -36,13 +38,19 @@ const MyPost = () => {
     return response.data;
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(['myPosts', currentMode], fetchPosts, {
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.content.length < 20) return undefined;
-        return allPages.length; // 다음 페이지 번호 반환
-      },
-    });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery(['myPosts', currentMode], fetchPosts, {
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.content.length < 20) return undefined;
+      return allPages.length; // 다음 페이지 번호 반환
+    },
+  });
 
   const handleModeChange = (mode) => {
     if (currentMode !== mode) {
@@ -72,6 +80,9 @@ const MyPost = () => {
       </s.PostWrapper>
     );
   };
+  if (error || isError) {
+    return <ErrorScreen />;
+  }
 
   return (
     <s.PageLayout
@@ -121,6 +132,7 @@ const MyPost = () => {
               image={data.imageUrls}
               comment={data.commentCount}
               boardType={data.boardType}
+              setError={setError}
             />
           ),
         )
@@ -141,6 +153,7 @@ const MyPost = () => {
               isAnonymousUniv={data.isAnonymousUniv}
               userStatus={data.writerInfo.userStatus}
               boardType={data.boardType}
+              setError={setError}
             />
           ),
         )
@@ -162,6 +175,7 @@ const MyPost = () => {
               nickName={data.nickname}
               age={data.age}
               gender={data.gender}
+              setError={setError}
             />
           ),
         )
@@ -180,6 +194,7 @@ const MyPost = () => {
               image={data.imageUrls}
               location={data.currentLocation}
               price={data.cost}
+              setError={setError}
             />
           ),
         )

@@ -3,7 +3,7 @@ import noImg from '../../assets/images/bannerDefault.svg';
 import { showDate } from '../Common/InfoExp';
 import { useNavigate } from 'react-router-dom';
 import { deleteData } from '../../api/Functions';
-import { DELETE_MY_MARKET_POST } from '../../api/urls';
+//import { DELETE_MY_MARKET_POST } from '../../api/urls';
 import Loading from '../../components/Loading/Loading';
 import { useState } from 'react';
 
@@ -17,6 +17,7 @@ const SingleMyTrade = ({
   user,
   location,
   price,
+  setError,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false); //삭제 누르는 순간 화면에서 바로 삭제를 위해
@@ -24,24 +25,25 @@ const SingleMyTrade = ({
   const navigate = useNavigate();
 
   const deletePost = async () => {
-    setIsLoading(true);
-    try {
-      const response = await deleteData(
-        DELETE_MY_MARKET_POST(postId),
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        {},
-      );
-      console.log(response);
-      if (response.status === 200) {
-        console.log('성공');
-        setIsDeleted(true); // 삭제 상태 업데이트
+    const confirmDelete = window.confirm('해당 글을 삭제하시겠습니까?');
+    if (confirmDelete) {
+      setIsLoading(true);
+      try {
+        const response = await deleteData(
+          DELETE_MY_POST(boardType, postId),
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+        if (response.status === 200) {
+          setIsDeleted(true); // 삭제 상태 업데이트
+        }
+      } catch (error) {
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('delete error:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 

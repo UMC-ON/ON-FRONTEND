@@ -39,7 +39,7 @@ const SchoolAuthPage = () => {
     let value = e.target.value;
 
     setUserInfo({ ...userInfo, [name]: value });
-    console.log(userInfo);
+    //console.log(userInfo);
   };
 
   const handleSubmitBE = async (e) => {
@@ -75,7 +75,7 @@ const SchoolAuthPage = () => {
           },
         );
         if (response) {
-          console.log(response);
+          //console.log(response);
           setLastModalOpen(true);
         }
       } else {
@@ -88,7 +88,7 @@ const SchoolAuthPage = () => {
           },
         );
         if (response) {
-          console.log(response);
+          //console.log(response);
           nav('/');
         }
       }

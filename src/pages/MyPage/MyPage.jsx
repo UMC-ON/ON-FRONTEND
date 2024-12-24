@@ -10,13 +10,16 @@ import { useSelector } from 'react-redux';
 import MyInfoCard from '../../components/MyPage/MyInfoCard';
 import arrow from '../../assets/images/mypage_arrow.svg';
 import MyInfo from '../../components/MyPage/MyInfo';
+import ErrorScreen from '../../components/ErrorScreen';
 
 const MyPage = () => {
   const userInfo = useSelector((state) => state.user.user);
   const [error, setError] = useState(null); // 에러를 저장할 상태
   const [isLoading, setIsLoading] = useState(false);
 
-  const [link, setLink] = useState(userInfo.universityUrl);
+  const [link, setLink] = useState(
+    userInfo.universityUrl ? userInfo.universityUrl : '',
+  );
   const [nickname, setNickname] = useState(userInfo.nickname);
 
   const [passwordInput, setPasswordInput] = useState('');
@@ -36,89 +39,77 @@ const MyPage = () => {
         setIsPasswordConfirmed(true);
       }
     } catch (error) {
-      console.error('error:', error);
-      alert('다시 시도해주세요.');
+      setError(true);
     } finally {
       setIsLoading(false);
     }
   };
 
-  //전화번호 포멧팅
-  function formatPhoneNumber(phoneNumber) {
-    // 전화번호 문자열이 11자리일 경우에만 포맷팅 진행
-    if (phoneNumber.length === 11 && /^010\d{8}$/.test(phoneNumber)) {
-      return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-    } else {
-      return phoneNumber;
-    }
-  }
-
   if (isLoading) {
     return <Loading />;
   }
-  if (!userInfo) {
-    return <>오류</>;
+  if (!userInfo || error) {
+    return <ErrorScreen />;
   } else {
     return (
-      <>
-        <s.MyPageLayout>
-          <PageHeader pageName="마이페이지" />
+      <s.MyPageLayout>
+        <PageHeader pageName="마이페이지" />
 
-          <MyInfoCard
-            nickname={nickname}
-            country={userInfo.country ? userInfo.country : ''}
-            university={
-              userInfo.dispatchedUniversity ? userInfo.dispatchedUniversity : ''
-            }
-            dispatchType={userInfo.dispatchType ? userInfo.dispatchType : ''}
-            userStatus={userInfo.userStatus ? userInfo.userStatus : ''}
-            isPassword={isPasswordConfirmed}
-            setIsLoading={setIsLoading}
-          />
-          {userInfo.userStatus !== 'TEMPORARY' ? (
-            <NavLink
-              to="/mypage/mypost"
-              style={{ width: '100%' }}
-            >
-              <s.MyPosts>
-                <span>내 글 보기</span>
-                <img src={arrow} />
-              </s.MyPosts>
-            </NavLink>
-          ) : (
-            <s.DisabledMyPosts>
+        <MyInfoCard
+          nickname={nickname}
+          country={userInfo.country ? userInfo.country : ''}
+          university={
+            userInfo.dispatchedUniversity ? userInfo.dispatchedUniversity : ''
+          }
+          dispatchType={userInfo.dispatchType ? userInfo.dispatchType : ''}
+          userStatus={userInfo.userStatus ? userInfo.userStatus : ''}
+          isPassword={isPasswordConfirmed}
+          setIsLoading={setIsLoading}
+          setError={setError}
+        />
+        {userInfo.userStatus !== 'TEMPORARY' ? (
+          <NavLink
+            to="/mypage/mypost"
+            style={{ width: '100%' }}
+          >
+            <s.MyPosts>
               <span>내 글 보기</span>
               <img src={arrow} />
-            </s.DisabledMyPosts>
-          )}
+            </s.MyPosts>
+          </NavLink>
+        ) : (
+          <s.DisabledMyPosts>
+            <span>내 글 보기</span>
+            <img src={arrow} />
+          </s.DisabledMyPosts>
+        )}
 
-          <s.MyInfoTitle>내 정보 확인</s.MyInfoTitle>
-          {!isPasswordConfirmed ? (
-            <s.PasswordContainer>
-              <s.PasswordTextInput
-                type="password"
-                placeholder="개인정보 보호를 위해 비밀번호를 입력해 주세요."
-                onChange={(e) => setPasswordInput(e.target.value)}
-              />
-              <s.ConfirmButton onClick={() => handelPassword(passwordInput)}>
-                확인
-              </s.ConfirmButton>
-            </s.PasswordContainer>
-          ) : (
-            <MyInfo
-              loginId={userInfo.loginId ? userInfo.loginId : ''}
-              name={userInfo.name ? userInfo.name : ''}
-              phone={userInfo.phone ? userInfo.phone : ''}
-              link={link}
-              setLink={setLink}
-              nickname={nickname}
-              setIsLoading={setIsLoading}
-              setNickname={setNickname}
-              userStatus={userInfo.userStatus}
+        <s.MyInfoTitle>내 정보 확인</s.MyInfoTitle>
+        {!isPasswordConfirmed ? (
+          <s.PasswordContainer>
+            <s.PasswordTextInput
+              type="password"
+              placeholder="개인정보 보호를 위해 비밀번호를 입력해 주세요."
+              onChange={(e) => setPasswordInput(e.target.value)}
             />
-          )}
-        </s.MyPageLayout>
-      </>
+            <s.ConfirmButton onClick={() => handelPassword(passwordInput)}>
+              확인
+            </s.ConfirmButton>
+          </s.PasswordContainer>
+        ) : (
+          <MyInfo
+            loginId={userInfo.loginId ? userInfo.loginId : ''}
+            name={userInfo.name ? userInfo.name : ''}
+            phone={userInfo.phone ? userInfo.phone : ''}
+            link={link}
+            setLink={setLink}
+            nickname={userInfo.nickname ? userInfo.nickname : ''}
+            setIsLoading={setIsLoading}
+            setNickname={setNickname}
+            userStatus={userInfo.userStatus ? userInfo.userStatus : ''}
+          />
+        )}
+      </s.MyPageLayout>
     );
   }
 };

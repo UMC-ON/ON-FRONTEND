@@ -9,6 +9,7 @@ import theme from '../../styles/theme';
 import { putData } from '../../api/Functions';
 import { PUT_NICKNAME, PUT_UNIV, CHECK_DUPLICATE_NICK } from '../../api/urls';
 import validImg from '../../assets/images/validNickName.svg';
+import { handleAllowNotification } from '../../service/notificationPermission';
 
 const MyInfo = ({
   loginId,
@@ -29,6 +30,36 @@ const MyInfo = ({
 
   const [modalDisplay, setModalDisplay] = useState(false); // 모달 상태 관리
   const [duplicateCheck, setDuplicateCheck] = useState(false);
+  const [isPushAllowed, setIsPushAllowed] = useState(false);
+
+  const handlePushCondition = () => {
+    if ('Notification' in window) {
+      const permission = Notification.permission;
+
+      if (permission === 'granted') {
+        setIsPushAllowed(true);
+      } else if (permission === 'denied') {
+        setIsPushAllowed(false);
+      } else {
+        setIsPushAllowed(false);
+      }
+    } else {
+      //console.log('이 브라우저에서는 알림 기능을 지원하지 않습니다.');
+    }
+  };
+
+  useEffect(() => {
+    handlePushCondition();
+  }, []);
+
+  const handleToggleChange = () => {
+    if (isPushAllowed) {
+      return;
+    } else {
+      handleAllowNotification();
+      handlePushCondition();
+    }
+  };
 
   function formatPhoneNumber(phoneNumber) {
     // 전화번호 문자열이 11자리일 경우에만 포맷팅 진행
@@ -38,11 +69,6 @@ const MyInfo = ({
       return phoneNumber;
     }
   }
-
-  useEffect(() => {
-    console.log(nicknameInput);
-    console.log(nickname);
-  }, [nickname]);
 
   //닉네임 중복 체크
   useEffect(() => {
@@ -68,7 +94,6 @@ const MyInfo = ({
           }
         })
         .catch((error) => {
-          console.error('Error:', error);
           alert('닉네임 중복 확인 오류.');
         });
     }
@@ -91,7 +116,6 @@ const MyInfo = ({
         setEditNickname(false);
       }
     } catch (error) {
-      console.log('Error:', error);
       alert('닉네임 수정 오류.');
     } finally {
       setIsLoading(false);
@@ -111,12 +135,10 @@ const MyInfo = ({
           'Content-Type': 'text/plain', // 헤더 명시
         });
         if (response.status === 200) {
-          console.log(response);
           setLink(data);
         }
       }
     } catch (error) {
-      console.log('Error:', error);
       alert('링크 수정 오류. 올바른 주소 형식인가요?');
     } finally {
       setIsLoading(false);
@@ -158,7 +180,7 @@ const MyInfo = ({
         </TitleBox>
         {!editLink ? (
           <TextInput
-            value={link}
+            value={link ? link : ''}
             disabled={true}
           />
         ) : (
@@ -168,7 +190,6 @@ const MyInfo = ({
           />
         )}
       </Wrapper>
-      {/* ==============닉네임================ */}
       <Wrapper>
         <TitleBox>
           닉네임
@@ -212,6 +233,20 @@ const MyInfo = ({
         )}
       </Wrapper>
 
+      <Wrapper>
+        <TitleBox>
+          알림 수신 동의
+          <ToggleSwitch>
+            <input
+              type="checkbox"
+              checked={isPushAllowed}
+              onChange={handleToggleChange}
+            />
+            <span>{isPushAllowed ? '동의' : '미동의'}</span>
+          </ToggleSwitch>
+        </TitleBox>
+      </Wrapper>
+
       <Wrapper style={{ display: 'inline-block', textAlign: 'left' }}>
         <DeleteAccount onClick={() => setModalDisplay(true)}>
           탈퇴
@@ -222,6 +257,7 @@ const MyInfo = ({
         <DeleteAccountModal
           modalDisplay={modalDisplay}
           onClose={() => setModalDisplay(false)}
+          setIsLoading={setIsLoading}
         />
       )}
     </MyInfoContainer>
@@ -342,4 +378,60 @@ const DuplicateBtn = styled(PurpleBox)`
   right: 0;
   top: 0;
   padding: 0.27rem 0.4rem;
+`;
+
+const ToggleSwitch = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 3.8rem;
+  height: 1.5rem;
+  margin-left: auto;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 1.5rem;
+    transition: 0.4s;
+    color: #5c5c5c;
+    font-size: 11px;
+    line-height: 1.5rem;
+    padding: 0 0.4rem 0 0.8rem;
+  }
+
+  span::before {
+    position: absolute;
+    content: '';
+    font-size: 11px;
+    height: 1.2rem;
+    width: 1.2rem;
+    left: 0.2rem; /* 슬라이더 초기 위치 */
+    bottom: 0.15rem;
+    background-color: white; /* 슬라이더 색상 */
+    border-radius: 50%; /* 원형 버튼 */
+    transition: 0.4s;
+    color: black;
+    box-shadow: 0px 0px 10px -5px;
+  }
+
+  input:checked + span {
+    background: ${theme.blueGra};
+    text-align: left;
+  }
+
+  input:not(:checked) + span {
+    text-align: right;
+  }
+  input:checked + span::before {
+    transform: translateX(2.3rem);
+  }
 `;

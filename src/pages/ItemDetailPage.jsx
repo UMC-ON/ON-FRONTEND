@@ -10,6 +10,7 @@ import ItemDetailPageHeader from '../components/ItemDetailPageHeader';
 import ItemList from '../components/ItemList';
 import SellChatModal from '../components/SellChatModal';
 import SecondModal from '../components/SecondModal';
+import ErrorScreen from '../components/ErrorScreen';
 
 import compas from '../assets/images/compasIcon.svg';
 import icon from '../assets/images/profileIcon.svg';
@@ -18,7 +19,6 @@ import defaultImg from '../assets/images/bannerDefault.svg';
 import {
   GET_SPECIFIC_ITEM,
   GET_NEARBY_ITEM,
-  GET_MARKET_ROOMID,
   GET_ROOM_ID,
 } from '../api/urls';
 import { getData, postData } from '../api/Functions';
@@ -44,19 +44,16 @@ function ItemDetailPage() {
   const [items, setItems] = useState([]);
   const [nearitems, setNearitems] = useState([]);
   const [receiverId, setReceiverId] = useState(null);
-  //const [roomId, setRoomId] = useState(null);
 
   const [modalImage, setModalImage] = useState(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-  //const [hasBottomTab, setHasBottomTab] = useState(true)
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
-  //const [infoData, setInfoData] = useState([]);
   const [nickname, setNickname] = useState('');
+  const [dealStatus, setDealStatus] = useState(null);
 
   const openChatModal = () => {
     if (userInfo.country != null) {
-      console.log('First modal opened');
       setIsChatModalOpen(true);
     } else {
       setIsSecondModalOpen(true);
@@ -64,17 +61,10 @@ function ItemDetailPage() {
   };
 
   const closeChatModal = () => {
-    console.log('First modal closed');
     setIsChatModalOpen(false);
   };
 
-  const openSecondModal = () => {
-    console.log('Second modal opened');
-    setIsSecondModalOpen(true);
-  };
-
   const closeSecondModal = () => {
-    console.log('Second modal closed');
     setIsSecondModalOpen(false);
   };
 
@@ -109,16 +99,14 @@ function ItemDetailPage() {
       );
 
       if (response) {
-        console.log(response.data);
         const roomId = response.data.roomId;
         const senderName = userInfo.nickname;
-        console.log('Application successful:', roomId);
         navigate(`/chat/trade/${roomId}`, { state: { roomId, senderName } });
       } else {
-        console.error('Application failed');
+        return <ErrorScreen />
       }
     } catch (error) {
-      console.error('Error applying for market chat:', error);
+      return <ErrorScreen />
     }
   };
 
@@ -131,10 +119,10 @@ function ItemDetailPage() {
         if (response) {
           setItems([response.data]);
           setReceiverId(response.data.userId);
-          console.log(response.data);
+          setDealStatus(response.data.dealStatus);
         }
       } catch (error) {
-        console.error('물품 상세 페이지 정보를 불러오는 중 오류 발생:', error);
+        return <ErrorScreen />
       }
     };
 
@@ -149,10 +137,9 @@ function ItemDetailPage() {
         });
         if (response) {
           setNearitems(response.data);
-          console.log(response.data);
         }
       } catch (error) {
-        console.error('근처 물품 정보를 불러오는 중 오류 발생:', error);
+        return <ErrorScreen />
       }
     };
 
@@ -161,42 +148,11 @@ function ItemDetailPage() {
 
   useEffect(() => {
     if (items.length > 0) {
-      setNickname(items[0].nickname); // 첫 번째 아이템의 닉네임 설정
+      setNickname(items[0].nickname);
     }
   }, [items]);
 
-  // const handleChatButtonClick = async () => {
-  //   closeChatModal();
-  //   if (!receiverId || !marketPostId) {
-  //     console.error('Receiver ID or Market Post ID is missing.');
-  //     return;
-  //   }
 
-  //   try {
-  //     const response = await postData(
-  //       GET_MARKET_ROOMID,
-  //       {
-  //         chatType: "MARKET",
-  //         receiverId: receiverId,
-  //         postId: marketPostId,
-  //       },
-  //       {
-  //         Authorization: `Bearer ${localStorage.getItem('AToken')}`
-  //       }
-  //     );
-
-  //     if (response?.data?.inSuccess) {
-  //       const roomId = response.data.result.roomId;
-  //       const nickname = userInfo?.nickname || 'Unknown User';
-  //       setRoomId(roomId);
-  //       navigate(`/chat/trade/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
-  //     } else {
-  //       console.error('Failed to create chat room:', response?.data?.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error sending chat request:', error);
-  //   }
-  // };
 
   return (
     <>
@@ -284,9 +240,15 @@ function ItemDetailPage() {
 
       {userInfo.id !== receiverId && (
         <BottomTabLayout>
-          <ChatButton onClick={openChatModal}>채팅으로 거래하기</ChatButton>
+            {nickname.includes('탈퇴사용자')
+              ? <GreyButton>탈퇴한 유저에게는 신청할 수 없어요</GreyButton>
+              : (dealStatus === 'COMPLETE') ? <GreyButton>거래가 완료된 판매글이에요.</GreyButton> :
+              <ChatButton onClick={openChatModal}>
+                채팅으로 거래하기
+              </ChatButton>}
         </BottomTabLayout>
       )}
+
       {isChatModalOpen && (
         <SellChatModal
           closeModal={closeChatModal}
@@ -410,7 +372,26 @@ const ChatButton = styled.div`
   font-weight: 600;
   font-size: 16px;
   color: white;
+  cursor: pointer;
 `;
+
+const GreyButton = styled.button`
+  cursor: not-allowed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 10px;
+  width: 22em;
+  height: 3em;
+  background-color: #d9d9d9;
+  color: white;
+  text-align: center;
+  font-family: Inter;
+  z-index: 2;
+`;
+
 
 const BottomTabLayout = styled.div`
   width: 100%;

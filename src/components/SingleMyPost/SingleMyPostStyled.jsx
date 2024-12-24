@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export const PostWrapper = styled.div`
-  height: 8.68rem;
+  height: auto;
+  min-height: 8.5rem;
   width: 100%;
   border: 0.5px solid transparent;
   border-image: linear-gradient(90deg, #ffffff 0%, #d9d9d9 50%, #fff 100%);
@@ -9,11 +10,12 @@ export const PostWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  justify-content: center;
+  justify-content: space-between;
+  pading-bottom: 0.5rem;
 `;
 export const Delete = styled.span`
   position: absolute;
-  bottom: 0.31rem;
+  top: 0.8rem;
   right: 2rem;
   color: #7a7a7a;
   font-family: Inter;
@@ -63,12 +65,14 @@ export const Title = styled.span`
   font-weight: 600;
   line-height: normal;
   letter-spacing: 0.0175rem;
+  margin-right: 45px;
+  padding-top: 12px;
 `;
 
 export const Time = styled.span`
   color: #7a7a7a;
   font-family: Inter;
-  font-size: 0.625rem;
+  font-size: 11px;
   font-style: normal;
   font-weight: 400;
   text-wrap: nowrap;
@@ -77,22 +81,22 @@ export const Time = styled.span`
 export const ContentText = styled.span`
   grid-area: content;
   width: 100%;
-  height: 3.375rem;
   color: #838383;
   font-family: Inter;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 150%; /* 1.125rem */
+  line-height: 1.125rem;
   letter-spacing: 0.015rem;
   justify-self: start;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
   text-align: left;
+  margin-bottom: 0, 5rem;
 `;
 
 // export const ContentImg = styled.div`
@@ -103,10 +107,12 @@ export const ContentText = styled.span`
 export const ContentImg = styled.img`
   grid-area: img;
   display: inline;
-  width: 5rem;
-  height: 5rem;
+  width: 4.6rem;
+  height: 4.6rem;
   align-self: start;
   object-fit: cover;
+  border-radius: 5px;
+  transform: translateY(-3px);
 `;
 
 export const Info = styled.div`

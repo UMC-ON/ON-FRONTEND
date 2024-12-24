@@ -19,6 +19,7 @@ const SingleMyAccompany = ({
   nickName,
   age,
   gender,
+  setError,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false); //삭제 누르는 순간 화면에서 바로 삭제를 위해
@@ -40,24 +41,25 @@ const SingleMyAccompany = ({
 
   const navigate = useNavigate();
   const deletePost = async () => {
-    setIsLoading(true);
-    try {
-      const response = await deleteData(
-        DELETE_MY_ACCOMPANY_POST(postId),
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        {},
-      );
-      console.log(response);
-      if (response.status === 200) {
-        console.log('성공');
-        setIsDeleted(true); // 삭제 상태 업데이트
+    const confirmDelete = window.confirm('해당 글을 삭제하시겠습니까?');
+    if (confirmDelete) {
+      setIsLoading(true);
+      try {
+        const response = await deleteData(
+          DELETE_MY_POST(boardType, postId),
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+        if (response.status === 200) {
+          setIsDeleted(true); // 삭제 상태 업데이트
+        }
+      } catch (error) {
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('delete error:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -100,7 +102,6 @@ const SingleMyAccompany = ({
             </span>
           </s.Location>
         </s.TripInfo>
-        {console.log(locationNum)}
         <s.ContentText>{content}</s.ContentText>
         <s.Info>
           <s.ProfileSvg />
@@ -117,7 +118,7 @@ const SingleMyAccompany = ({
           }}
         >
           삭제
-        </s.Delete>{' '}
+        </s.Delete>
       </s.PostContainer>
     </s.PostWrapper>
   );

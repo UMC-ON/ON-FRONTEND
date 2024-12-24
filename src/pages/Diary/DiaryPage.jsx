@@ -7,13 +7,14 @@ import DailyDiary from '../../components/DailyDiary';
 import DDayCalendar from '../../components/DDayCalendar.jsx';
 import DailyDiaryCalendar from '../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx';
 import DiaryAlertModal from '../../components/DiaryAlertModal.jsx';
+import ErrorScreen from '../../components/ErrorScreen.jsx';
 
 import styled from 'styled-components';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DiaryPage.css';
-import ko from 'date-fns/locale/ko';
+//import ko from 'date-fns/locale/ko';
 import closeIcon from '../../assets/images/close_button.svg';
 import plus_button from '../../assets/images/addButton.svg';
 import { getData, postData } from '../../api/Functions';
@@ -34,7 +35,6 @@ const Diary = () => {
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
-  console.log(userInfo);
 
   useEffect(() => {
     const fetchDiaries = async () => {
@@ -45,11 +45,8 @@ const Diary = () => {
         setDiaries(response?.data?.diaryList);
         setDday(response?.data?.dday);
         setDateList(response?.data?.dateList);
-        console.log(response?.data?.diaryList);
-        console.log(userInfo);
-        console.log(response?.data?.dday);
       } catch (error) {
-        console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
+        return <ErrorScreen />
       }
     };
     fetchDiaries();
@@ -60,17 +57,6 @@ const Diary = () => {
     setCalendarOpen(false);
   };
 
-  const getDdayFromServer = async () => {
-    try {
-      const response = await getData(GET_DIARY, {
-        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-      });
-      return response?.data?.result.date || null; // 서버에서 dday 값을 반환
-    } catch (error) {
-      console.error('서버에서 dday 가져오는 중 오류 발생:', error);
-      return null;
-    }
-  };
 
   const handleDateChange2 = (date) => {
     setSelectedDate2(date);
@@ -115,13 +101,12 @@ const Diary = () => {
       );
 
       if (response) {
-        console.log('Diary saved:', response.data);
         window.location.reload();
       } else {
-        console.error('Error saving diary: no response.');
+        return <ErrorScreen />
       }
     } catch (error) {
-      console.error('Error saving diary:', error);
+      return <ErrorScreen />
     }
   };
 
@@ -161,7 +146,6 @@ const Diary = () => {
         )}
         <CalendarContainer>
           <DiaryCalendar
-            diaries={diaries}
             dateList={dateList}
           />
         </CalendarContainer>
@@ -196,7 +180,7 @@ const Diary = () => {
               value={newDiaryContent}
               onChange={(e) => setNewDiaryContent(e.target.value)} // 사용자가 입력한 내용을 상태에 저장
             />
-            <Save onClick={handleSaveDiary}>저장하기</Save>
+            <Save onClick={handleSaveDiary}>저장</Save>
           </NewDiaryContainer>
         )}
 
@@ -302,7 +286,7 @@ const CalendarContainer = styled.div`
 `;
 
 const AddDiary = styled.div`
-  width: 30%;
+  width: 33%;
   height: 5vh;
   margin-left: 5%;
   margin-top: 1em;
@@ -313,7 +297,7 @@ const AddDiary = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.8em;
+  font-size: 0.9em;
   cursor: pointer; // 클릭 가능하도록 커서 변경
 `;
 
@@ -332,9 +316,9 @@ const NewDiaryContainer = styled.div`
 
 const NewDiary = styled.textarea`
   font-family: 'Inter';
-  color: #838383;
+  color: #5c5c5c;
   background-color: white;
-  font-size: 14px;
+  font-size: 0.95rem;
   width: 89%;
   height: 10vh;
   border-radius: 15px;
@@ -346,7 +330,7 @@ const NewDiary = styled.textarea`
   padding: 20px;
   &::placeholder {
     color: #838383;
-    font-size: 13px;
+    font-size: 0.95rem;
     font-family: 'Inter';
   }
   outline: none;
@@ -354,12 +338,12 @@ const NewDiary = styled.textarea`
 `;
 
 const Save = styled.div`
-  width: 70px;
-  height: 20px;
-  border-radius: 9px;
-  background: ${(props) => props.theme.blueGra};
+  width: 40px;
+  height: 22px;
+  border-radius: 13px;
+  background: ${(props) => props.theme.purpleGra};
   color: white;
-  font-size: 12px;
+  font-size: 0.85rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -388,6 +372,10 @@ const BottomTabLayout = styled.div`
   }
   @media (max-width: 360px) {
     height: 60%;
+  }
+  
+  @media (min-width: 375px) and (max-width: 414px) {
+    height: 53%;
   }
 `;
 

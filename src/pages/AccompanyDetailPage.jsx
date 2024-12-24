@@ -2,15 +2,15 @@ import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
-import detailImg from '../assets/images/accompany_img.svg';
-import profileImg from '../assets/images/englandIcon.svg';
+//import detailImg from '../assets/images/accompany_img.svg';
+//import profileImg from '../assets/images/englandIcon.svg';
 import coordinateIcon from '../assets/images/coordinate_icon.svg';
 import marketImg2 from '../assets/images/bannerDefault.svg';
 
 import calendarIcon from '../assets/images/black_calendar_icon.svg';
 import placeIcon from '../assets/images/black_place_icon.svg';
 import plusIcon from '../assets/images/black_plus_icon.svg';
-import marketImg from '../assets/images/borough_market.svg';
+//import marketImg from '../assets/images/borough_market.svg';
 
 import CardAccompanyList from '../components/CardAccompanyList';
 import AccompanyHeader from '../components/AccompanyHeader';
@@ -33,6 +33,7 @@ import {
   GET_ROOM_ID,
   APPLY_ACCOMPANY,
 } from '../api/urls';
+import ErrorScreen from '../components/ErrorScreen';
 
 function AccompanyDetailPage() {
   const location = useLocation();
@@ -60,7 +61,7 @@ function AccompanyDetailPage() {
 
   const openFirstModal = () => {
     if (userInfo.country != null) {
-      console.log('First modal opened');
+      // console.log('First modal opened');
       setIsFirstModalOpen(true);
     } else {
       setIsSecondModalOpen(true);
@@ -68,37 +69,37 @@ function AccompanyDetailPage() {
   };
 
   const closeFirstModal = () => {
-    console.log('First modal closed');
+    // console.log('First modal closed');
     setIsFirstModalOpen(false);
   };
 
   const openSecondModal = () => {
-    console.log('Second modal opened');
+    // console.log('Second modal opened');
     setIsSecondModalOpen(true);
   };
 
   const closeSecondModal = () => {
-    console.log('Second modal closed');
+    // console.log('Second modal closed');
     setIsSecondModalOpen(false);
   };
 
   const openReportModal = () => {
-    console.log('Report modal opened');
+    // console.log('Report modal opened');
     setIsReportModalOpen(true);
   };
 
   const closeReportModal = () => {
-    console.log('Report modal closed');
+    // console.log('Report modal closed');
     setIsReportModalOpen(false);
   };
 
   const openShareModal = () => {
-    console.log('Share modal opened');
+    // console.log('Share modal opened');
     setIsShareModalOpen(true);
   };
 
   const closeShareModal = () => {
-    console.log('Share modal closed');
+    // console.log('Share modal closed');
     setIsShareModalOpen(false);
   };
 
@@ -120,8 +121,8 @@ function AccompanyDetailPage() {
 
   const applyData = async () => {
     try {
-      console.log('userId: ');
-      console.log(infoData[0].userId);
+      // console.log('userId: ');
+      // console.log(infoData[0].userId);
       // console.log(typeof infoData[0].userId);
       // console.log("postId: ");
       // console.log(postId);
@@ -149,18 +150,20 @@ function AccompanyDetailPage() {
         // console.log(response2.data);
 
         const roomId = response.data.roomId;
-        console.log('roomId: ');
-        console.log(response.data);
+        // console.log('roomId: ');
+        // console.log(response.data);
         const senderName = infoData[0].nickname;
-        console.log('Application successful:', roomId);
+        // console.log('Application successful:', roomId);
         navigate(`/chat/accompany/${roomId}`, {
           state: { roomId, senderName },
         });
       } else {
-        console.error('Application failed');
+        return <ErrorScreen />;
+        // console.error('Application failed');
       }
     } catch (error) {
-      console.error('Error applying for accompany:', error);
+      return <ErrorScreen />;
+      // console.error('Error applying for accompany:', error);
     }
   };
 
@@ -174,15 +177,15 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setInfoData(info_data.data);
-        console.log('info data here');
-        console.log(info_data.data);
+        // console.log('info data here');
+        // console.log(info_data.data);
         //
 
         const user_data = await getData(GET_USER_INFO, {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         // console.log(user_data.data.result.id);
-        console.log('user id');
+        // console.log('user id');
         setUserId(user_data.data.id);
 
         // console.log(info_data.data[0].nickname);
@@ -192,9 +195,10 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         });
         setAccompanyData(accompany_data.data);
-        console.log(accompanyData);
+        // console.log(accompanyData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        return <ErrorScreen />;
+        // console.error('Error fetching data:', error);
       } finally {
         // insert code here
         setTimeout(() => {
@@ -374,7 +378,11 @@ function AccompanyDetailPage() {
 
             {infoData[0].userId !== userId ? (
               <BottomTabLayout>
-                {card.recruitCompletd ? (
+                {infoData[0].nickname.includes("탈퇴사용자") ? (
+                  <GreyButton $width="500px">
+                    탈퇴한 유저에게는 신청할 수 없어요
+                  </GreyButton>
+                ) : card.recruitCompleted ? (
                   <GreyButton $width="500px">
                     모집이 완료된 동행 글이에요.
                   </GreyButton>
@@ -480,7 +488,7 @@ const GradientOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(to top, #363636, transparent);
-  opacity: 0.7;
+  opacity: 0.1;
 `;
 
 const ProfileTextContainer = styled.div`

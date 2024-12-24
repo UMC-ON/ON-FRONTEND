@@ -19,6 +19,7 @@ import { getData } from '../../api/Functions.jsx';
 import { GET_FILTERED_POST_IN, GET_POST_OF } from '../../api/urls.jsx';
 import { throttle } from 'rxjs';
 import { loadUser, logout } from '../../redux/actions.jsx';
+import ErrorScreen from '../../components/ErrorScreen.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
@@ -29,6 +30,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
   const [showCountry, setShowCountry] = useState(false); //모달창
   const [country, setCountry] = useState(null); //선택된 국가
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [postList, setPostList] = useState(null);
   const totalPage = useRef(0);
   const currentPage = useRef(0);
@@ -67,18 +69,22 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
       },
       { page: currentPage.current, size: 5, sort: 'DESC' },
-    );
-    if (response) {
-      totalPage.current = response.data.totalPages;
-      if (currentPage.current > 0) {
-        setPostList((postList) => [...postList, ...response.data.content]);
-        console.log('내용 존재');
-      } else {
-        setPostList(response.data.content);
-        console.log('이거 실행');
-      }
-    }
-    return response;
+    )
+      .then((response) => {
+        totalPage.current = response.data.totalPages;
+        if (currentPage.current > 0) {
+          setPostList((postList) => [...postList, ...response.data.content]);
+          //console.log('내용 존재');
+        } else {
+          setPostList(response.data.content);
+          //console.log('이거 실행');
+        }
+        setIsError(false);
+        return response;
+      })
+      .catch((error) => {
+        setIsError(true);
+      });
   };
   const fetchFilteredData = async () => {
     if (currentPage.current == 0) {
@@ -97,17 +103,17 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
       totalPage.current = response.data.totalPages;
       if (currentPage.current > 0) {
         setPostList((postList) => [...postList, ...response.data.content]);
-        console.log('내용 존재');
+        //console.log('내용 존재');
       } else {
         setPostList(response.data.content);
-        console.log('이거 실행');
+        //console.log('이거 실행');
       }
     }
   };
 
   useEffect(() => {
-    console.log('유저인포');
-    console.log(userInfo);
+    //console.log('유저인포');
+    //console.log(userInfo);
 
     if (country === null) {
       fetchData();
@@ -129,15 +135,12 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         currentPage.current < totalPage.current
       ) {
         currentPage.current++;
-        console.log(currentPage.current);
-        console.log(totalPage.current);
-        console.log(isLoading);
         if (country === null) {
           await fetchData();
         } else {
           await fetchFilteredData();
         }
-        console.log(isLoading);
+
         newDataLoading.current = false;
       }
     }
@@ -160,6 +163,9 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
 
   if (isLoading) {
     return <Loading />;
+  }
+  if (isError) {
+    return <ErrorScreen />;
   }
 
   return (
@@ -195,7 +201,6 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         <s.PostListSection>
           {postList && postList.length > 0 ? (
             postList.map((post) => {
-              console.log(post);
               return (
                 <CommunityPost
                   key={post.postId}

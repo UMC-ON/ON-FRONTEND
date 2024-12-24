@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getData, postData } from '../../api/Functions.jsx';
+import { useSwipeable } from 'react-swipeable';
 import {
   GET_COMMENT_OF,
   GET_POST_DETAIL,
@@ -21,26 +22,28 @@ import {
   WRITE_REPLY_ON,
 } from '../../api/urls.jsx';
 import Loading from '../../components/Loading/Loading.jsx';
-
+import ErrorScreen from '../../components/ErrorScreen.jsx';
 import Reply from '../../components/Comment/Reply.jsx';
 
 const DetailPage = ({ color1, color2, boardType }) => {
   const titleColor = boardType === 'INFO' ? 'rgb(191, 216, 229)' : '#CBCDE9';
   let logInInfo = useSelector((state) => state.user);
   let userInfo = logInInfo.user;
-  console.log(userInfo);
+  //console.log(userInfo);
   const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
   const [commentCount, setCommentCount] = useState(0);
 
   const [currentPost, setCurrentPost] = useState();
   const [commentList, setCommentList] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const openedImg = useRef(null);
   const currentPage = useRef(0);
   const totalPage = useRef(0);
   const newCommentLoading = useRef(0);
   const myCommentId = useRef(null);
+  const nav = useNavigate();
 
   const fetchCommentData = async (order = 'DESC') => {
     if (currentPage.current === 0) {
@@ -58,9 +61,8 @@ const DetailPage = ({ color1, color2, boardType }) => {
       { page: currentPage.current, size: 20, sort: 'ASC' },
     );
     if (response) {
-      console.log('아아아아ㅏ아아아아아');
       totalPage.current = response.data.totalPages;
-      console.log(totalPage.current);
+      //console.log(totalPage.current);
       if (currentPage.current > 0) {
         // 추가 댓글 로딩 시 기존 댓글 + 새 댓글
         setCommentList((prevCommentList) => [
@@ -99,6 +101,10 @@ const DetailPage = ({ color1, color2, boardType }) => {
           setCommentCount(commentResponse.data.totalElements);
         } catch (error) {
           console.error('Error fetching data:', error);
+          console.log(currentPost_id);
+          if (!isLoading) {
+            setIsError(true);
+          }
         } finally {
           setLoading(false); // 성공적이든 실패든 최종적으로 로딩을 끝내도록
         }
@@ -129,25 +135,24 @@ const DetailPage = ({ color1, color2, boardType }) => {
       window.scrollY + document.documentElement.clientHeight >
       document.documentElement.scrollHeight - 50
     ) {
-      console.log('api 호출');
-      console.log(
-        isLoading,
-        newCommentLoading.current,
-        currentPage.current,
-        totalPage.current,
-      );
       if (
         !isLoading &&
         !newCommentLoading.current &&
         currentPage.current < totalPage.current - 1
       ) {
-        console.log('찐api호출');
+        //console.log('찐api호출');
         currentPage.current++;
         await fetchCommentData();
         newCommentLoading.current = false;
       }
     }
   };
+
+  const handlers = useSwipeable({
+    preventScrollOnSwipe: true,
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true,
+  });
 
   useEffect(() => {
     //setLoading(true)
@@ -236,9 +241,17 @@ const DetailPage = ({ color1, color2, boardType }) => {
     fetchCommentData();
     setLoading(false);
   };
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
+  };
 
   if (isLoading) {
     return <Loading />;
+  }
+  if (isError) {
+    return <ErrorScreen />;
   }
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
@@ -276,20 +289,38 @@ const DetailPage = ({ color1, color2, boardType }) => {
           </s.Title>
           <s.Content>
             {currentPost.content}
-            <s.ImgSection>
-              {currentPost.imageUrls
-                ? currentPost.imageUrls.map((img, index) => (
+            {currentPost.imageUrls ? (
+              <s.ImgSection isMobile={isMobile()}>
+                {currentPost.imageUrls.length > 1 ? (
+                  currentPost.imageUrls.map((img, index) => (
                     <s.ContentImg
                       src={img}
                       key={index}
-                      onClick={(e) => {
-                        openedImg.current = e.target.src;
-                        setImageModalOpen(true);
+                      onClick={() => {
+                        nav('./images', {
+                          state: {
+                            list: currentPost.imageUrls,
+                            clickedIndex: index,
+                          },
+                        });
                       }}
                     />
                   ))
-                : null}
-            </s.ImgSection>
+                ) : (
+                  <OneBigImg
+                    src={currentPost.imageUrls[0]}
+                    onClick={() => {
+                      nav('./images', {
+                        state: {
+                          list: currentPost.imageUrls,
+                          clickedIndex: 0,
+                        },
+                      });
+                    }}
+                  />
+                )}
+              </s.ImgSection>
+            ) : null}
           </s.Content>
           <s.CommentNumSection>
             <img
@@ -344,15 +375,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
               }
             })}
           </s.CommentSection>
-          {isImageModalOpen && (
-            <ImgModal
-              onClick={() => {
-                setImageModalOpen(false);
-              }}
-            >
-              <Img src={openedImg.current} />
-            </ImgModal>
-          )}
         </s.DetailPageLayout>
         <s.CommentWritingDiv id="commentDiv">
           <div
@@ -438,9 +460,11 @@ const ImgModal = styled.div`
   background: black;
   z-index: 3;
 `;
-const Img = styled.div`
+const OneBigImg = styled.img`
+  position: relative;
   width: 100%;
-  height: 100%;
-  background: ${(props) => `url(${props.src})`} no-repeat center;
-  background-size: contain;
+  align-self: center;
+  justify-self: center;
+  //background: ${(props) => `url(${props.src})`} no-repeat center;
+  object-fit: cover;
 `;

@@ -2,6 +2,8 @@ import React from 'react';
 import * as s from './ChatHeaderStyled.jsx';
 import { POST_RECRUIT_COMPLETE, POST_TRADE_COMPLETE } from '../../api/urls.jsx';
 import { postData, putData } from '../../api/Functions.jsx';
+import { useState } from 'react';
+import Loading from '../Loading/Loading.jsx';
 
 const ChatHeader = ({
   messageInitiator,
@@ -11,10 +13,14 @@ const ChatHeader = ({
   onBackClick,
   id,
   isComplete,
+  setError,
 }) => {
-  const handleAccComplete = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAccComplete = async () => {
     try {
-      postData(
+      setIsLoading(true);
+      const response = await postData(
         POST_RECRUIT_COMPLETE(id),
         {},
         {
@@ -23,12 +29,15 @@ const ChatHeader = ({
         {},
       );
     } catch (error) {
-      console.error('Error posting data', error);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleTradeComplete = () => {
     try {
+      setIsLoading(true);
       putData(
         POST_TRADE_COMPLETE(id),
         {},
@@ -38,10 +47,15 @@ const ChatHeader = ({
         { marketPostId: id },
       );
     } catch (error) {
-      console.error('Error posting data', error);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <s.ChatHeaderLayout style={{ backgroundColor: `${defaultColor}` }}>
       <s.BackButton onClick={onBackClick}>
@@ -64,18 +78,19 @@ const ChatHeader = ({
       <s.PageName style={{ color: isAccompany ? '#ffffff' : '#ABB4FF' }}>
         {receiver}
       </s.PageName>
-      {!messageInitiator && !isComplete && (
-        <s.CompleteBtn
-          onClick={isAccompany ? handleAccComplete : handleTradeComplete}
-        >
-          {isAccompany ? '모집 완료' : '거래 완료'}
-        </s.CompleteBtn>
-      )}
-      {isComplete && (
-        <s.CompletedBtn>
-          {isAccompany ? '모집 완료' : '거래 완료'}
-        </s.CompletedBtn>
-      )}
+
+      {!messageInitiator &&
+        (isComplete ? (
+          <s.CompletedBtn>
+            {isAccompany ? '모집 완료' : '거래 완료'}
+          </s.CompletedBtn>
+        ) : (
+          <s.CompleteBtn
+            onClick={isAccompany ? handleAccComplete : handleTradeComplete}
+          >
+            {isAccompany ? '모집 완료' : '거래 완료'}
+          </s.CompleteBtn>
+        ))}
     </s.ChatHeaderLayout>
   );
 };

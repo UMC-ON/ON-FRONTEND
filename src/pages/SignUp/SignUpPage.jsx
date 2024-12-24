@@ -51,10 +51,10 @@ const SignUpPage = () => {
           });
         }
         if (name === 'signUpAuthNum') {
-          console.log('Updated signUpAuthNum:', value);
+          //console.log('Updated signUpAuthNum:', value);
         }
       }
-      console.log(userInfo);
+      //console.log(userInfo);
     }
   };
   const { currentTitle, currentStep, prev, next, isFirstStep, isLastStep } =
@@ -99,12 +99,12 @@ const SignUpPage = () => {
     e.preventDefault();
 
     if (isLastStep) {
-      console.log('제출');
+      //console.log('제출');
       // TODO: Request form
       //UserList.unshift(userInfo);
       try {
         const formData = JSON.stringify(userInfo);
-        console.log('S.formData: ', formData);
+        //console.log('S.formData: ', formData);
         const response = await postData(SIGN_UP_URL, formData);
         if (response) {
           alert('회원가입이 완료되었습니다.');
@@ -114,7 +114,7 @@ const SignUpPage = () => {
           Navigate('/landing');
         }
       } catch (error) {
-        console.error('Sign-Up failed: ', error);
+        //console.error('Sign-Up failed: ', error);
         if (error.response && error.response.status === 400) {
           alert('요청 데이터가 잘못되었습니다. 다시 확인해주세요.');
         } else {

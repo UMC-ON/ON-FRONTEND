@@ -16,7 +16,7 @@ const useMultiStepForm = (steps = StepEl) => {
     setCurrentStepIndex((index) =>
       index >= steps.length - 1 ? index : index + 1,
     );
-    console.log(info);
+    //console.log(info);
   };
 
   return {

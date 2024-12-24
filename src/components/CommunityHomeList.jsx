@@ -107,6 +107,7 @@ const SmallGreyText = styled.p`
   color: #7a7a7a;
   font-size: 0.5em;
   text-align: right;
+  white-space: nowrap;
 `;
 
 const Span = styled.span`

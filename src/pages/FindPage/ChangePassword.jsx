@@ -33,7 +33,7 @@ const ChangePassword = () => {
       let name = e.target.name;
       let value = e.target.value;
       setUserInfo({ ...userInfo, [name]: value });
-      console.log(userInfo);
+      //console.log(userInfo);
     }
   };
 
@@ -42,7 +42,7 @@ const ChangePassword = () => {
   const changePW = async (userInfo) => {
     const formData = JSON.stringify(userInfo);
     await putData(CHANGE_PW, formData).then((res) => {
-      console.log(res);
+      //console.log(res);
       setModal(true);
     });
   };
@@ -126,7 +126,7 @@ const ChangePassword = () => {
                     {...register('password_check', {
                       required: '비밀번호를 확인해주세요.',
                       validate: (value) => {
-                        console.log(value == passwordSet.current.pw);
+                        //console.log(value == passwordSet.current.pw);
                         return value == passwordSet.current.pw
                           ? true
                           : '비밀번호가 일치하지 않습니다';

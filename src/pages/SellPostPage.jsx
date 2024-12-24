@@ -10,13 +10,14 @@ import SellPostHeader from '../components/SellPostHeader';
 import SellPostSelectCity from '../components/SellPostSelectCity/SellPostSelectCity';
 import SellPostCitySelect from '../components/SellPostShowCitySelect';
 import AlertModal from '../components/SellAlertModal.jsx';
+import ErrorScreen from '../components/ErrorScreen.jsx';
 
-import { postData, multiFilePostData } from '../api/Functions';
+import { multiFilePostData } from '../api/Functions';
 import { POST_ITEM } from '../api/urls';
 
 function SellPost() {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [image, setImage] = useState(null); // 한 장의 이미지로 수정
+  const [image, setImage] = useState(null);
   const [title, setTitle] = useState('');
   const [cost, setCost] = useState('');
   const [content, setContent] = useState('');
@@ -63,7 +64,7 @@ function SellPost() {
   };
 
   const handleDeleteImage = () => {
-    setImage(null); // 이미지 삭제
+    setImage(null);
   };
 
   const navigate = useNavigate();
@@ -81,7 +82,7 @@ function SellPost() {
       currentLocation: city.city,
       share: share,
     };
-    console.log(jsonData);
+    
 
     const jsonBlob = new Blob([JSON.stringify(jsonData)], {
       type: 'application/json',
@@ -98,11 +99,11 @@ function SellPost() {
       });
 
       if (response) {
-        console.log(response.data.result);
+        
         navigate('/sell');
       }
     } catch (error) {
-      console.error('ITEM POST Error:', error.message);
+        return <ErrorScreen />;
     }
   };
 
@@ -188,11 +189,14 @@ function SellPost() {
           <Add
             placeholder="₩ 판매 금액을 입력해 주세요."
             type="text"
-            value={cost ? `₩ ${cost}` : ''}
+            value={share ? '₩ 0' : cost ? `₩ ${cost}` : ''}
             onChange={(e) => {
-              const inputValue = e.target.value.replace(/[^0-9]/g, ''); // 숫자만 허용
-              setCost(inputValue);
+              if (!share) { // 나눔 체크박스가 체크되지 않은 경우에만 입력값 허용
+                const inputValue = e.target.value.replace(/[^0-9]/g, ''); // 숫자만 허용
+                setCost(inputValue);
+              }
             }}
+            disabled={share} // 나눔 체크박스가 체크되면 입력 불가
           />
         </Section>
 
@@ -200,7 +204,15 @@ function SellPost() {
           <input
             type="checkbox"
             checked={share}
-            onChange={(e) => setShare(e.target.checked)}
+            onChange={(e) => {
+              const isChecked = e.target.checked;
+              setShare(isChecked);
+
+              // 체크박스 체크 시 cost 값을 0으로 설정
+              if (isChecked) {
+                setCost('0');
+              }
+            }}
           />
           <span style={{ fontSize: '13px', marginLeft: '3px' }}>나눔</span>
         </CheckboxContainer>

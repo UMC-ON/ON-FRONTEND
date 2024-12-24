@@ -192,7 +192,7 @@ const apiDupCheck = async (url, target, dupCheckSetter, dupCheck) => {
     'Content-Type': 'text/plain',
   });
   if (response) {
-    console.log(response);
+    //console.log(response);
     if (response.data) {
       //true면 존재한다는 것
       dupCheckSetter({ ...dupCheck, [target.name]: -1 });
@@ -335,7 +335,7 @@ export const UserInfoForm1 = ({
                   authNum: parseInt(code.current),
                 };
                 const formData = JSON.stringify(data);
-                console.log('F.formData:', formData);
+                //console.log('F.formData:', formData);
                 try {
                   const res = await putData(VERIFY_CODE, formData);
                   if (res) {
@@ -411,7 +411,7 @@ export const UserInfoForm1 = ({
             {...register('password_check', {
               required: '비밀번호를 확인해주세요.',
               validate: (value) => {
-                console.log(value == passwordSet.current.pw);
+                //console.log(value == passwordSet.current.pw);
                 return value == passwordSet.current.pw
                   ? true
                   : '비밀번호가 일치하지 않습니다';
@@ -678,7 +678,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       target: { name: e.target.name, value: !e.target.value }, //state는 비동기적이라 바로 적용안됨
     });
   };
-  console.log(state);
+  //console.log(state);
 
   useEffect(() => {
     //이전 단계를 눌로 페이지에 다시 돌아왔을 때, 렌더링하며 이전 입력값 불러오고 조건 체크
@@ -837,7 +837,7 @@ export const SchoolAuthForm = ({ state, setFile }) => {
   const [preview, setPreview] = useState(null);
   const onChangeImgFile = (fileList) => {
     if (fileList[0]) {
-      console.log(fileList[0]);
+      //console.log(fileList[0]);
       const uploadImg = fileList[0];
       setPreview(URL.createObjectURL(uploadImg));
       setFile(uploadImg);

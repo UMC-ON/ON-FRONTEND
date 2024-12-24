@@ -1,7 +1,7 @@
 import * as s from './SellPostSelectCityStyled.jsx';
-import { useNavigate, useLocation } from 'react-router-dom';
+//import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import PageHeader from '../../components/PageHeader/PageHeader.jsx';
+//import PageHeader from '../../components/PageHeader/PageHeader.jsx';
 import { countryFlags, countries, cities } from '../../assets/cityDatabase.js';
 
 /*사용 방법
@@ -34,8 +34,8 @@ const SelectCity = ({ closeModal, getCity }) => {
       country: country,
       city: city.city,
     };
-    console.log('Country:', country); // country를 출력
-    console.log('City:', city.city); // city를 출력
+    //console.log('Country:', country); // country를 출력
+    //console.log('City:', city.city); // city를 출력
     getCity(locationInfo); // 객체로 국가와 도시 정보 전달
   };
 

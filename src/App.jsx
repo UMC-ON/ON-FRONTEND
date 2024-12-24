@@ -56,12 +56,12 @@ import { loadUser, loginFailure, logout } from './redux/actions.jsx';
 import Loading from './components/Loading/Loading.jsx';
 import FindId from './pages/FindPage/FindId.jsx';
 import FindPassword from './pages/FindPage/FindPassword.jsx';
-import { requestNotificationPermissionOnce } from './service/notificationPermission.jsx';
 import Test from './pages/SignUp/Test.jsx';
 import { getData, Interceptor } from './api/Functions.jsx';
 import { GET_USER_INFO } from './api/urls.jsx';
 //import axios from 'axios';
 import ChangePassword from './pages/FindPage/ChangePassword.jsx';
+import ImageSlide from './pages/Community/ImageSlide.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -87,43 +87,46 @@ function App() {
       setIsLoading(false);
     } else {
       //setIsLoading(true);
-      console.log('트루로 설정', mountCount);
+      //console.log('트루로 설정', mountCount);
 
-      console.log('유저인포 앱', userInfo);
+      //console.log('유저인포 앱', userInfo);
       if (!userInfo) {
-        console.log('유저인포 없음');
+        //console.log('유저인포 없음');
         setIsLoading(true);
-        console.log(userInfo);
+        //console.log(userInfo);
         const loadUserData = async () => {
           const accessToken = localStorage.getItem('AToken');
           if (accessToken) {
-            console.log('엑세스 있음');
+            //console.log('엑세스 있음');
             const res = await getData(GET_USER_INFO, {
               Authorization: `Bearer ${accessToken}`,
-            });
-            if (res) {
-              console.log(res, 'dkdk');
-              dispatch(loadUser(res.data, accessToken));
-              if (res.data.userStatus == 'TEMPORARY') {
-                //사용자가 임의로 주소 수정해서 들어오면 이쪽으로 안내..
-                //임의로 수정=새로 마운트 되므로 리덕스 유저인포는 없어서 이 로직이 맞음
-                nav('/signUp/credentials');
-              }
+            })
+              .then((res) => {
+                //console.log(res, 'dkdk');
+                dispatch(loadUser(res.data, accessToken));
+                if (res.data.userStatus == 'TEMPORARY') {
+                  //사용자가 임의로 주소 수정해서 들어오면 이쪽으로 안내..
+                  //임의로 수정=새로 마운트 되므로 리덕스 유저인포는 없어서 이 로직이 맞음
+                  nav('/signUp/credentials');
+                }
 
-              console.log('앱 유저인포:', userInfo);
-              setIsLoading(false);
-            }
+                //console.log('앱 유저인포:', userInfo);
+                setIsLoading(false);
+              })
+              .catch(() => {
+                dispatch(logout());
+                alert('로그인이 필요합니다.');
+                nav('/signIn');
+              });
           } else {
-            dispatch(logout());
             alert('로그인이 필요합니다.');
             nav('/signIn');
-            requestNotificationPermissionOnce();
           }
         };
         try {
           loadUserData();
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
       }
     }
@@ -133,7 +136,7 @@ function App() {
     if (!userInfo && !excludepaths.includes(location.pathname)) {
       setIsLoading(true);
     } else if (userInfo && !excludepaths.includes(location.pathname)) {
-      console.log('지금 유저인포 등록됨');
+      //console.log('지금 유저인포 등록됨');
       setIsLoading(false);
     }
   }, [userInfo]);
@@ -198,6 +201,10 @@ function App() {
             element={<FreeDetailPage />}
           />
           <Route
+            path="/community/general/detail/:id/images"
+            element={<ImageSlide />}
+          />
+          <Route
             path="/community/general/post"
             element={<FreePostPage />}
           />
@@ -208,6 +215,10 @@ function App() {
           <Route
             path="/community/info/detail/:id"
             element={<InfoDetailPage />}
+          />
+          <Route
+            path="/community/info/detail/:id/images"
+            element={<ImageSlide />}
           />
           <Route
             path="/community/info/post"

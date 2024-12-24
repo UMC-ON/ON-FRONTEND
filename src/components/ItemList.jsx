@@ -11,8 +11,7 @@ import filled_star from '../assets/images/filled_star.svg';
 import defaultImg from '../assets/images/bannerDefault.svg';
 
 import { showDate } from '../components/Common/InfoExp';
-import { GET_CURRENT_INFO } from '../api/urls';
-import { getData, postData, putData } from '../api/Functions';
+import ErrorScreen from './ErrorScreen';
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const ItemList = ({ items }) => {
@@ -23,10 +22,8 @@ const ItemList = ({ items }) => {
   useEffect(() => {
     const fetchScrappedPosts = async () => {
       try {
-        // Check if userInfo is available
         if (!userInfo || !userInfo.id) {
-          console.error('User info is not available');
-          return;
+          return <ErrorScreen />
         }
 
         const response = await axios.get(`${serverAddress}/api/v1/scrap`, {
@@ -46,12 +43,11 @@ const ItemList = ({ items }) => {
             (post) => post.marketPost.marketPostId,
           );
           setScrappedMarketPostIds(scrappedIds);
-          console.log(scrappedIds);
         } else {
-          console.error('Unexpected response structure:', response.data);
+            return <ErrorScreen />
         }
       } catch (error) {
-        console.error('Error fetching scrapped posts:', error);
+          return <ErrorScreen />
       }
     };
 
@@ -167,7 +163,7 @@ const StarContainer = ({
       }
       setIsStarFilled(!isStarFilled);
     } catch (error) {
-      console.error('스크랩 처리 중 오류 발생:', error);
+        return <ErrorScreen />
     }
   };
 

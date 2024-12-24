@@ -8,11 +8,14 @@ import Loading from '../../components/Loading/Loading.jsx';
 import { multiFilePostData } from '../../api/Functions.jsx';
 import { showDispatchedInfo } from '../../components/Common/InfoExp.jsx';
 import { WRITE_POST_IN } from '../../api/urls.jsx';
+import ImageSection from './ImageSection.jsx';
+import ErrorScreen from '../../components/ErrorScreen.jsx';
 
 const PostPage = ({ color, boardType }) => {
   const navigate = useNavigate();
   const [imageFiles, setImageFiles] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   let userInfo = useSelector((state) => state.user.user);
 
@@ -35,8 +38,8 @@ const PostPage = ({ color, boardType }) => {
 
   useEffect(() => {
     if (userInfo) {
-      console.log(`유저:${userInfo}`);
-      console.log('useEffect 실행');
+      //console.log(`유저:${userInfo}`);
+      //console.log('useEffect 실행');
     }
     if (userInfo && userInfo.id) {
       setInput({ ...userInfo, id: userInfo.id });
@@ -44,11 +47,14 @@ const PostPage = ({ color, boardType }) => {
   }, [userInfo]);
   useEffect(() => {
     //setImageFiles(sendingImages.current);
-    console.log(imageFiles);
+    //console.log(imageFiles);
   }, [imageFiles]);
 
   if (isLoading) {
     return <Loading />;
+  }
+  if (isError) {
+    return <ErrorScreen />;
   }
   if (BETest && !userInfo) {
     return null;
@@ -68,7 +74,7 @@ const PostPage = ({ color, boardType }) => {
     const fileList = e.target.files;
     if (fileList) {
       const imgList = Array.from(fileList);
-      console.log(imgList);
+      //console.log(imgList);
 
       setImageFiles((prev) => prev.concat(imgList));
       e.target.value = '';
@@ -102,17 +108,18 @@ const PostPage = ({ color, boardType }) => {
         {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         },
-      );
-      if (response) {
-        console.log(response.data.result);
-        return response;
-      }
+      )
+        .then((res) => res)
+        .catch((error) => {
+          setIsError(true);
+        });
+      return response;
     };
     const sendingComplete = await sendData();
     if (sendingComplete) {
       setLoading(false);
 
-      navigate(`/community/${boardType == 'FREE' ? 'general' : 'info'}`, {
+      navigate(-1, {
         replace: true,
       });
     }
@@ -202,45 +209,10 @@ const PostPage = ({ color, boardType }) => {
               name="content"
               onChange={onChangeInput}
             />
-            <s.ImgSection>
-              {imageFiles.map((url, i) => (
-                <div
-                  key={URL.createObjectURL(url)}
-                  style={{ position: 'relative' }}
-                >
-                  <s.PreviewImg
-                    src={URL.createObjectURL(url)}
-                    width="160"
-                    height="160"
-                    alt={`image${i}`}
-                  />
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 15 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{
-                      position: 'absolute',
-                      right: '0.3rem',
-                      top: '0.3rem',
-                      zIndex: '2',
-                    }}
-                    onClick={() => {
-                      const deletedImageList = imageFiles.filter(
-                        (imageUrl) => imageUrl !== url,
-                      );
-                      setImageFiles(deletedImageList);
-                    }}
-                  >
-                    <path
-                      d="M14.4433 0.0955087C14.5707 -0.0318362 14.7771 -0.0318362 14.9045 0.0955087C15.0318 0.222854 15.0318 0.42932 14.9045 0.556665L7.96116 7.5L14.9045 14.4433C15.0318 14.5707 15.0318 14.7771 14.9045 14.9045C14.7771 15.0318 14.5707 15.0318 14.4433 14.9045L7.5 7.96116L0.556665 14.9045C0.42932 15.0318 0.222853 15.0318 0.0955081 14.9045C-0.031836 14.7771 -0.031836 14.5707 0.0955081 14.4433L7.03884 7.5L0.095509 0.556665C-0.0318359 0.42932 -0.0318359 0.222854 0.095509 0.0955087C0.222854 -0.0318362 0.429321 -0.0318362 0.556666 0.0955087L7.5 7.03884L14.4433 0.0955087Z"
-                      fill="#000000"
-                    />
-                  </svg>
-                </div>
-              ))}
-            </s.ImgSection>
+            <ImageSection
+              imageFiles={imageFiles}
+              setImageFiles={setImageFiles}
+            />
           </s.EditorWrapper>
         </s.ContentSection>
       </s.BigContainer>

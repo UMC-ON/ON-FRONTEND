@@ -1,18 +1,18 @@
 import styled from 'styled-components';
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+//import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import PageHeader from '../components/PageHeader/PageHeader';
 import ScrapListComponent from '../components/ScrapListComponent';
-import LoadingScreen from '../components/LoadingScreen';
+import ErrorScreen from '../components/ErrorScreen';
 
 import nothing from '../assets/images/no_content.svg';
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
-import { getData } from '../api/Functions';
-import { GET_SCRAP } from '../api/urls';
+//import { getData } from '../api/Functions';
+//import { GET_SCRAP } from '../api/urls';
 
 function ScrapList() {
     const [items, setItems] = useState([]);
@@ -32,16 +32,13 @@ function ScrapList() {
             
           });
     
-          // 응답 데이터 확인
-          console.log("API response:", response.data);
-    
           if (page === 0) {
             setItems(response.data.content);
           } else {
             setItems(prevItems => [...prevItems, ...response.data.content]);
           }
         } catch (error) {
-          console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
+          return <ErrorScreen />
         }
       };
     

@@ -1,3 +1,4 @@
+import ImageSection from '../ImageSection';
 import PostPage from '../PostPage';
 
 const InfoPostPage = () => {

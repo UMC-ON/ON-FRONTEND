@@ -10,21 +10,6 @@ export const NotificationLayout = styled.div`
   flex-direction: column;
 `;
 
-export const Background = styled.div`
-  background: linear-gradient(
-    180deg,
-    rgba(110, 186, 255, 0) 0%,
-    rgba(86, 150, 217, 0.2) 50%,
-    rgba(62, 115, 178, 0.32) 100%
-  );
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  max-width: 480px;
-  height: 25vh;
-  z-index: 0;
-`;
-
 export const NotificationWrapper = styled.article`
   width: 100%;
   height: auto;
