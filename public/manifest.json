@@ -1,10 +1,10 @@
 {
-  "name": "ON - \uad50\ud658\ud559\uc0dd \ucee4\ubba4\ub2c8\ud2f0",
-  "short_name": "ON:온",
+  "name": "On - 교환/방문학생의 모든 것, On-boarding",
+  "short_name": "On: 온",
   "id": "/manifest.json",
   "start_url": "/",
   "display": "standalone",
-  "description": "나만의 완벽한 교환/방문학생을 위해, On-boarding",
+  "description": "교환/방문학생의 모든 것, On-boarding",
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
   "orientation": "portrait",
@@ -102,5 +102,8 @@
   ],
   "launch_handler": {
     "client_mode": "navigate-new"
+  },
+  "android": {
+    "minSdkVersion": 21
   }
 }
