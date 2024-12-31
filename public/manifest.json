@@ -1,7 +1,7 @@
 {
   "name": "On - 교환/방문학생의 모든 것, On-boarding",
   "short_name": "On: 온",
-  "id": "/manifest.json",
+  "id": "https://on-boarding-abroad.vercel.app",
   "start_url": "/",
   "display": "standalone",
   "description": "교환/방문학생의 모든 것, On-boarding",
