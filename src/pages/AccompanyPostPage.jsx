@@ -887,7 +887,6 @@ const RightContainer = styled.div`
   width: 100%;
   padding: 2vh 0;
   z-index: 2;
-  max-width: 480px;
 `;
 
 const SpaceBetween = styled.div`
@@ -1037,7 +1036,6 @@ export const LeftButton = styled.img`
 
 const BottomTabLayout2 = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 87px;
   position: fixed;
   bottom: 0;

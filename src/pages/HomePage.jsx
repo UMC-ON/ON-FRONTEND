@@ -650,14 +650,6 @@ const BigText = styled.div`
   line-height: 1.2;
 `;
 
-const MiddleText = styled.div`
-  color: ${(props) => props.color || '#000000'};
-  margin-right: ${(props) => props.spacing || '0'};
-  font-weight: bold;
-  font-family: 'Inter-Regular';
-  font-size: 1.2em;
-`;
-
 const Container = styled.div`
   margin: 1em;
   display: grid;
@@ -700,6 +692,30 @@ const Container = styled.div`
   & > button:nth-child(6) {
     grid-row: 3; /* Second row */
     grid-column: 3 / 4; /* Third column */
+  }
+
+  /* iPad 해상도에서 4:2 비율로 변경 */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr; /* 4:2 비율 */
+
+    /* Fourth button */
+  & > button:nth-child(4) {
+    grid-row: 1; /* Second row */
+    grid-column: 4 / 5; /* Third column */
+  }
+
+  /* Fifth button */
+  & > button:nth-child(5) {
+    grid-row: 2; /* Second row */
+    grid-column: 4 / 5; /* Third column */
+  }
+
+  /* Sixth button */
+  & > button:nth-child(6) {
+    grid-row: 1; /* Second row */
+    grid-column: 5 / 6; /* Third column */
+  }
+
   }
 `;
 
@@ -755,49 +771,6 @@ const Icon = styled.div`
   filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 `;
 
-const SliderContainer = styled.div`
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 1.5vh;
-  overflow: hidden;
-  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
-`;
-
-const SliderWrapper = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['currentSlide'].includes(prop),
-})`
-  display: flex;
-  transition: transform 0.3s ease-in-out;
-  transform: ${(props) => `translateX(-${props.currentSlide * 100}%)`};
-`;
-
-const Slide = styled.div`
-  min-width: 100%;
-  padding-bottom: 33%; /* Adjust this according to the image aspect ratio */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  aspect-ratio: 1/0.385;
-`;
-
-const DotContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 1.5vh;
-`;
-
-const Dot = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['active'].includes(prop),
-})`
-  width: ${(props) => (props.active ? '8px' : '5px')};
-  height: ${(props) => (props.active ? '8px' : '5px')};
-  margin: ${(props) => (props.active ? '0 5px' : '2px 5px')};
-  border-radius: 50%;
-  background-color: ${(props) => (props.active ? '#3E73B2' : '#A3A3A3')};
-  opacity: ${(props) => (props.active ? '1' : '0.5')};
-  cursor: pointer;
-`;
 
 const BlueContainer = styled.div`
   margin-top: 1vh;
