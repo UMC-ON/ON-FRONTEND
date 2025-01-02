@@ -3,7 +3,6 @@ import xImg from '../../assets/images/xImg.svg';
 
 export const ConfirmHeader = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 61px;
   position: fixed;
   flex-wrap: wrap;
@@ -225,7 +224,6 @@ export const Footer = styled.div`
   flex-wrap: wrap;
 
   width: 100%;
-  max-width: 480px;
 
   height: auto;
   //min-height: 70px;

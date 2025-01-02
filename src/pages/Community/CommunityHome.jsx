@@ -68,7 +68,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
       {
         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
       },
-      { page: currentPage.current, size: 5, sort: 'DESC' },
+      { page: currentPage.current, size: 20, sort: 'DESC' },
     )
       .then((response) => {
         totalPage.current = response.data.totalPages;
