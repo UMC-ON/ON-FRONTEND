@@ -85,7 +85,7 @@ const SelectCountry = ({ closeModal, getCountry }) => {
                 key={country.id}
                 onClick={() => handleCountryClick(country)}
               >
-                {console.log(country.country)}
+                {/* {console.log(country.country)} */}
                 <s.Flag>{countryFlags[country.country]}</s.Flag>
                 <s.Country>{country.country}</s.Country>
               </s.SingleCountryContainer>
