@@ -157,7 +157,6 @@ export const CommentWritingDiv = styled.div`
   align-items: center;
 
   width: 100%;
-  max-width: 480px;
   height: 7.8rem;
   background: linear-gradient(
     135deg,
