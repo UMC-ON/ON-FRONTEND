@@ -130,12 +130,16 @@ const SchoolAuthPage = () => {
             </s.TitleSection>
 
             <s.ContentSection>
-              {/* <s.BackButton
-                type="button"
-                onClick={prev}
-              >
-                이전 단계
-              </s.BackButton> */}
+              {!isFirstStep && (
+                <s.BackButton
+                  type="button"
+                  onClick={() => {
+                    prev();
+                  }}
+                >
+                  이전단계
+                </s.BackButton>
+              )}
               <s.StyledH2>{currentTitle}</s.StyledH2>
               <s.Explanation style={{ marginBottom: '40px' }}>
                 신뢰할 수 있는 커뮤니티를 위해 교환/방문교의 파견 사실여부를
