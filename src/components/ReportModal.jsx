@@ -53,7 +53,7 @@ import closeIcon from '../assets/images/close_button.svg';
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 480px;
+    // max-width: 480px;
   `;
   
   const ModalContent = styled.div`
@@ -87,20 +87,3 @@ import closeIcon from '../assets/images/close_button.svg';
     cursor: pointer;
   `;
   
-  const BlueButton = styled.button`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    border-radius: 10px;
-    width: 200px;
-    height: 50px;
-    padding: 15px 26px;
-    background: linear-gradient(135deg, #d6ebff, #c2c7ff);
-    color: white;
-    text-align: center;
-    font-family: Inter;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-  `;
