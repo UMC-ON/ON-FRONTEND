@@ -694,9 +694,33 @@ const Container = styled.div`
     grid-column: 3 / 4; /* Third column */
   }
 
-  /* iPad 해상도에서 4:2 비율로 변경 */
-  @media (min-width: 768px) and (max-width: 1024px) {
+  /* iPad 해상도에서 비율 변경 */
+  @media (min-width: 768px) and (max-width: 1200px) {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr; /* 4:2 비율 */
+
+    /* Fourth button */
+  & > button:nth-child(4) {
+    grid-row: 1; /* Second row */
+    grid-column: 4 / 5; /* Third column */
+  }
+
+  /* Fifth button */
+  & > button:nth-child(5) {
+    grid-row: 2; /* Second row */
+    grid-column: 4 / 5; /* Third column */
+  }
+
+  /* Sixth button */
+  & > button:nth-child(6) {
+    grid-row: 1; /* Second row */
+    grid-column: 5 / 6; /* Third column */
+  }
+
+  }
+
+  /* PC 해상도에서 비율 변경 */
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; /* 4:2 비율 */
 
     /* Fourth button */
   & > button:nth-child(4) {
