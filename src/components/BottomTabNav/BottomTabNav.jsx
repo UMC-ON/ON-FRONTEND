@@ -31,7 +31,9 @@ const BottomTabNav = () => {
       </NavLink>
       {/*동행구하기 버튼*/}
       <NavLink to="/accompany">
-        <s.IconContainer className={currentPath === '/accompany' ? 'active' : ''}>
+        <s.IconContainer
+          className={currentPath === '/accompany' ? 'active' : ''}
+        >
           <s.Icon
             xmlns="http://www.w3.org/2000/svg"
             width="23"
@@ -104,17 +106,19 @@ const BottomTabNav = () => {
       </NavLink>
       {/*나의일기 버튼*/}
       <NavLink to="/diary">
-      <s.IconContainer className={currentPath === '/diary' ? 'active' : ''}>
-        <s.Icon
+        <s.IconContainer className={currentPath === '/diary' ? 'active' : ''}>
+          <s.Icon
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill={currentPath === '/diary' ? theme.navActivate : theme.creamGray} // 아이콘에 직접 색상 적용
+            fill={
+              currentPath === '/diary' ? theme.navActivate : theme.creamGray
+            } // 아이콘에 직접 색상 적용
           >
             <path
               d="M2 4.59375V21H18.4062"
-              stroke={currentPath === '/diary' ? theme.navActivate : "#CCCCCC"} // 문제 되는 부분에 stroke 색상 적용
+              stroke={currentPath === '/diary' ? theme.navActivate : '#CCCCCC'} // 문제 되는 부분에 stroke 색상 적용
               fill="none"
               strokeWidth="3"
               strokeLinecap="round"
@@ -124,12 +128,14 @@ const BottomTabNav = () => {
               fillRule="evenodd"
               clipRule="evenodd"
               d="M6.67663 0C6.26842 0 5.9375 0.33092 5.9375 0.73913V16.2609C5.9375 16.6691 6.26842 17 6.67663 17H22.1984C22.6066 17 22.9375 16.6691 22.9375 16.2609V0.73913C22.9375 0.33092 22.6066 0 22.1984 0H6.67663ZM9.71528 4.40741C9.36754 4.40741 9.08565 4.6893 9.08565 5.03704C9.08565 5.38477 9.36754 5.66667 9.71528 5.66667H19.1597C19.5075 5.66667 19.7894 5.38477 19.7894 5.03704C19.7894 4.6893 19.5075 4.40741 19.1597 4.40741H9.71528ZM9.08565 8.18518C9.08565 7.83745 9.36754 7.55556 9.71528 7.55556H19.1597C19.5075 7.55556 19.7894 7.83745 19.7894 8.18518C19.7894 8.53292 19.5075 8.81481 19.1597 8.81481H9.71528C9.36754 8.81481 9.08565 8.53292 9.08565 8.18518ZM9.71528 10.7037C9.36754 10.7037 9.08565 10.9856 9.08565 11.3333C9.08565 11.6811 9.36754 11.963 9.71528 11.963H16.0116C16.3593 11.963 16.6412 11.6811 16.6412 11.3333C16.6412 10.9856 16.3593 10.7037 16.0116 10.7037H9.71528Z"
-              fill={currentPath === '/diary' ? theme.navActivate : theme.creamGray} // 아이콘 색상 설정
+              fill={
+                currentPath === '/diary' ? theme.navActivate : theme.creamGray
+              } // 아이콘 색상 설정
             />
           </s.Icon>
 
-        <s.IconTag>나의일기</s.IconTag>
-      </s.IconContainer>
+          <s.IconTag>나의일기</s.IconTag>
+        </s.IconContainer>
       </NavLink>
     </s.BottomTabLayout>
   );
