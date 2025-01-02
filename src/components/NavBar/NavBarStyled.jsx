@@ -3,7 +3,6 @@ import theme from '../../styles/theme';
 
 export const NavbarLayout = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 61px;
   position: fixed;
   z-index: 3;
