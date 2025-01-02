@@ -3,7 +3,7 @@ import theme from '../../styles/theme';
 
 export const PageHeaderLayout = styled.div`
   width: 100%;
-  max-width: 480px;
+  // max-width: 480px;
   height: 61px;
   position: fixed;
   z-index: 2;
@@ -45,7 +45,7 @@ export const PageLayout = styled.div`
   display: flex;
   align-items: center;
   overflow-y: auto;
-  max-width: 480px;
+  // max-width: 480px;
 `;
 export const ContinentWrapper = styled.div`
   width: 100%;
