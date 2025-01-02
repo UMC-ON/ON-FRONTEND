@@ -732,7 +732,6 @@ const BottomTabLayout = styled.div`
   height: auto; /* 높이를 내용에 맞게 조정 */
   min-height: 300px;
   max-height: calc(50rem - 50px);
-  max-width: 480px;
   position: fixed;
   bottom: 0;
   border-radius: 14px 14px 0px 0px;
@@ -887,7 +886,6 @@ const RightContainer = styled.div`
   width: 100%;
   padding: 2vh 0;
   z-index: 2;
-  max-width: 480px;
 `;
 
 const SpaceBetween = styled.div`
@@ -1037,7 +1035,6 @@ export const LeftButton = styled.img`
 
 const BottomTabLayout2 = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 87px;
   position: fixed;
   bottom: 0;

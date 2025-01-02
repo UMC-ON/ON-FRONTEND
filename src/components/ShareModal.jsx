@@ -73,7 +73,7 @@ import closeIcon from '../assets/images/close_button.svg';
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 480px;
+    // max-width: 480px;
   `;
   
   const ModalContent = styled.div`

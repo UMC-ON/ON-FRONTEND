@@ -502,6 +502,16 @@ const ProfileTextContainer = styled.div`
 const TextContainer = styled.div`
   margin-left: 1em;
   margin-top: 1.5em;
+
+
+  /* 더 큰 해상도에서는 5:2 비율 적용 */
+  @media (min-width: 768px) {
+    margin-top: 3em;
+  }
+
+  @media (min-width: 1024px) {
+    margin-top: 5em;
+  }
 `;
 
 const BigText = styled.p`
@@ -626,7 +636,6 @@ const MiddleText = styled.div`
 
 const BottomTabLayout = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 87px;
   position: fixed;
   bottom: 0;
