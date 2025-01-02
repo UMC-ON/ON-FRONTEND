@@ -9,19 +9,6 @@
   font-family: 'Inter';
 }
 
-html,
-body {
-  height: 100%;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch; /* iOS에서 스크롤 부드럽게 */
-}
-
-.container {
-  height: 100%;
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
-}
-
 .logo {
   height: 6em;
   padding: 1.5em;
