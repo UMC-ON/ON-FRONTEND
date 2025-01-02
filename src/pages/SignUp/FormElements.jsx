@@ -715,7 +715,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
       </s.InputWrapper>
       <DefaultCheckBox
         wrapperStyle={{
-          paddingTop: '30px',
+          marginTop: '30px',
           color: isConfirmed ? '' : 'black',
         }}
         after="교환/방문교 미정"

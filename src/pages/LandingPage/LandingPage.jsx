@@ -10,11 +10,14 @@ const LandingPage = () => {
   return (
     <>
       <LandingPageContainer>
-        <Text>{`나만의 완벽한
-      교환/방문 라이프를 키다`}</Text>
-        <LogoImg />
-
-        <ImgImg style={{ alignSelf: 'center' }} />
+        <ImgImg style={{ alignSelf: 'center' }}>
+          <LogoImg>
+            <Text>
+              {`나만의 완벽한
+      교환/방문 라이프를 키다`}
+            </Text>
+          </LogoImg>
+        </ImgImg>
 
         <ButtonSection>
           <Button
@@ -43,13 +46,13 @@ const LandingPageContainer = styled.div`
   position: relative;
   width: 100%;
   min-height: 100vh;
-  padding: 0 2.5rem;
+  padding: 0 10vw;
 `;
 
 const Text = styled.pre`
   color: #ccc;
   font-family: Inter;
-  font-size: 1rem;
+  font-size: 2vh;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
@@ -57,7 +60,8 @@ const Text = styled.pre`
   white-space: pre-line;
   text-align: left;
   position: absolute;
-  bottom: 80%;
+  top: -50%;
+  left: 0;
 `;
 const landingLogo = `<svg width="241" height="148" viewBox="0 0 241 148" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_2945_8479)">
@@ -121,21 +125,23 @@ const changeLogo = keyframes`
 `;
 const LogoImg = styled.div`
   background: url('data:image/svg+xml,${encodedLandingLogo}') no-repeat center;
-  background-size: cover;
-  width: 15.06269rem;
-  height: 9.25rem;
+  background-size: contain;
+  width: 102%;
+  height: 90%;
   flex-shrink: 0;
   position: absolute;
-  bottom: 59%;
+  bottom: 140%;
+  left: -15%;
   animation: ${changeLogo} 2.5s 0s infinite;
 `;
 
 const ImgImg = styled.div`
-  width: 12.4375rem;
-  height: 9.0625rem;
-  background-image: url(${landingImg});
-  position: absolute;
-  bottom: 32%;
+  width: 27vh;
+  height: 19vh;
+  background: url(${landingImg}) no-repeat center;
+  background-size: contain;
+  position: fixed;
+  bottom: 30vh;
 `;
 
 const GradientImg = styled.div`
@@ -176,5 +182,5 @@ const Button = styled.button`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  margin: 0.35rem 0;
+  margin: 0.35rem 1rem;
 `;
