@@ -9,7 +9,7 @@ export const DiaryCalendar = styled.div`
         
     .react-calendar {
         width: 100%;
-        max-width: 350px;
+        max-width: 900px;
         background: #F3F9FF;
         border-radius: 10px;
         font-family: Inter;
@@ -97,8 +97,8 @@ export const DiaryCalendar = styled.div`
 
 
 export const EmptyCheckbox = styled.div`
-    width: 14px;
-    height: 14px;
+    width: 0.9em;
+    height: 0.9em;
     background: #D9D9D9;
     border-radius: 2px;
     margin: 5px auto;
@@ -106,14 +106,15 @@ export const EmptyCheckbox = styled.div`
 `;
 
 export const FullCheckbox = styled.div`
-    width: 14px;
-    height: 14px;
+    width: 0.9em;
+    height: 0.9em;
     background: ${(props) => props.theme.purpleGra};
     border-radius: 2px;
     margin: 5px auto;
 `
 
 export const DiaryCheck = styled.img`
-    width: 10px;
-    height: 10px;
+    margin-bottom: 2px;
+    width: 0.7em;
+    height: 0.7em;
 `

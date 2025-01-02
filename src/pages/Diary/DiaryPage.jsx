@@ -239,8 +239,13 @@ const DDay = styled.div`
   border: 5px solid #DCDFFF;
   z-index: 1;
   background-color: white;
+
+  @media (min-width: 768px) {
+    width: 350px;
+    height: 350px;
   }
 `;
+
 
 const DDayText = styled.div`
   font-size: 45px;
@@ -255,6 +260,14 @@ const DDayText = styled.div`
 const SubText = styled.div`
   @media (max-width: 385px) {
     padding-top: 2vh;
+  }
+
+  @media (min-width: 768px) and (max-width: 834px) {
+    padding-top: 3vh;
+  }
+
+  @media (min-width: 835px) {
+    padding-top: 1.5vh;
   }
 `;
 
@@ -287,7 +300,10 @@ const CalendarContainer = styled.div`
 
 const AddDiary = styled.div`
   width: 33%;
+  max-width: 160px;
+  padding: 1%;
   height: 5vh;
+  max-height: 50px;
   margin-left: 5%;
   margin-top: 1em;
   margin-bottom: 1em;
@@ -354,8 +370,8 @@ const Save = styled.div`
 
 const BottomTabLayout = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 50vh;
+  max-height: 450px;
   position: fixed;
   bottom: 0;
   border-radius: 14px 14px 0px 0px;
@@ -367,15 +383,21 @@ const BottomTabLayout = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   box-shadow: 0px -1px 4px 0px #e2e2e2;
-  @media (min-width: 365px) and (max-width: 380px) {
-    height: 66%;
-  }
-  @media (max-width: 360px) {
+
+  @media (max-width: 370px) {
     height: 60%;
   }
+  @media (max-width: 380px) {
+    height: 66%;
+  }
   
-  @media (min-width: 375px) and (max-width: 414px) {
-    height: 53%;
+  @media (min-width: 381px) and (max-width: 414px) {
+    height: 52%;
+  }
+  
+  @media (min-width: 760px) {
+    width: 100%;
+    height: 45%;
   }
 `;
 
