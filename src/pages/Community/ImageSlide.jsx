@@ -54,7 +54,6 @@ export default ImageSlide;
 
 const ImgModal = styled.div`
   width: 100vw;
-  max-width: 480px;
   height: 100vh;
   margin: 0 auto;
   overflow: hidden;
