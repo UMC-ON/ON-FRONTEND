@@ -18,23 +18,28 @@ import { useState, useEffect, useRef } from 'react';
 import { getData } from '../../api/Functions.jsx';
 import { GET_FILTERED_POST_IN, GET_POST_OF } from '../../api/urls.jsx';
 import { throttle } from 'rxjs';
-import { loadUser, logout } from '../../redux/actions.jsx';
+import { loadUser, logout, saveScrollStatus } from '../../redux/actions.jsx';
 import ErrorScreen from '../../components/ErrorScreen.jsx';
+import PostPage from './PostPage.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
 const CommunityHome = ({ boardType, color1, color2 }) => {
   let userInfo = useSelector((state) => state.user.user);
+  let scrollInfo = useSelector((state) => state.scroll);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [showCountry, setShowCountry] = useState(false); //모달창
   const [country, setCountry] = useState(null); //선택된 국가
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [postList, setPostList] = useState(null);
-  const totalPage = useRef(0);
-  const currentPage = useRef(0);
+  const [postList, setPostList] = useState(scrollInfo.itemList);
+  const totalPage = useRef(scrollInfo.totalPage);
+  const currentPage = useRef(scrollInfo.page);
   const newDataLoading = useRef(false);
+
+  history.scrollRestoration = 'auto';
 
   const handleCountryClick = () => {
     setShowCountry(!showCountry);
@@ -114,21 +119,24 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
   useEffect(() => {
     //console.log('유저인포');
     //console.log(userInfo);
-
-    if (country === null) {
-      fetchData();
-      setIsLoading(false);
-    } else {
-      fetchFilteredData();
-      setIsLoading(false);
+    console.log(postList);
+    if (postList.length === 0) {
+      if (country === null) {
+        fetchData();
+        setIsLoading(false);
+      } else {
+        fetchFilteredData();
+        setIsLoading(false);
+      }
     }
-  }, [country, userInfo]);
+  }, [country, userInfo, postList]);
 
   const onScroll = async () => {
     if (
       window.scrollY + document.documentElement.clientHeight >
       document.documentElement.scrollHeight - 50
     ) {
+      console.log(totalPage.current);
       if (
         !isLoading &&
         !newDataLoading.current &&
@@ -160,6 +168,12 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
       clearTimeout(throttleCheck);
     };
   }, []);
+
+  useEffect(() => {
+    dispatch(
+      saveScrollStatus(totalPage.current, currentPage.current, postList),
+    );
+  }, [postList]);
 
   if (isLoading) {
     return <Loading />;
@@ -233,7 +247,6 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
             pointerEvents: 'none',
             zIndex: '1',
             width: '100%',
-            maxWidth: '480px',
           }}
         />
 
