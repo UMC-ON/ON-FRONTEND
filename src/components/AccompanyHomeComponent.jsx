@@ -107,6 +107,7 @@ const AccompanyHomeComponent = ({
       <PageHeader
         pageName={'동행 구하기'}
         nav={'/'}
+        notBack={true}
       />
       <Space />
 

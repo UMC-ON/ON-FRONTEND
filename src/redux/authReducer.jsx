@@ -42,6 +42,7 @@ const authReducer = (state = initialState, action) => {
         refreshToken: null,
         error: null,
       };
+
     default:
       return state;
   }
