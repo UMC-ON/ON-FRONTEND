@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const NotificationLayout = styled.div`
   width: 100vw;
-  max-width: 480px;
   display: flex;
   box-sizing: border-box;
   padding: 61px 1.94rem 1.94rem;

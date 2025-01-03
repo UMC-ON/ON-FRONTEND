@@ -227,9 +227,7 @@ const AccompanyChat = () => {
 
         if (response) {
           setInfoResult(response.data);
-          setIsRecruitComplete(
-            response.data.participantNumber === response.data.recruitNumber,
-          );
+          setIsRecruitComplete(response.data.fullyRecruited);
         }
       } catch (error) {
         setError(true);
@@ -297,11 +295,14 @@ const AccompanyChat = () => {
         pointColor={pointColor}
         infoResult={infoResult}
       />
-      <s.Background
-        $backgroundimageurl={
-          messageInitiator ? PurpleBackground : BlueBackground
-        }
-      />
+      <s.BackgroundWrapper>
+        <s.Background
+          $backgroundimageurl={
+            messageInitiator ? PurpleBackground : BlueBackground
+          }
+        />
+      </s.BackgroundWrapper>
+
       <ChatInput
         roomId={roomId}
         currentUserId={userInfo.id}

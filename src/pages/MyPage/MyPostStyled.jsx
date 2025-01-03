@@ -3,7 +3,6 @@ import theme from '../../styles/theme';
 
 export const PageLayout = styled.div`
   width: 100vw;
-  max-width: 480px;
   display: flex;
   box-sizing: border-box;
   padding: 61px 0px 0px;
