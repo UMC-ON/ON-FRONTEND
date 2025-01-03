@@ -362,7 +362,7 @@ const Image = styled.img`
 `;
 
 const ChatButton = styled.div`
-  width: 22em;
+  width: 90%;
   height: 3em;
   border-radius: 10px;
   background: ${(props) => props.theme.blueGra};
@@ -376,6 +376,7 @@ const ChatButton = styled.div`
 `;
 
 const GreyButton = styled.button`
+  width: 90%;
   cursor: not-allowed;
   display: flex;
   justify-content: center;
@@ -383,7 +384,6 @@ const GreyButton = styled.button`
   font-weight: 600;
   font-size: 16px;
   border-radius: 10px;
-  width: 22em;
   height: 3em;
   background-color: #d9d9d9;
   color: white;
@@ -395,7 +395,6 @@ const GreyButton = styled.button`
 
 const BottomTabLayout = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 87px;
   position: fixed;
   bottom: 0;
