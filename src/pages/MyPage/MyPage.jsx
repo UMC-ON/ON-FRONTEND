@@ -25,8 +25,6 @@ const MyPage = () => {
   const [passwordInput, setPasswordInput] = useState('');
   const [isPasswordConfirmed, setIsPasswordConfirmed] = useState(false);
 
-  const navigate = useNavigate();
-
   //비밀번호 입력
   const handelPassword = async (passwordInput) => {
     setIsLoading(true);
@@ -39,7 +37,7 @@ const MyPage = () => {
         setIsPasswordConfirmed(true);
       }
     } catch (error) {
-      setError(true);
+      alert('비밀번호가 올바르지 않습니다.');
     } finally {
       setIsLoading(false);
     }

@@ -1,10 +1,8 @@
 import styled from 'styled-components';
-import theme from '../../styles/theme';
 
 export const ChatListLayout = styled.div`
   width: 100vw;
   height: 100vh;
-  max-width: 480px;
   display: flex;
   box-sizing: border-box;
   padding: 61px 0px 87px;

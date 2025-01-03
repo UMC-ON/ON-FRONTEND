@@ -10,12 +10,11 @@ export const PostWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  justify-content: space-between;
-  pading-bottom: 0.5rem;
+  justify-content: center;
+  /* padding-bottom: 0.5rem; */
 `;
 export const Delete = styled.span`
   position: absolute;
-  top: 0.8rem;
   right: 2rem;
   color: #7a7a7a;
   font-family: Inter;
@@ -66,7 +65,6 @@ export const Title = styled.span`
   line-height: normal;
   letter-spacing: 0.0175rem;
   margin-right: 45px;
-  padding-top: 12px;
 `;
 
 export const Time = styled.span`
@@ -96,7 +94,7 @@ export const ContentText = styled.span`
   text-overflow: ellipsis;
   white-space: normal;
   text-align: left;
-  margin-bottom: 0, 5rem;
+  margin-bottom: 0.5rem;
 `;
 
 // export const ContentImg = styled.div`
@@ -107,8 +105,8 @@ export const ContentText = styled.span`
 export const ContentImg = styled.img`
   grid-area: img;
   display: inline;
-  width: 4.6rem;
-  height: 4.6rem;
+  width: 4.9rem;
+  height: 4.9rem;
   align-self: start;
   object-fit: cover;
   border-radius: 5px;

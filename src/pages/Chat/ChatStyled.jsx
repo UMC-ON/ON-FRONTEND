@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const ChatLayout = styled.div`
   width: 100vw;
-  max-width: 480px;
   display: flex;
   box-sizing: border-box;
   padding: 61px 0px 0px;
@@ -16,12 +15,17 @@ export const ChatLayout = styled.div`
   justify-content: space-between;
 `;
 
-export const Background = styled.div`
+export const BackgroundWrapper = styled.div`
   width: 100%;
-  height: 100%;
   position: fixed;
   bottom: 6.125px;
   z-index: 0;
+  display: flex;
+`;
+
+export const Background = styled.div`
+  width: 100%;
+  aspect-ratio: 390 / 539;
   background-image: url(${(props) => props.$backgroundimageurl});
   background-repeat: no-repeat;
   background-size: contain;

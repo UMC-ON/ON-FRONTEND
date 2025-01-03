@@ -366,7 +366,7 @@ const Search = styled.textarea`
 
 const SearchIcon = styled.img`
   position: absolute;
-  right: 30px;
+  right: 8%;
   top: 50%;
   transform: translateY(-50%);
 `;
