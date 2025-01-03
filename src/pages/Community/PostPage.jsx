@@ -213,7 +213,6 @@ const PostPage = ({ color, boardType }) => {
               onChangeImgFile(e);
             }}
           />
-          d
           <img src={camera} />
         </label>
         <DefaultCheckBox

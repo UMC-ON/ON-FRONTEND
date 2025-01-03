@@ -23,8 +23,7 @@ const Comment = ({
           });
         }}
         style={{
-          backgroundColor:
-            clickedComment === comment ? '#bfd8e5dd' : '#d9d9d933',
+          backgroundColor: clickedComment === comment ? '#F3F9FF' : '#d9d9d933',
         }}
       >
         <Writer writer={`${comment.writerInfo.id === postWriter_id}`}>

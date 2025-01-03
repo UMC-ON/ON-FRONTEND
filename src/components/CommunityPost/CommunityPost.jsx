@@ -8,7 +8,7 @@ import { showDate } from '../Common/InfoExp';
 import { CommentList } from '../Common/TempDummyData/PostList';
 import { useEffect } from 'react';
 
-const CommunityPost = ({ post }) => {
+const CommunityPost = ({ post, onClick }) => {
   const photoURL = post.imageUrls.toString();
   const navigate = useNavigate();
 

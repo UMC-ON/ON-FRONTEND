@@ -1,6 +1,12 @@
 // redux/actions/authActions.js
 import { GET_USER_INFO } from '../api/urls';
-import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT, LOAD_USER } from './actionTypes';
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  LOGOUT,
+  LOAD_USER,
+  SAVE_SCROLL_STATUS,
+} from './actionTypes';
 //import { getData } from '../api/Functions';
 //import { useNavigate } from 'react-router-dom';
 //import { useEffect } from 'react';
@@ -36,5 +42,13 @@ export const loadUser = (user, accessToken) => {
   return {
     type: LOAD_USER,
     payload: { user: user, accessToken: accessToken },
+  };
+};
+
+export const saveScrollStatus = (totalPage, page, itemList) => {
+  // console.log(user);
+  return {
+    type: SAVE_SCROLL_STATUS,
+    payload: { totalPage: totalPage, page: page, itemList: itemList },
   };
 };
