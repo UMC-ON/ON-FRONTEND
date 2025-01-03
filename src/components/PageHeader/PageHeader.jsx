@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import * as s from './PageHeaderStyled.jsx';
 import theme from '../../styles/theme';
 
-const PageHeader = ({ pageName, color = `${theme.title}`, nav }) => {
+const PageHeader = ({ pageName, color = `${theme.title}`, nav, notBack = false }) => {
   const navigate = useNavigate();
 
   const onClickBackButton = () => {
@@ -15,6 +15,7 @@ const PageHeader = ({ pageName, color = `${theme.title}`, nav }) => {
   };
   return (
     <s.PageHeaderLayout>
+      {!notBack && (
       <s.BackButton onClick={onClickBackButton}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -32,6 +33,7 @@ const PageHeader = ({ pageName, color = `${theme.title}`, nav }) => {
           />
         </svg>
       </s.BackButton>
+      )}
       <s.PageName style={{ color: `${color}` }}>{pageName}</s.PageName>
     </s.PageHeaderLayout>
   );
