@@ -6,6 +6,7 @@ import {
   LOGOUT,
   LOAD_USER,
   SAVE_SCROLL_STATUS,
+  SAVE_ACCOMPANY_SCROLL_STATUS
 } from './actionTypes';
 //import { getData } from '../api/Functions';
 //import { useNavigate } from 'react-router-dom';
@@ -50,5 +51,20 @@ export const saveScrollStatus = (totalPage, page, itemList) => {
   return {
     type: SAVE_SCROLL_STATUS,
     payload: { totalPage: totalPage, page: page, itemList: itemList },
+  };
+};
+
+export const saveAccompanyScrollStatus = (totalPage, page, itemList, startDate, endDate, gender, country) => {
+  return {
+    type: SAVE_ACCOMPANY_SCROLL_STATUS,
+    payload: {
+      totalPage,
+      page,
+      itemList,
+      startDate,
+      endDate,
+      gender,
+      country,
+    },
   };
 };
