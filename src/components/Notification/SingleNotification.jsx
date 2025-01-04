@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import * as s from './SingleNotificationStyled';
 //import theme from '../../styles/theme';
 import { useNavigate } from 'react-router-dom';
