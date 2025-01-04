@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
 import { useNavigate } from 'react-router-dom';
 //import Slider from 'react-slick';
@@ -138,8 +139,6 @@ import Loading from '../components/Loading/Loading';
 
 import { getData } from '../api/Functions';
 import {
-  GET_USER_INFO,
-  GET_TWO_FREEPOST,
   GET_RECENT_POST_OF,
   GET_NEAR_ACCOMPANY,
 } from '../api/urls';
@@ -155,10 +154,12 @@ import { cities, countries } from '../assets/cityDatabase';
 import ErrorScreen from '../components/ErrorScreen';
 
 function HomePage() {
+  const userInfo = [useSelector((state) => state.user.user)];
+
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingAccom, setIsLoadingAccom] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [userData, setUserData] = useState([]);
+  // const [userData, setUserData] = useState([]);
   const [infoData, setInfoData] = useState([]);
   const [freeData, setFreeData] = useState([]);
   const [accompanyData, setAccompanyData] = useState([]);
@@ -241,26 +242,20 @@ function HomePage() {
   };
 
   useEffect(() => {
+    console.log('user info', userInfo);
     // console.log(immigrationLink);
+    if (userInfo[0].universityUrl) {
+      setUnivLink(userInfo[0].universityUrl);
+    }
+    if (userInfo[0].country) {
+      getSiteByCountry(userInfo[0].country);
+    }
   }, [immigrationLink]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-
-        const user_data = await getData(GET_USER_INFO, {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        });
-        setUserData([user_data.data]);
-        // console.log('userData');
-        // console.log(user_data.data);
-        if (user_data.data.universityUrl) {
-          setUnivLink(user_data.data.universityUrl);
-        }
-        if (user_data.data.country) {
-          getSiteByCountry(user_data.data.country);
-        }
 
         const info_data = await getData(GET_RECENT_POST_OF('INFO'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
@@ -319,11 +314,11 @@ function HomePage() {
       }
     };
 
-    if (userData.country) {
+    if (userInfo[0].country) {
       // console.log(userData);
       fetchAccomData();
     }
-  }, [userData.country]);
+  }, [userInfo[0].country]);
 
   if (isLoading && isLoadingAccom) {
     return <Loading />;
@@ -334,8 +329,8 @@ function HomePage() {
       <NavBar></NavBar>
       <Space></Space>
       <BigContainer>
-        {userData &&
-          userData.map((card, index) => (
+        {userInfo &&
+          userInfo.map((card, index) => (
             <div key={index}>
               <LeftContainer>
                 <SubText>나의 파견교</SubText>
@@ -358,7 +353,7 @@ function HomePage() {
             </div>
           ))}
 
-        {userData.map((card, index) => (
+        {userInfo.map((card, index) => (
           <Container key={index}>
             <Button onClick={goToDiary}>
               <Icon
@@ -461,7 +456,7 @@ function HomePage() {
 
       <SmallSpace />
 
-      {userData.map((card, index) => (
+      {userInfo.map((card, index) => (
         <div key={index}>
           {card.country ? (
             <BlueContainer key={index}>
