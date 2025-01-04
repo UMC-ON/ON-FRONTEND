@@ -4,10 +4,10 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   server: {
-    //port: 443,
-    port: 3000,
-    host: 'localhost',
+    port: 443,
+    // port: 3000,
+    // host: 'localhost',
   },
-  //plugins: [react(), vercel()],
-  plugins: [react()],
+  plugins: [react(), vercel()],
+  // plugins: [react()],
 });
