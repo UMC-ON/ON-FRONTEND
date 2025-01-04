@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import React, { useRef, useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 
 import postIcon from '../assets/images/writepost_icon.svg';
@@ -22,17 +23,18 @@ import Loading from '../components/Loading/Loading.jsx';
 import AlertModal from '../components/AlertModal.jsx';
 
 import { multiFilePostData, getData } from '../api/Functions';
-import { WRITE_ACCOMPANY, GET_USER_INFO } from '../api/urls';
+import { WRITE_ACCOMPANY} from '../api/urls';
 import ErrorScreen from '../components/ErrorScreen.jsx';
 
 function AccompanyPostPage() {
-  const [isLoading, setIsLoading] = useState(true);
+  const userInfo = [useSelector((state) => state.user.user)];
 
   const [ageChecked, setAgeChecked] = useState(false);
   const [schoolChecked, setSchoolChecked] = useState(false);
 
-  const [age, setAge] = useState(null);
-  const [school, setSchool] = useState('');
+  const age = userInfo[0].age;
+  const school = userInfo[0].dispatchedUniversity;
+  const userid = userInfo[0].id;
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -42,8 +44,8 @@ function AccompanyPostPage() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [personValue, setPersonValue] = useState(0);
 
+  const [country, setCountry] = useState(userInfo[0].country);
   const [showCountry, setShowCountry] = useState(false);
-  const [country, setCountry] = useState('');
   const [isCountryClicked, setIsCountryClicked] = useState(false);
 
   const [showCity, setShowCity] = useState(false);
@@ -63,8 +65,6 @@ function AccompanyPostPage() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [fileSize, setFileSize] = useState(null);
 
-  const [userData, setUserData] = useState(null);
-
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
 
@@ -76,37 +76,9 @@ function AccompanyPostPage() {
     // console.log(endDate);
   }, [endDate]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        const user_data = await getData(GET_USER_INFO, {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        });
-
-        const data = user_data.data;
-        setUserData(data);
-        // console.log('user data');
-        // console.log(user_data.data);
-
-        setAge(data.age);
-        setCountry(data.country);
-        // console.log(data.country);
-        setSchool(data.dispatchedUniversity);
-      } catch (error) {
-        return <ErrorScreen/>
-        // console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const [input, setInput] = useState({
-    userId: null,
+    userId: userid,
     ageAnonymous: ageChecked,
     currentCountry: '',
     universityAnonymous: schoolChecked,
@@ -121,12 +93,11 @@ function AccompanyPostPage() {
   });
 
   useEffect(() => {
-    if (userData) {
       setInput((prevInput) => ({
         ...prevInput,
-        userId: userData.id,
+        userId: userid,
         ageAnonymous: ageChecked,
-        currentCountry: userData.country,
+        currentCountry: userInfo.country,
         universityAnonymous: schoolChecked,
         travelArea: [city, city2],
         totalRecruitNumber: personValue,
@@ -135,9 +106,7 @@ function AccompanyPostPage() {
         endDate: endDate,
         imageFiles: [selectedFile],
       }));
-    }
   }, [
-    userData,
     ageChecked,
     country,
     schoolChecked,
@@ -317,10 +286,9 @@ function AccompanyPostPage() {
   // formData.append('dispatchCertifyApplyRequestDto', blob);
 
   useEffect(() => {
-    if (userData) {
       setInput((prevInput) => ({
         ...prevInput,
-        userId: userData.id,
+        userId: userid,
         ageAnonymous: ageChecked,
         currentCountry: country,
         universityAnonymous: schoolChecked,
@@ -331,9 +299,7 @@ function AccompanyPostPage() {
         endDate: endDate,
         imageFiles: [selectedFile],
       }));
-    }
   }, [
-    userData,
     ageChecked,
     country,
     schoolChecked,
@@ -351,7 +317,7 @@ function AccompanyPostPage() {
     const formData = new FormData();
 
     const jsonData = {
-      userId: input.userId,
+      userId: userid,
       ageAnonymous: ageChecked,
       currentCountry: country,
       universityAnonymous: schoolChecked,
@@ -409,9 +375,6 @@ function AccompanyPostPage() {
     // alert(input);
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <>
