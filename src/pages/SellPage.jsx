@@ -239,7 +239,10 @@ function SellPage() {
 
   return (
     <>
-      <SellPageHeader pageName={'거래하기'} />
+      <SellPageHeader 
+      pageName={'거래하기'}
+      nav={'/'}
+      notBack={true} />
       <Space />
       <br />
       <SearchContainer>

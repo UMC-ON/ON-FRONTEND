@@ -5,7 +5,7 @@ import theme from '../styles/theme';
 
 import ToBookmark from '../assets/images/ToBookmark.svg';
 
-const PageHeader = ({ pageName, color = `${theme.title}` }) => {
+const PageHeader = ({ pageName, color = `${theme.title}`, nav, notBack = false }) => {
   const navigate = useNavigate();
 
   const goBookmark = () => {
@@ -13,8 +13,13 @@ const PageHeader = ({ pageName, color = `${theme.title}` }) => {
   };
 
   const onClickBackButton = () => {
-    navigate(-1);
+    if (nav) {
+      navigate(nav);
+    } else {
+      navigate(-1);
+    }
   };
+  
   return (
     <PageHeaderLayout>
       <BackButton onClick={onClickBackButton}>
