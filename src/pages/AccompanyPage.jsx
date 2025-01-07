@@ -154,7 +154,7 @@ function AccompanyPage() {
         },
         {
           page: page,
-          size: 4,
+          size: 20,
           ...params,
         },
       );
