@@ -1,16 +1,22 @@
 import styled from 'styled-components';
+import { getToken, getMessaging } from 'firebase/messaging';
 import EditButton from '../../assets/images/mypage_edit_button.svg';
 import { useState } from 'react';
 //import { DELETE_ACCOUNT } from '../../api/urls';
-import { deleteData, postData } from '../../api/Functions';
+import { postData } from '../../api/Functions';
 import DeleteAccountModal from './DeleteAccountModal';
 import { useEffect } from 'react';
 import theme from '../../styles/theme';
 import { putData } from '../../api/Functions';
-import { PUT_NICKNAME, PUT_UNIV, CHECK_DUPLICATE_NICK } from '../../api/urls';
+import {
+  PUT_NICKNAME,
+  PUT_UNIV,
+  CHECK_DUPLICATE_NICK,
+  POST_TOKEN,
+} from '../../api/urls';
 import validImg from '../../assets/images/validNickName.svg';
 import { handleAllowNotification } from '../../service/notificationPermission';
-
+import { app } from '../../service/initFirebase';
 const MyInfo = ({
   loginId,
   name,
@@ -44,7 +50,7 @@ const MyInfo = ({
         setIsPushAllowed(false);
       }
     } else {
-      //console.log('이 브라우저에서는 알림 기능을 지원하지 않습니다.');
+      alert('이 브라우저에서는 알림 기능을 지원하지 않습니다. ');
     }
   };
 
@@ -58,6 +64,43 @@ const MyInfo = ({
     } else {
       handleAllowNotification();
       handlePushCondition();
+    }
+  };
+
+  const handleDeviceToken = async () => {
+    if (!isPushAllowed) {
+      alert('푸시 허용을 해주세요.');
+      handlePushCondition();
+    } else if (isPushAllowed) {
+      const messaging = getMessaging(app);
+      const token = await getToken(messaging, {
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+      });
+      if (token) {
+        try {
+          const response = await postData(
+            POST_TOKEN,
+            {
+              deviceToken: token,
+            },
+            {
+              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+              'Content-Type': 'application/json',
+            },
+          );
+
+          if (response.status == 200) {
+            // console.log('토큰 보내짐:', response.data);
+            alert(
+              '성공적으로 등록되었습니다. 알림 서비스를 원활히 이용하실 수 있습니다.',
+            );
+          }
+        } catch (error) {
+          // console.error('토큰 보내는 중 에러 발생', error);
+        }
+      } else {
+        alert('토큰 등록이 불가능 합니다. 생성하려면 권한을 허용해주세요');
+      }
     }
   };
 
@@ -233,19 +276,25 @@ const MyInfo = ({
         )}
       </Wrapper>
 
-      <Wrapper>
+      <PushWrapper>
         <TitleBox>
           알림 수신 동의
           <ToggleSwitch>
             <input
               type="checkbox"
               checked={isPushAllowed}
-              onChange={handleToggleChange}
+              onChange={() => handleToggleChange()}
             />
             <span>{isPushAllowed ? '동의' : '미동의'}</span>
           </ToggleSwitch>
         </TitleBox>
-      </Wrapper>
+        <PushInfo>
+          <div>!</div>
+          알림이 수신되지 않나요?{' '}
+          <span onClick={() => handleDeviceToken()}>여기를 눌러</span>
+          &nbsp;디바이스를 다시 등록하세요.
+        </PushInfo>
+      </PushWrapper>
 
       <Wrapper style={{ display: 'inline-block', textAlign: 'left' }}>
         <DeleteAccount onClick={() => setModalDisplay(true)}>
@@ -272,6 +321,44 @@ const MyInfoContainer = styled.article`
   flex-direction: column;
   width: 100%;
   gap: 2rem;
+`;
+const PushInfo = styled.div`
+  display: block;
+  align-items: center;
+  color: #a8a8a8;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: left;
+  div {
+    display: inline-flex;
+    background-color: #a8a8a8;
+    font-family: Inter;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-align: left;
+    border-radius: 50%;
+    height: 14px;
+    width: 14px;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    margin: 0 3px;
+  }
+  span {
+    text-decoration: underline;
+  }
+`;
+
+const PushWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.4rem;
 `;
 
 const Wrapper = styled.div`
