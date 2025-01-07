@@ -169,20 +169,6 @@ const PostPage = ({ color, boardType }) => {
               checkBoxStyle={{ color: `${color}`, borderRadius: '50%' }}
               option="noGrad"
             />
-            {/* <label style={{ color: '#b2b2b2' }}>
-              <s.RadioButton
-                type="radio"
-                after="파견교 비공개"
-                name="anonymousUniv"
-                value="disagree"
-                checked={isChecked}
-                onClick={handleClick}
-                onChange={onChangeInput}
-                activeColor={color}
-                inactiveColor={'#ffffff'}
-              />
-              파견교 비공개
-            </label> */}
           </s.SpaceBetweenContainer>
         </s.PostInfoSection>
         <s.TitleSection>

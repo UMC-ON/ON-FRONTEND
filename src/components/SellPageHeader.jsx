@@ -47,7 +47,6 @@ export default PageHeader;
 
 const PageHeaderLayout = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 61px;
   position: fixed;
   z-index: 2;
@@ -76,5 +75,5 @@ const PageName = styled.p`
 
 const Bookmark = styled.img`
   position: relative;
-  left: 120px;
+  left: 30%;
 `;

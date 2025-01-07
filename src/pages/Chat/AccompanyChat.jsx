@@ -19,7 +19,7 @@ import ErrorScreen from '../../components/ErrorScreen';
 const AccompanyChat = () => {
   const [isFirstLoadComplete, setIsFirstLoadComplete] = useState(false); // 첫 로드 완료 상태
   const [infoResult, setInfoResult] = useState([]);
-  const [isRecruitComplete, setIsRecruitComplete] = useState();
+  const [isRecruitComplete, setIsRecruitComplete] = useState(false);
   const [defaultColor, setDefaultColor] = useState('');
   const [pointColor, setPointColor] = useState('');
   const [messageInitiator, setMessageInitiator] = useState();
@@ -34,6 +34,7 @@ const AccompanyChat = () => {
   const [isFetchingData, setIsFetchingData] = useState(false);
   const pollingRef = useRef(true); // 롱 폴링 상태를 관리하는 ref
   const [error, setError] = useState(false);
+  const [senderId, setSenderId] = useState();
 
   // 초기 채팅 설정 함수
   const initialChatSetting = (response) => {
@@ -45,8 +46,14 @@ const AccompanyChat = () => {
       setMessageInitiator(false);
       setDefaultColor('rgba(217, 236, 255, 1)');
       setPointColor('rgba(132, 180, 255, 1)');
+      console.log('콘솔', response.data.content[0].chatUserOne);
+      setSenderId(response.data.content[0].chatUserOne);
     }
   };
+
+  useEffect(() => {
+    console.log('센더', senderId);
+  }, [senderId]);
 
   // infinite scroll 채팅 메시지 불러오기
   const {
@@ -227,9 +234,7 @@ const AccompanyChat = () => {
 
         if (response) {
           setInfoResult(response.data);
-          setIsRecruitComplete(
-            response.data.participantNumber === response.data.recruitNumber,
-          );
+          setIsRecruitComplete(response.data.fullyRecruited);
         }
       } catch (error) {
         setError(true);
@@ -256,9 +261,10 @@ const AccompanyChat = () => {
         messageInitiator={messageInitiator}
         isAccompany={true}
         onBackClick={() => navigate('/chatlist')}
-        id={roomId}
-        isComplete={isRecruitComplete}
+        isRecruitComplete={!!isRecruitComplete}
         setError={setError}
+        roomId={roomId}
+        senderId={senderId}
       />
 
       <s.ChatWrapper>
@@ -297,11 +303,14 @@ const AccompanyChat = () => {
         pointColor={pointColor}
         infoResult={infoResult}
       />
-      <s.Background
-        $backgroundimageurl={
-          messageInitiator ? PurpleBackground : BlueBackground
-        }
-      />
+      <s.BackgroundWrapper>
+        <s.Background
+          $backgroundimageurl={
+            messageInitiator ? PurpleBackground : BlueBackground
+          }
+        />
+      </s.BackgroundWrapper>
+
       <ChatInput
         roomId={roomId}
         currentUserId={userInfo.id}

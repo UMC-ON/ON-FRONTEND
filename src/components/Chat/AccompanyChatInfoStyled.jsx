@@ -68,7 +68,7 @@ export const Location = styled.div`
   grid-area: location;
   display: flex;
   justify-content: left;
-  align-items: flex-start;
+  align-items: center;
 `;
 export const NumberOfPeople = styled.div`
   grid-area: num;
@@ -89,6 +89,8 @@ export const Category = styled.span`
 `;
 
 export const LocationContent = styled.div`
+  display: flex;
+
   span {
     color: #7a7a7a;
     font-family: Inter;

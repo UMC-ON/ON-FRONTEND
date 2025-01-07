@@ -33,12 +33,12 @@ self.addEventListener('push', function (e) {
   if (!e.data.json()) return;
 
   const resultData = e.data.json().notification;
-  const notificationTitle = resultData.title;
+  console.log(resultData);
+  const formatTitle = resultData.title.replace(/^\[.*?\]\s*/, '');
+  const notificationTitle = formatTitle;
   const notificationOptions = {
     body: resultData.body,
-    icon: resultData.image,
-    tag: resultData.tag,
-    ...resultData,
+    icon: '/icon/favicon-96x96.png',
   };
   console.log('push: ', { resultData, notificationTitle, notificationOptions });
 
@@ -46,7 +46,7 @@ self.addEventListener('push', function (e) {
 });
 
 messaging.onBackgroundMessage((payload) => {
-  const notificationTitle = payload.title;
+  const notificationTitle = 'payload.title';
   const notificationOptions = {
     body: payload.body,
     // icon: payload.icon

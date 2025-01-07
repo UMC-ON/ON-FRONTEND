@@ -4,7 +4,6 @@ export const CompanyCalendar = styled.div`
   width: 100%;
   margin-top: 10px;
 
-
     .top-header {
     width: 90%;
     display: flex;

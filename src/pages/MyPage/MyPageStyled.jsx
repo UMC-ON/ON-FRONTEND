@@ -3,7 +3,6 @@ import theme from '../../styles/theme';
 
 export const MyPageLayout = styled.div`
   width: 100vw;
-  max-width: 480px;
   display: flex;
   box-sizing: border-box;
   padding: 61px 1.5rem 0px;
@@ -32,6 +31,7 @@ export const PasswordTextInput = styled.input`
   font-style: normal;
   font-weight: 400;
   line-height: 2rem;
+  border-radius: 0;
   ::placeholder {
     color: #838383;
     font-family: Inter;

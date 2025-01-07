@@ -203,7 +203,7 @@ const TradeChat = () => {
   };
 
   //인포
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchTradeInfo = async () => {
       try {
         const response = await getData(
@@ -250,7 +250,7 @@ const TradeChat = () => {
         isAccompany={false}
         onBackClick={handleBackNavigation}
         id={infoResult.marketPostId}
-        isComplete={infoResult.dealStatus === 'COMPLETE' ? true : false}
+        isRecruitComplete={infoResult.dealStatus === 'COMPLETE' ? true : false}
         setError={setError}
       />
 

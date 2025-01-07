@@ -61,6 +61,8 @@ export const POST_CHAT = (roomId) => `/api/v1/chat/${roomId}/send`;
 export const POST_RECRUIT_COMPLETE = (roomId) =>
   `/api/v1/chat/${roomId}/recruit`;
 export const POST_TRADE_COMPLETE = (id) => `/api/v1/market-post/${id}/status`;
+export const GET_PARTICIPANT_STATUS = (userId, chattingRoomld) =>
+  `/api/v1/company-participant/status/${userId}/${chattingRoomld}`;
 
 //물품거래글
 export const GET_ITEM_LIST = `/api/v1/market-post`;

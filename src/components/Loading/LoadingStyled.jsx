@@ -5,7 +5,6 @@ export const PageWrapper = styled.div`
   top: 0%;
   left: 0%;
   width: 100%;
-  max-width: 480px;
   height: 100%;
   background: rgba(255, 255, 255, 0.8);
   display: flex;

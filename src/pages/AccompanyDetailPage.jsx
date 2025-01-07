@@ -29,7 +29,6 @@ import { getData, postData } from '../api/Functions';
 import {
   GET_DETAIL_ACCOMPANY,
   GET_SIMILAR_ACCOMPANY,
-  GET_USER_INFO,
   GET_ROOM_ID,
   APPLY_ACCOMPANY,
 } from '../api/urls';
@@ -47,15 +46,13 @@ function AccompanyDetailPage() {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
-  const [isValidated, setIsValidated] = useState(null);
-
   const [nickname, setNickName] = useState('');
-  const [userId, setUserId] = useState(0);
 
   const [infoData, setInfoData] = useState([]);
   const [accompanyData, setAccompanyData] = useState([]);
 
   const userInfo = useSelector((state) => state.user.user);
+  const userId = userInfo.id;
 
   const navigate = useNavigate();
 
@@ -180,13 +177,6 @@ function AccompanyDetailPage() {
         // console.log('info data here');
         // console.log(info_data.data);
         //
-
-        const user_data = await getData(GET_USER_INFO, {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        });
-        // console.log(user_data.data.result.id);
-        // console.log('user id');
-        setUserId(user_data.data.id);
 
         // console.log(info_data.data[0].nickname);
         setNickName(info_data.data[0].nickname);
@@ -502,6 +492,16 @@ const ProfileTextContainer = styled.div`
 const TextContainer = styled.div`
   margin-left: 1em;
   margin-top: 1.5em;
+
+
+  /* 더 큰 해상도에서는 5:2 비율 적용 */
+  @media (min-width: 768px) {
+    margin-top: 3em;
+  }
+
+  @media (min-width: 1024px) {
+    margin-top: 5em;
+  }
 `;
 
 const BigText = styled.p`
@@ -626,7 +626,6 @@ const MiddleText = styled.div`
 
 const BottomTabLayout = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 87px;
   position: fixed;
   bottom: 0;

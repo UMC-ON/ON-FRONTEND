@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useSwipeable } from 'react-swipeable';
 import { useNavigate } from 'react-router-dom';
 //import Slider from 'react-slick';
@@ -138,8 +139,6 @@ import Loading from '../components/Loading/Loading';
 
 import { getData } from '../api/Functions';
 import {
-  GET_USER_INFO,
-  GET_TWO_FREEPOST,
   GET_RECENT_POST_OF,
   GET_NEAR_ACCOMPANY,
 } from '../api/urls';
@@ -155,10 +154,12 @@ import { cities, countries } from '../assets/cityDatabase';
 import ErrorScreen from '../components/ErrorScreen';
 
 function HomePage() {
+  const userInfo = [useSelector((state) => state.user.user)];
+
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingAccom, setIsLoadingAccom] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [userData, setUserData] = useState([]);
+  // const [userData, setUserData] = useState([]);
   const [infoData, setInfoData] = useState([]);
   const [freeData, setFreeData] = useState([]);
   const [accompanyData, setAccompanyData] = useState([]);
@@ -241,26 +242,20 @@ function HomePage() {
   };
 
   useEffect(() => {
+    console.log('user info', userInfo);
     // console.log(immigrationLink);
+    if (userInfo[0].universityUrl) {
+      setUnivLink(userInfo[0].universityUrl);
+    }
+    if (userInfo[0].country) {
+      getSiteByCountry(userInfo[0].country);
+    }
   }, [immigrationLink]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-
-        const user_data = await getData(GET_USER_INFO, {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        });
-        setUserData([user_data.data]);
-        // console.log('userData');
-        // console.log(user_data.data);
-        if (user_data.data.universityUrl) {
-          setUnivLink(user_data.data.universityUrl);
-        }
-        if (user_data.data.country) {
-          getSiteByCountry(user_data.data.country);
-        }
 
         const info_data = await getData(GET_RECENT_POST_OF('INFO'), {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
@@ -319,11 +314,11 @@ function HomePage() {
       }
     };
 
-    if (userData.country) {
+    if (userInfo[0].country) {
       // console.log(userData);
       fetchAccomData();
     }
-  }, [userData.country]);
+  }, [userInfo[0].country]);
 
   if (isLoading && isLoadingAccom) {
     return <Loading />;
@@ -334,8 +329,8 @@ function HomePage() {
       <NavBar></NavBar>
       <Space></Space>
       <BigContainer>
-        {userData &&
-          userData.map((card, index) => (
+        {userInfo &&
+          userInfo.map((card, index) => (
             <div key={index}>
               <LeftContainer>
                 <SubText>나의 파견교</SubText>
@@ -358,7 +353,7 @@ function HomePage() {
             </div>
           ))}
 
-        {userData.map((card, index) => (
+        {userInfo.map((card, index) => (
           <Container key={index}>
             <Button onClick={goToDiary}>
               <Icon
@@ -461,7 +456,7 @@ function HomePage() {
 
       <SmallSpace />
 
-      {userData.map((card, index) => (
+      {userInfo.map((card, index) => (
         <div key={index}>
           {card.country ? (
             <BlueContainer key={index}>
@@ -650,14 +645,6 @@ const BigText = styled.div`
   line-height: 1.2;
 `;
 
-const MiddleText = styled.div`
-  color: ${(props) => props.color || '#000000'};
-  margin-right: ${(props) => props.spacing || '0'};
-  font-weight: bold;
-  font-family: 'Inter-Regular';
-  font-size: 1.2em;
-`;
-
 const Container = styled.div`
   margin: 1em;
   display: grid;
@@ -700,6 +687,54 @@ const Container = styled.div`
   & > button:nth-child(6) {
     grid-row: 3; /* Second row */
     grid-column: 3 / 4; /* Third column */
+  }
+
+  /* iPad 해상도에서 비율 변경 */
+  @media (min-width: 768px) and (max-width: 1200px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr; /* 4:2 비율 */
+
+    /* Fourth button */
+  & > button:nth-child(4) {
+    grid-row: 1; /* Second row */
+    grid-column: 4 / 5; /* Third column */
+  }
+
+  /* Fifth button */
+  & > button:nth-child(5) {
+    grid-row: 2; /* Second row */
+    grid-column: 4 / 5; /* Third column */
+  }
+
+  /* Sixth button */
+  & > button:nth-child(6) {
+    grid-row: 1; /* Second row */
+    grid-column: 5 / 6; /* Third column */
+  }
+
+  }
+
+  /* PC 해상도에서 비율 변경 */
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; /* 4:2 비율 */
+
+    /* Fourth button */
+  & > button:nth-child(4) {
+    grid-row: 1; /* Second row */
+    grid-column: 4 / 5; /* Third column */
+  }
+
+  /* Fifth button */
+  & > button:nth-child(5) {
+    grid-row: 2; /* Second row */
+    grid-column: 4 / 5; /* Third column */
+  }
+
+  /* Sixth button */
+  & > button:nth-child(6) {
+    grid-row: 1; /* Second row */
+    grid-column: 5 / 6; /* Third column */
+  }
+
   }
 `;
 
@@ -755,49 +790,6 @@ const Icon = styled.div`
   filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
 `;
 
-const SliderContainer = styled.div`
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 1.5vh;
-  overflow: hidden;
-  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.1));
-`;
-
-const SliderWrapper = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['currentSlide'].includes(prop),
-})`
-  display: flex;
-  transition: transform 0.3s ease-in-out;
-  transform: ${(props) => `translateX(-${props.currentSlide * 100}%)`};
-`;
-
-const Slide = styled.div`
-  min-width: 100%;
-  padding-bottom: 33%; /* Adjust this according to the image aspect ratio */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  aspect-ratio: 1/0.385;
-`;
-
-const DotContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 1.5vh;
-`;
-
-const Dot = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['active'].includes(prop),
-})`
-  width: ${(props) => (props.active ? '8px' : '5px')};
-  height: ${(props) => (props.active ? '8px' : '5px')};
-  margin: ${(props) => (props.active ? '0 5px' : '2px 5px')};
-  border-radius: 50%;
-  background-color: ${(props) => (props.active ? '#3E73B2' : '#A3A3A3')};
-  opacity: ${(props) => (props.active ? '1' : '0.5')};
-  cursor: pointer;
-`;
 
 const BlueContainer = styled.div`
   margin-top: 1vh;

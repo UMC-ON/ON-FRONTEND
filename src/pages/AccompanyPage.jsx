@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { saveAccompanyScrollStatus } from '../redux/actions.jsx';
 import moment from 'moment';
 
 import AccompanyHomeComponent from '../components/AccompanyHomeComponent';
@@ -12,30 +14,38 @@ import Loading from '../components/Loading/Loading.jsx';
 
 import { getData } from '../api/Functions';
 import {
-  GET_ALL_ACCOMPANY,
   GET_FILTER_ACCOMPANY,
-  GET_USER_INFO,
 } from '../api/urls';
 import ErrorScreen from '../components/ErrorScreen.jsx';
 function AccompanyPage() {
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user.user);
+  const scrollInfo = useSelector((state) => state.accompanyScroll);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUserLoading, setIsUserLoading] = useState(true);
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [isDateClicked, setIsDateClicked] = useState(false);
+  const [startDate, setStartDate] = useState(scrollInfo.startDate || null);
+  const [endDate, setEndDate] = useState(scrollInfo.endDate || null);
+  const [gender, setGender] = useState(scrollInfo.gender || null);
+  const [country, setCountry] = useState(scrollInfo.country || null);
+
+  const [isDateClicked, setIsDateClicked] = useState(!!scrollInfo.startDate || !!scrollInfo.endDate);
+  const [isGenderClicked, setIsGenderClicked] = useState(!!scrollInfo.gender);
+  const [isCountryClicked, setIsCountryClicked] = useState(!!scrollInfo.country);
+
   const [showCalendar, setShowCalendar] = useState(false);
-
   const [showGender, setShowGender] = useState(false);
-  const [gender, setGender] = useState(null);
-  const [isGenderClicked, setIsGenderClicked] = useState(false);
-
   const [showCountry, setShowCountry] = useState(false);
-  const [country, setCountry] = useState(null);
-  const [isCountryClicked, setIsCountryClicked] = useState(false);
-  const [allData, setAllData] = useState([]);
-  const [isValidated, setIsValidated] = useState(null);
-  const [page, setPage] = useState(0);
+
+  const [allData, setAllData] = useState(scrollInfo.itemList || []); // 게시글 리스트
+  const [page, setPage] = useState(scrollInfo.page || 0); // 현재 페이지
+  const [totalPage, setTotalPage] = useState(scrollInfo.totalPage || 0); // 전체 페이지 수
+
+
+  useEffect(() => {
+    dispatch(
+      saveAccompanyScrollStatus(totalPage, page, allData, startDate, endDate, gender, country)
+    );
+  }, [allData, dispatch, totalPage, page, startDate, endDate, gender, country]);
 
   const handleFilterClick = useCallback(() => {
     // console.log('handleFilterClick');
@@ -148,11 +158,15 @@ function AccompanyPage() {
           ...params,
         },
       );
+      // console.log('API 응답 데이터:', all_data.data.content);
+      // console.log('사용자 정보', userInfo);
+      
 
       // console.log("param is " + params);
       //console.log('params:', params);
       // console.log("all data is " + all_data);
 
+      setTotalPage(all_data.data.totalPages);
       if (page === 0) {
         // console.log('all data');
         // console.log(all_data.data.content);
@@ -163,11 +177,6 @@ function AccompanyPage() {
         setAllData((prevData) => [...prevData, ...all_data.data.content]);
       }
 
-      const user_data = await getData(GET_USER_INFO, {
-        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-      });
-
-      setIsValidated(user_data.data.country);
     } catch (error) {
       return <ErrorScreen />;
       // console.error('Error fetching data:', error);
@@ -234,7 +243,7 @@ function AccompanyPage() {
         isCountryClicked={isCountryClicked}
         updateIsCountryClicked={resetCountryClick}
         updateEverything={handleResetAll}
-        isValidated={isValidated}
+        isValidated={userInfo.country}
       />
 
       {showCalendar && (
@@ -312,7 +321,6 @@ const BottomTabLayout = styled.div`
   height: auto; /* 높이를 내용에 맞게 조정 */
   min-height: 300px;
   max-height: calc(100vh - 50px);
-  max-width: 480px;
   position: fixed;
   bottom: 0;
   border-radius: 14px 14px 0px 0px;

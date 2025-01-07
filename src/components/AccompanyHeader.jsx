@@ -48,7 +48,6 @@ export default AccompanyHeader;
 
 export const PageHeaderLayout = styled.div`
   width: 100%;
-  max-width: 480px;
   height: 61px;
   position: fixed;
   z-index: 2;
