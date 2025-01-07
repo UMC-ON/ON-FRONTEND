@@ -241,8 +241,7 @@ function SellPage() {
     <>
       <SellPageHeader 
       pageName={'거래하기'}
-      nav={'/'}
-      notBack={true} />
+      nav={'/'} />
       <Space />
       <br />
       <SearchContainer>
