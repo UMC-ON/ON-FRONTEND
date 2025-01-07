@@ -42,7 +42,7 @@ function SellPage() {
         {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         },
-        { page: page, size: 5, sort: 'DESC' },
+        { page: page, size: 20, sort: 'DESC' },
       );
 
       if (page === 0) {
@@ -60,7 +60,7 @@ function SellPage() {
       // 필터링된 물품 불러오기
       const params = {
         page: page,
-        size: 5,
+        size: 20,
         sort: 'DESC',
         dealType: dealType
           ? dealType === '직거래'
@@ -100,7 +100,7 @@ function SellPage() {
         {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         },
-        { keyword: searchKeyword, page: page, size: 5, sort: 'DESC' },
+        { keyword: searchKeyword, page: page, size: 20, sort: 'DESC' },
       );
 
       if (response && response.data) {
@@ -239,7 +239,9 @@ function SellPage() {
 
   return (
     <>
-      <SellPageHeader pageName={'거래하기'} />
+      <SellPageHeader 
+      pageName={'거래하기'}
+      nav={'/'} />
       <Space />
       <br />
       <SearchContainer>

@@ -6,7 +6,8 @@ import {
   LOGOUT,
   LOAD_USER,
   SAVE_SCROLL_STATUS,
-  SAVE_ACCOMPANY_SCROLL_STATUS
+  SAVE_ACCOMPANY_SCROLL_STATUS,
+  SAVE_SELL_SCROLL_STATUS
 } from './actionTypes';
 //import { getData } from '../api/Functions';
 //import { useNavigate } from 'react-router-dom';
@@ -65,6 +66,19 @@ export const saveAccompanyScrollStatus = (totalPage, page, itemList, startDate, 
       endDate,
       gender,
       country,
+    },
+  };
+};
+
+export const saveSellScrollStatus = (totalPage, page, dealType, currentCountry, dealStatus) => {
+  return {
+    type: SAVE_SELL_SCROLL_STATUS,
+    payload: {
+      totalPage,
+      page,
+      dealType,
+      currentCountry,
+      dealStatus,
     },
   };
 };

@@ -112,7 +112,10 @@ const Diary = () => {
 
   return (
     <DiaryContainer>
-      <PageHeader pageName="나의 일기" />
+      <PageHeader 
+      pageName="나의 일기" 
+      nav={'/'}
+      notBack={true} />
       <Content>
         <Information>
           <DDay>
